@@ -1,4 +1,4 @@
-package de.cubeisland.cubeengine.util.gettextgen.util;
+package de.cubeisland.maven.messagecatalog.util;
 
 import java.io.File;
 import java.io.FileFilter;

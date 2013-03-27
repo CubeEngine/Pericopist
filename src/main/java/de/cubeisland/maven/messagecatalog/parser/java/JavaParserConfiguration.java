@@ -1,4 +1,4 @@
-package de.cubeisland.cubeengine.util.gettextgen.parser.java;
+package de.cubeisland.maven.messagecatalog.parser.java;
 
 import java.util.HashMap;
 import java.util.HashSet;

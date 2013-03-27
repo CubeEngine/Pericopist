@@ -1,4 +1,4 @@
-package de.cubeisland.cubeengine.util.gettextgen.format;
+package de.cubeisland.maven.messagecatalog.format;
 
 import org.apache.maven.plugin.MojoFailureException;
 

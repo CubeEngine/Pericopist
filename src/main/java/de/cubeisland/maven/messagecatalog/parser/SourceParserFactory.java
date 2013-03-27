@@ -1,8 +1,8 @@
-package de.cubeisland.cubeengine.util.gettextgen.parser;
+package de.cubeisland.maven.messagecatalog.parser;
 
 import java.util.Map;
 
-import de.cubeisland.cubeengine.util.gettextgen.parser.java.JavaSourceParser;
+import de.cubeisland.maven.messagecatalog.parser.java.JavaSourceParser;
 
 import org.apache.maven.plugin.logging.Log;
 

@@ -1,4 +1,4 @@
-package de.cubeisland.cubeengine.util.gettextgen.parser;
+package de.cubeisland.maven.messagecatalog.parser;
 
 import org.apache.maven.plugin.MojoFailureException;
 

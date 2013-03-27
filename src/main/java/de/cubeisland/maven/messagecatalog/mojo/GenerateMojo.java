@@ -1,7 +1,7 @@
-package de.cubeisland.cubeengine.util.gettextgen.mojo;
+package de.cubeisland.maven.messagecatalog.mojo;
 
-import de.cubeisland.cubeengine.util.gettextgen.format.*;
-import de.cubeisland.cubeengine.util.gettextgen.parser.*;
+import de.cubeisland.maven.messagecatalog.format.*;
+import de.cubeisland.maven.messagecatalog.parser.*;
 import org.apache.maven.plugin.*;
 
 import java.io.*;

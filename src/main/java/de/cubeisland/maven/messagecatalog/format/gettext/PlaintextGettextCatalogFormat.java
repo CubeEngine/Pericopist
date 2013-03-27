@@ -1,4 +1,4 @@
-package de.cubeisland.cubeengine.util.gettextgen.format.gettext;
+package de.cubeisland.maven.messagecatalog.format.gettext;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,9 +8,9 @@ import java.io.Writer;
 import java.util.Map;
 import java.util.Set;
 
-import de.cubeisland.cubeengine.util.gettextgen.format.CatalogFormat;
-import de.cubeisland.cubeengine.util.gettextgen.parser.Occurrence;
-import de.cubeisland.cubeengine.util.gettextgen.parser.TranslatableMessage;
+import de.cubeisland.maven.messagecatalog.format.CatalogFormat;
+import de.cubeisland.maven.messagecatalog.parser.Occurrence;
+import de.cubeisland.maven.messagecatalog.parser.TranslatableMessage;
 
 import org.apache.maven.plugin.logging.Log;
 

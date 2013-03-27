@@ -1,4 +1,4 @@
-package de.cubeisland.cubeengine.util.gettextgen.parser.java;
+package de.cubeisland.maven.messagecatalog.parser.java;
 
 import java.io.File;
 import java.util.HashMap;
@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.cubeisland.cubeengine.util.gettextgen.parser.Occurrence;
-import de.cubeisland.cubeengine.util.gettextgen.parser.TranslatableMessage;
+import de.cubeisland.maven.messagecatalog.parser.Occurrence;
+import de.cubeisland.maven.messagecatalog.parser.TranslatableMessage;
 
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.expr.MemberValuePair;

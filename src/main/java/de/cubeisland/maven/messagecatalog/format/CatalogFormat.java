@@ -1,10 +1,10 @@
-package de.cubeisland.cubeengine.util.gettextgen.format;
+package de.cubeisland.maven.messagecatalog.format;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
-import de.cubeisland.cubeengine.util.gettextgen.parser.TranslatableMessage;
+import de.cubeisland.maven.messagecatalog.parser.TranslatableMessage;
 
 public interface CatalogFormat
 {

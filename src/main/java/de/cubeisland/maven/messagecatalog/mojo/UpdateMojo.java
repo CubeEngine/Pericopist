@@ -1,4 +1,4 @@
-package de.cubeisland.cubeengine.util.gettextgen.mojo;
+package de.cubeisland.maven.messagecatalog.mojo;
 
 import org.apache.maven.plugin.*;
 
