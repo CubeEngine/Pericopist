@@ -11,6 +11,16 @@
     <description>Generates message catalogs.</description>
     <url>https://engine.cubeisland.de</url>
 
+    <developers>
+        <developer>
+            <id>quickwango</id>
+            <name>Phillip Schichtel</name>
+            <roles>
+                <role>Project Lead</role>
+            </roles>
+        </developer>
+    </developers>
+
     <distributionManagement>
         <repository>
             <id>cubeisland-repo</id>
@@ -38,9 +48,8 @@
     </dependencies>
 
     <scm>
-        <connection>scm:git:https://github.com/CubeIsland/maven-messagecatalog-plugin</connection>
         <url>scm:git:https://github.com/CubeIsland/maven-messagecatalog-plugin</url>
-        <tag>master</tag>
+        <connection>scm:git:https://github.com/CubeIsland/maven-messagecatalog-plugin</connection>
         <developerConnection>scm:git:https://github.com/CubeIsland/maven-messagecatalog-plugin</developerConnection>
     </scm>
 
