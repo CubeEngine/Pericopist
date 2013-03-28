@@ -48,9 +48,9 @@
     </dependencies>
 
     <scm>
-        <url>scm:git:https://github.com/CubeIsland/maven-messagecatalog-plugin</url>
-        <connection>scm:git:https://github.com/CubeIsland/maven-messagecatalog-plugin</connection>
-        <developerConnection>scm:git:https://github.com/CubeIsland/maven-messagecatalog-plugin</developerConnection>
+        <url>scm:git:https://github.com/CubeEngineDev/messagecatalog-maven-plugin</url>
+        <connection>scm:git:https://github.com/CubeEngineDev/messagecatalog-maven-plugin</connection>
+        <developerConnection>scm:git:https://github.com/CubeEngineDev/messagecatalog-maven-plugin</developerConnection>
     </scm>
 
     <build>
