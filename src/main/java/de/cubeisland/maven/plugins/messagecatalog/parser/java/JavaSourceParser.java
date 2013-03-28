@@ -1,4 +1,4 @@
-package de.cubeisland.maven.messagecatalog.parser.java;
+package de.cubeisland.maven.plugins.messagecatalog.parser.java;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.cubeisland.maven.messagecatalog.parser.SourceParser;
-import de.cubeisland.maven.messagecatalog.parser.TranslatableMessage;
-import de.cubeisland.maven.messagecatalog.util.Misc;
+import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
+import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
 import japa.parser.JavaParser;
 import japa.parser.ParseException;

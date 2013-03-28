@@ -1,4 +1,4 @@
-package de.cubeisland.maven.messagecatalog.parser;
+package de.cubeisland.maven.plugins.messagecatalog.parser;
 
 import java.util.HashSet;
 import java.util.Set;

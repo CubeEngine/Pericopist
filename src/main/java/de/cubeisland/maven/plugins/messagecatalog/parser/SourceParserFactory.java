@@ -1,8 +1,8 @@
-package de.cubeisland.maven.messagecatalog.parser;
+package de.cubeisland.maven.plugins.messagecatalog.parser;
 
 import java.util.Map;
 
-import de.cubeisland.maven.messagecatalog.parser.java.JavaSourceParser;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.JavaSourceParser;
 
 import org.apache.maven.plugin.logging.Log;
 

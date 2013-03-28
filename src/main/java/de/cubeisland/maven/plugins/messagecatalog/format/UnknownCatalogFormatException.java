@@ -1,4 +1,4 @@
-package de.cubeisland.maven.messagecatalog.format;
+package de.cubeisland.maven.plugins.messagecatalog.format;
 
 import org.apache.maven.plugin.MojoFailureException;
 

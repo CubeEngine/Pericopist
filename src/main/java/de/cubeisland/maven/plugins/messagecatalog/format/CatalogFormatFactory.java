@@ -1,8 +1,8 @@
-package de.cubeisland.maven.messagecatalog.format;
+package de.cubeisland.maven.plugins.messagecatalog.format;
 
 import java.util.Map;
 
-import de.cubeisland.maven.messagecatalog.format.gettext.PlaintextGettextCatalogFormat;
+import de.cubeisland.maven.plugins.messagecatalog.format.gettext.PlaintextGettextCatalogFormat;
 
 import org.apache.maven.plugin.logging.Log;
 

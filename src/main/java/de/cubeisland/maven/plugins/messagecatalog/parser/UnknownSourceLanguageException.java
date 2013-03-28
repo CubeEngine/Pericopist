@@ -1,4 +1,4 @@
-package de.cubeisland.maven.messagecatalog.parser;
+package de.cubeisland.maven.plugins.messagecatalog.parser;
 
 import org.apache.maven.plugin.MojoFailureException;
 

@@ -1,4 +1,4 @@
-package de.cubeisland.maven.messagecatalog.mojo;
+package de.cubeisland.maven.plugins.messagecatalog.mojo;
 
 import org.apache.maven.plugin.*;
 

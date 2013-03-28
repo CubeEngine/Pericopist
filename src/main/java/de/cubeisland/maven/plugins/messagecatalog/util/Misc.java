@@ -1,4 +1,4 @@
-package de.cubeisland.maven.messagecatalog.util;
+package de.cubeisland.maven.plugins.messagecatalog.util;
 
 import java.io.File;
 import java.io.FileFilter;
