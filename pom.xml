@@ -34,6 +34,12 @@
         </snapshotRepository>
     </distributionManagement>
 
+    <scm>
+        <url>scm:git:https://github.com/CubeEngineDev/messagecatalog-maven-plugin</url>
+        <connection>scm:git:https://github.com/CubeEngineDev/messagecatalog-maven-plugin</connection>
+        <developerConnection>scm:git:https://github.com/CubeEngineDev/messagecatalog-maven-plugin</developerConnection>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -46,12 +52,6 @@
             <version>1.0.8</version>
         </dependency>
     </dependencies>
-
-    <scm>
-        <url>scm:git:https://github.com/CubeEngineDev/messagecatalog-maven-plugin</url>
-        <connection>scm:git:https://github.com/CubeEngineDev/messagecatalog-maven-plugin</connection>
-        <developerConnection>scm:git:https://github.com/CubeEngineDev/messagecatalog-maven-plugin</developerConnection>
-    </scm>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
@@ -73,6 +73,11 @@
                     <source>1.5</source>
                     <target>1.5</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.3.2</version>
             </plugin>
         </plugins>
     </build>
