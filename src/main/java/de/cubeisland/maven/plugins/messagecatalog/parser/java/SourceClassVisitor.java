@@ -1,5 +1,16 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser.java;
 
+import de.cubeisland.maven.plugins.messagecatalog.parser.Occurrence;
+import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
+import japa.parser.ast.ImportDeclaration;
+import japa.parser.ast.expr.Expression;
+import japa.parser.ast.expr.MemberValuePair;
+import japa.parser.ast.expr.MethodCallExpr;
+import japa.parser.ast.expr.NameExpr;
+import japa.parser.ast.expr.NormalAnnotationExpr;
+import japa.parser.ast.expr.StringLiteralExpr;
+import japa.parser.ast.visitor.VoidVisitorAdapter;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,24 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.cubeisland.maven.plugins.messagecatalog.parser.Occurrence;
-import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
-
-import japa.parser.ast.expr.Expression;
-import japa.parser.ast.expr.MemberValuePair;
-import japa.parser.ast.expr.MethodCallExpr;
-import japa.parser.ast.expr.NormalAnnotationExpr;
-import japa.parser.ast.expr.StringLiteralExpr;
-import japa.parser.ast.visitor.VoidVisitorAdapter;
-
-class MessageVisitor extends VoidVisitorAdapter<File>
+class SourceClassVisitor extends VoidVisitorAdapter<File>
 {
-    private final Map<String, TranslatableMessage> messages;
 
     private final HashMap<String, Set<String>> annotations = new HashMap<String, Set<String>>()
     {
         {
-            put("Command", new HashSet<String>()
+            put("de.cubeisland.cubeengine.core.command.reflected.Command", new HashSet<String>()
             {
                 {
                     add("desc");
@@ -43,9 +43,15 @@ class MessageVisitor extends VoidVisitorAdapter<File>
         }
     };
 
-    public MessageVisitor()
+    private final String basePackage;
+    private final Map<String, TranslatableMessage> messages;
+    private final Map<String, String> importedClasses;
+
+    public SourceClassVisitor(String basePackage)
     {
+        this.basePackage = basePackage;
         this.messages = new HashMap<String, TranslatableMessage>();
+        this.importedClasses = new HashMap<String, String>();
     }
 
     public Set<TranslatableMessage> getMessages()
@@ -67,6 +73,21 @@ class MessageVisitor extends VoidVisitorAdapter<File>
     }
 
     @Override
+    public void visit(ImportDeclaration n, File file)
+    {
+        if (!n.isStatic() && !n.isAsterisk())
+        {
+            final NameExpr nameExpr = n.getName();
+            final String fqcn = nameExpr.toString();
+            if (fqcn.startsWith(basePackage))
+            {
+                this.importedClasses.put(nameExpr.getName(), fqcn);
+            }
+        }
+        super.visit(n, file);
+    }
+
+    @Override
     public void visit(NormalAnnotationExpr n, File file)
     {
         Set<String> fields = this.annotations.get(n.getName().getName());
@@ -84,6 +105,7 @@ class MessageVisitor extends VoidVisitorAdapter<File>
                 }
             }
         }
+        super.visit(n, file);
     }
 
     @Override
@@ -101,5 +123,6 @@ class MessageVisitor extends VoidVisitorAdapter<File>
                 }
             }
         }
+        super.visit(n, file);
     }
 }

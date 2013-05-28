@@ -33,7 +33,6 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
     public Map<String, Object> config = Collections.emptyMap();
 
 
-    @Override
     public void execute() throws MojoExecutionException, MojoFailureException
     {
         this.doExecute();
