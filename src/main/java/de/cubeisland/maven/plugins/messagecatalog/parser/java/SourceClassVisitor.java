@@ -97,7 +97,8 @@ class SourceClassVisitor extends ASTVisitor
 
             if(fqcn.startsWith(basePackage))
             {
-//                this.importedClasses.put()    TODO clarify whats the key and whats the value exactly
+                int dotIndex = name.getFullyQualifiedName().lastIndexOf('.');
+                this.importedClasses.put(name.getFullyQualifiedName().substring(dotIndex + 1), name.getFullyQualifiedName());
             }
         }
         return super.visit(node);
