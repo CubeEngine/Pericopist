@@ -25,7 +25,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         this.log = log;
     }
 
-    @Override
     public void write(File file, Set<TranslatableMessage> messages) throws IOException
     {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file, false));
@@ -84,7 +83,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         writer.write("msgstr \"\"\n");
     }
 
-    @Override
     public String getFileExtension()
     {
         return "po";
