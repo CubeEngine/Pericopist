@@ -1,5 +1,12 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser.java;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import de.cubeisland.maven.plugins.messagecatalog.parser.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
 import japa.parser.ast.ImportDeclaration;
@@ -10,13 +17,6 @@ import japa.parser.ast.expr.NameExpr;
 import japa.parser.ast.expr.NormalAnnotationExpr;
 import japa.parser.ast.expr.StringLiteralExpr;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 class SourceClassVisitor extends VoidVisitorAdapter<File>
 {
@@ -54,9 +54,9 @@ class SourceClassVisitor extends VoidVisitorAdapter<File>
         this.importedClasses = new HashMap<String, String>();
     }
 
-    public Set<TranslatableMessage> getMessages()
+    public Map<String, TranslatableMessage> getMessages()
     {
-        return new HashSet<TranslatableMessage>(this.messages.values());
+        return this.messages;
     }
 
     private void addMessage(String string, Occurrence occurrence)

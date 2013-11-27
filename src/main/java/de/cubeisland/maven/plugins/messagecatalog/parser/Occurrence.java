@@ -2,7 +2,7 @@ package de.cubeisland.maven.plugins.messagecatalog.parser;
 
 import java.io.File;
 
-public class Occurrence
+public class Occurrence implements Comparable<Occurrence>
 {
     private final File file;
     private final int line;
@@ -21,5 +21,15 @@ public class Occurrence
     public int getLine()
     {
         return line;
+    }
+
+    public int compareTo(Occurrence o)
+    {
+        int value = this.file.getAbsolutePath().compareTo(o.file.getAbsolutePath());
+        if(value == 0)
+        {
+            value = Integer.compare(this.line, o.line);
+        }
+        return value;
     }
 }

@@ -1,20 +1,24 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser.java;
 
+import org.apache.maven.plugin.logging.Log;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
+
+import de.cubeisland.maven.plugins.messagecatalog.parser.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
-import org.apache.maven.plugin.logging.Log;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class JavaSourceParser implements SourceParser
 {
@@ -42,7 +46,7 @@ public class JavaSourceParser implements SourceParser
 
         SourceClassVisitor visitor;
         CompilationUnit compilationUnit;
-        Set<TranslatableMessage> messages = new HashSet<TranslatableMessage>();
+        Map<String, TranslatableMessage> messages = new HashMap<String, TranslatableMessage>();
         for (File file : files)
         {
             try
@@ -50,7 +54,8 @@ public class JavaSourceParser implements SourceParser
                 compilationUnit = JavaParser.parse(file);
                 visitor = new SourceClassVisitor(this.basePackage);
                 visitor.visit(compilationUnit, file);
-                messages.addAll(visitor.getMessages());
+
+                this.mergeMessages(messages, visitor.getMessages());
             }
             catch (IOException ignored)
             {}
@@ -60,7 +65,26 @@ public class JavaSourceParser implements SourceParser
             }
         }
 
-        return messages;
+        return new TreeSet<TranslatableMessage>(messages.values());
+    }
+
+    private void mergeMessages(Map<String, TranslatableMessage> messages, Map<String, TranslatableMessage> fileMessages)
+    {
+        for(Entry<String, TranslatableMessage> messageEntry : fileMessages.entrySet())
+        {
+            TranslatableMessage message = messages.get(messageEntry.getKey());
+            if(message == null)
+            {
+                messages.put(messageEntry.getKey(), messageEntry.getValue());
+            }
+            else
+            {
+                for(Occurrence occurrence : messageEntry.getValue().getOccurrences())
+                {
+                    message.addOccurrence(occurrence);
+                }
+            }
+        }
     }
 
     private class JavaFileFilter implements FileFilter

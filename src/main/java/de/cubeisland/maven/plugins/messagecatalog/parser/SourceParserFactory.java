@@ -1,10 +1,10 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser;
 
+import org.apache.maven.plugin.logging.Log;
+
 import java.util.Map;
 
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.JavaSourceParser;
-
-import org.apache.maven.plugin.logging.Log;
 
 public class SourceParserFactory
 {
