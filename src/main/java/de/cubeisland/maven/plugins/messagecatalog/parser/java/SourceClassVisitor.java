@@ -93,7 +93,6 @@ class SourceClassVisitor extends ASTVisitor
         {
             Name name = node.getName();
             String fqcn = name.getFullyQualifiedName();
-            System.out.println("FQN: " + fqcn);
 
             if(fqcn.startsWith(basePackage))
             {
