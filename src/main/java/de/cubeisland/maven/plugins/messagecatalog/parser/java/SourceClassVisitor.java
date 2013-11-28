@@ -5,6 +5,7 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MemberValuePair;
 import org.eclipse.jdt.core.dom.MethodInvocation;
@@ -14,6 +15,7 @@ import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -174,8 +176,51 @@ class SourceClassVisitor extends ASTVisitor
                 {
                     this.addMessage(((StringLiteral)expr).getLiteralValue(), new Occurrence(file, this.getLine(expr)));
                 }
+                else if(expr instanceof InfixExpression)
+                {
+                    String value = this.getString((InfixExpression)expr);
+
+                    if(value != null)
+                    {
+                        this.addMessage(value, new Occurrence(file, this.getLine(expr)));
+                    }
+                }
             }
         }
         return super.visit(node);
+    }
+
+    private String getString(InfixExpression expr)
+    {
+        StringBuilder value = new StringBuilder(2 + expr.extendedOperands().size());
+        List<Expression> expressions = new ArrayList<Expression>(2 + expr.extendedOperands().size());
+
+        expressions.add(expr.getLeftOperand());
+        expressions.add(expr.getRightOperand());
+        for(Object o : expr.extendedOperands())
+        {
+            if(o instanceof Expression)
+            {
+                expressions.add((Expression)o);
+            }
+        }
+
+        for(Expression e : expressions)
+        {
+            if (e instanceof StringLiteral)
+            {
+                value.append(((StringLiteral)e).getLiteralValue());
+            }
+            else if(e instanceof InfixExpression)
+            {
+                value.append(this.getString((InfixExpression)e));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        return value.toString();
     }
 }
