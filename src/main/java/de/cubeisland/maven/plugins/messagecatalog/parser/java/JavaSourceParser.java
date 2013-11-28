@@ -81,7 +81,7 @@ public class JavaSourceParser implements SourceParser
 
     public boolean isTranslatableMethodName(String name)
     {
-        return this.methodNames != null && Arrays.binarySearch(this.methodNames, name) != -1;
+        return this.methodNames != null && Arrays.binarySearch(this.methodNames, name) > -1;
     }
 
     public void setTranslatableAnnotations(Map<String, String[]> annotationFields)
@@ -101,7 +101,7 @@ public class JavaSourceParser implements SourceParser
             String[] fields = this.annotationFields.get(annotation);
             if(fields != null)
             {
-                return Arrays.binarySearch(fields, field) != -1;
+                return Arrays.binarySearch(fields, field) > -1;
             }
         }
         return false;
