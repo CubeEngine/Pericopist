@@ -10,10 +10,25 @@ public class SourceParserFactory
 {
     public static SourceParser newSourceParser(String language, Map<String, Object> config, Log log) throws UnknownSourceLanguageException
     {
+        SourceParser parser;
         if (language.equalsIgnoreCase("java"))
         {
-            return new JavaSourceParser(config, log);
+            parser = new JavaSourceParser(config, log);
         }
-        throw new UnknownSourceLanguageException("Unknown source language: " + language);
+        else
+        {
+            throw new UnknownSourceLanguageException("Unknown source language: " + language);
+        }
+
+        if (config.containsKey("basePackage"))
+        {
+            parser.setBasePackage(String.valueOf(config.get("basePackage")));
+        }
+        else
+        {
+            parser.setBasePackage("de.cubeisland.cubeengine");
+        }
+
+        return parser;
     }
 }
