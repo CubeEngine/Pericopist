@@ -1,24 +1,31 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser.java;
 
-import de.cubeisland.maven.plugins.messagecatalog.parser.Occurrence;
-import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
-import japa.parser.ast.ImportDeclaration;
-import japa.parser.ast.expr.Expression;
-import japa.parser.ast.expr.MemberValuePair;
-import japa.parser.ast.expr.MethodCallExpr;
-import japa.parser.ast.expr.NameExpr;
-import japa.parser.ast.expr.NormalAnnotationExpr;
-import japa.parser.ast.expr.StringLiteralExpr;
-import japa.parser.ast.visitor.VoidVisitorAdapter;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.InfixExpression;
+import org.eclipse.jdt.core.dom.MarkerAnnotation;
+import org.eclipse.jdt.core.dom.MemberValuePair;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.Name;
+import org.eclipse.jdt.core.dom.NormalAnnotation;
+import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
+import org.eclipse.jdt.core.dom.StringLiteral;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-class SourceClassVisitor extends VoidVisitorAdapter<File>
+import de.cubeisland.maven.plugins.messagecatalog.parser.Occurrence;
+import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
+
+class SourceClassVisitor extends ASTVisitor
 {
 
     private final HashMap<String, Set<String>> annotations = new HashMap<String, Set<String>>()
@@ -43,12 +50,16 @@ class SourceClassVisitor extends VoidVisitorAdapter<File>
         }
     };
 
+    private final CompilationUnit compilationUnit;
+    private final File file;
     private final String basePackage;
     private final Map<String, TranslatableMessage> messages;
     private final Map<String, String> importedClasses;
 
-    public SourceClassVisitor(String basePackage)
+    public SourceClassVisitor(CompilationUnit compilationUnit, File file, String basePackage)
     {
+        this.compilationUnit = compilationUnit;
+        this.file = file;
         this.basePackage = basePackage;
         this.messages = new HashMap<String, TranslatableMessage>();
         this.importedClasses = new HashMap<String, String>();
@@ -57,6 +68,11 @@ class SourceClassVisitor extends VoidVisitorAdapter<File>
     public Set<TranslatableMessage> getMessages()
     {
         return new HashSet<TranslatableMessage>(this.messages.values());
+    }
+
+    private int getLine(ASTNode node)
+    {
+        return this.compilationUnit.getLineNumber(node.getStartPosition());
     }
 
     private void addMessage(String string, Occurrence occurrence)
@@ -73,56 +89,138 @@ class SourceClassVisitor extends VoidVisitorAdapter<File>
     }
 
     @Override
-    public void visit(ImportDeclaration n, File file)
+    public boolean visit(ImportDeclaration node)
     {
-        if (!n.isStatic() && !n.isAsterisk())
+        if(!node.isStatic() && !node.isOnDemand())
         {
-            final NameExpr nameExpr = n.getName();
-            final String fqcn = nameExpr.toString();
-            if (fqcn.startsWith(basePackage))
+            Name name = node.getName();
+            String fqcn = name.getFullyQualifiedName();
+
+            if(fqcn.startsWith(basePackage))
             {
-                this.importedClasses.put(nameExpr.getName(), fqcn);
+                int dotIndex = name.getFullyQualifiedName().lastIndexOf('.');
+                this.importedClasses.put(name.getFullyQualifiedName().substring(dotIndex + 1), name.getFullyQualifiedName());
             }
         }
-        super.visit(n, file);
+        return super.visit(node);
     }
 
     @Override
-    public void visit(NormalAnnotationExpr n, File file)
+    public boolean visit(NormalAnnotation node)
     {
-        Set<String> fields = this.annotations.get(n.getName().getName());
+        Set<String> fields = this.annotations.get(node.getTypeName().getFullyQualifiedName());
         if (fields != null)
         {
-            for (MemberValuePair pair : n.getPairs())
+            for(Object o : node.values())
             {
-                if (fields.contains(pair.getName()))
+                if(!(o instanceof MemberValuePair))
+                {
+                    continue;
+                }
+                MemberValuePair pair = (MemberValuePair) o;
+
+                if(fields.contains(pair.getName()))
                 {
                     Expression expr = pair.getValue();
-                    if (expr instanceof StringLiteralExpr)
+                    if(expr instanceof StringLiteral)
                     {
-                        this.addMessage(((StringLiteralExpr)expr).getValue(), new Occurrence(file, expr.getBeginLine()));
+                        this.addMessage(((StringLiteral)expr).getLiteralValue(), new Occurrence(file, this.getLine(expr)));
                     }
                 }
             }
         }
-        super.visit(n, file);
+        return super.visit(node);
     }
 
     @Override
-    public void visit(MethodCallExpr n, File file)
+    public boolean visit(SingleMemberAnnotation node)
     {
-        if (this.methods.contains(n.getName()))
+        Set<String> fields = this.annotations.get(node.getTypeName().getFullyQualifiedName());
+        if(fields != null)
         {
-            List<Expression> args = n.getArgs();
-            if (args.size() > 0)
+            if(fields.contains("value"))
             {
-                Expression expr = args.get(0);
-                if (expr instanceof StringLiteralExpr)
+                Expression expr = node.getValue();
+                if(expr instanceof StringLiteral)
                 {
-                    this.addMessage(((StringLiteralExpr)expr).getValue(), new Occurrence(file, expr.getBeginLine()));
+                    this.addMessage(((StringLiteral)expr).getLiteralValue(), new Occurrence(this.file, this.getLine(expr)));
                 }
             }
         }
-        super.visit(n, file);
+        return super.visit(node);
+    }
+
+    @Override
+    public boolean visit(MarkerAnnotation node)
+    {
+        /*
+         * TODO Have a look at it
+         * it seems that also NormalAnnotations are identified as MarkerAnnotations
+         * whether they just have default values!
+         * Maybe one has to catch it with the annotation declaration.
+         * what is when the annotation is from another project?
+         */
+        return super.visit(node);
+    }
+
+    @Override
+    public boolean visit(MethodInvocation node)
+    {
+        if(this.methods.contains(node.getName().getIdentifier()))
+        {
+            List args = node.arguments();
+            if(args.size() > 0)
+            {
+                Expression expr = (Expression) args.get(0);
+                if(expr instanceof StringLiteral)
+                {
+                    this.addMessage(((StringLiteral)expr).getLiteralValue(), new Occurrence(file, this.getLine(expr)));
+                }
+                else if(expr instanceof InfixExpression)
+                {
+                    String value = this.getString((InfixExpression)expr);
+
+                    if(value != null)
+                    {
+                        this.addMessage(value, new Occurrence(file, this.getLine(expr)));
+                    }
+                }
+            }
+        }
+        return super.visit(node);
+    }
+
+    private String getString(InfixExpression expr)
+    {
+        StringBuilder value = new StringBuilder(2 + expr.extendedOperands().size());
+        List<Expression> expressions = new ArrayList<Expression>(2 + expr.extendedOperands().size());
+
+        expressions.add(expr.getLeftOperand());
+        expressions.add(expr.getRightOperand());
+        for(Object o : expr.extendedOperands())
+        {
+            if(o instanceof Expression)
+            {
+                expressions.add((Expression)o);
+            }
+        }
+
+        for(Expression e : expressions)
+        {
+            if (e instanceof StringLiteral)
+            {
+                value.append(((StringLiteral)e).getLiteralValue());
+            }
+            else if(e instanceof InfixExpression)
+            {
+                value.append(this.getString((InfixExpression)e));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        return value.toString();
     }
 }

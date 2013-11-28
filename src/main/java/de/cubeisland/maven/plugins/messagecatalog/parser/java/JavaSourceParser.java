@@ -3,10 +3,11 @@ package de.cubeisland.maven.plugins.messagecatalog.parser.java;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
-import japa.parser.JavaParser;
-import japa.parser.ParseException;
-import japa.parser.ast.CompilationUnit;
 import org.apache.maven.plugin.logging.Log;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -40,6 +41,19 @@ public class JavaSourceParser implements SourceParser
     {
         List<File> files = Misc.scanFilesRecursive(sourceDirectory, this.fileFilter);
 
+        String[] environment = new String[files.size()];
+        for(int i = 0; i < environment.length; i++)
+        {
+            environment[i] = files.get(i).getAbsolutePath();
+        }
+
+        Map options = JavaCore.getOptions();
+        JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
+
+        ASTParser parser = ASTParser.newParser(AST.JLS3);
+        parser.setEnvironment(null, environment, null, true);
+        parser.setCompilerOptions(options);
+
         SourceClassVisitor visitor;
         CompilationUnit compilationUnit;
         Set<TranslatableMessage> messages = new HashSet<TranslatableMessage>();
@@ -47,14 +61,16 @@ public class JavaSourceParser implements SourceParser
         {
             try
             {
-                compilationUnit = JavaParser.parse(file);
-                visitor = new SourceClassVisitor(this.basePackage);
-                visitor.visit(compilationUnit, file);
+                parser.setSource(Misc.parseFileToCharArray(file));
+                compilationUnit = (CompilationUnit) parser.createAST(null);
+                visitor = new SourceClassVisitor(compilationUnit, file, this.basePackage);
+                compilationUnit.accept(visitor);
+//                visitor.visit(compilationUnit, file);
                 messages.addAll(visitor.getMessages());
             }
             catch (IOException ignored)
             {}
-            catch (ParseException e)
+            catch (Exception e)
             {
                 this.log.warn("Failed to parse the file >" + file.getAbsolutePath() + "<", e);
             }

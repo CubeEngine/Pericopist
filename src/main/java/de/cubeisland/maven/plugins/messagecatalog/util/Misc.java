@@ -1,7 +1,6 @@
 package de.cubeisland.maven.plugins.messagecatalog.util;
 
-import java.io.File;
-import java.io.FileFilter;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,5 +56,24 @@ public class Misc
                 files.add(file);
             }
         }
+    }
+
+    public static char[] parseFileToCharArray(File file) throws IOException
+    {
+        BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file));
+        StringBuilder sb = new StringBuilder();
+        byte[] buffer = new byte[4096];
+
+        int bytesRead = 0;
+        while((bytesRead = stream.read(buffer)) > -1)
+        {
+            if(bytesRead > 0)
+            {
+                sb.append(new String(buffer, 0, bytesRead));
+            }
+        }
+
+        stream.close();
+        return sb.toString().toCharArray();
     }
 }
