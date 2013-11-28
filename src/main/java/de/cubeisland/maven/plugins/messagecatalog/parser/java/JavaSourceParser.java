@@ -1,6 +1,13 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser.java;
 
+import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
+import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 import org.apache.maven.plugin.logging.Log;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -13,12 +20,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import de.cubeisland.maven.plugins.messagecatalog.parser.Occurrence;
-import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
-import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
-import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
-import japa.parser.JavaParser;
-import japa.parser.ParseException;
-import japa.parser.ast.CompilationUnit;
 
 public class JavaSourceParser implements SourceParser
 {
@@ -44,22 +45,34 @@ public class JavaSourceParser implements SourceParser
     {
         List<File> files = Misc.scanFilesRecursive(sourceDirectory, this.fileFilter);
 
-        SourceClassVisitor visitor;
-        CompilationUnit compilationUnit;
+        String[] environment = new String[files.size()];
+        for(int i = 0; i < environment.length; i++)
+        {
+            environment[i] = files.get(i).getAbsolutePath();
+        }
+
+        Map options = JavaCore.getOptions();
+        JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
+
+        ASTParser parser = ASTParser.newParser(AST.JLS3);
+        parser.setEnvironment(null, environment, null, true);
+        parser.setCompilerOptions(options);
+
         Map<String, TranslatableMessage> messages = new HashMap<String, TranslatableMessage>();
         for (File file : files)
         {
             try
             {
-                compilationUnit = JavaParser.parse(file);
-                visitor = new SourceClassVisitor(this.basePackage);
-                visitor.visit(compilationUnit, file);
+                parser.setSource(Misc.parseFileToCharArray(file));
+                CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
+                SourceClassVisitor visitor = new SourceClassVisitor(compilationUnit, file, this.basePackage);
+                compilationUnit.accept(visitor);
 
                 this.mergeMessages(messages, visitor.getMessages());
             }
             catch (IOException ignored)
             {}
-            catch (ParseException e)
+            catch (Exception e)
             {
                 this.log.warn("Failed to parse the file >" + file.getAbsolutePath() + "<", e);
             }
