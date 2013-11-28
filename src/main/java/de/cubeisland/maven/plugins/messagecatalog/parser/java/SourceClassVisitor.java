@@ -23,44 +23,24 @@ import java.util.Map;
 import java.util.Set;
 
 import de.cubeisland.maven.plugins.messagecatalog.parser.Occurrence;
+import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
 
 class SourceClassVisitor extends ASTVisitor
 {
-
-    private final HashMap<String, Set<String>> annotations = new HashMap<String, Set<String>>()
-    {
-        {
-            put("de.cubeisland.cubeengine.core.command.reflected.Command", new HashSet<String>()
-            {
-                {
-                    add("desc");
-                    add("usage");
-                }
-            });
-        }
-    };
-
-    private final Set<String> methods = new HashSet<String>()
-    {
-        {
-            add("sendTranslated");
-            add("getTranslation");
-            add("translate");
-        }
-    };
-
+    private final SourceParser parser;
     private final CompilationUnit compilationUnit;
     private final File file;
-    private final String basePackage;
+
     private final Map<String, TranslatableMessage> messages;
     private final Map<String, String> importedClasses;
 
-    public SourceClassVisitor(CompilationUnit compilationUnit, File file, String basePackage)
+    public SourceClassVisitor(SourceParser parser, CompilationUnit compilationUnit, File file)
     {
+        this.parser = parser;
         this.compilationUnit = compilationUnit;
         this.file = file;
-        this.basePackage = basePackage;
+
         this.messages = new HashMap<String, TranslatableMessage>();
         this.importedClasses = new HashMap<String, String>();
     }
@@ -96,7 +76,7 @@ class SourceClassVisitor extends ASTVisitor
             Name name = node.getName();
             String fqcn = name.getFullyQualifiedName();
 
-            if(fqcn.startsWith(basePackage))
+            if(this.parser.startsWithBasePackage(fqcn))
             {
                 int dotIndex = name.getFullyQualifiedName().lastIndexOf('.');
                 this.importedClasses.put(name.getFullyQualifiedName().substring(dotIndex + 1), name.getFullyQualifiedName());
@@ -108,8 +88,8 @@ class SourceClassVisitor extends ASTVisitor
     @Override
     public boolean visit(NormalAnnotation node)
     {
-        Set<String> fields = this.annotations.get(node.getTypeName().getFullyQualifiedName());
-        if (fields != null)
+        String annotationName = node.getTypeName().getFullyQualifiedName();
+        if (this.parser.isTranslatableAnnotation(annotationName))
         {
             for(Object o : node.values())
             {
@@ -119,7 +99,7 @@ class SourceClassVisitor extends ASTVisitor
                 }
                 MemberValuePair pair = (MemberValuePair) o;
 
-                if(fields.contains(pair.getName()))
+                if(this.parser.isTranslatableAnnotationField(annotationName, pair.getName().getFullyQualifiedName()))
                 {
                     Expression expr = pair.getValue();
                     if(expr instanceof StringLiteral)
@@ -135,16 +115,12 @@ class SourceClassVisitor extends ASTVisitor
     @Override
     public boolean visit(SingleMemberAnnotation node)
     {
-        Set<String> fields = this.annotations.get(node.getTypeName().getFullyQualifiedName());
-        if(fields != null)
+        if(this.parser.isTranslatableAnnotationField(node.getTypeName().getFullyQualifiedName(), "value"))
         {
-            if(fields.contains("value"))
+            Expression expr = node.getValue();
+            if(expr instanceof StringLiteral)
             {
-                Expression expr = node.getValue();
-                if(expr instanceof StringLiteral)
-                {
-                    this.addMessage(((StringLiteral)expr).getLiteralValue(), new Occurrence(this.file, this.getLine(expr)));
-                }
+                this.addMessage(((StringLiteral)expr).getLiteralValue(), new Occurrence(this.file, this.getLine(expr)));
             }
         }
         return super.visit(node);
@@ -166,7 +142,7 @@ class SourceClassVisitor extends ASTVisitor
     @Override
     public boolean visit(MethodInvocation node)
     {
-        if(this.methods.contains(node.getName().getIdentifier()))
+        if(this.parser.isTranslatableMethodName(node.getName().getIdentifier()))
         {
             List args = node.arguments();
             if(args.size() > 0)
