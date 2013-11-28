@@ -2,13 +2,6 @@ package de.cubeisland.maven.plugins.messagecatalog;
 
 import org.apache.maven.plugin.logging.Log;
 
-/**
- * Created with IntelliJ IDEA.
- * User: boeserwolf91
- * Date: 27.11.13
- * Time: 22:05
- * To change this template use File | Settings | File Templates.
- */
 public class Logger implements Log
 {
     public boolean isDebugEnabled()

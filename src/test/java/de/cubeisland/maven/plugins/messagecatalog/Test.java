@@ -16,7 +16,8 @@ public class Test
         try
         {
             SourceParser parser = SourceParserFactory.newSourceParser("java", new HashMap<String, Object>(1), new Logger());
-            parser.setTranslatableMethodNames(new String[]{"getTranslation"});
+            parser.setTranslatableMethodNames(new String[]{"getTranslation", "sendTranslated", "_"});
+
             File file = new File("D:\\Programmieren\\Java\\messagecatalog-maven-plugin\\src\\test\\resources");
             for(TranslatableMessage message : parser.parse(file))
             {
