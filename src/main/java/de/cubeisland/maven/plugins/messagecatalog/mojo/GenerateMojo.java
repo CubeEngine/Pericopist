@@ -17,10 +17,10 @@ public class GenerateMojo extends AbstractMessageCatalogMojo
     @Override
     public void doExecute() throws MojoExecutionException, MojoFailureException
     {
-        SourceParser parser = SourceParserFactory.newSourceParser(this.language, this.config, this.getLog());
+        SourceParser parser = SourceParserFactory.newSourceParser(this.language, this.options, this.getLog());
         Set<TranslatableMessage> messages = parser.parse (this.sourcePath);
 
-        CatalogFormat catalogFormat = CatalogFormatFactory.newCatalogFormat(this.outputFormat, config, this.getLog());
+        CatalogFormat catalogFormat = CatalogFormatFactory.newCatalogFormat(this.outputFormat, this.options, this.getLog());
         File file = new File(this.templateFile + "." + catalogFormat.getFileExtension());
         try
         {

@@ -30,7 +30,7 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
     /**
      * @parameter
      */
-    public Map<String, Object> config = Collections.emptyMap();
+    public Map<String, Object> options = Collections.emptyMap();
 
 
     public void execute() throws MojoExecutionException, MojoFailureException
