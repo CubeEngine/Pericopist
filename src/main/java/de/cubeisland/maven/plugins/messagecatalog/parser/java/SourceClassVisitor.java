@@ -4,24 +4,23 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MemberValuePair;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
@@ -33,12 +32,20 @@ class SourceClassVisitor extends ASTVisitor
     private final CompilationUnit compilationUnit;
     private final File file;
 
+    private String packageName;
+    private Set<String> normalImports;
+    private Set<String> onDemandImports;
+
     public SourceClassVisitor(JavaParserConfiguration configuration, TranslatableMessageManager messageManager, CompilationUnit compilationUnit, File file)
     {
         this.configuration = configuration;
         this.messageManager = messageManager;
         this.compilationUnit = compilationUnit;
         this.file = file;
+
+        this.normalImports = new HashSet<String>();
+        this.onDemandImports = new HashSet<String>();
+        this.onDemandImports.add("java.lang");
     }
 
     private int getLine(ASTNode node)
@@ -46,27 +53,59 @@ class SourceClassVisitor extends ASTVisitor
         return this.compilationUnit.getLineNumber(node.getStartPosition());
     }
 
-//    @Override
-//    public boolean visit(ImportDeclaration node)
-//    {
-//        if(!node.isStatic() && !node.isOnDemand())
-//        {
-//            Name name = node.getName();
-//            String fqcn = name.getFullyQualifiedName();
-//
-//            if(this.parser.startsWithBasePackage(fqcn))
-//            {
-//                int dotIndex = name.getFullyQualifiedName().lastIndexOf('.');
-//                this.importedClasses.put(name.getFullyQualifiedName().substring(dotIndex + 1), name.getFullyQualifiedName());
-//            }
-//        }
-//        return super.visit(node);
-//    }
+    private TranslatableAnnotation getTranslatableAnnotation(String simpleName)
+    {
+        TranslatableAnnotation annotation;
+        for(String normal : this.normalImports)
+        {
+            if(normal.endsWith(simpleName))
+            {
+                annotation = this.configuration.getAnnotation(normal);
+                if(annotation != null && annotation.getSimpleName().equals(simpleName))
+                {
+                    return annotation;
+                }
+            }
+        }
+        for(String onDemand : this.onDemandImports)
+        {
+            annotation = this.configuration.getAnnotation(onDemand + "." + simpleName);
+            if(annotation != null)
+            {
+                return annotation;
+            }
+        }
+        return this.configuration.getAnnotation(this.packageName + "." + simpleName);
+    }
+
+    @Override
+    public boolean visit(PackageDeclaration node)
+    {
+        this.packageName = node.getName().getFullyQualifiedName();
+        return super.visit(node);
+    }
+
+    @Override
+    public boolean visit(ImportDeclaration node)
+    {
+        if(!node.isStatic())
+        {
+            if(node.isOnDemand())
+            {
+                this.onDemandImports.add(node.getName().getFullyQualifiedName());
+            }
+            else
+            {
+                this.normalImports.add(node.getName().getFullyQualifiedName());
+            }
+        }
+        return super.visit(node);
+    }
 
     @Override
     public boolean visit(NormalAnnotation node)
     {
-        TranslatableAnnotation annotation = this.configuration.getAnnotation(node.getTypeName().getFullyQualifiedName(), false); // TODO provide real fqn!
+        TranslatableAnnotation annotation = this.getTranslatableAnnotation(node.getTypeName().getFullyQualifiedName());
         if (annotation != null)
         {
             for(Object o : node.values())
@@ -93,7 +132,7 @@ class SourceClassVisitor extends ASTVisitor
     @Override
     public boolean visit(SingleMemberAnnotation node)
     {
-        TranslatableAnnotation annotation = this.configuration.getAnnotation(node.getTypeName().getFullyQualifiedName(), false); // TODO provide real fqn!
+        TranslatableAnnotation annotation = this.getTranslatableAnnotation(node.getTypeName().getFullyQualifiedName());
         if(annotation != null && annotation.hasField("value"))
         {
             Expression expr = node.getValue();

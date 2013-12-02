@@ -19,6 +19,7 @@ public class Main
         this.getNonTranslation("Bye bye!");
     }
 
+    @TestSingleMemberAnnotation("pre-added")
     private String getNonTranslation(String string, Object ... o)
     {
         return String.format(string, o);

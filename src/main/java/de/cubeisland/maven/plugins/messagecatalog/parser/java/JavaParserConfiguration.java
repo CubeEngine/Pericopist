@@ -66,11 +66,11 @@ public class JavaParserConfiguration
         return this.annotations;
     }
 
-    public TranslatableAnnotation getAnnotation(String name, boolean isFQN)
+    public TranslatableAnnotation getAnnotation(String name)
     {
         for(TranslatableAnnotation annotation : this.annotations)
         {
-            if(isFQN && annotation.getFullQualifiedName().equals(name) || !isFQN && annotation.getSimpleName().equals(name))
+            if(annotation.getFullQualifiedName().equals(name))
             {
                 return annotation;
             }
