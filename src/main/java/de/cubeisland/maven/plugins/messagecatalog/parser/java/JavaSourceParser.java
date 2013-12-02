@@ -14,8 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
-import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
@@ -25,6 +26,7 @@ public class JavaSourceParser implements SourceParser
     private final Log log;
 
     private JavaParserConfiguration configuration;
+    private TranslatableMessageManager messageManager;
 
     public JavaSourceParser(Map<String, Object> config, Log log)
     {
@@ -32,6 +34,12 @@ public class JavaSourceParser implements SourceParser
         this.log = log;
 
         Set<TranslatableMethod> methodSet = null;
+
+        this.messageManager = (TranslatableMessageManager) config.get("message_manager");
+        if(this.messageManager == null)
+        {
+            this.messageManager = new TranslatableMessageManager();
+        }
 
         String methods = (String) config.get("methods");
         if (methods != null)
@@ -72,17 +80,14 @@ public class JavaSourceParser implements SourceParser
         parser.setEnvironment(null, environment, null, true);
         parser.setCompilerOptions(options);
 
-        Set<TranslatableMessage> messages = new HashSet<TranslatableMessage>();
         for (File file : files)
         {
             try
             {
                 parser.setSource(Misc.parseFileToCharArray(file));
                 CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
-                SourceClassVisitor visitor = new SourceClassVisitor(this.configuration, compilationUnit, file);
+                SourceClassVisitor visitor = new SourceClassVisitor(this.configuration, this.messageManager, compilationUnit, file);
                 compilationUnit.accept(visitor);
-
-                messages.addAll(visitor.getMessages());
             }
             catch (IOException ignored)
             {}
@@ -92,7 +97,7 @@ public class JavaSourceParser implements SourceParser
             }
         }
 
-        return messages;
+        return this.messageManager.getMessages();
     }
 
     private class JavaFileFilter implements FileFilter

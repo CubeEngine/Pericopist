@@ -1,6 +1,7 @@
 package de.cubeisland.maven.plugins.messagecatalog.mojo;
 
 import de.cubeisland.maven.plugins.messagecatalog.format.*;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.parser.*;
 import org.apache.maven.plugin.*;
 

@@ -16,52 +16,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.cubeisland.maven.plugins.messagecatalog.parser.Occurrence;
-import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
 
 class SourceClassVisitor extends ASTVisitor
 {
-//    private final JavaSourceParser parser;
     private final JavaParserConfiguration configuration;
+    private final TranslatableMessageManager messageManager;
     private final CompilationUnit compilationUnit;
     private final File file;
 
-    private final Map<String, TranslatableMessage> messages;
-//    private final Map<String, String> importedClasses;
-
-    public SourceClassVisitor(JavaParserConfiguration configuration, CompilationUnit compilationUnit, File file)
+    public SourceClassVisitor(JavaParserConfiguration configuration, TranslatableMessageManager messageManager, CompilationUnit compilationUnit, File file)
     {
-//        this.parser = parser;
         this.configuration = configuration;
+        this.messageManager = messageManager;
         this.compilationUnit = compilationUnit;
         this.file = file;
-
-        this.messages = new HashMap<String, TranslatableMessage>();
-//        this.importedClasses = new HashMap<String, String>();
-    }
-
-    public Set<TranslatableMessage> getMessages()
-    {
-        return new HashSet<TranslatableMessage>(this.messages.values());
     }
 
     private int getLine(ASTNode node)
     {
         return this.compilationUnit.getLineNumber(node.getStartPosition());
-    }
-
-    private void addMessage(String singular, String plural, Occurrence occurrence) // TODO add plural
-    {
-        TranslatableMessage message = this.messages.get(singular);
-        if (message == null)
-        {
-            this.messages.put(singular, new TranslatableMessage(singular, occurrence));
-        }
-        else
-        {
-            message.addOccurrence(occurrence);
-        }
     }
 
 //    @Override
@@ -172,7 +149,7 @@ class SourceClassVisitor extends ASTVisitor
 
             if(singular != null)
             {
-                this.addMessage(singular, plural, new Occurrence(file, this.getLine(node)));
+                this.messageManager.addMessage(singular, plural, new Occurrence(this.file, this.getLine(node)));
             }
         }
 

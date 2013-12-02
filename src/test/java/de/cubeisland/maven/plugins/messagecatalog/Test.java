@@ -4,10 +4,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.cubeisland.maven.plugins.messagecatalog.parser.Occurrence;
+import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParserFactory;
-import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.parser.UnknownSourceLanguageException;
 
 public class Test
@@ -16,8 +17,13 @@ public class Test
     {
         try
         {
+            TranslatableMessageManager messageManager = new TranslatableMessageManager();
+            messageManager.addMessage("pre-added", null, 1);
+            messageManager.addMessage("2nd pre-added string", "pre-added string has a plural!", 2);
+
             Map<String, Object> options = new HashMap<String, Object>();
             options.put("methods", "getTranslation sendTranslated:0 _ getTranslationN:0,1 sendTranslationN:0,1");
+            options.put("message_manager", messageManager);
 
             SourceParser parser = SourceParserFactory.newSourceParser("java", options, new Logger());
 
@@ -26,9 +32,13 @@ public class Test
             {
                 for(Occurrence occurrence : message.getOccurrences())
                 {
-                    System.out.println("#" + occurrence.getFile().getPath() + ":" + occurrence.getLine());
+                    System.out.println("# " + occurrence);
                 }
-                System.out.println(message.getMessage());
+                System.out.println("msgid = \"" + message.getSingular() + "\"");
+                if (message.hasPlural())
+                {
+                    System.out.println("msgid_plural = \"" + message.getPlural() + "\"");
+                }
                 System.out.println();
             }
         }

@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
-import de.cubeisland.maven.plugins.messagecatalog.parser.Occurrence;
-import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 
 import org.apache.maven.plugin.logging.Log;
 
@@ -40,8 +40,17 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 {
                     writer.write("#: " + occurrence.getFile().getPath() + ":" + occurrence.getLine() + "\n");
                 }
-                writeMessageId(writer, message.getMessage());
-                writeMessageString(writer);
+                writer.write("msgid \"" + message.getSingular() + "\"\n");
+                if(message.hasPlural())
+                {
+                    writer.write("msgid_plural \"" + message.getPlural() + "\"\n");
+                    writer.write("msgstr[0] \"\"\n");
+                    writer.write("msgstr[1] \"\"\n");
+                }
+                else
+                {
+                    writer.write("msgstr \"\"\n");
+                }
                 writer.write("\n");
             }
             writer.flush();

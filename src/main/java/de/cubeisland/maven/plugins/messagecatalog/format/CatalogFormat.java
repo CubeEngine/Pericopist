@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
-import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 
 public interface CatalogFormat
 {
