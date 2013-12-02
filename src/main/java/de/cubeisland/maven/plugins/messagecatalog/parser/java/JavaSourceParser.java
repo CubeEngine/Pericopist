@@ -9,7 +9,6 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,7 @@ import java.util.Set;
 
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
 public class JavaSourceParser implements SourceParser
@@ -24,14 +24,35 @@ public class JavaSourceParser implements SourceParser
     private final FileFilter fileFilter;
     private final Log log;
 
-    private String[] methodNames;
-    private Map<String, String[]> annotationFields;
-    private String basePackage;
+    private JavaParserConfiguration configuration;
 
     public JavaSourceParser(Map<String, Object> config, Log log)
     {
         this.fileFilter = new JavaFileFilter();
         this.log = log;
+
+        Set<TranslatableMethod> methodSet = null;
+
+        String methods = (String) config.get("methods");
+        if (methods != null)
+        {
+            methodSet = new HashSet<TranslatableMethod>();
+            for(String method : methods.split(" "))
+            {
+                try
+                {
+                    TranslatableMethod translatableMethod = new TranslatableMethod(method);
+                    methodSet.add(translatableMethod);
+                    this.log.info("translatable method '" + translatableMethod + "' was added");
+                }
+                catch (Exception e)
+                {
+                    this.log.error("The translatable method '" + method + "' could not be added", e);
+                }
+            }
+        }
+
+        this.configuration = new JavaParserConfiguration(methodSet);
     }
 
     public Set<TranslatableMessage> parse(File sourceDirectory)
@@ -58,9 +79,9 @@ public class JavaSourceParser implements SourceParser
             {
                 parser.setSource(Misc.parseFileToCharArray(file));
                 CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
-                SourceClassVisitor visitor = new SourceClassVisitor(this, compilationUnit, file);
+                SourceClassVisitor visitor = new SourceClassVisitor(this.configuration, compilationUnit, file);
                 compilationUnit.accept(visitor);
-//                visitor.visit(compilationUnit, file);
+
                 messages.addAll(visitor.getMessages());
             }
             catch (IOException ignored)
@@ -72,49 +93,6 @@ public class JavaSourceParser implements SourceParser
         }
 
         return messages;
-    }
-
-    public void setTranslatableMethodNames(String[] methods)
-    {
-        this.methodNames = methods;
-    }
-
-    public boolean isTranslatableMethodName(String name)
-    {
-        return this.methodNames != null && Arrays.binarySearch(this.methodNames, name) > -1;
-    }
-
-    public void setTranslatableAnnotations(Map<String, String[]> annotationFields)
-    {
-        this.annotationFields = annotationFields;
-    }
-
-    public boolean isTranslatableAnnotation(String annotation)
-    {
-        return this.annotationFields != null && this.annotationFields.get(annotation) != null;
-    }
-
-    public boolean isTranslatableAnnotationField(String annotation, String field)
-    {
-        if (this.annotationFields != null)
-        {
-            String[] fields = this.annotationFields.get(annotation);
-            if(fields != null)
-            {
-                return Arrays.binarySearch(fields, field) > -1;
-            }
-        }
-        return false;
-    }
-
-    public void setBasePackage(String basePackage)
-    {
-        this.basePackage = basePackage;
-    }
-
-    public boolean startsWithBasePackage(String fqn)
-    {
-        return fqn.startsWith(this.basePackage);
     }
 
     private class JavaFileFilter implements FileFilter

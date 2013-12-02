@@ -6,81 +6,85 @@ public class Logger implements Log
 {
     public boolean isDebugEnabled()
     {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     public void debug(CharSequence content)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        System.out.println(content);
     }
 
     public void debug(CharSequence content, Throwable error)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        System.out.println(content);
+        error.printStackTrace();
     }
 
     public void debug(Throwable error)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        error.printStackTrace();
     }
 
     public boolean isInfoEnabled()
     {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     public void info(CharSequence content)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        System.out.println(content);
     }
 
     public void info(CharSequence content, Throwable error)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        System.out.println(content);
+        error.printStackTrace();
     }
 
     public void info(Throwable error)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        error.printStackTrace();
     }
 
     public boolean isWarnEnabled()
     {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     public void warn(CharSequence content)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        System.out.println(content);
     }
 
     public void warn(CharSequence content, Throwable error)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        System.out.println(content);
+        error.printStackTrace();
     }
 
     public void warn(Throwable error)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        error.printStackTrace();
     }
 
     public boolean isErrorEnabled()
     {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     public void error(CharSequence content)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        System.out.println(content);
     }
 
     public void error(CharSequence content, Throwable error)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        System.out.println(content);
+        error.printStackTrace();
     }
 
     public void error(Throwable error)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        error.printStackTrace();
     }
 }

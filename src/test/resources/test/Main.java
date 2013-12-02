@@ -10,6 +10,7 @@ public class Main
 
         i18n.sendTranslated("hello everyone");
         i18n.getTranslation("whats up?");
+        i18n.getTranslation("whats up?");
 
         i18n.getTranslationN("hope %s is fine?", "hope you are fine", getOnlinePersons(), "Phillip");
 
