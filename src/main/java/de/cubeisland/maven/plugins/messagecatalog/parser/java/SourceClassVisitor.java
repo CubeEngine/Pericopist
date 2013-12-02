@@ -45,9 +45,9 @@ class SourceClassVisitor extends ASTVisitor
         this.importedClasses = new HashMap<String, String>();
     }
 
-    public Set<TranslatableMessage> getMessages()
+    public Map<String, TranslatableMessage> getMessages()
     {
-        return new HashSet<TranslatableMessage>(this.messages.values());
+        return this.messages;
     }
 
     private int getLine(ASTNode node)
