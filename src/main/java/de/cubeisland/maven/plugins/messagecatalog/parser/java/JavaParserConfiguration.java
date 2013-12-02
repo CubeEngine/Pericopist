@@ -1,16 +1,16 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser.java;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
 
 public class JavaParserConfiguration
 {
     private final Set<TranslatableMethod> methods;
-//    private final Map<String, Set<String>> annotationFields;
+    private final Set<TranslatableAnnotation> annotations;
 
     public JavaParserConfiguration()
     {
@@ -22,7 +22,7 @@ public class JavaParserConfiguration
         this(methods, null);
     }
 
-    public JavaParserConfiguration(Set<TranslatableMethod> methods, Map<String, Set<String>> annotationFields)
+    public JavaParserConfiguration(Set<TranslatableMethod> methods, Set<TranslatableAnnotation> annotations)
     {
         if (methods != null)
         {
@@ -34,14 +34,14 @@ public class JavaParserConfiguration
             this.methods.add(new TranslatableMethod("_:0"));
             this.methods.add(new TranslatableMethod("translate:0,1"));
         }
-//        if (annotationFields != null)
-//        {
-//            this.annotationFields = annotationFields;
-//        }
-//        else
-//        {
-//            this.annotationFields = new HashMap<String, Set<String>>();
-//        }
+        if (annotations != null)
+        {
+            this.annotations = annotations;
+        }
+        else
+        {
+            this.annotations = new HashSet<TranslatableAnnotation>(1);
+        }
     }
 
     public TranslatableMethod getMethod(String name)
@@ -61,8 +61,20 @@ public class JavaParserConfiguration
         return this.methods;
     }
 
-//    public Map<String, Set<String>> getAnnotationFields()
-//    {
-//        return this.annotationFields;
-//    }
+    public Set<TranslatableAnnotation> getAnnotations()
+    {
+        return this.annotations;
+    }
+
+    public TranslatableAnnotation getAnnotation(String name, boolean isFQN)
+    {
+        for(TranslatableAnnotation annotation : this.annotations)
+        {
+            if(isFQN && annotation.getFullQualifiedName().equals(name) || !isFQN && annotation.getSimpleName().equals(name))
+            {
+                return annotation;
+            }
+        }
+        return null;
+    }
 }

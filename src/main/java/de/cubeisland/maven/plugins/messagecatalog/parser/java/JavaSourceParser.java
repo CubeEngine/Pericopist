@@ -17,6 +17,7 @@ import java.util.Set;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
@@ -34,6 +35,7 @@ public class JavaSourceParser implements SourceParser
         this.log = log;
 
         Set<TranslatableMethod> methodSet = null;
+        Set<TranslatableAnnotation> annotationSet = null;
 
         this.messageManager = (TranslatableMessageManager) config.get("message_manager");
         if(this.messageManager == null)
@@ -55,12 +57,31 @@ public class JavaSourceParser implements SourceParser
                 }
                 catch (Exception e)
                 {
-                    this.log.error("The translatable method '" + method + "' could not be added", e);
+                    this.log.error("translatable method '" + method + "' could not be added", e);
                 }
             }
         }
 
-        this.configuration = new JavaParserConfiguration(methodSet);
+        String annotations = (String) config.get("annotations");
+        if(annotations != null)
+        {
+            annotationSet = new HashSet<TranslatableAnnotation>();
+            for(String annotation : annotations.split(" "))
+            {
+                try
+                {
+                    TranslatableAnnotation translatableAnnotation = new TranslatableAnnotation(annotation);
+                    annotationSet.add(translatableAnnotation);
+                    this.log.info("translatable annotation '" + translatableAnnotation + "' was added");
+                }
+                catch (Exception e)
+                {
+                    this.log.error("translatable annotation '" + annotation + "_ could not be added", e);
+                }
+            }
+        }
+
+        this.configuration = new JavaParserConfiguration(methodSet, annotationSet);
     }
 
     public Set<TranslatableMessage> parse(File sourceDirectory)

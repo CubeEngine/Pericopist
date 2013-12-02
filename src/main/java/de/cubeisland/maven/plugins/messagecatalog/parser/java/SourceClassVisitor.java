@@ -5,7 +5,11 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.InfixExpression;
+import org.eclipse.jdt.core.dom.MarkerAnnotation;
+import org.eclipse.jdt.core.dom.MemberValuePair;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.NormalAnnotation;
+import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 import java.io.File;
@@ -19,6 +23,7 @@ import java.util.Set;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
 
 class SourceClassVisitor extends ASTVisitor
@@ -57,60 +62,61 @@ class SourceClassVisitor extends ASTVisitor
 //        }
 //        return super.visit(node);
 //    }
-//
-//    @Override
-//    public boolean visit(NormalAnnotation node)
-//    {
-//        String annotationName = node.getTypeName().getFullyQualifiedName();
-//        if (this.parser.isTranslatableAnnotation(annotationName))
-//        {
-//            for(Object o : node.values())
-//            {
-//                if(!(o instanceof MemberValuePair))
-//                {
-//                    continue;
-//                }
-//                MemberValuePair pair = (MemberValuePair) o;
-//
-//                if(this.parser.isTranslatableAnnotationField(annotationName, pair.getName().getFullyQualifiedName()))
-//                {
-//                    Expression expr = pair.getValue();
-//                    if(expr instanceof StringLiteral)
-//                    {
-//                        this.addMessage(((StringLiteral)expr).getLiteralValue(), new Occurrence(file, this.getLine(expr)));
-//                    }
-//                }
-//            }
-//        }
-//        return super.visit(node);
-//    }
-//
-//    @Override
-//    public boolean visit(SingleMemberAnnotation node)
-//    {
-//        if(this.parser.isTranslatableAnnotationField(node.getTypeName().getFullyQualifiedName(), "value"))
-//        {
-//            Expression expr = node.getValue();
-//            if(expr instanceof StringLiteral)
-//            {
-//                this.addMessage(((StringLiteral)expr).getLiteralValue(), new Occurrence(this.file, this.getLine(expr)));
-//            }
-//        }
-//        return super.visit(node);
-//    }
-//
-//    @Override
-//    public boolean visit(MarkerAnnotation node)
-//    {
-//        /*
-//         * TODO Have a look at it
-//         * it seems that also NormalAnnotations are identified as MarkerAnnotations
-//         * whether they just have default values!
-//         * Maybe one has to catch it with the annotation declaration.
-//         * what is when the annotation is from another project?
-//         */
-//        return super.visit(node);
-//    }
+
+    @Override
+    public boolean visit(NormalAnnotation node)
+    {
+        TranslatableAnnotation annotation = this.configuration.getAnnotation(node.getTypeName().getFullyQualifiedName(), false); // TODO provide real fqn!
+        if (annotation != null)
+        {
+            for(Object o : node.values())
+            {
+                if(!(o instanceof MemberValuePair))
+                {
+                    continue;
+                }
+                MemberValuePair pair = (MemberValuePair) o;
+
+                if(annotation.hasField(pair.getName().getFullyQualifiedName()))
+                {
+                    Expression expr = pair.getValue();
+                    if(expr instanceof StringLiteral)
+                    {
+                        this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(file, this.getLine(expr)));
+                    }
+                }
+            }
+        }
+        return super.visit(node);
+    }
+
+    @Override
+    public boolean visit(SingleMemberAnnotation node)
+    {
+        TranslatableAnnotation annotation = this.configuration.getAnnotation(node.getTypeName().getFullyQualifiedName(), false); // TODO provide real fqn!
+        if(annotation != null && annotation.hasField("value"))
+        {
+            Expression expr = node.getValue();
+            if(expr instanceof StringLiteral)
+            {
+                this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(this.file, this.getLine(expr)));
+            }
+        }
+        return super.visit(node);
+    }
+
+    @Override
+    public boolean visit(MarkerAnnotation node)
+    {
+        /*
+         * TODO Have a look at it
+         * it seems that also NormalAnnotations are identified as MarkerAnnotations
+         * whether they just have default values!
+         * Maybe one has to catch it with the annotation declaration.
+         * what is when the annotation is from another project?
+         */
+        return super.visit(node);
+    }
 
     @Override
     public boolean visit(MethodInvocation node)
