@@ -1,6 +1,7 @@
 package de.cubeisland.maven.plugins.messagecatalog;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParserFactory;
 import de.cubeisland.maven.plugins.messagecatalog.parser.UnknownSourceLanguageException;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
+import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
 public class Test
 {
@@ -39,7 +41,7 @@ public class Test
             {
                 for(Occurrence occurrence : message.getOccurrences())
                 {
-                    System.out.println("# " + occurrence);
+                    System.out.println("# " + Misc.getNormalizedRelativePath(file, occurrence.getFile()));
                 }
                 System.out.println("msgid = \"" + message.getSingular() + "\"");
                 if (message.hasPlural())

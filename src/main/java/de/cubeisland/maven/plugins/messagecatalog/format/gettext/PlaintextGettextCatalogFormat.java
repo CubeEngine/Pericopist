@@ -11,6 +11,7 @@ import java.util.Set;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
 import org.apache.maven.plugin.logging.Log;
 
@@ -19,10 +20,14 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     private final Map<String, Object> config;
     private final Log log;
 
+    private final File base;
+
     public PlaintextGettextCatalogFormat(Map<String, Object> config, Log log)
     {
         this.config = config;
         this.log = log;
+
+        this.base = (File) config.get("SourcePath");    // TODO modify the way how to get the base!
     }
 
     public void write(File file, Set<TranslatableMessage> messages) throws IOException
@@ -38,7 +43,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             {
                 for (Occurrence occurrence : message.getOccurrences())
                 {
-                    writer.write("#: " + occurrence.getFile().getPath() + ":" + occurrence.getLine() + "\n");
+                    writer.write("#: " + Misc.getNormalizedRelativePath(this.base, occurrence.getFile()) + ":" + occurrence.getLine() + "\n");
                 }
                 writer.write("msgid \"" + message.getSingular() + "\"\n");
                 if(message.hasPlural())
