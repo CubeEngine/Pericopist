@@ -30,7 +30,7 @@ public class Test
             messageManager.addMessage("2nd pre-added string", "pre-added string has a plural!", 2);
 
             Map<String, Object> options = new HashMap<String, Object>();
-            options.put("methods", "getTranslation sendTranslated:0 _ getTranslationN:0,1 sendTranslationN:0,1");
+            options.put("methods", "getTranslation sendTranslated:1 _ getTranslationN:1,2 sendTranslationN:1,2");
             options.put("annotations", "test.anot.TestNormalAnnotation:desc,usage test.anot.TestSingleMemberAnnotation");
             options.put("message_manager", messageManager);
 

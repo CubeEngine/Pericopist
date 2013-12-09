@@ -11,7 +11,7 @@ public class TranslatableMethod
         String[] parts = method.trim().split(":");
 
         this.name = parts[0];
-        this.singularIndex = 0;
+        this.singularIndex = 1;
         this.pluralIndex = -1;
 
         if(parts.length > 1)
@@ -32,7 +32,7 @@ public class TranslatableMethod
 
     public int getSingularIndex()
     {
-        return this.singularIndex;
+        return this.singularIndex - 1;
     }
 
     public boolean hasPlural()
@@ -42,12 +42,12 @@ public class TranslatableMethod
 
     public int getPluralIndex()
     {
-        return this.pluralIndex;
+        return this.pluralIndex - 1;
     }
 
     @Override
     public String toString()
     {
-        return this.getName() + ":" + this.getSingularIndex() + (this.hasPlural() ? "," + this.getPluralIndex() : "");
+        return this.getName() + ":" + this.singularIndex + (this.hasPlural() ? "," + this.pluralIndex : "");
     }
 }
