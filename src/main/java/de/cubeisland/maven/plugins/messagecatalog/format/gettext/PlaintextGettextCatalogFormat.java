@@ -5,6 +5,7 @@ import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.HeaderFields;
 import org.fedorahosted.tennera.jgettext.HeaderUtil;
 import org.fedorahosted.tennera.jgettext.Message;
+import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
 import java.io.File;
@@ -15,21 +16,19 @@ import java.util.Set;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
-import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
     private final Map<String, Object> config;
     private final Log log;
 
-    private final File base;
+    private Message headerMessage;
 
     public PlaintextGettextCatalogFormat(Map<String, Object> config, Log log)
     {
         this.config = config;
         this.log = log;
-
-        this.base = (File) config.get("SourcePath");    // TODO modify the way how to get the base!
     }
 
     public void write(File file, Set<TranslatableMessage> messages) throws IOException
@@ -38,10 +37,14 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         for(TranslatableMessage translatableMessage : messages)
         {
+            if(translatableMessage.getOccurrences().isEmpty())
+            {
+                continue;
+            }
             Message message = new Message();
             for(Occurrence occurrence : translatableMessage.getOccurrences())
             {
-                message.addSourceReference(Misc.getNormalizedRelativePath(this.base, occurrence.getFile()), occurrence.getLine());
+                message.addSourceReference(occurrence.getPath(), occurrence.getLine());
             }
             message.setMsgid(translatableMessage.getSingular());
             if(translatableMessage.hasPlural())
@@ -52,24 +55,52 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             catalog.addMessage(message);
         }
 
-        catalog.addMessage(this.getHeader(catalog.locateHeader()));
+        this.updateHeaderMessage();
+        catalog.addMessage(this.headerMessage);
 
         PoWriter poWriter = new PoWriter(true);
         poWriter.write(catalog, file);
     }
 
-    private Message getHeader(Message existing)
+    public TranslatableMessageManager read(File file) throws IOException
     {
-        if(existing != null && existing.isHeader())
+        TranslatableMessageManager manager = new TranslatableMessageManager();
+
+        Catalog catalog = new Catalog(true);
+        PoParser poParser = new PoParser(catalog);
+        catalog = poParser.parseCatalog(file);
+
+        this.headerMessage = catalog.locateHeader();
+
+        int i = 0;
+        for(Message message : catalog)
         {
-            HeaderFields header = HeaderFields.wrap(existing);
+            if(!message.isHeader())
+            {
+                manager.addMessage(message.getMsgid(), message.getMsgidPlural(), i++);
+            }
+        }
+
+        return manager;
+    }
+
+    private void updateHeaderMessage()
+    {
+        if (this.headerMessage != null)
+        {
+            HeaderFields header = HeaderFields.wrap(this.headerMessage);
             header.updatePOTCreationDate();
-            header.updatePOTCreationDate();
-            return header.unwrap();
+
+            Message updatedHeader = header.unwrap();
+            for(String comment : this.headerMessage.getComments())
+            {
+                updatedHeader.addComment(comment);
+            }
+            this.headerMessage = updatedHeader;
         }
         else
         {
-            return HeaderUtil.generateDefaultHeader();
+            this.headerMessage = HeaderUtil.generateDefaultHeader();
         }
     }
 

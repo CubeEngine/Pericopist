@@ -41,7 +41,7 @@ public class Test
             {
                 for(Occurrence occurrence : message.getOccurrences())
                 {
-                    System.out.println("# " + Misc.getNormalizedRelativePath(file, occurrence.getFile()));
+                    System.out.println("# " + occurrence.getPath());
                 }
                 System.out.println("msgid = \"" + message.getSingular() + "\"");
                 if (message.hasPlural())

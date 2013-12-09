@@ -107,7 +107,7 @@ public class JavaSourceParser implements SourceParser
             {
                 parser.setSource(Misc.parseFileToCharArray(file));
                 CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
-                SourceClassVisitor visitor = new SourceClassVisitor(this.configuration, this.messageManager, compilationUnit, file);
+                SourceClassVisitor visitor = new SourceClassVisitor(this.configuration, this.messageManager, compilationUnit, sourceDirectory, file);
                 compilationUnit.accept(visitor);
             }
             catch (IOException ignored)

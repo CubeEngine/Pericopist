@@ -24,23 +24,26 @@ import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
+import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
 class SourceClassVisitor extends ASTVisitor
 {
     private final JavaParserConfiguration configuration;
     private final TranslatableMessageManager messageManager;
     private final CompilationUnit compilationUnit;
+    private final File base;
     private final File file;
 
     private String packageName;
     private Set<String> normalImports;
     private Set<String> onDemandImports;
 
-    public SourceClassVisitor(JavaParserConfiguration configuration, TranslatableMessageManager messageManager, CompilationUnit compilationUnit, File file)
+    public SourceClassVisitor(JavaParserConfiguration configuration, TranslatableMessageManager messageManager, CompilationUnit compilationUnit, File base, File file)
     {
         this.configuration = configuration;
         this.messageManager = messageManager;
         this.compilationUnit = compilationUnit;
+        this.base = base;
         this.file = file;
 
         this.normalImports = new HashSet<String>();
@@ -121,7 +124,7 @@ class SourceClassVisitor extends ASTVisitor
                     Expression expr = pair.getValue();
                     if(expr instanceof StringLiteral)
                     {
-                        this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(file, this.getLine(expr)));
+                        this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(Misc.getNormalizedRelativePath(this.base, this.file), this.getLine(expr)));
                     }
                 }
             }
@@ -138,7 +141,7 @@ class SourceClassVisitor extends ASTVisitor
             Expression expr = node.getValue();
             if(expr instanceof StringLiteral)
             {
-                this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(this.file, this.getLine(expr)));
+                this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(Misc.getNormalizedRelativePath(this.base, this.file), this.getLine(expr)));
             }
         }
         return super.visit(node);
@@ -194,7 +197,7 @@ class SourceClassVisitor extends ASTVisitor
 
             if(singular != null)
             {
-                this.messageManager.addMessage(singular, plural, new Occurrence(this.file, this.getLine(node)));
+                this.messageManager.addMessage(singular, plural, new Occurrence(Misc.getNormalizedRelativePath(this.base, this.file), this.getLine(node)));
             }
         }
 

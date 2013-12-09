@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.util.Set;
 
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 
 public interface CatalogFormat
 {
     void write(File file, Set<TranslatableMessage> messages) throws IOException;
+    TranslatableMessageManager read(File file) throws IOException;
     String getFileExtension();
 }
