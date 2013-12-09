@@ -8,7 +8,7 @@ public class Main
     {
         I18n i18n = new I18n();
 
-        i18n.sendTranslated("hello everyone");
+        i18n.sendTranslated("\n\n\n\thello everyone");
         i18n.getTranslation("whats up?");
         i18n.getTranslation("whats up?");
 

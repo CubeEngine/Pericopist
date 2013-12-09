@@ -25,8 +25,15 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     {
         this.position = position;
 
-        this.singular = singular;
-        this.plural = plural;
+        this.singular = this.replaceWhitespaces(singular);
+        if(plural != null)
+        {
+            this.plural = this.replaceWhitespaces(plural);
+        }
+        else
+        {
+            this.plural = null;
+        }
 
         this.occurrences = new TreeSet<Occurrence>();
         if(firstOccurrence != null)
@@ -91,5 +98,13 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
             return -1;
         }
         return Integer.compare(this.position, o.position);
+    }
+
+    private String replaceWhitespaces(String string)
+    {
+        String replaced = string.replaceAll("\n", "\\\\n");
+        replaced = replaced.replaceAll("\t", "\\\\t");
+
+        return replaced;
     }
 }
