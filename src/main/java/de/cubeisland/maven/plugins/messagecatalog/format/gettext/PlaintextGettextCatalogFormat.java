@@ -99,6 +99,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
     public String getFileExtension()
     {
-        return "po";
+        return "pot";
     }
 }
