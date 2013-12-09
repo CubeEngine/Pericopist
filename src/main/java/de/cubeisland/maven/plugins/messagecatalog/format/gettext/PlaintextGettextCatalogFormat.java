@@ -3,6 +3,7 @@ package de.cubeisland.maven.plugins.messagecatalog.format.gettext;
 import org.apache.maven.plugin.logging.Log;
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.HeaderFields;
+import org.fedorahosted.tennera.jgettext.HeaderUtil;
 import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
@@ -59,26 +60,18 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
     private Message getHeader(Message existing)
     {
-        HeaderFields header;
         if(existing != null && existing.isHeader())
         {
-            header = HeaderFields.wrap(existing);
+            HeaderFields header = HeaderFields.wrap(existing);
+            header.updatePOTCreationDate();
+            header.updatePOTCreationDate();
+            return header.unwrap();
         }
         else
         {
-            header = new HeaderFields();
-            for(String headerKey : HeaderFields.getDefaultKeys())
-            {
-                header.setValue(headerKey, "<VALUE>");
-            }
-            header.setValue(HeaderFields.KEY_Language, "java");
+            return HeaderUtil.generateDefaultHeader();
         }
-        header.updatePOTCreationDate();
-        header.updatePOTCreationDate();
-
-        return header.unwrap();
     }
-
 
     public String getFileExtension()
     {
