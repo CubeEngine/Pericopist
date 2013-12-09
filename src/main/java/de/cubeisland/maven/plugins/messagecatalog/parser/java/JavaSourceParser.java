@@ -76,7 +76,7 @@ public class JavaSourceParser implements SourceParser
                 }
                 catch (Exception e)
                 {
-                    this.log.error("translatable annotation '" + annotation + "_ could not be added", e);
+                    this.log.error("translatable annotation '" + annotation + "' could not be added", e);
                 }
             }
         }
