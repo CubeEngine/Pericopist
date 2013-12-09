@@ -51,6 +51,11 @@
             <artifactId>org.eclipse.jdt.core</artifactId>
             <version>3.7.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.fedorahosted.tennera</groupId>
+            <artifactId>jgettext</artifactId>
+            <version>0.13</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -79,6 +84,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.3.2</version>
             </plugin>
+
         </plugins>
     </build>
 </project>

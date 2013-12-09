@@ -1,10 +1,13 @@
 package de.cubeisland.maven.plugins.messagecatalog.format.gettext;
 
-import java.io.BufferedWriter;
+import org.apache.maven.plugin.logging.Log;
+import org.fedorahosted.tennera.jgettext.Catalog;
+import org.fedorahosted.tennera.jgettext.HeaderFields;
+import org.fedorahosted.tennera.jgettext.Message;
+import org.fedorahosted.tennera.jgettext.PoWriter;
+
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,8 +15,6 @@ import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
-
-import org.apache.maven.plugin.logging.Log;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
@@ -32,70 +33,52 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
     public void write(File file, Set<TranslatableMessage> messages) throws IOException
     {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file, false));
+        Catalog catalog = new Catalog(true);
 
-        try
+        for(TranslatableMessage translatableMessage : messages)
         {
-            writeHeader(writer);
-            writer.write("\n");
-
-            for (TranslatableMessage message : messages)
+            Message message = new Message();
+            for(Occurrence occurrence : translatableMessage.getOccurrences())
             {
-                for (Occurrence occurrence : message.getOccurrences())
-                {
-                    writer.write("#: " + Misc.getNormalizedRelativePath(this.base, occurrence.getFile()) + ":" + occurrence.getLine() + "\n");
-                }
-                writer.write("msgid \"" + message.getSingular() + "\"\n");
-                if(message.hasPlural())
-                {
-                    writer.write("msgid_plural \"" + message.getPlural() + "\"\n");
-                    writer.write("msgstr[0] \"\"\n");
-                    writer.write("msgstr[1] \"\"\n");
-                }
-                else
-                {
-                    writer.write("msgstr \"\"\n");
-                }
-                writer.write("\n");
+                message.addSourceReference(Misc.getNormalizedRelativePath(this.base, occurrence.getFile()), occurrence.getLine());
             }
-            writer.flush();
+            message.setMsgid(translatableMessage.getSingular());
+            if(translatableMessage.hasPlural())
+            {
+                message.setMsgidPlural(translatableMessage.getPlural());
+            }
+
+            catalog.addMessage(message);
         }
-        finally
+
+        catalog.addMessage(this.getHeader(catalog.locateHeader()));
+
+        PoWriter poWriter = new PoWriter(true);
+        poWriter.write(catalog, file);
+    }
+
+    private Message getHeader(Message existing)
+    {
+        HeaderFields header;
+        if(existing != null && existing.isHeader())
         {
-            writer.close();
+            header = HeaderFields.wrap(existing);
         }
+        else
+        {
+            header = new HeaderFields();
+            for(String headerKey : HeaderFields.getDefaultKeys())
+            {
+                header.setValue(headerKey, "<VALUE>");
+            }
+            header.setValue(HeaderFields.KEY_Language, "java");
+        }
+        header.updatePOTCreationDate();
+        header.updatePOTCreationDate();
+
+        return header.unwrap();
     }
 
-    private static void writeHeader(BufferedWriter writer) throws IOException
-    {
-        writeMessageId(writer, "");
-        writeMessageString(writer);
-        writeHeaderLine(writer, "Project-Id-Version: <PROJECT>");
-        writeHeaderLine(writer, "POT-Creation-Date: <DATE>");
-        writeHeaderLine(writer, "PO-Revision-Date: <DATE>");
-        writeHeaderLine(writer, "Last-Translator: <NAME>");
-        writeHeaderLine(writer, "Language-Team: <TEAM>");
-        writeHeaderLine(writer, "Language: <LANGUAGE>");
-        writeHeaderLine(writer, "MIME-Revision: 1.0");
-        writeHeaderLine(writer, "Content-Type: text/plain; charset=UTF-8");
-        writeHeaderLine(writer, "Content-Transfer-Encoding: 8bit");
-        writeHeaderLine(writer, "X-Generator: maven-messagecatalog-plugin");
-    }
-
-    private static void writeHeaderLine(Writer writer, String content) throws IOException
-    {
-        writer.write("\"" + content + "\\n\"\n");
-    }
-
-    private static void writeMessageId(Writer writer, String msgid) throws IOException
-    {
-        writer.write("msgid \"" + msgid + "\"\n");
-    }
-
-    private static void writeMessageString(Writer writer) throws IOException
-    {
-        writer.write("msgstr \"\"\n");
-    }
 
     public String getFileExtension()
     {
