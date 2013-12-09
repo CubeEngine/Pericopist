@@ -1,26 +1,28 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser.java;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
+
 public class JavaParserConfiguration
 {
-    private final Set<String> methods;
-    private final Map<String, Set<String>> annotationFields;
+    private final Set<TranslatableMethod> methods;
+    private final Set<TranslatableAnnotation> annotations;
 
     public JavaParserConfiguration()
     {
         this(null);
     }
 
-    public JavaParserConfiguration(Set<String> methods)
+    public JavaParserConfiguration(Set<TranslatableMethod> methods)
     {
         this(methods, null);
     }
 
-    public JavaParserConfiguration(Set<String> methods, Map<String, Set<String>> annotationFields)
+    public JavaParserConfiguration(Set<TranslatableMethod> methods, Set<TranslatableAnnotation> annotations)
     {
         if (methods != null)
         {
@@ -28,25 +30,51 @@ public class JavaParserConfiguration
         }
         else
         {
-            this.methods = new HashSet<String>();
+            this.methods = new HashSet<TranslatableMethod>();
+            this.methods.add(new TranslatableMethod("_:0"));
+            this.methods.add(new TranslatableMethod("translate:0,1"));
         }
-        if (annotationFields != null)
+        if (annotations != null)
         {
-            this.annotationFields = annotationFields;
+            this.annotations = annotations;
         }
         else
         {
-            this.annotationFields = new HashMap<String, Set<String>>();
+            this.annotations = new HashSet<TranslatableAnnotation>(1);
         }
     }
 
-    public Set<String> getMethods()
+    public TranslatableMethod getMethod(String name)
+    {
+        for(TranslatableMethod method : this.methods)
+        {
+            if(method.getName().equals(name))
+            {
+                return method;
+            }
+        }
+        return null;
+    }
+
+    public Set<TranslatableMethod> getMethods()
     {
         return this.methods;
     }
 
-    public Map<String, Set<String>> getAnnotationFields()
+    public Set<TranslatableAnnotation> getAnnotations()
     {
-        return this.annotationFields;
+        return this.annotations;
+    }
+
+    public TranslatableAnnotation getAnnotation(String name)
+    {
+        for(TranslatableAnnotation annotation : this.annotations)
+        {
+            if(annotation.getFullQualifiedName().equals(name))
+            {
+                return annotation;
+            }
+        }
+        return null;
     }
 }

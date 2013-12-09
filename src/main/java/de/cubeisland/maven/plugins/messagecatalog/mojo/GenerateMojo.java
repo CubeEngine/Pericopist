@@ -1,6 +1,7 @@
 package de.cubeisland.maven.plugins.messagecatalog.mojo;
 
 import de.cubeisland.maven.plugins.messagecatalog.format.*;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.parser.*;
 import org.apache.maven.plugin.*;
 
@@ -17,6 +18,8 @@ public class GenerateMojo extends AbstractMessageCatalogMojo
     @Override
     public void doExecute() throws MojoExecutionException, MojoFailureException
     {
+        this.options.put("SourcePath", this.sourcePath);
+
         SourceParser parser = SourceParserFactory.newSourceParser(this.language, this.options, this.getLog());
         Set<TranslatableMessage> messages = parser.parse (this.sourcePath);
 

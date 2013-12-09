@@ -1,6 +1,7 @@
 package de.cubeisland.maven.plugins.messagecatalog.util;
 
 import java.io.*;
+import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -75,5 +76,10 @@ public class Misc
 
         stream.close();
         return sb.toString().toCharArray();
+    }
+
+    public static String getNormalizedRelativePath(File base, File file)
+    {
+        return base.toURI().relativize(file.toURI()).getPath().replaceAll("\\\\", "/");
     }
 }

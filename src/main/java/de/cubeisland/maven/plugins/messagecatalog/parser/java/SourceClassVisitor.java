@@ -9,45 +9,43 @@ import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MemberValuePair;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import de.cubeisland.maven.plugins.messagecatalog.parser.Occurrence;
-import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
-import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
 
 class SourceClassVisitor extends ASTVisitor
 {
-    private final SourceParser parser;
+    private final JavaParserConfiguration configuration;
+    private final TranslatableMessageManager messageManager;
     private final CompilationUnit compilationUnit;
     private final File file;
 
-    private final Map<String, TranslatableMessage> messages;
-    private final Map<String, String> importedClasses;
+    private String packageName;
+    private Set<String> normalImports;
+    private Set<String> onDemandImports;
 
-    public SourceClassVisitor(SourceParser parser, CompilationUnit compilationUnit, File file)
+    public SourceClassVisitor(JavaParserConfiguration configuration, TranslatableMessageManager messageManager, CompilationUnit compilationUnit, File file)
     {
-        this.parser = parser;
+        this.configuration = configuration;
+        this.messageManager = messageManager;
         this.compilationUnit = compilationUnit;
         this.file = file;
 
-        this.messages = new HashMap<String, TranslatableMessage>();
-        this.importedClasses = new HashMap<String, String>();
-    }
-
-    public Set<TranslatableMessage> getMessages()
-    {
-        return new HashSet<TranslatableMessage>(this.messages.values());
+        this.normalImports = new HashSet<String>();
+        this.onDemandImports = new HashSet<String>();
+        this.onDemandImports.add("java.lang");
     }
 
     private int getLine(ASTNode node)
@@ -55,31 +53,50 @@ class SourceClassVisitor extends ASTVisitor
         return this.compilationUnit.getLineNumber(node.getStartPosition());
     }
 
-    private void addMessage(String string, Occurrence occurrence)
+    private TranslatableAnnotation getTranslatableAnnotation(String simpleName)
     {
-        TranslatableMessage message = this.messages.get(string);
-        if (message == null)
+        TranslatableAnnotation annotation;
+        for(String normal : this.normalImports)
         {
-            this.messages.put(string, new TranslatableMessage(string, occurrence));
+            if(normal.endsWith(simpleName))
+            {
+                annotation = this.configuration.getAnnotation(normal);
+                if(annotation != null && annotation.getSimpleName().equals(simpleName))
+                {
+                    return annotation;
+                }
+            }
         }
-        else
+        for(String onDemand : this.onDemandImports)
         {
-            message.addOccurrence(occurrence);
+            annotation = this.configuration.getAnnotation(onDemand + "." + simpleName);
+            if(annotation != null)
+            {
+                return annotation;
+            }
         }
+        return this.configuration.getAnnotation(this.packageName + "." + simpleName);
+    }
+
+    @Override
+    public boolean visit(PackageDeclaration node)
+    {
+        this.packageName = node.getName().getFullyQualifiedName();
+        return super.visit(node);
     }
 
     @Override
     public boolean visit(ImportDeclaration node)
     {
-        if(!node.isStatic() && !node.isOnDemand())
+        if(!node.isStatic())
         {
-            Name name = node.getName();
-            String fqcn = name.getFullyQualifiedName();
-
-            if(this.parser.startsWithBasePackage(fqcn))
+            if(node.isOnDemand())
             {
-                int dotIndex = name.getFullyQualifiedName().lastIndexOf('.');
-                this.importedClasses.put(name.getFullyQualifiedName().substring(dotIndex + 1), name.getFullyQualifiedName());
+                this.onDemandImports.add(node.getName().getFullyQualifiedName());
+            }
+            else
+            {
+                this.normalImports.add(node.getName().getFullyQualifiedName());
             }
         }
         return super.visit(node);
@@ -88,8 +105,8 @@ class SourceClassVisitor extends ASTVisitor
     @Override
     public boolean visit(NormalAnnotation node)
     {
-        String annotationName = node.getTypeName().getFullyQualifiedName();
-        if (this.parser.isTranslatableAnnotation(annotationName))
+        TranslatableAnnotation annotation = this.getTranslatableAnnotation(node.getTypeName().getFullyQualifiedName());
+        if (annotation != null)
         {
             for(Object o : node.values())
             {
@@ -99,12 +116,12 @@ class SourceClassVisitor extends ASTVisitor
                 }
                 MemberValuePair pair = (MemberValuePair) o;
 
-                if(this.parser.isTranslatableAnnotationField(annotationName, pair.getName().getFullyQualifiedName()))
+                if(annotation.hasField(pair.getName().getFullyQualifiedName()))
                 {
                     Expression expr = pair.getValue();
                     if(expr instanceof StringLiteral)
                     {
-                        this.addMessage(((StringLiteral)expr).getLiteralValue(), new Occurrence(file, this.getLine(expr)));
+                        this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(file, this.getLine(expr)));
                     }
                 }
             }
@@ -115,12 +132,13 @@ class SourceClassVisitor extends ASTVisitor
     @Override
     public boolean visit(SingleMemberAnnotation node)
     {
-        if(this.parser.isTranslatableAnnotationField(node.getTypeName().getFullyQualifiedName(), "value"))
+        TranslatableAnnotation annotation = this.getTranslatableAnnotation(node.getTypeName().getFullyQualifiedName());
+        if(annotation != null && annotation.hasField("value"))
         {
             Expression expr = node.getValue();
             if(expr instanceof StringLiteral)
             {
-                this.addMessage(((StringLiteral)expr).getLiteralValue(), new Occurrence(this.file, this.getLine(expr)));
+                this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(this.file, this.getLine(expr)));
             }
         }
         return super.visit(node);
@@ -142,27 +160,44 @@ class SourceClassVisitor extends ASTVisitor
     @Override
     public boolean visit(MethodInvocation node)
     {
-        if(this.parser.isTranslatableMethodName(node.getName().getIdentifier()))
+        TranslatableMethod method = this.configuration.getMethod(node.getName().getIdentifier());
+        if (method != null)
         {
+            String singular = null;
+            String plural = null;
+
             List args = node.arguments();
-            if(args.size() > 0)
+            if(args.size() > method.getSingularIndex())
             {
-                Expression expr = (Expression) args.get(0);
-                if(expr instanceof StringLiteral)
+                Expression expr = (Expression) args.get(method.getSingularIndex());
+                if (expr instanceof StringLiteral)
                 {
-                    this.addMessage(((StringLiteral)expr).getLiteralValue(), new Occurrence(file, this.getLine(expr)));
+                    singular = ((StringLiteral)expr).getLiteralValue();
                 }
                 else if(expr instanceof InfixExpression)
                 {
-                    String value = this.getString((InfixExpression)expr);
-
-                    if(value != null)
-                    {
-                        this.addMessage(value, new Occurrence(file, this.getLine(expr)));
-                    }
+                    singular = this.getString((InfixExpression) expr);
                 }
             }
+            if(method.hasPlural() && args.size() > method.getPluralIndex())
+            {
+                Expression expr = (Expression) args.get(method.getPluralIndex());
+                if (expr instanceof StringLiteral)
+                {
+                    plural = ((StringLiteral)expr).getLiteralValue();
+                }
+                else if(expr instanceof InfixExpression)
+                {
+                    plural = this.getString((InfixExpression) expr);
+                }
+            }
+
+            if(singular != null)
+            {
+                this.messageManager.addMessage(singular, plural, new Occurrence(this.file, this.getLine(node)));
+            }
         }
+
         return super.visit(node);
     }
 

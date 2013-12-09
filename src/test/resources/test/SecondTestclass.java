@@ -2,6 +2,7 @@ package test;
 
 import static test.I18n._;
 import test.anot.TestNormalAnnotation;
+import test.wronganot.TestSingleMemberAnnotation;
 
 public class SecondTestclass
 {
@@ -12,6 +13,7 @@ public class SecondTestclass
         i18n.getTranslation("goodbye");
     }
 
+    @TestSingleMemberAnnotation("wrongAnnotation!")
     @TestNormalAnnotation(desc = "normalAnnotString")
     public void test()
     {

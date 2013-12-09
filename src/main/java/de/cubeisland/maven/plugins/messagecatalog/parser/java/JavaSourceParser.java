@@ -9,14 +9,16 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
-import de.cubeisland.maven.plugins.messagecatalog.parser.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
 public class JavaSourceParser implements SourceParser
@@ -24,14 +26,62 @@ public class JavaSourceParser implements SourceParser
     private final FileFilter fileFilter;
     private final Log log;
 
-    private String[] methodNames;
-    private Map<String, String[]> annotationFields;
-    private String basePackage;
+    private JavaParserConfiguration configuration;
+    private TranslatableMessageManager messageManager;
 
     public JavaSourceParser(Map<String, Object> config, Log log)
     {
         this.fileFilter = new JavaFileFilter();
         this.log = log;
+
+        Set<TranslatableMethod> methodSet = null;
+        Set<TranslatableAnnotation> annotationSet = null;
+
+        this.messageManager = (TranslatableMessageManager) config.get("message_manager");
+        if(this.messageManager == null)
+        {
+            this.messageManager = new TranslatableMessageManager();
+        }
+
+        String methods = (String) config.get("methods");
+        if (methods != null)
+        {
+            methodSet = new HashSet<TranslatableMethod>();
+            for(String method : methods.split(" "))
+            {
+                try
+                {
+                    TranslatableMethod translatableMethod = new TranslatableMethod(method);
+                    methodSet.add(translatableMethod);
+                    this.log.info("translatable method '" + translatableMethod + "' was added");
+                }
+                catch (Exception e)
+                {
+                    this.log.error("translatable method '" + method + "' could not be added", e);
+                }
+            }
+        }
+
+        String annotations = (String) config.get("annotations");
+        if(annotations != null)
+        {
+            annotationSet = new HashSet<TranslatableAnnotation>();
+            for(String annotation : annotations.split(" "))
+            {
+                try
+                {
+                    TranslatableAnnotation translatableAnnotation = new TranslatableAnnotation(annotation);
+                    annotationSet.add(translatableAnnotation);
+                    this.log.info("translatable annotation '" + translatableAnnotation + "' was added");
+                }
+                catch (Exception e)
+                {
+                    this.log.error("translatable annotation '" + annotation + "' could not be added", e);
+                }
+            }
+        }
+
+        this.configuration = new JavaParserConfiguration(methodSet, annotationSet);
     }
 
     public Set<TranslatableMessage> parse(File sourceDirectory)
@@ -51,17 +101,14 @@ public class JavaSourceParser implements SourceParser
         parser.setEnvironment(null, environment, null, true);
         parser.setCompilerOptions(options);
 
-        Set<TranslatableMessage> messages = new HashSet<TranslatableMessage>();
         for (File file : files)
         {
             try
             {
                 parser.setSource(Misc.parseFileToCharArray(file));
                 CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
-                SourceClassVisitor visitor = new SourceClassVisitor(this, compilationUnit, file);
+                SourceClassVisitor visitor = new SourceClassVisitor(this.configuration, this.messageManager, compilationUnit, file);
                 compilationUnit.accept(visitor);
-//                visitor.visit(compilationUnit, file);
-                messages.addAll(visitor.getMessages());
             }
             catch (IOException ignored)
             {}
@@ -71,50 +118,7 @@ public class JavaSourceParser implements SourceParser
             }
         }
 
-        return messages;
-    }
-
-    public void setTranslatableMethodNames(String[] methods)
-    {
-        this.methodNames = methods;
-    }
-
-    public boolean isTranslatableMethodName(String name)
-    {
-        return this.methodNames != null && Arrays.binarySearch(this.methodNames, name) > -1;
-    }
-
-    public void setTranslatableAnnotations(Map<String, String[]> annotationFields)
-    {
-        this.annotationFields = annotationFields;
-    }
-
-    public boolean isTranslatableAnnotation(String annotation)
-    {
-        return this.annotationFields != null && this.annotationFields.get(annotation) != null;
-    }
-
-    public boolean isTranslatableAnnotationField(String annotation, String field)
-    {
-        if (this.annotationFields != null)
-        {
-            String[] fields = this.annotationFields.get(annotation);
-            if(fields != null)
-            {
-                return Arrays.binarySearch(fields, field) > -1;
-            }
-        }
-        return false;
-    }
-
-    public void setBasePackage(String basePackage)
-    {
-        this.basePackage = basePackage;
-    }
-
-    public boolean startsWithBasePackage(String fqn)
-    {
-        return fqn.startsWith(this.basePackage);
+        return this.messageManager.getMessages();
     }
 
     private class JavaFileFilter implements FileFilter

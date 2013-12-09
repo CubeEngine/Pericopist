@@ -8,7 +8,8 @@ public class Main
     {
         I18n i18n = new I18n();
 
-        i18n.sendTranslated("hello everyone");
+        i18n.sendTranslated("\n\n\n\thello everyone");
+        i18n.getTranslation("whats up?");
         i18n.getTranslation("whats up?");
 
         i18n.getTranslationN("hope %s is fine?", "hope you are fine", getOnlinePersons(), "Phillip");
@@ -18,6 +19,7 @@ public class Main
         this.getNonTranslation("Bye bye!");
     }
 
+    @TestSingleMemberAnnotation("pre-added")
     private String getNonTranslation(String string, Object ... o)
     {
         return String.format(string, o);
