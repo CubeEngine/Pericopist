@@ -36,9 +36,16 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         for(TranslatableMessage translatableMessage : messageManager)
         {
-            if(translatableMessage.getOccurrences().isEmpty() && this.config.removeUnusedMessages())
+            if(translatableMessage.getOccurrences().isEmpty())
             {
-                continue;
+                if(this.config.removeUnusedMessages())
+                {
+                    continue;
+                }
+                else
+                {
+                    this.log.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
+                }
             }
             Message message = new Message();
             for(Occurrence occurrence : translatableMessage.getOccurrences())
