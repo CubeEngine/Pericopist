@@ -17,6 +17,7 @@ import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
+import de.cubeisland.maven.plugins.messagecatalog.util.OptionValues;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
@@ -37,7 +38,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         for(TranslatableMessage translatableMessage : messages)
         {
-            if(translatableMessage.getOccurrences().isEmpty())
+            if(translatableMessage.getOccurrences().isEmpty() && (Boolean) this.config.get(OptionValues.REMOVE_UNUSED_MESSAGES))
             {
                 continue;
             }

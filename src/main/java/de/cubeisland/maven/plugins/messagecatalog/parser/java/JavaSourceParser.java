@@ -20,6 +20,7 @@ import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
+import de.cubeisland.maven.plugins.messagecatalog.util.OptionValues;
 
 public class JavaSourceParser implements SourceParser
 {
@@ -43,7 +44,7 @@ public class JavaSourceParser implements SourceParser
             this.messageManager = new TranslatableMessageManager();
         }
 
-        String methods = (String) config.get("methods");
+        String methods = (String) config.get(OptionValues.TRANSLATABLE_METHODS);
         if (methods != null)
         {
             methodSet = new HashSet<TranslatableMethod>();
@@ -62,7 +63,7 @@ public class JavaSourceParser implements SourceParser
             }
         }
 
-        String annotations = (String) config.get("annotations");
+        String annotations = (String) config.get(OptionValues.TRANSLATABLE_ANNOTATIONS);
         if(annotations != null)
         {
             annotationSet = new HashSet<TranslatableAnnotation>();
