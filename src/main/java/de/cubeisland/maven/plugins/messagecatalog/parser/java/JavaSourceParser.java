@@ -16,11 +16,10 @@ import java.util.Set;
 
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
+import de.cubeisland.maven.plugins.messagecatalog.util.Config;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
-import de.cubeisland.maven.plugins.messagecatalog.util.OptionValues;
 
 public class JavaSourceParser implements SourceParser
 {
@@ -28,9 +27,8 @@ public class JavaSourceParser implements SourceParser
     private final Log log;
 
     private JavaParserConfiguration configuration;
-    private TranslatableMessageManager messageManager;
 
-    public JavaSourceParser(Map<String, Object> config, Log log)
+    public JavaSourceParser(Config config, Log log)
     {
         this.fileFilter = new JavaFileFilter();
         this.log = log;
@@ -38,13 +36,7 @@ public class JavaSourceParser implements SourceParser
         Set<TranslatableMethod> methodSet = null;
         Set<TranslatableAnnotation> annotationSet = null;
 
-        this.messageManager = (TranslatableMessageManager) config.get("message_manager");
-        if(this.messageManager == null)
-        {
-            this.messageManager = new TranslatableMessageManager();
-        }
-
-        String methods = (String) config.get(OptionValues.TRANSLATABLE_METHODS);
+        String methods = config.options.get(Config.TRANSLATABLE_METHODS);
         if (methods != null)
         {
             methodSet = new HashSet<TranslatableMethod>();
@@ -63,7 +55,7 @@ public class JavaSourceParser implements SourceParser
             }
         }
 
-        String annotations = (String) config.get(OptionValues.TRANSLATABLE_ANNOTATIONS);
+        String annotations = config.options.get(Config.TRANSLATABLE_ANNOTATIONS);
         if(annotations != null)
         {
             annotationSet = new HashSet<TranslatableAnnotation>();
@@ -85,9 +77,14 @@ public class JavaSourceParser implements SourceParser
         this.configuration = new JavaParserConfiguration(methodSet, annotationSet);
     }
 
-    public Set<TranslatableMessage> parse(File sourceDirectory)
+    public TranslatableMessageManager parse(File sourceDirectory, TranslatableMessageManager manager)
     {
         List<File> files = Misc.scanFilesRecursive(sourceDirectory, this.fileFilter);
+
+        if(manager == null)
+        {
+            manager = new TranslatableMessageManager();
+        }
 
         String[] environment = new String[files.size()];
         for(int i = 0; i < environment.length; i++)
@@ -108,7 +105,7 @@ public class JavaSourceParser implements SourceParser
             {
                 parser.setSource(Misc.parseFileToCharArray(file));
                 CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
-                SourceClassVisitor visitor = new SourceClassVisitor(this.configuration, this.messageManager, compilationUnit, sourceDirectory, file);
+                SourceClassVisitor visitor = new SourceClassVisitor(this.configuration, manager, compilationUnit, sourceDirectory, file);
                 compilationUnit.accept(visitor);
             }
             catch (IOException ignored)
@@ -119,7 +116,7 @@ public class JavaSourceParser implements SourceParser
             }
         }
 
-        return this.messageManager.getMessages();
+        return manager;
     }
 
     private class JavaFileFilter implements FileFilter

@@ -10,35 +10,33 @@ import org.fedorahosted.tennera.jgettext.PoWriter;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
 
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
-import de.cubeisland.maven.plugins.messagecatalog.util.OptionValues;
+import de.cubeisland.maven.plugins.messagecatalog.util.Config;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
-    private final Map<String, Object> config;
+    private final Config config;
     private final Log log;
 
     private Message headerMessage;
 
-    public PlaintextGettextCatalogFormat(Map<String, Object> config, Log log)
+    public PlaintextGettextCatalogFormat(Config config, Log log)
     {
         this.config = config;
         this.log = log;
     }
 
-    public void write(File file, Set<TranslatableMessage> messages) throws IOException
+    public void write(File file, TranslatableMessageManager messageManager) throws IOException
     {
         Catalog catalog = new Catalog(true);
 
-        for(TranslatableMessage translatableMessage : messages)
+        for(TranslatableMessage translatableMessage : messageManager.getMessages())
         {
-            if(translatableMessage.getOccurrences().isEmpty() && (Boolean) this.config.get(OptionValues.REMOVE_UNUSED_MESSAGES))
+            if(translatableMessage.getOccurrences().isEmpty() && this.config.removeUnusedMessages)
             {
                 continue;
             }

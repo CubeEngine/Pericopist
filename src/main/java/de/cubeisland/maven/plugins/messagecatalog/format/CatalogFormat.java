@@ -9,7 +9,7 @@ import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageMan
 
 public interface CatalogFormat
 {
-    void write(File file, Set<TranslatableMessage> messages) throws IOException;
+    void write(File file, TranslatableMessageManager manager) throws IOException;
     TranslatableMessageManager read(File file) throws IOException;
     String getFileExtension();
 }

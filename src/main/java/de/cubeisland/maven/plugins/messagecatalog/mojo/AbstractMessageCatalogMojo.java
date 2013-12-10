@@ -5,10 +5,12 @@ import org.apache.maven.plugin.*;
 import java.io.*;
 import java.util.*;
 
-import de.cubeisland.maven.plugins.messagecatalog.util.OptionValues;
+import de.cubeisland.maven.plugins.messagecatalog.util.Config;
 
 public abstract class AbstractMessageCatalogMojo extends AbstractMojo
 {
+    public Config config;
+
     /**
      * @parameter
      */
@@ -37,20 +39,23 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
     /**
      * @parameter
      */
-    public Map<String, Object> options = Collections.emptyMap();
+    public Map<String, String> options = Collections.emptyMap();
 
-    public void inflateOptions()
+    private void inflateConfig()
     {
-        this.options.put(OptionValues.SOURCE_LANGUAGE, this.language);
-        this.options.put(OptionValues.OUTPUT_FORMAT, this.outputFormat);
-        this.options.put(OptionValues.SOURCE_PATH, this.sourcePath);
-        this.options.put(OptionValues.TEMPLATE_FILE, this.templateFile);
-        this.options.put(OptionValues.REMOVE_UNUSED_MESSAGES, this.removeUnusedMessages);
+        this.config = new Config();
+        this.config.sourcePath = this.sourcePath;
+        this.config.templateFile = this.templateFile;
+        this.config.language = this.language;
+        this.config.outputFormat = this.outputFormat;
+        this.config.removeUnusedMessages = this.removeUnusedMessages;
+
+        this.config.options = this.options;
     }
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        this.inflateOptions();
+        this.inflateConfig();
         this.doExecute();
     }
 

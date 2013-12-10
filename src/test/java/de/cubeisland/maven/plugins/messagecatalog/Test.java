@@ -18,7 +18,7 @@ public class Test
         mojo.templateFile = "src/test/messages";
 
 
-        mojo.options = new HashMap<String, Object>(2);
+        mojo.options = new HashMap<String, String>(2);
         mojo.options.put("methods", "getTranslation sendTranslated:1 _ getTranslationN:1,2 sendTranslationN:1,2");
         mojo.options.put("annotations", "test.anot.TestNormalAnnotation:desc,usage test.anot.TestSingleMemberAnnotation");
 
