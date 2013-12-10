@@ -34,7 +34,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     {
         Catalog catalog = new Catalog(true);
 
-        for(TranslatableMessage translatableMessage : messageManager.getMessages())
+        for(TranslatableMessage translatableMessage : messageManager)
         {
             if(translatableMessage.getOccurrences().isEmpty() && this.config.removeUnusedMessages)
             {
