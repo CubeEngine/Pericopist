@@ -1,9 +1,12 @@
 package de.cubeisland.maven.plugins.messagecatalog.mojo;
 
-import org.apache.maven.plugin.*;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.Collections;
+import java.util.Map;
 
 import de.cubeisland.maven.plugins.messagecatalog.util.Config;
 

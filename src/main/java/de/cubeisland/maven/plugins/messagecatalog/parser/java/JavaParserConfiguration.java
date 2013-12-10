@@ -1,7 +1,6 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser.java;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;

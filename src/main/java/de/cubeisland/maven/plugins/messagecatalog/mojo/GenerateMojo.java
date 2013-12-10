@@ -1,13 +1,16 @@
 package de.cubeisland.maven.plugins.messagecatalog.mojo;
 
-import de.cubeisland.maven.plugins.messagecatalog.format.*;
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
-import de.cubeisland.maven.plugins.messagecatalog.parser.*;
-import org.apache.maven.plugin.*;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+
+import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
+import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormatFactory;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
+import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
+import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParserFactory;
 
 /**
  * Blabla
