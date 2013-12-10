@@ -30,7 +30,12 @@ public class Occurrence implements Comparable<Occurrence>
 
     public int compareTo(Occurrence o)
     {
-        return this.toString().compareTo(o.toString());
+        int cmp = this.getFile().getPath().compareTo(o.getFile().getPath());
+        if(cmp == 0)
+        {
+            return Integer.valueOf(this.line).compareTo(o.line);
+        }
+        return cmp;
     }
 
     @Override
