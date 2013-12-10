@@ -36,7 +36,7 @@ public class JavaSourceParser implements SourceParser
         Set<TranslatableMethod> methodSet = null;
         Set<TranslatableAnnotation> annotationSet = null;
 
-        String methods = config.options.get(Config.TRANSLATABLE_METHODS);
+        String methods = config.getOptions().get("methods");
         if (methods != null)
         {
             methodSet = new HashSet<TranslatableMethod>();
@@ -55,7 +55,7 @@ public class JavaSourceParser implements SourceParser
             }
         }
 
-        String annotations = config.options.get(Config.TRANSLATABLE_ANNOTATIONS);
+        String annotations = config.getOptions().get("annotations");
         if(annotations != null)
         {
             annotationSet = new HashSet<TranslatableAnnotation>();

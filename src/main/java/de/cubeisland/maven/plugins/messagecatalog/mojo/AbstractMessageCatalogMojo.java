@@ -12,8 +12,6 @@ import de.cubeisland.maven.plugins.messagecatalog.util.Config;
 
 public abstract class AbstractMessageCatalogMojo extends AbstractMojo
 {
-    public Config config;
-
     /**
      * @parameter
      */
@@ -44,23 +42,10 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
      */
     public Map<String, String> options = Collections.emptyMap();
 
-    private void inflateConfig()
-    {
-        this.config = new Config();
-        this.config.sourcePath = this.sourcePath;
-        this.config.templateFile = this.templateFile;
-        this.config.language = this.language;
-        this.config.outputFormat = this.outputFormat;
-        this.config.removeUnusedMessages = this.removeUnusedMessages;
-
-        this.config.options = this.options;
-    }
-
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        this.inflateConfig();
-        this.doExecute();
+        this.doExecute(new Config(this.language, this.sourcePath, this.templateFile, this.outputFormat, this.removeUnusedMessages, this.options));
     }
 
-    protected abstract void doExecute() throws MojoExecutionException, MojoFailureException;
+    protected abstract void doExecute(Config config) throws MojoExecutionException, MojoFailureException;
 }

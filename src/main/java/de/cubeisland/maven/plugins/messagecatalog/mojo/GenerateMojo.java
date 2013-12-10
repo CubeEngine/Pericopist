@@ -11,6 +11,7 @@ import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormatFactory;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParserFactory;
+import de.cubeisland.maven.plugins.messagecatalog.util.Config;
 
 /**
  * Blabla
@@ -20,13 +21,13 @@ import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParserFactory;
 public class GenerateMojo extends AbstractMessageCatalogMojo
 {
     @Override
-    public void doExecute() throws MojoExecutionException, MojoFailureException
+    public void doExecute(Config config) throws MojoExecutionException, MojoFailureException
     {
-        SourceParser parser = SourceParserFactory.newSourceParser(this.language, this.config, this.getLog());
-        TranslatableMessageManager messageManager = parser.parse (this.sourcePath, null);
+        SourceParser parser = SourceParserFactory.newSourceParser(config.getSourceLanguage(), config, this.getLog());
+        TranslatableMessageManager messageManager = parser.parse (config.getSourcePath(), null);
 
-        CatalogFormat catalogFormat = CatalogFormatFactory.newCatalogFormat(this.outputFormat, this.config, this.getLog());
-        File file = new File(this.templateFile + "." + catalogFormat.getFileExtension());
+        CatalogFormat catalogFormat = CatalogFormatFactory.newCatalogFormat(config.getOutputFormat(), config, this.getLog());
+        File file = new File(config.getTemplateFile() + "." + catalogFormat.getFileExtension());
         try
         {
             catalogFormat.write(file, messageManager);
