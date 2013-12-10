@@ -1,6 +1,7 @@
 package de.cubeisland.maven.plugins.messagecatalog.message;
 
 import java.io.File;
+import java.util.Locale;
 
 public class Occurrence implements Comparable<Occurrence>
 {
@@ -30,7 +31,7 @@ public class Occurrence implements Comparable<Occurrence>
 
     public int compareTo(Occurrence o)
     {
-        int cmp = this.getFile().getPath().compareTo(o.getFile().getPath());
+        int cmp = this.getFile().getPath().toLowerCase(Locale.ENGLISH).compareTo(o.getFile().getPath().toLowerCase(Locale.ENGLISH));
         if(cmp == 0)
         {
             return Integer.valueOf(this.line).compareTo(o.line);
