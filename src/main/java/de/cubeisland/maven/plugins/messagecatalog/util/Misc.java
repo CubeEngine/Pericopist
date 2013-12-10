@@ -78,8 +78,8 @@ public class Misc
         return sb.toString().toCharArray();
     }
 
-    public static String getNormalizedRelativePath(File base, File file)
+    public static File getRelativizedFile(File base, File file)
     {
-        return base.toURI().relativize(file.toURI()).getPath().replaceAll("\\\\", "/");
+        return new File(base.toURI().relativize(file.toURI()).getPath());
     }
 }

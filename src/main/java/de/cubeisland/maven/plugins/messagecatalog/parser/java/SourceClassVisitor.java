@@ -124,7 +124,7 @@ class SourceClassVisitor extends ASTVisitor
                     Expression expr = pair.getValue();
                     if(expr instanceof StringLiteral)
                     {
-                        this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(Misc.getNormalizedRelativePath(this.base, this.file), this.getLine(expr)));
+                        this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(Misc.getRelativizedFile(this.base, this.file), this.getLine(expr)));
                     }
                 }
             }
@@ -141,7 +141,7 @@ class SourceClassVisitor extends ASTVisitor
             Expression expr = node.getValue();
             if(expr instanceof StringLiteral)
             {
-                this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(Misc.getNormalizedRelativePath(this.base, this.file), this.getLine(expr)));
+                this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(Misc.getRelativizedFile(this.base, this.file), this.getLine(expr)));
             }
         }
         return super.visit(node);
@@ -197,7 +197,7 @@ class SourceClassVisitor extends ASTVisitor
 
             if(singular != null)
             {
-                this.messageManager.addMessage(singular, plural, new Occurrence(Misc.getNormalizedRelativePath(this.base, this.file), this.getLine(node)));
+                this.messageManager.addMessage(singular, plural, new Occurrence(Misc.getRelativizedFile(this.base, this.file), this.getLine(node)));
             }
         }
 

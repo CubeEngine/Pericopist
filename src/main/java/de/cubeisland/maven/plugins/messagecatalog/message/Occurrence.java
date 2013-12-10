@@ -1,19 +1,26 @@
 package de.cubeisland.maven.plugins.messagecatalog.message;
 
+import java.io.File;
+
 public class Occurrence implements Comparable<Occurrence>
 {
-    private final String path;
+    private final File file;
     private final int line;
 
-    public Occurrence(String path, int line)
+    public Occurrence(File file, int line)
     {
-        this.path = path;
+        this.file = file;
         this.line = line;
+    }
+
+    public File getFile()
+    {
+        return file;
     }
 
     public String getPath()
     {
-        return path;
+        return this.getFile().getPath().replaceAll("\\\\", "/");
     }
 
     public int getLine()
@@ -29,6 +36,6 @@ public class Occurrence implements Comparable<Occurrence>
     @Override
     public String toString()
     {
-        return this.path + ":" + this.line;
+        return this.file.getPath() + ":" + this.line;
     }
 }
