@@ -10,7 +10,8 @@ import java.util.List;
 
 public class Misc
 {
-    private static final FileFilter DUMMY_FILTER = new FileFilter() {
+    private static final FileFilter DUMMY_FILTER = new FileFilter()
+    {
 
         public boolean accept(File file)
         {
@@ -69,9 +70,9 @@ public class Misc
         byte[] buffer = new byte[4096];
 
         int bytesRead = 0;
-        while((bytesRead = stream.read(buffer)) > -1)
+        while ((bytesRead = stream.read(buffer)) > -1)
         {
-            if(bytesRead > 0)
+            if (bytesRead > 0)
             {
                 sb.append(new String(buffer, 0, bytesRead));
             }

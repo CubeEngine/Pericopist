@@ -14,11 +14,11 @@ public class TranslatableMethod
         this.singularIndex = 1;
         this.pluralIndex = -1;
 
-        if(parts.length > 1)
+        if (parts.length > 1)
         {
             String[] lines = parts[1].split(",");
             this.singularIndex = Integer.valueOf(lines[0]);
-            if(lines.length > 1)
+            if (lines.length > 1)
             {
                 this.pluralIndex = Integer.valueOf(lines[1]);
             }

@@ -40,7 +40,7 @@ public class JavaSourceParser implements SourceParser
         if (methods != null)
         {
             methodSet = new HashSet<TranslatableMethod>();
-            for(String method : methods.split(" "))
+            for (String method : methods.split(" "))
             {
                 try
                 {
@@ -56,10 +56,10 @@ public class JavaSourceParser implements SourceParser
         }
 
         String annotations = config.getOptions().get("annotations");
-        if(annotations != null)
+        if (annotations != null)
         {
             annotationSet = new HashSet<TranslatableAnnotation>();
-            for(String annotation : annotations.split(" "))
+            for (String annotation : annotations.split(" "))
             {
                 try
                 {
@@ -81,13 +81,13 @@ public class JavaSourceParser implements SourceParser
     {
         List<File> files = Misc.scanFilesRecursive(sourceDirectory, this.fileFilter);
 
-        if(manager == null)
+        if (manager == null)
         {
             manager = new TranslatableMessageManager();
         }
 
         String[] environment = new String[files.size()];
-        for(int i = 0; i < environment.length; i++)
+        for (int i = 0; i < environment.length; i++)
         {
             environment[i] = files.get(i).getAbsolutePath();
         }
@@ -104,7 +104,7 @@ public class JavaSourceParser implements SourceParser
             try
             {
                 parser.setSource(Misc.parseFileToCharArray(file));
-                CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
+                CompilationUnit compilationUnit = (CompilationUnit)parser.createAST(null);
                 SourceClassVisitor visitor = new SourceClassVisitor(this.configuration, manager, compilationUnit, sourceDirectory, file);
                 compilationUnit.accept(visitor);
             }

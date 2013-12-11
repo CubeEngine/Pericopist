@@ -24,7 +24,7 @@ public class GenerateMojo extends AbstractMessageCatalogMojo
     public void doExecute(Config config) throws MojoExecutionException, MojoFailureException
     {
         SourceParser parser = SourceParserFactory.newSourceParser(config.getSourceLanguage(), config, this.getLog());
-        TranslatableMessageManager messageManager = parser.parse (config.getSourcePath(), null);
+        TranslatableMessageManager messageManager = parser.parse(config.getSourcePath(), null);
 
         CatalogFormat catalogFormat = CatalogFormatFactory.newCatalogFormat(config.getOutputFormat(), config, this.getLog());
         File file = new File(config.getTemplateFile() + "." + catalogFormat.getFileExtension());

@@ -59,21 +59,21 @@ class SourceClassVisitor extends ASTVisitor
     private TranslatableAnnotation getTranslatableAnnotation(String simpleName)
     {
         TranslatableAnnotation annotation;
-        for(String normal : this.normalImports)
+        for (String normal : this.normalImports)
         {
-            if(normal.endsWith(simpleName))
+            if (normal.endsWith(simpleName))
             {
                 annotation = this.configuration.getAnnotation(normal);
-                if(annotation != null && annotation.getSimpleName().equals(simpleName))
+                if (annotation != null && annotation.getSimpleName().equals(simpleName))
                 {
                     return annotation;
                 }
             }
         }
-        for(String onDemand : this.onDemandImports)
+        for (String onDemand : this.onDemandImports)
         {
             annotation = this.configuration.getAnnotation(onDemand + "." + simpleName);
-            if(annotation != null)
+            if (annotation != null)
             {
                 return annotation;
             }
@@ -91,9 +91,9 @@ class SourceClassVisitor extends ASTVisitor
     @Override
     public boolean visit(ImportDeclaration node)
     {
-        if(!node.isStatic())
+        if (!node.isStatic())
         {
-            if(node.isOnDemand())
+            if (node.isOnDemand())
             {
                 this.onDemandImports.add(node.getName().getFullyQualifiedName());
             }
@@ -111,18 +111,18 @@ class SourceClassVisitor extends ASTVisitor
         TranslatableAnnotation annotation = this.getTranslatableAnnotation(node.getTypeName().getFullyQualifiedName());
         if (annotation != null)
         {
-            for(Object o : node.values())
+            for (Object o : node.values())
             {
-                if(!(o instanceof MemberValuePair))
+                if (!(o instanceof MemberValuePair))
                 {
                     continue;
                 }
-                MemberValuePair pair = (MemberValuePair) o;
+                MemberValuePair pair = (MemberValuePair)o;
 
-                if(annotation.hasField(pair.getName().getFullyQualifiedName()))
+                if (annotation.hasField(pair.getName().getFullyQualifiedName()))
                 {
                     Expression expr = pair.getValue();
-                    if(expr instanceof StringLiteral)
+                    if (expr instanceof StringLiteral)
                     {
                         this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(Misc.getRelativizedFile(this.base, this.file), this.getLine(expr)));
                     }
@@ -136,10 +136,10 @@ class SourceClassVisitor extends ASTVisitor
     public boolean visit(SingleMemberAnnotation node)
     {
         TranslatableAnnotation annotation = this.getTranslatableAnnotation(node.getTypeName().getFullyQualifiedName());
-        if(annotation != null && annotation.hasField("value"))
+        if (annotation != null && annotation.hasField("value"))
         {
             Expression expr = node.getValue();
-            if(expr instanceof StringLiteral)
+            if (expr instanceof StringLiteral)
             {
                 this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(Misc.getRelativizedFile(this.base, this.file), this.getLine(expr)));
             }
@@ -170,32 +170,32 @@ class SourceClassVisitor extends ASTVisitor
             String plural = null;
 
             List args = node.arguments();
-            if(args.size() > method.getSingularIndex())
+            if (args.size() > method.getSingularIndex())
             {
-                Expression expr = (Expression) args.get(method.getSingularIndex());
+                Expression expr = (Expression)args.get(method.getSingularIndex());
                 if (expr instanceof StringLiteral)
                 {
                     singular = ((StringLiteral)expr).getLiteralValue();
                 }
-                else if(expr instanceof InfixExpression)
+                else if (expr instanceof InfixExpression)
                 {
-                    singular = this.getString((InfixExpression) expr);
+                    singular = this.getString((InfixExpression)expr);
                 }
             }
-            if(method.hasPlural() && args.size() > method.getPluralIndex())
+            if (method.hasPlural() && args.size() > method.getPluralIndex())
             {
-                Expression expr = (Expression) args.get(method.getPluralIndex());
+                Expression expr = (Expression)args.get(method.getPluralIndex());
                 if (expr instanceof StringLiteral)
                 {
                     plural = ((StringLiteral)expr).getLiteralValue();
                 }
-                else if(expr instanceof InfixExpression)
+                else if (expr instanceof InfixExpression)
                 {
-                    plural = this.getString((InfixExpression) expr);
+                    plural = this.getString((InfixExpression)expr);
                 }
             }
 
-            if(singular != null)
+            if (singular != null)
             {
                 this.messageManager.addMessage(singular, plural, new Occurrence(Misc.getRelativizedFile(this.base, this.file), this.getLine(node)));
             }
@@ -211,21 +211,21 @@ class SourceClassVisitor extends ASTVisitor
 
         expressions.add(expr.getLeftOperand());
         expressions.add(expr.getRightOperand());
-        for(Object o : expr.extendedOperands())
+        for (Object o : expr.extendedOperands())
         {
-            if(o instanceof Expression)
+            if (o instanceof Expression)
             {
                 expressions.add((Expression)o);
             }
         }
 
-        for(Expression e : expressions)
+        for (Expression e : expressions)
         {
             if (e instanceof StringLiteral)
             {
                 value.append(((StringLiteral)e).getLiteralValue());
             }
-            else if(e instanceof InfixExpression)
+            else if (e instanceof InfixExpression)
             {
                 value.append(this.getString((InfixExpression)e));
             }

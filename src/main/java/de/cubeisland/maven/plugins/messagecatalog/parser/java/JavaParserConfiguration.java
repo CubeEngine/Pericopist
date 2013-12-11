@@ -45,9 +45,9 @@ public class JavaParserConfiguration
 
     public TranslatableMethod getMethod(String name)
     {
-        for(TranslatableMethod method : this.methods)
+        for (TranslatableMethod method : this.methods)
         {
-            if(method.getName().equals(name))
+            if (method.getName().equals(name))
             {
                 return method;
             }
@@ -67,9 +67,9 @@ public class JavaParserConfiguration
 
     public TranslatableAnnotation getAnnotation(String name)
     {
-        for(TranslatableAnnotation annotation : this.annotations)
+        for (TranslatableAnnotation annotation : this.annotations)
         {
-            if(annotation.getFullQualifiedName().equals(name))
+            if (annotation.getFullQualifiedName().equals(name))
             {
                 return annotation;
             }

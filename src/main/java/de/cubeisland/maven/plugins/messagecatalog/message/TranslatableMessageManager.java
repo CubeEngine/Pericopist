@@ -26,13 +26,13 @@ public class TranslatableMessageManager implements Iterable<TranslatableMessage>
     private void addMessage(String singular, String plural, Integer position, Occurrence occurrence)
     {
         TranslatableMessage message = this.getMessage(singular, plural);
-        if(message != null)
+        if (message != null)
         {
             message.addOccurrence(occurrence);
         }
         else
         {
-            if(position != null)
+            if (position != null)
             {
                 message = new TranslatableMessage(singular, plural, position);
             }
