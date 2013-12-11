@@ -43,7 +43,7 @@ public class Config
         return this.outputFormat;
     }
 
-    public boolean removeUnusedMessages()
+    public boolean getRemoveUnusedMessages()
     {
         return this.removeUnusedMessages;
     }
