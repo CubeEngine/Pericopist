@@ -35,7 +35,7 @@ public class UpdateMojo extends AbstractMessageCatalogMojo
         }
 
         SourceParser parser = SourceParserFactory.newSourceParser(config.getSourceLanguage(), config, this.getLog());  // create SourceParser
-        messageManager = parser.parse (config.getSourcePath(), messageManager);     // search source files for translatable string literals
+        messageManager = parser.parse(config.getSourcePath(), messageManager);     // search source files for translatable string literals
 
         try
         {

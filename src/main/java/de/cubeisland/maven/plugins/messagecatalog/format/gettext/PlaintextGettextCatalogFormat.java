@@ -9,12 +9,14 @@ import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
+import de.cubeisland.maven.plugins.messagecatalog.util.CatalogHeader;
 import de.cubeisland.maven.plugins.messagecatalog.util.Config;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
@@ -23,6 +25,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     private final Log log;
 
     private Message headerMessage;
+    private CatalogHeader catalogHeader;
 
     public PlaintextGettextCatalogFormat(Config config, Log log)
     {
@@ -34,11 +37,11 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     {
         Catalog catalog = new Catalog(true);
 
-        for(TranslatableMessage translatableMessage : messageManager)
+        for (TranslatableMessage translatableMessage : messageManager)
         {
-            if(translatableMessage.getOccurrences().isEmpty())
+            if (translatableMessage.getOccurrences().isEmpty())
             {
-                if(this.config.getRemoveUnusedMessages())
+                if (this.config.getRemoveUnusedMessages())
                 {
                     continue;
                 }
@@ -48,12 +51,12 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 }
             }
             Message message = new Message();
-            for(Occurrence occurrence : translatableMessage.getOccurrences())
+            for (Occurrence occurrence : translatableMessage.getOccurrences())
             {
                 message.addSourceReference(occurrence.getPath(), occurrence.getLine());
             }
             message.setMsgid(translatableMessage.getSingular());
-            if(translatableMessage.hasPlural())
+            if (translatableMessage.hasPlural())
             {
                 message.setMsgidPlural(translatableMessage.getPlural());
             }
@@ -79,9 +82,9 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         this.headerMessage = catalog.locateHeader();
 
         int i = 0;
-        for(Message message : catalog)
+        for (Message message : catalog)
         {
-            if(!message.isHeader())
+            if (!message.isHeader())
             {
                 manager.addMessage(message.getMsgid(), message.getMsgidPlural(), i++);
             }
@@ -92,21 +95,35 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
     private void updateHeaderMessage()
     {
-        if (this.headerMessage != null)
-        {
-            HeaderFields header = HeaderFields.wrap(this.headerMessage);
-            header.updatePOTCreationDate();
-
-            Message updatedHeader = header.unwrap();
-            for(String comment : this.headerMessage.getComments())
-            {
-                updatedHeader.addComment(comment);
-            }
-            this.headerMessage = updatedHeader;
-        }
-        else
+        if (this.headerMessage == null)
         {
             this.headerMessage = HeaderUtil.generateDefaultHeader();
+        }
+        HeaderFields headerFields = HeaderFields.wrap(this.headerMessage);
+        headerFields.updatePOTCreationDate();
+
+        this.headerMessage = headerFields.unwrap();
+
+        // TODO add header!
+        if (this.catalogHeader == null)
+        {
+            if (this.config.getHeaderFile() == null)
+            {
+                return;
+            }
+            try
+            {
+                this.catalogHeader = new CatalogHeader(this.config.getHeaderFile(), this.config.getVelocityContext());
+            }
+            catch (FileNotFoundException e)
+            {
+                this.log.warn(e.getClass().getName() + ": " + e.getMessage());
+                return;
+            }
+        }
+        for (String line : this.catalogHeader.getComments())
+        {
+            this.headerMessage.addComment(line);
         }
     }
 
