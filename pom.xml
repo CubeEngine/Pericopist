@@ -19,6 +19,13 @@
                 <role>Project Lead</role>
             </roles>
         </developer>
+        <developer>
+            <id>boeserwolf91</id>
+            <name>Stefan Wolf</name>
+            <roles>
+                <role>Contributor</role>
+            </roles>
+        </developer>
     </developers>
 
     <distributionManagement>
