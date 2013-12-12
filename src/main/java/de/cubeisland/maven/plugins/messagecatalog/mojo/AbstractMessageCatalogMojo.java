@@ -5,6 +5,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.tools.ToolContext;
+import org.apache.velocity.tools.ToolManager;
 import org.apache.velocity.tools.generic.DateTool;
 
 import java.io.File;
@@ -58,32 +60,45 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
     /**
      * @parameter
      */
+    public boolean addDefaultTools = false;
+
+    /**
+     * @parameter
+     */
     public Map<String, String> options = Collections.emptyMap();
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        VelocityContext velocityContext = new VelocityContext();
+        ToolManager toolManager = new ToolManager(this.addDefaultTools);
+
+        ToolContext context = toolManager.createContext();
         if (this.project != null)
         {
-            velocityContext.put("project", this.project.getModel());
-            velocityContext.put("artifactId", this.project.getArtifactId());
-            velocityContext.put("groupId", this.project.getGroupId());
-            velocityContext.put("version", this.project.getVersion());
+            context.put("project", this.project.getModel());
+            context.put("artifactId", this.project.getArtifactId());
+            context.put("groupId", this.project.getGroupId());
+            context.put("version", this.project.getVersion());
             Properties properties = this.project.getProperties();
             for (Entry entry : properties.entrySet())
             {
-                velocityContext.put((String)entry.getKey(), entry.getValue());
+                context.put((String)entry.getKey(), entry.getValue());
             }
         }
-        velocityContext.put("date", new DateTool());
 
         File header = null;
         if (this.headerFile != null)
         {
-            header = Misc.getRelativizedFile(this.project.getBasedir(), this.headerFile);
+            if(this.project != null)
+            {
+                header = Misc.getRelativizedFile(this.project.getBasedir(), this.headerFile);
+            }
+            else
+            {
+                header = Misc.getRelativizedFile(new File(""), this.headerFile);
+            }
         }
 
-        this.doExecute(new Config(this.language, this.sourcePath, this.templateFile, this.outputFormat, this.removeUnusedMessages, header, velocityContext, this.options));
+        this.doExecute(new Config(this.language, this.sourcePath, this.templateFile, this.outputFormat, this.removeUnusedMessages, header, context, this.options));
     }
 
     protected abstract void doExecute(Config config) throws MojoExecutionException, MojoFailureException;

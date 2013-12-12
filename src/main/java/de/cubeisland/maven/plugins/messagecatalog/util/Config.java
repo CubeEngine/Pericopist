@@ -1,6 +1,7 @@
 package de.cubeisland.maven.plugins.messagecatalog.util;
 
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.context.Context;
 
 import java.io.File;
 import java.util.Map;
@@ -13,11 +14,11 @@ public class Config
     private final String outputFormat;
     private final boolean removeUnusedMessages;
     private final File headerFile;
-    private final VelocityContext velocityContext;
+    private final Context velocityContext;
 
     private Map<String, String> options;
 
-    public Config(String language, File sourcePath, String templateFile, String outputFormat, boolean removeUnusedMessages, File headerFile, VelocityContext velocityContext, Map<String, String> options)
+    public Config(String language, File sourcePath, String templateFile, String outputFormat, boolean removeUnusedMessages, File headerFile, Context velocityContext, Map<String, String> options)
     {
         this.sourceLanguage = language;
         this.sourcePath = sourcePath;
@@ -59,7 +60,7 @@ public class Config
         return this.headerFile;
     }
 
-    public VelocityContext getVelocityContext()
+    public Context getVelocityContext()
     {
         return this.velocityContext;
     }
