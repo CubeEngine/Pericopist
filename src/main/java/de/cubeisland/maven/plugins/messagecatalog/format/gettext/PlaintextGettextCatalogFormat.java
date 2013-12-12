@@ -104,7 +104,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         this.headerMessage = headerFields.unwrap();
 
-        // TODO add header!
         if (this.catalogHeader == null)
         {
             if (this.config.getHeaderFile() == null)
