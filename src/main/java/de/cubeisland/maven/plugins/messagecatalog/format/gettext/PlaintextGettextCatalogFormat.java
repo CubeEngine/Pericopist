@@ -17,7 +17,7 @@ import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.util.CatalogHeader;
-import de.cubeisland.maven.plugins.messagecatalog.util.Config;
+import de.cubeisland.maven.plugins.messagecatalog.config.Config;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
@@ -41,7 +41,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         {
             if (translatableMessage.getOccurrences().isEmpty())
             {
-                if (this.config.getRemoveUnusedMessages())
+                if (this.config.getCatalog().getRemoveUnusedMessages())
                 {
                     continue;
                 }
@@ -106,13 +106,13 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         if (this.catalogHeader == null)
         {
-            if (this.config.getHeaderFile() == null)
+            if (this.config.getCatalog().getHeader() == null)
             {
                 return;
             }
             try
             {
-                this.catalogHeader = new CatalogHeader(this.config.getHeaderFile(), this.config.getVelocityContext());
+                this.catalogHeader = new CatalogHeader(this.config.getCatalog().getHeader(), this.config.getCatalog().getVelocityContext());
             }
             catch (FileNotFoundException e)
             {

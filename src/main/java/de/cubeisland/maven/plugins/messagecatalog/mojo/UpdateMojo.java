@@ -11,7 +11,7 @@ import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormatFactory;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParserFactory;
-import de.cubeisland.maven.plugins.messagecatalog.util.Config;
+import de.cubeisland.maven.plugins.messagecatalog.config.Config;
 
 /**
  * @goal update
@@ -21,8 +21,8 @@ public class UpdateMojo extends AbstractMessageCatalogMojo
     @Override
     protected void doExecute(Config config) throws MojoExecutionException, MojoFailureException
     {
-        CatalogFormat catalogFormat = CatalogFormatFactory.newCatalogFormat(config.getOutputFormat(), config, this.getLog());    // create catalogFormat
-        File file = new File(config.getTemplateFile() + "." + catalogFormat.getFileExtension());   // load pot file
+        CatalogFormat catalogFormat = CatalogFormatFactory.newCatalogFormat(config.getCatalog().getOutputFormat(), config, this.getLog());    // create catalogFormat
+        File file = new File(config.getCatalog().getTemplateFile() + "." + catalogFormat.getFileExtension());   // load pot file
 
         TranslatableMessageManager messageManager;
         try
@@ -34,8 +34,8 @@ public class UpdateMojo extends AbstractMessageCatalogMojo
             throw new MojoExecutionException("Failed to read the existing message catalog.", e);
         }
 
-        SourceParser parser = SourceParserFactory.newSourceParser(config.getSourceLanguage(), config, this.getLog());  // create SourceParser
-        messageManager = parser.parse(config.getSourcePath(), messageManager);     // search source files for translatable string literals
+        SourceParser parser = SourceParserFactory.newSourceParser(config.getSource().getLanguage(), config, this.getLog());  // create SourceParser
+        messageManager = parser.parse(config.getSource().getDirectory(), messageManager);     // search source files for translatable string literals
 
         try
         {

@@ -18,7 +18,7 @@ import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageMan
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
-import de.cubeisland.maven.plugins.messagecatalog.util.Config;
+import de.cubeisland.maven.plugins.messagecatalog.config.Config;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
 public class JavaSourceParser implements SourceParser
@@ -36,7 +36,7 @@ public class JavaSourceParser implements SourceParser
         Set<TranslatableMethod> methodSet = null;
         Set<TranslatableAnnotation> annotationSet = null;
 
-        String methods = config.getOptions().get("methods");
+        String methods = config.getSource().getOptions().get("methods");
         if (methods != null)
         {
             methodSet = new HashSet<TranslatableMethod>();
@@ -55,7 +55,7 @@ public class JavaSourceParser implements SourceParser
             }
         }
 
-        String annotations = config.getOptions().get("annotations");
+        String annotations = config.getSource().getOptions().get("annotations");
         if (annotations != null)
         {
             annotationSet = new HashSet<TranslatableAnnotation>();

@@ -3,7 +3,7 @@ package de.cubeisland.maven.plugins.messagecatalog.parser;
 import org.apache.maven.plugin.logging.Log;
 
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.JavaSourceParser;
-import de.cubeisland.maven.plugins.messagecatalog.util.Config;
+import de.cubeisland.maven.plugins.messagecatalog.config.Config;
 
 public class SourceParserFactory
 {
