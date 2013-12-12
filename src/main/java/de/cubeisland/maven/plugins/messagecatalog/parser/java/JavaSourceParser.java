@@ -16,9 +16,9 @@ import java.util.Set;
 
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
+import de.cubeisland.maven.plugins.messagecatalog.util.Config;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
 public class JavaSourceParser implements SourceParser
@@ -27,9 +27,8 @@ public class JavaSourceParser implements SourceParser
     private final Log log;
 
     private JavaParserConfiguration configuration;
-    private TranslatableMessageManager messageManager;
 
-    public JavaSourceParser(Map<String, Object> config, Log log)
+    public JavaSourceParser(Config config, Log log)
     {
         this.fileFilter = new JavaFileFilter();
         this.log = log;
@@ -37,17 +36,11 @@ public class JavaSourceParser implements SourceParser
         Set<TranslatableMethod> methodSet = null;
         Set<TranslatableAnnotation> annotationSet = null;
 
-        this.messageManager = (TranslatableMessageManager) config.get("message_manager");
-        if(this.messageManager == null)
-        {
-            this.messageManager = new TranslatableMessageManager();
-        }
-
-        String methods = (String) config.get("methods");
+        String methods = config.getOptions().get("methods");
         if (methods != null)
         {
             methodSet = new HashSet<TranslatableMethod>();
-            for(String method : methods.split(" "))
+            for (String method : methods.split(" "))
             {
                 try
                 {
@@ -62,11 +55,11 @@ public class JavaSourceParser implements SourceParser
             }
         }
 
-        String annotations = (String) config.get("annotations");
-        if(annotations != null)
+        String annotations = config.getOptions().get("annotations");
+        if (annotations != null)
         {
             annotationSet = new HashSet<TranslatableAnnotation>();
-            for(String annotation : annotations.split(" "))
+            for (String annotation : annotations.split(" "))
             {
                 try
                 {
@@ -84,12 +77,17 @@ public class JavaSourceParser implements SourceParser
         this.configuration = new JavaParserConfiguration(methodSet, annotationSet);
     }
 
-    public Set<TranslatableMessage> parse(File sourceDirectory)
+    public TranslatableMessageManager parse(File sourceDirectory, TranslatableMessageManager manager)
     {
         List<File> files = Misc.scanFilesRecursive(sourceDirectory, this.fileFilter);
 
+        if (manager == null)
+        {
+            manager = new TranslatableMessageManager();
+        }
+
         String[] environment = new String[files.size()];
-        for(int i = 0; i < environment.length; i++)
+        for (int i = 0; i < environment.length; i++)
         {
             environment[i] = files.get(i).getAbsolutePath();
         }
@@ -106,8 +104,8 @@ public class JavaSourceParser implements SourceParser
             try
             {
                 parser.setSource(Misc.parseFileToCharArray(file));
-                CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
-                SourceClassVisitor visitor = new SourceClassVisitor(this.configuration, this.messageManager, compilationUnit, file);
+                CompilationUnit compilationUnit = (CompilationUnit)parser.createAST(null);
+                SourceClassVisitor visitor = new SourceClassVisitor(this.configuration, manager, compilationUnit, sourceDirectory, file);
                 compilationUnit.accept(visitor);
             }
             catch (IOException ignored)
@@ -118,7 +116,7 @@ public class JavaSourceParser implements SourceParser
             }
         }
 
-        return this.messageManager.getMessages();
+        return manager;
     }
 
     private class JavaFileFilter implements FileFilter

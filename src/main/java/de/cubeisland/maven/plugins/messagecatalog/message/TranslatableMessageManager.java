@@ -1,9 +1,10 @@
 package de.cubeisland.maven.plugins.messagecatalog.message;
 
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class TranslatableMessageManager
+public class TranslatableMessageManager implements Iterable<TranslatableMessage>
 {
     private Set<TranslatableMessage> messages;
 
@@ -25,13 +26,13 @@ public class TranslatableMessageManager
     private void addMessage(String singular, String plural, Integer position, Occurrence occurrence)
     {
         TranslatableMessage message = this.getMessage(singular, plural);
-        if(message != null)
+        if (message != null)
         {
             message.addOccurrence(occurrence);
         }
         else
         {
-            if(position != null)
+            if (position != null)
             {
                 message = new TranslatableMessage(singular, plural, position);
             }
@@ -58,5 +59,10 @@ public class TranslatableMessageManager
     public Set<TranslatableMessage> getMessages()
     {
         return messages;
+    }
+
+    public Iterator<TranslatableMessage> iterator()
+    {
+        return this.getMessages().iterator();
     }
 }

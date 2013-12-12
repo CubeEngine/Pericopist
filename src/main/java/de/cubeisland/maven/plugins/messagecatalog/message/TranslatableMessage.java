@@ -25,18 +25,11 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     {
         this.position = position;
 
-        this.singular = this.replaceWhitespaces(singular);
-        if(plural != null)
-        {
-            this.plural = this.replaceWhitespaces(plural);
-        }
-        else
-        {
-            this.plural = null;
-        }
+        this.singular = singular;
+        this.plural = plural;
 
         this.occurrences = new TreeSet<Occurrence>();
-        if(firstOccurrence != null)
+        if (firstOccurrence != null)
         {
             this.occurrences.add(firstOccurrence);
         }
@@ -69,22 +62,22 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
 
     public int compareTo(TranslatableMessage o)
     {
-        if(this.position == null)
+        if (this.position == null)
         {
-            if(o.position == null)
+            if (o.position == null)
             {
                 int comp = this.singular.compareTo(o.singular);
-                if(comp == 0)
+                if (comp == 0)
                 {
-                    if(this.hasPlural())
+                    if (this.hasPlural())
                     {
-                        if(o.hasPlural())
+                        if (o.hasPlural())
                         {
                             return this.plural.compareTo(o.plural);
                         }
                         return 1;
                     }
-                    else if(o.hasPlural())
+                    else if (o.hasPlural())
                     {
                         return -1;
                     }
@@ -93,18 +86,10 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
             }
             return 1;
         }
-        else if(o.position == null)
+        else if (o.position == null)
         {
             return -1;
         }
         return Integer.compare(this.position, o.position);
-    }
-
-    private String replaceWhitespaces(String string)
-    {
-        String replaced = string.replaceAll("\n", "\\\\n");
-        replaced = replaced.replaceAll("\t", "\\\\t");
-
-        return replaced;
     }
 }

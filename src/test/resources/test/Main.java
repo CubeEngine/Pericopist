@@ -7,10 +7,14 @@ public class Main
     public void main(String[] args)
     {
         I18n i18n = new I18n();
+        boolean question = true;
 
-        i18n.sendTranslated("\n\n\n\thello everyone");
+        i18n.sendTranslated("hello everyone");
         i18n.getTranslation("whats up?");
         i18n.getTranslation("whats up?");
+
+        i18n.getTranslation((question ? "true" : "false")); // TODO
+        i18n.getTranslation((question ? "right" : "wring") + "answer"); // TODO
 
         i18n.getTranslationN("hope %s is fine?", "hope you are fine", getOnlinePersons(), "Phillip");
 
@@ -20,7 +24,7 @@ public class Main
     }
 
     @TestSingleMemberAnnotation("pre-added")
-    private String getNonTranslation(String string, Object ... o)
+    private String getNonTranslation(String string, Object... o)
     {
         return String.format(string, o);
     }

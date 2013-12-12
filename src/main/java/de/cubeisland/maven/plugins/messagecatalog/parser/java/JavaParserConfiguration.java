@@ -1,7 +1,6 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser.java;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
@@ -46,9 +45,9 @@ public class JavaParserConfiguration
 
     public TranslatableMethod getMethod(String name)
     {
-        for(TranslatableMethod method : this.methods)
+        for (TranslatableMethod method : this.methods)
         {
-            if(method.getName().equals(name))
+            if (method.getName().equals(name))
             {
                 return method;
             }
@@ -68,9 +67,9 @@ public class JavaParserConfiguration
 
     public TranslatableAnnotation getAnnotation(String name)
     {
-        for(TranslatableAnnotation annotation : this.annotations)
+        for (TranslatableAnnotation annotation : this.annotations)
         {
-            if(annotation.getFullQualifiedName().equals(name))
+            if (annotation.getFullQualifiedName().equals(name))
             {
                 return annotation;
             }

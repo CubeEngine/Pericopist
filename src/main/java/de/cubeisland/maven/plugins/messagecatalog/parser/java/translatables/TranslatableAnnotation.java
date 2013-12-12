@@ -15,11 +15,11 @@ public class TranslatableAnnotation
         this.fqn = parts[0];
         this.fields = new HashSet<String>();
 
-        if(parts.length > 1)
+        if (parts.length > 1)
         {
             String[] fieldNames = parts[1].split(",");
 
-            for(String field : fieldNames)
+            for (String field : fieldNames)
             {
                 this.fields.add(field);
             }
@@ -48,9 +48,9 @@ public class TranslatableAnnotation
 
     public boolean hasField(String name)
     {
-        for(String field : this.fields)
+        for (String field : this.fields)
         {
-            if(field.equals(name))
+            if (field.equals(name))
             {
                 return true;
             }
@@ -63,14 +63,14 @@ public class TranslatableAnnotation
     {
         StringBuilder builder = new StringBuilder(this.fqn);
         int fieldAmount = this.getFields().size();
-        if(fieldAmount != 0)
+        if (fieldAmount != 0)
         {
             builder.append(":");
-            for(String field : this.getFields())
+            for (String field : this.getFields())
             {
                 builder.append(field);
                 fieldAmount--;
-                if(fieldAmount != 0)
+                if (fieldAmount != 0)
                 {
                     builder.append(",");
                 }

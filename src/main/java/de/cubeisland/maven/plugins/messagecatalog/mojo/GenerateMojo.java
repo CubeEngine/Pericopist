@@ -1,12 +1,17 @@
 package de.cubeisland.maven.plugins.messagecatalog.mojo;
 
-import de.cubeisland.maven.plugins.messagecatalog.format.*;
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
-import de.cubeisland.maven.plugins.messagecatalog.parser.*;
-import org.apache.maven.plugin.*;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+
+import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
+import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormatFactory;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
+import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
+import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParserFactory;
+import de.cubeisland.maven.plugins.messagecatalog.util.Config;
 
 /**
  * Blabla
@@ -16,18 +21,16 @@ import java.util.*;
 public class GenerateMojo extends AbstractMessageCatalogMojo
 {
     @Override
-    public void doExecute() throws MojoExecutionException, MojoFailureException
+    public void doExecute(Config config) throws MojoExecutionException, MojoFailureException
     {
-        this.options.put("SourcePath", this.sourcePath);
+        SourceParser parser = SourceParserFactory.newSourceParser(config.getSourceLanguage(), config, this.getLog());
+        TranslatableMessageManager messageManager = parser.parse(config.getSourcePath(), null);
 
-        SourceParser parser = SourceParserFactory.newSourceParser(this.language, this.options, this.getLog());
-        Set<TranslatableMessage> messages = parser.parse (this.sourcePath);
-
-        CatalogFormat catalogFormat = CatalogFormatFactory.newCatalogFormat(this.outputFormat, this.options, this.getLog());
-        File file = new File(this.templateFile + "." + catalogFormat.getFileExtension());
+        CatalogFormat catalogFormat = CatalogFormatFactory.newCatalogFormat(config.getOutputFormat(), config, this.getLog());
+        File file = new File(config.getTemplateFile() + "." + catalogFormat.getFileExtension());
         try
         {
-            catalogFormat.write(file, messages);
+            catalogFormat.write(file, messageManager);
         }
         catch (IOException e)
         {

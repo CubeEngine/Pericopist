@@ -1,100 +1,129 @@
 package de.cubeisland.maven.plugins.messagecatalog.format.gettext;
 
-import java.io.BufferedWriter;
+import org.apache.maven.plugin.logging.Log;
+import org.fedorahosted.tennera.jgettext.Catalog;
+import org.fedorahosted.tennera.jgettext.HeaderFields;
+import org.fedorahosted.tennera.jgettext.HeaderUtil;
+import org.fedorahosted.tennera.jgettext.Message;
+import org.fedorahosted.tennera.jgettext.PoParser;
+import org.fedorahosted.tennera.jgettext.PoWriter;
+
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Writer;
-import java.util.Map;
-import java.util.Set;
 
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
-import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
-
-import org.apache.maven.plugin.logging.Log;
+import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
+import de.cubeisland.maven.plugins.messagecatalog.util.CatalogHeader;
+import de.cubeisland.maven.plugins.messagecatalog.util.Config;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
-    private final Map<String, Object> config;
+    private final Config config;
     private final Log log;
 
-    private final File base;
+    private Message headerMessage;
+    private CatalogHeader catalogHeader;
 
-    public PlaintextGettextCatalogFormat(Map<String, Object> config, Log log)
+    public PlaintextGettextCatalogFormat(Config config, Log log)
     {
         this.config = config;
         this.log = log;
-
-        this.base = (File) config.get("SourcePath");    // TODO modify the way how to get the base!
     }
 
-    public void write(File file, Set<TranslatableMessage> messages) throws IOException
+    public void write(File file, TranslatableMessageManager messageManager) throws IOException
     {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file, false));
+        Catalog catalog = new Catalog(true);
 
-        try
+        for (TranslatableMessage translatableMessage : messageManager)
         {
-            writeHeader(writer);
-            writer.write("\n");
-
-            for (TranslatableMessage message : messages)
+            if (translatableMessage.getOccurrences().isEmpty())
             {
-                for (Occurrence occurrence : message.getOccurrences())
+                if (this.config.getRemoveUnusedMessages())
                 {
-                    writer.write("#: " + Misc.getNormalizedRelativePath(this.base, occurrence.getFile()) + ":" + occurrence.getLine() + "\n");
-                }
-                writer.write("msgid \"" + message.getSingular() + "\"\n");
-                if(message.hasPlural())
-                {
-                    writer.write("msgid_plural \"" + message.getPlural() + "\"\n");
-                    writer.write("msgstr[0] \"\"\n");
-                    writer.write("msgstr[1] \"\"\n");
+                    continue;
                 }
                 else
                 {
-                    writer.write("msgstr \"\"\n");
+                    this.log.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
                 }
-                writer.write("\n");
             }
-            writer.flush();
+            Message message = new Message();
+            for (Occurrence occurrence : translatableMessage.getOccurrences())
+            {
+                message.addSourceReference(occurrence.getPath(), occurrence.getLine());
+            }
+            message.setMsgid(translatableMessage.getSingular());
+            if (translatableMessage.hasPlural())
+            {
+                message.setMsgidPlural(translatableMessage.getPlural());
+            }
+
+            catalog.addMessage(message);
         }
-        finally
+
+        this.updateHeaderMessage();
+        catalog.addMessage(this.headerMessage);
+
+        PoWriter poWriter = new PoWriter(true);
+        poWriter.write(catalog, file);
+    }
+
+    public TranslatableMessageManager read(File file) throws IOException
+    {
+        TranslatableMessageManager manager = new TranslatableMessageManager();
+
+        Catalog catalog = new Catalog(true);
+        PoParser poParser = new PoParser(catalog);
+        catalog = poParser.parseCatalog(file);
+
+        this.headerMessage = catalog.locateHeader();
+
+        int i = 0;
+        for (Message message : catalog)
         {
-            writer.close();
+            if (!message.isHeader())
+            {
+                manager.addMessage(message.getMsgid(), message.getMsgidPlural(), i++);
+            }
         }
+
+        return manager;
     }
 
-    private static void writeHeader(BufferedWriter writer) throws IOException
+    private void updateHeaderMessage()
     {
-        writeMessageId(writer, "");
-        writeMessageString(writer);
-        writeHeaderLine(writer, "Project-Id-Version: <PROJECT>");
-        writeHeaderLine(writer, "POT-Creation-Date: <DATE>");
-        writeHeaderLine(writer, "PO-Revision-Date: <DATE>");
-        writeHeaderLine(writer, "Last-Translator: <NAME>");
-        writeHeaderLine(writer, "Language-Team: <TEAM>");
-        writeHeaderLine(writer, "Language: <LANGUAGE>");
-        writeHeaderLine(writer, "MIME-Revision: 1.0");
-        writeHeaderLine(writer, "Content-Type: text/plain; charset=UTF-8");
-        writeHeaderLine(writer, "Content-Transfer-Encoding: 8bit");
-        writeHeaderLine(writer, "X-Generator: maven-messagecatalog-plugin");
-    }
+        if (this.headerMessage == null)
+        {
+            this.headerMessage = HeaderUtil.generateDefaultHeader();
+        }
+        HeaderFields headerFields = HeaderFields.wrap(this.headerMessage);
+        headerFields.updatePOTCreationDate();
 
-    private static void writeHeaderLine(Writer writer, String content) throws IOException
-    {
-        writer.write("\"" + content + "\\n\"\n");
-    }
+        this.headerMessage = headerFields.unwrap();
 
-    private static void writeMessageId(Writer writer, String msgid) throws IOException
-    {
-        writer.write("msgid \"" + msgid + "\"\n");
-    }
-
-    private static void writeMessageString(Writer writer) throws IOException
-    {
-        writer.write("msgstr \"\"\n");
+        if (this.catalogHeader == null)
+        {
+            if (this.config.getHeaderFile() == null)
+            {
+                return;
+            }
+            try
+            {
+                this.catalogHeader = new CatalogHeader(this.config.getHeaderFile(), this.config.getVelocityContext());
+            }
+            catch (FileNotFoundException e)
+            {
+                this.log.warn(e.getClass().getName() + ": " + e.getMessage());
+                return;
+            }
+        }
+        for (String line : this.catalogHeader.getComments())
+        {
+            this.headerMessage.addComment(line);
+        }
     }
 
     public String getFileExtension()
