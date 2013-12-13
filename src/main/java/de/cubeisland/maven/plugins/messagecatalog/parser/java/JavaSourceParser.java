@@ -36,11 +36,11 @@ public class JavaSourceParser implements SourceParser
         Set<TranslatableMethod> methodSet = null;
         Set<TranslatableAnnotation> annotationSet = null;
 
-        String methods = config.getSource().getOptions().get("methods");
+        List<String> methods = config.getSource().getTranslatables().getMethods();
         if (methods != null)
         {
-            methodSet = new HashSet<TranslatableMethod>();
-            for (String method : methods.split(" "))
+            methodSet = new HashSet<TranslatableMethod>(methods.size());
+            for (String method : methods)
             {
                 try
                 {
@@ -55,11 +55,11 @@ public class JavaSourceParser implements SourceParser
             }
         }
 
-        String annotations = config.getSource().getOptions().get("annotations");
+        List<String> annotations = config.getSource().getTranslatables().getAnnotations();
         if (annotations != null)
         {
-            annotationSet = new HashSet<TranslatableAnnotation>();
-            for (String annotation : annotations.split(" "))
+            annotationSet = new HashSet<TranslatableAnnotation>(annotations.size());
+            for (String annotation : annotations)
             {
                 try
                 {

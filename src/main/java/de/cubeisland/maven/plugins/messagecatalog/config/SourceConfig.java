@@ -9,7 +9,7 @@ public class SourceConfig
     private File directory = new File("./src/main/java");
     private String language = "java";
 
-    private Map<String, String> options = Collections.emptyMap();
+    private TranslatableConfig translatables = new TranslatableConfig();
 
     public File getDirectory()
     {
@@ -31,13 +31,13 @@ public class SourceConfig
         this.language = language;
     }
 
-    public Map<String, String> getOptions()
+    public TranslatableConfig getTranslatables()
     {
-        return options;
+        return translatables;
     }
 
-    public void setOptions(Map<String, String> options)
+    public void setTranslatables(TranslatableConfig translatables)
     {
-        this.options = options;
+        this.translatables = translatables;
     }
 }
