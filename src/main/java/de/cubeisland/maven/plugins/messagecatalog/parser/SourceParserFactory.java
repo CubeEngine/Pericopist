@@ -2,8 +2,8 @@ package de.cubeisland.maven.plugins.messagecatalog.parser;
 
 import org.apache.maven.plugin.logging.Log;
 
-import de.cubeisland.maven.plugins.messagecatalog.parser.java.JavaSourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.config.Config;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.JavaSourceParser;
 
 public class SourceParserFactory
 {

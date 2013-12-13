@@ -2,8 +2,8 @@ package de.cubeisland.maven.plugins.messagecatalog.format;
 
 import org.apache.maven.plugin.logging.Log;
 
-import de.cubeisland.maven.plugins.messagecatalog.format.gettext.PlaintextGettextCatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.config.Config;
+import de.cubeisland.maven.plugins.messagecatalog.format.gettext.PlaintextGettextCatalogFormat;
 
 public class CatalogFormatFactory
 {

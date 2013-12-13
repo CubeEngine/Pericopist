@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.cubeisland.maven.plugins.messagecatalog.config.Config;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableAnnotation;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables.TranslatableMethod;
-import de.cubeisland.maven.plugins.messagecatalog.config.Config;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
 public class JavaSourceParser implements SourceParser

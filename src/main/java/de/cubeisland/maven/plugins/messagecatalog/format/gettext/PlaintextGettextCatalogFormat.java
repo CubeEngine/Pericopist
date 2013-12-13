@@ -12,12 +12,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import de.cubeisland.maven.plugins.messagecatalog.config.Config;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.util.CatalogHeader;
-import de.cubeisland.maven.plugins.messagecatalog.config.Config;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {

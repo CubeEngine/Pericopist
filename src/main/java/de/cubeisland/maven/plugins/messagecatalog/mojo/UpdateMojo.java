@@ -6,12 +6,12 @@ import org.apache.maven.plugin.MojoFailureException;
 import java.io.File;
 import java.io.IOException;
 
+import de.cubeisland.maven.plugins.messagecatalog.config.Config;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormatFactory;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParserFactory;
-import de.cubeisland.maven.plugins.messagecatalog.config.Config;
 
 /**
  * @goal update

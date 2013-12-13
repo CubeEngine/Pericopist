@@ -6,14 +6,12 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.apache.velocity.context.Context;
 
-import java.io.File;
 import java.util.Map.Entry;
 import java.util.Properties;
 
 import de.cubeisland.maven.plugins.messagecatalog.config.CatalogConfig;
 import de.cubeisland.maven.plugins.messagecatalog.config.Config;
 import de.cubeisland.maven.plugins.messagecatalog.config.SourceConfig;
-import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
 public abstract class AbstractMessageCatalogMojo extends AbstractMojo
 {
@@ -50,20 +48,6 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
                 context.put((String)entry.getKey(), entry.getValue());
             }
         }
-
-        File header = this.catalog.getHeader();
-        if (header != null)
-        {
-            if(this.project != null)
-            {
-                header = Misc.getRelativizedFile(this.project.getBasedir(), header);
-            }
-            else
-            {
-                header = Misc.getRelativizedFile(new File("."), header);
-            }
-        }
-        this.catalog.setHeader(header);
 
         this.doExecute(new Config(this.source, this.catalog));
     }
