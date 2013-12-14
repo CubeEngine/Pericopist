@@ -5,13 +5,13 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.apache.velocity.context.Context;
+import org.apache.velocity.tools.ToolManager;
 
+import java.io.File;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import de.cubeisland.maven.plugins.messagecatalog.config.CatalogConfig;
-import de.cubeisland.maven.plugins.messagecatalog.config.Config;
-import de.cubeisland.maven.plugins.messagecatalog.config.SourceConfig;
+import de.cubeisland.maven.plugins.messagecatalog.MessageCatalogFactory;
 
 public abstract class AbstractMessageCatalogMojo extends AbstractMojo
 {
@@ -25,23 +25,20 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
     /**
      * @parameter
      */
-    private SourceConfig source = new SourceConfig();
-
-    /**
-     * @parameter
-     */
-    private CatalogConfig catalog = new CatalogConfig();
+    private File configuration;
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
+        ToolManager toolManager = new ToolManager();
+        Context context = toolManager.createContext();
+
         if (this.project != null)
         {
-            Context context = this.catalog.getVelocityContext();
-
             context.put("project", this.project.getModel());
             context.put("artifactId", this.project.getArtifactId());
             context.put("groupId", this.project.getGroupId());
             context.put("version", this.project.getVersion());
+            context.put("basedir", this.project.getBasedir());
             Properties properties = this.project.getProperties();
             for (Entry entry : properties.entrySet())
             {
@@ -49,8 +46,17 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
             }
         }
 
-        this.doExecute(new Config(this.source, this.catalog));
+        MessageCatalogFactory factory = null;
+        try
+        {
+            factory = new MessageCatalogFactory(this.configuration);
+            this.doExecute(factory);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
-    protected abstract void doExecute(Config config) throws MojoExecutionException, MojoFailureException;
+    protected abstract void doExecute(MessageCatalogFactory factory) throws MojoExecutionException, MojoFailureException;
 }

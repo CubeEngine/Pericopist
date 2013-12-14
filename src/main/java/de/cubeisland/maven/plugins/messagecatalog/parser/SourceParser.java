@@ -1,10 +1,12 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser;
 
-import java.io.File;
+import java.util.logging.Logger;
 
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 
 public interface SourceParser
 {
-    TranslatableMessageManager parse(File sourceDirectory, TranslatableMessageManager manager);
+    TranslatableMessageManager parse(SourceConfig config, TranslatableMessageManager manager);
+    Class<? extends SourceConfig> getSourceConfigClass();
+    void init(Logger logger);
 }

@@ -1,4 +1,4 @@
-package de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables;
+package de.cubeisland.maven.plugins.messagecatalog.parser.java.config;
 
 import java.util.HashSet;
 import java.util.Set;

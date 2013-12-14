@@ -1,6 +1,5 @@
 package de.cubeisland.maven.plugins.messagecatalog.format.gettext;
 
-import org.apache.maven.plugin.logging.Log;
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.HeaderFields;
 import org.fedorahosted.tennera.jgettext.HeaderUtil;
@@ -8,11 +7,10 @@ import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Logger;
 
-import de.cubeisland.maven.plugins.messagecatalog.config.Config;
+import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfig;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
@@ -21,33 +19,26 @@ import de.cubeisland.maven.plugins.messagecatalog.util.CatalogHeader;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
-    private final Config config;
-    private final Log log;
-
     private Message headerMessage;
     private CatalogHeader catalogHeader;
+    private Logger logger;
 
-    public PlaintextGettextCatalogFormat(Config config, Log log)
+    public void write(CatalogConfig config, TranslatableMessageManager messageManager) throws IOException
     {
-        this.config = config;
-        this.log = log;
-    }
-
-    public void write(File file, TranslatableMessageManager messageManager) throws IOException
-    {
+        GettextCatalogConfig catalogConfig = (GettextCatalogConfig) config;
         Catalog catalog = new Catalog(true);
 
         for (TranslatableMessage translatableMessage : messageManager)
         {
             if (translatableMessage.getOccurrences().isEmpty())
             {
-                if (this.config.getCatalog().getRemoveUnusedMessages())
+                if (catalogConfig.getRemoveUnusedMessages())
                 {
                     continue;
                 }
                 else
                 {
-                    this.log.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
+                    this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
                 }
             }
             Message message = new Message();
@@ -64,20 +55,21 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             catalog.addMessage(message);
         }
 
-        this.updateHeaderMessage();
+        this.updateHeaderMessage(catalogConfig);
         catalog.addMessage(this.headerMessage);
 
         PoWriter poWriter = new PoWriter(true);
-        poWriter.write(catalog, file);
+        poWriter.write(catalog, catalogConfig.getTemplateFile());
     }
 
-    public TranslatableMessageManager read(File file) throws IOException
+    public TranslatableMessageManager read(CatalogConfig config) throws IOException
     {
+        GettextCatalogConfig catalogConfig = (GettextCatalogConfig) config;
         TranslatableMessageManager manager = new TranslatableMessageManager();
 
         Catalog catalog = new Catalog(true);
         PoParser poParser = new PoParser(catalog);
-        catalog = poParser.parseCatalog(file);
+        catalog = poParser.parseCatalog(catalogConfig.getTemplateFile());
 
         this.headerMessage = catalog.locateHeader();
 
@@ -93,7 +85,12 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return manager;
     }
 
-    private void updateHeaderMessage()
+    public Class<? extends CatalogConfig> getCatalogConfigClass()
+    {
+        return GettextCatalogConfig.class;
+    }
+
+    private void updateHeaderMessage(GettextCatalogConfig config)
     {
         if (this.headerMessage == null)
         {
@@ -106,17 +103,17 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         if (this.catalogHeader == null)
         {
-            if (this.config.getCatalog().getHeader() == null)
+            if (config.getHeader() == null)
             {
                 return;
             }
-            try
+//            try
             {
-                this.catalogHeader = new CatalogHeader(this.config.getCatalog().getHeader(), this.config.getCatalog().getVelocityContext());
+//                this.catalogHeader = new CatalogHeader(config.getHeader(), config.getVelocityContext()); // TODO getVelocityContext!
             }
-            catch (FileNotFoundException e)
+//            catch (FileNotFoundException e)
             {
-                this.log.warn(e.getClass().getName() + ": " + e.getMessage());
+//                this.logger.warning(e.getClass().getName() + ": " + e.getMessage());
                 return;
             }
         }
@@ -129,5 +126,10 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     public String getFileExtension()
     {
         return "pot";
+    }
+
+    public void init(Logger logger)
+    {
+        this.logger = logger;
     }
 }
