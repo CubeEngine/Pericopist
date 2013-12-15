@@ -10,7 +10,9 @@ import org.apache.velocity.tools.ToolManager;
 import java.io.File;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.logging.Logger;
 
+import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalogFactory;
 
 public abstract class AbstractMessageCatalogMojo extends AbstractMojo
@@ -46,11 +48,10 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
             }
         }
 
-        MessageCatalogFactory factory = null;
         try
         {
-            factory = new MessageCatalogFactory(this.configuration);
-            this.doExecute(factory);
+            MessageCatalogFactory factory = new MessageCatalogFactory();
+            this.doExecute(factory.getMessageCatalog(configuration, context));
         }
         catch (Exception e)
         {
@@ -58,5 +59,5 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
         }
     }
 
-    protected abstract void doExecute(MessageCatalogFactory factory) throws MojoExecutionException, MojoFailureException;
+    protected abstract void doExecute(MessageCatalog messageCatalog) throws MojoExecutionException, MojoFailureException;
 }

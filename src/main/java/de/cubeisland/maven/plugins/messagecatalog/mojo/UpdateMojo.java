@@ -3,7 +3,7 @@ package de.cubeisland.maven.plugins.messagecatalog.mojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
-import de.cubeisland.maven.plugins.messagecatalog.MessageCatalogFactory;
+import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 
 /**
  * @goal update
@@ -11,7 +11,7 @@ import de.cubeisland.maven.plugins.messagecatalog.MessageCatalogFactory;
 public class UpdateMojo extends AbstractMessageCatalogMojo
 {
     @Override
-    protected void doExecute(MessageCatalogFactory factory) throws MojoExecutionException, MojoFailureException
+    protected void doExecute(MessageCatalog factory) throws MojoExecutionException, MojoFailureException
     {
 //        CatalogFormat catalogFormat = CatalogFormatFactory.newCatalogFormat(config.getCatalog().getOutputFormat(), config, this.getLog());    // create catalogFormat
 //        File file = new File(config.getCatalog().getTemplateFile() + "." + catalogFormat.getFileExtension());   // load pot file

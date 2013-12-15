@@ -1,5 +1,8 @@
 package de.cubeisland.maven.plugins.messagecatalog.util;
 
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.resource.loader.FileResourceLoader;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -7,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 public class Misc
 {
@@ -85,5 +89,17 @@ public class Misc
     public static File getRelativizedFile(File base, File file)
     {
         return new File(base.toURI().relativize(file.toURI()).getPath());
+    }
+
+    public static VelocityEngine getVelocityEngine(File file)
+    {
+        Properties properties = new Properties();
+        properties.put("resource.loader", "file");
+        properties.put("file.resource.loader.class", FileResourceLoader.class.getName());
+        properties.put("file.resource.loader.description", "Velocity File Resource Loader");
+        properties.put("file.resource.loader.path", file.getParentFile().getAbsolutePath());
+        properties.put("file.resource.loader.cache", false);
+
+        return new VelocityEngine(properties);
     }
 }

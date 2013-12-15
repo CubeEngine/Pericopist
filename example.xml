@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messagecatalog>
+    <source language="java">
+        <directory>src/main/java</directory>
+        <methods>
+            <method>getTranslation</method>
+        </methods>
+        <annotations>
+            <annotation>de.cubeisland.engine.core.command.reflected.Command:desc,usage</annotation>
+        </annotations>
+    </source>
+    <catalog format="gettext">
+        <removeUnusedMessages>false</removeUnusedMessages>
+        <template>src/main/resources/translations/messages</template>
+        <header>../header.txt</header>
+    </catalog>
+</messagecatalog>
