@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfig;
+import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
-import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfig;
+import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 
 public class MessageCatalog
@@ -18,32 +18,32 @@ public class MessageCatalog
     private final Context context;
 
     private final SourceParser sourceParser;
-    private final SourceConfig sourceConfig;
+    private final SourceConfiguration sourceConfiguration;
     private final CatalogFormat catalogFormat;
-    private final CatalogConfig catalogConfig;
+    private final CatalogConfiguration catalogConfiguration;
 
-    public MessageCatalog(SourceParser sourceParser, SourceConfig sourceConfig, CatalogFormat catalogFormat, CatalogConfig catalogConfig, Context context, Logger logger)
+    public MessageCatalog(SourceParser sourceParser, SourceConfiguration sourceConfiguration, CatalogFormat catalogFormat, CatalogConfiguration catalogConfiguration, Context context, Logger logger)
     {
         this.sourceParser = sourceParser;
-        this.sourceConfig = sourceConfig;
+        this.sourceConfiguration = sourceConfiguration;
         this.catalogFormat = catalogFormat;
-        this.catalogConfig = catalogConfig;
+        this.catalogConfiguration = catalogConfiguration;
 
         this.context = context;
         this.logger = logger;
     }
 
-    public SourceConfig getSourceConfig()
+    public SourceConfiguration getSourceConfiguration()
     {
-        return sourceConfig;
+        return sourceConfiguration;
     }
 
-    public CatalogConfig getCatalogConfig()
+    public CatalogConfiguration getCatalogConfiguration()
     {
-        return catalogConfig;
+        return catalogConfiguration;
     }
 
-    private Context getVelocityContext()
+    public Context getVelocityContext()
     {
         return this.context;
     }
@@ -78,7 +78,7 @@ public class MessageCatalog
     {
         try
         {
-            return this.catalogFormat.read(this.catalogConfig);
+            return this.catalogFormat.read(this, this.catalogConfiguration);
         }
         catch (IOException e)
         {
@@ -89,14 +89,14 @@ public class MessageCatalog
 
     public TranslatableMessageManager parseSourceCode(TranslatableMessageManager manager)
     {
-        return this.sourceParser.parse(this.sourceConfig, manager);
+        return this.sourceParser.parse(this, this.sourceConfiguration, manager);
     }
 
     public void createCatalog(TranslatableMessageManager manager)
     {
         try
         {
-            this.catalogFormat.write(this.catalogConfig, manager);
+            this.catalogFormat.write(this, this.catalogConfiguration, manager);
         }
         catch (IOException e)
         {

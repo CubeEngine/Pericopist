@@ -10,13 +10,14 @@ public class Test
 {
     public static void main(String[] args)
     {
-        ToolManager toolManager = new ToolManager();
+        ToolManager toolManager = new ToolManager(true);
 
         MessageCatalogFactory factory = new MessageCatalogFactory();
         MessageCatalog messageCatalog;
         try
         {
             messageCatalog = factory.getMessageCatalog(new File("./example.xml"), toolManager.createContext());
+            messageCatalog.updateCatalog();
         }
         catch (ConfigurationException e)
         {

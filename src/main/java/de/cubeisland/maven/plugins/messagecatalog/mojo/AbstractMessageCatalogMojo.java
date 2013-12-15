@@ -10,7 +10,6 @@ import org.apache.velocity.tools.ToolManager;
 import java.io.File;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalogFactory;
@@ -59,5 +58,5 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
         }
     }
 
-    protected abstract void doExecute(MessageCatalog messageCatalog) throws MojoExecutionException, MojoFailureException;
+    protected abstract void doExecute(MessageCatalog catalog) throws MojoExecutionException, MojoFailureException;
 }

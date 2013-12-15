@@ -97,7 +97,10 @@ public class Misc
         properties.put("resource.loader", "file");
         properties.put("file.resource.loader.class", FileResourceLoader.class.getName());
         properties.put("file.resource.loader.description", "Velocity File Resource Loader");
-        properties.put("file.resource.loader.path", file.getParentFile().getAbsolutePath());
+        if(file.getParentFile() != null)
+        {
+            properties.put("file.resource.loader.path", file.getParentFile().getAbsolutePath());
+        }
         properties.put("file.resource.loader.cache", false);
 
         return new VelocityEngine(properties);

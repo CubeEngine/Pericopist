@@ -7,10 +7,12 @@ import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfig;
+import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
+import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
@@ -23,9 +25,9 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     private CatalogHeader catalogHeader;
     private Logger logger;
 
-    public void write(CatalogConfig config, TranslatableMessageManager messageManager) throws IOException
+    public void write(MessageCatalog messageCatalog, CatalogConfiguration config, TranslatableMessageManager messageManager) throws IOException
     {
-        GettextCatalogConfig catalogConfig = (GettextCatalogConfig) config;
+        GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
         Catalog catalog = new Catalog(true);
 
         for (TranslatableMessage translatableMessage : messageManager)
@@ -55,16 +57,16 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             catalog.addMessage(message);
         }
 
-        this.updateHeaderMessage(catalogConfig);
+        this.updateHeaderMessage(messageCatalog, catalogConfig);
         catalog.addMessage(this.headerMessage);
 
         PoWriter poWriter = new PoWriter(true);
         poWriter.write(catalog, catalogConfig.getTemplateFile());
     }
 
-    public TranslatableMessageManager read(CatalogConfig config) throws IOException
+    public TranslatableMessageManager read(MessageCatalog messageCatalog, CatalogConfiguration config) throws IOException
     {
-        GettextCatalogConfig catalogConfig = (GettextCatalogConfig) config;
+        GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
         TranslatableMessageManager manager = new TranslatableMessageManager();
 
         Catalog catalog = new Catalog(true);
@@ -85,12 +87,12 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return manager;
     }
 
-    public Class<? extends CatalogConfig> getCatalogConfigClass()
+    public Class<? extends CatalogConfiguration> getConfigClass()
     {
-        return GettextCatalogConfig.class;
+        return GettextCatalogConfiguration.class;
     }
 
-    private void updateHeaderMessage(GettextCatalogConfig config)
+    private void updateHeaderMessage(MessageCatalog messageCatalog, GettextCatalogConfiguration config)
     {
         if (this.headerMessage == null)
         {
@@ -107,13 +109,13 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             {
                 return;
             }
-//            try
+            try
             {
-//                this.catalogHeader = new CatalogHeader(config.getHeader(), config.getVelocityContext()); // TODO getVelocityContext!
+                this.catalogHeader = new CatalogHeader(config.getHeader(), messageCatalog.getVelocityContext());
             }
-//            catch (FileNotFoundException e)
+            catch (FileNotFoundException e)
             {
-//                this.logger.warning(e.getClass().getName() + ": " + e.getMessage());
+                this.logger.warning(e.getClass().getName() + ": " + e.getMessage());
                 return;
             }
         }

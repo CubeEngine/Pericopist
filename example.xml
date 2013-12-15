@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messagecatalog>
     <source language="java">
-        <directory>src/main/java</directory>
+        <directory>src/test/resources</directory>
         <methods>
             <method>getTranslation</method>
+            <method>getTranslationN:1,2</method>
         </methods>
         <annotations>
-            <annotation>de.cubeisland.engine.core.command.reflected.Command:desc,usage</annotation>
+            <annotation>test.anot.TestSingleMemberAnnotation</annotation>
+            <annotation>text.anot.TestNormalAnnotation:desc,usage</annotation>
         </annotations>
     </source>
     <catalog format="gettext">
         <removeUnusedMessages>false</removeUnusedMessages>
-        <template>src/main/resources/translations/messages</template>
-        <header>../header.txt</header>
+        <template>messages.pot</template>
+        <header>header.txt</header>
     </catalog>
 </messagecatalog>

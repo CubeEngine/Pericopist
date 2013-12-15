@@ -20,11 +20,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import de.cubeisland.maven.plugins.messagecatalog.exception.ConfigurationException;
 import de.cubeisland.maven.plugins.messagecatalog.exception.ConfigurationNotFoundException;
-import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfig;
+import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.exception.UnknownCatalogFormatException;
 import de.cubeisland.maven.plugins.messagecatalog.format.gettext.PlaintextGettextCatalogFormat;
-import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfig;
+import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.exception.UnknownSourceLanguageException;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.JavaSourceParser;
@@ -76,11 +76,11 @@ public class MessageCatalogFactory
 
         configTemplate.merge(context, stringWriter);
 
-        SourceParser sourceParser;
-        SourceConfig sourceConfig;
+        SourceParser sourceParser = null;
+        SourceConfiguration sourceConfiguration = null;
 
-        CatalogFormat catalogFormat;
-        CatalogConfig catalogConfig;
+        CatalogFormat catalogFormat = null;
+        CatalogConfiguration catalogConfiguration = null;
 
         NodeList list = this.getRootNode(stringWriter.toString()).getChildNodes();
         for(int i = 0; i < list.getLength(); i++)
@@ -104,16 +104,16 @@ public class MessageCatalogFactory
                     throw new ConfigurationException("Could not create a SourceParser instance of " + sourceParserClass.getName());
                 }
 
-                Class<? extends SourceConfig> sourceConfigClass = sourceParser.getSourceConfigClass();
+                Class<? extends SourceConfiguration> sourceConfigClass = sourceParser.getConfigClass();
                 try
                 {
-                    sourceConfig = sourceConfigClass.newInstance();
-                    sourceConfig.parse(node);
+                    sourceConfiguration = sourceConfigClass.newInstance();
                 }
                 catch (Exception e)
                 {
-                    throw new ConfigurationException("Could not create a SourceConfig instance of " + sourceConfigClass.getName());
+                    throw new ConfigurationException("Could not create a SourceConfiguration instance of " + sourceConfigClass.getName(), e);
                 }
+                sourceConfiguration.parse(node);
             }
             else if(node.getNodeName().equals("catalog"))
             {
@@ -130,14 +130,23 @@ public class MessageCatalogFactory
                 }
                 catch (Exception e)
                 {
-                    throw new ConfigurationException("Could not create a CatalogFormat instance of " + catalogFormatClass.getName());
+                    throw new ConfigurationException("Could not create an CatalogFormat instance of " + catalogFormatClass.getName());
                 }
 
-                // TODO create CatalogConfig
+                Class<? extends CatalogConfiguration> catalogConfigClass = catalogFormat.getConfigClass();
+                try
+                {
+                    catalogConfiguration = catalogConfigClass.newInstance();
+                }
+                catch (Exception e)
+                {
+                    throw new ConfigurationException("Could not create an CatalogConfiguration instance of " + catalogConfigClass.getName(), e);
+                }
+                catalogConfiguration.parse(node);
             }
         }
 
-        return null;
+        return new MessageCatalog(sourceParser, sourceConfiguration, catalogFormat, catalogConfiguration, context, this.logger);
     }
 
     private Node getRootNode(String xml) throws ConfigurationException
@@ -173,47 +182,4 @@ public class MessageCatalogFactory
         this.sourceParserMap.put("java", JavaSourceParser.class);
         this.catalogFormatMap.put("gettext", PlaintextGettextCatalogFormat.class);
     }
-
-//    private void parseConfiguration(String xml) throws ParserConfigurationException, IOException, SAXException, UnknownSourceLanguageException, IllegalAccessException, InstantiationException, UnknownCatalogFormatException
-//    {
-//        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//        DocumentBuilder builder = factory.newDocumentBuilder();
-//        InputSource inputSource = new InputSource(new StringReader(xml));
-//        Document document = builder.parse(inputSource);
-//
-//        NodeList list = document.getElementsByTagName("messagecatalog");
-//        Node node = list.item(0);
-//
-//        list = node.getChildNodes();
-//        for(int i = 0; i < list.getLength(); i++)
-//        {
-//            node = list.item(0);
-//            if(node.getNodeName().equals("source"))
-//            {
-//                String language = node.getAttributes().getNamedItem("language").getTextContent();
-//                Class<? extends SourceParser> sourceParser = this.getSourceParserClass(language);
-//                if(sourceParser == null)
-//                {
-//                    throw new UnknownSourceLanguageException("Unknown source language " + language);
-//                }
-//                this.sourceParser = sourceParser.newInstance();
-//                this.sourceParser.init(this.logger);
-//            }
-//            else if(node.getNodeName().equals("catalog"))
-//            {
-//                String format = node.getAttributes().getNamedItem("format").getTextContent();
-//                Class<? extends CatalogFormat> catalogFormat = this.getCatalogFormatClass(null);
-//                if(catalogFormat == null)
-//                {
-//                    throw new UnknownCatalogFormatException("Unknown catalog format " + format);
-//                }
-//                this.catalogFormat = catalogFormat.newInstance();
-//                this.catalogFormat.init(this.logger);
-//            }
-//            else
-//            {
-//                this.logger.info("Unknown node " + node.getNodeName());
-//            }
-//        }
-//    }
 }

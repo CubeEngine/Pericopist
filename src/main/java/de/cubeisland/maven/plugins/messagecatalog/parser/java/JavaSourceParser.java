@@ -13,10 +13,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
-import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfig;
+import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
-import de.cubeisland.maven.plugins.messagecatalog.parser.java.config.JavaSourceConfig;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.config.JavaSourceConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
 public class JavaSourceParser implements SourceParser
@@ -29,9 +30,9 @@ public class JavaSourceParser implements SourceParser
         this.fileFilter = new JavaFileFilter();
     }
 
-    public TranslatableMessageManager parse(SourceConfig config, TranslatableMessageManager manager)
+    public TranslatableMessageManager parse(MessageCatalog messageCatalog, SourceConfiguration config, TranslatableMessageManager manager)
     {
-        JavaSourceConfig sourceConfig = (JavaSourceConfig) config;
+        JavaSourceConfiguration sourceConfig = (JavaSourceConfiguration) config;
 
         List<File> files = Misc.scanFilesRecursive(sourceConfig.getDirectory(), this.fileFilter);
 
@@ -73,9 +74,9 @@ public class JavaSourceParser implements SourceParser
         return manager;
     }
 
-    public Class<? extends SourceConfig> getSourceConfigClass()
+    public Class<? extends SourceConfiguration> getConfigClass()
     {
-        return JavaSourceConfig.class;
+        return JavaSourceConfiguration.class;
     }
 
     public void init(Logger logger)

@@ -2,10 +2,10 @@ package de.cubeisland.maven.plugins.messagecatalog.format;
 
 import java.io.File;
 
-public abstract class AbstractCatalogConfig implements CatalogConfig
+public abstract class AbstractCatalogConfiguration implements CatalogConfiguration
 {
     protected File templateFile;
-    private boolean removeUnusedMessages;
+    protected boolean removeUnusedMessages = true;
 
     public File getTemplateFile()
     {
