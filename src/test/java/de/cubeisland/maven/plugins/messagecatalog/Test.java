@@ -17,7 +17,7 @@ public class Test
         try
         {
             messageCatalog = factory.getMessageCatalog(new File("./example.xml"), toolManager.createContext());
-            messageCatalog.updateCatalog();
+            messageCatalog.generateCatalog();
         }
         catch (ConfigurationException e)
         {

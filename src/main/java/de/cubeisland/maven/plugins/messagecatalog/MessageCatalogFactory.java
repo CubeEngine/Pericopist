@@ -96,8 +96,8 @@ public class MessageCatalogFactory
                 }
                 try
                 {
-                    sourceParser = sourceParserClass.newInstance();
-                    sourceParser.init(this.logger);
+                    sourceParserClass.getConstructor(Logger.class).newInstance(this.logger);
+                    sourceParser = sourceParserClass.getConstructor(Logger.class).newInstance(this.logger);
                 }
                 catch (Exception e)
                 {
@@ -125,8 +125,7 @@ public class MessageCatalogFactory
                 }
                 try
                 {
-                    catalogFormat = catalogFormatClass.newInstance();
-                    catalogFormat.init(this.logger);
+                    catalogFormat = catalogFormatClass.getConstructor(Logger.class).newInstance(this.logger);
                 }
                 catch (Exception e)
                 {

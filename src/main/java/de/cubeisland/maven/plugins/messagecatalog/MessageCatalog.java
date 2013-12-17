@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
+import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 
@@ -55,17 +55,17 @@ public class MessageCatalog
 
     public void generateCatalog()
     {
-        this.generateCatalog(null);
+        this.createCatalog(this.parseSourceCode());
     }
 
-    private void generateCatalog(final TranslatableMessageManager manager)
+    private void generateCatalog(final MessageStore manager)
     {
         this.createCatalog(this.parseSourceCode(manager));
     }
 
     public void updateCatalog()
     {
-        TranslatableMessageManager manager = this.readCatalog();
+        MessageStore manager = this.readCatalog();
         if (manager == null)
         {
             this.logger.severe("Could not read the old catalog.");
@@ -74,7 +74,7 @@ public class MessageCatalog
         this.generateCatalog(manager);
     }
 
-    public TranslatableMessageManager readCatalog()
+    public MessageStore readCatalog()
     {
         try
         {
@@ -87,12 +87,17 @@ public class MessageCatalog
         }
     }
 
-    public TranslatableMessageManager parseSourceCode(TranslatableMessageManager manager)
+    public MessageStore parseSourceCode()
+    {
+        return this.sourceParser.parse(this, this.sourceConfiguration);
+    }
+
+    public MessageStore parseSourceCode(MessageStore manager)
     {
         return this.sourceParser.parse(this, this.sourceConfiguration, manager);
     }
 
-    public void createCatalog(TranslatableMessageManager manager)
+    public void createCatalog(MessageStore manager)
     {
         try
         {

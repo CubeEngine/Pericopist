@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
+import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.config.JavaSourceConfiguration;
@@ -25,12 +25,18 @@ public class JavaSourceParser implements SourceParser
     private final FileFilter fileFilter;
     private Logger logger;
 
-    public JavaSourceParser()
+    public JavaSourceParser(Logger logger)
     {
         this.fileFilter = new JavaFileFilter();
+        this.logger = logger;
     }
 
-    public TranslatableMessageManager parse(MessageCatalog messageCatalog, SourceConfiguration config, TranslatableMessageManager manager)
+    public MessageStore parse(MessageCatalog messageCatalog, SourceConfiguration config)
+    {
+        return this.parse(messageCatalog, config, null);
+    }
+
+    public MessageStore parse(MessageCatalog messageCatalog, SourceConfiguration config, MessageStore manager)
     {
         JavaSourceConfiguration sourceConfig = (JavaSourceConfiguration) config;
 
@@ -38,7 +44,7 @@ public class JavaSourceParser implements SourceParser
 
         if (manager == null)
         {
-            manager = new TranslatableMessageManager();
+            manager = new MessageStore();
         }
 
         String[] environment = new String[files.size()];
@@ -77,11 +83,6 @@ public class JavaSourceParser implements SourceParser
     public Class<? extends SourceConfiguration> getConfigClass()
     {
         return JavaSourceConfiguration.class;
-    }
-
-    public void init(Logger logger)
-    {
-        this.logger = logger;
     }
 
     private class JavaFileFilter implements FileFilter

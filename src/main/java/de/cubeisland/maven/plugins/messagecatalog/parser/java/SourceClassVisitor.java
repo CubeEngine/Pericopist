@@ -20,8 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.config.JavaSourceConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.config.TranslatableAnnotation;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.config.TranslatableMethod;
@@ -30,7 +30,7 @@ import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 class SourceClassVisitor extends ASTVisitor
 {
     private final JavaSourceConfiguration configuration;
-    private final TranslatableMessageManager messageManager;
+    private final MessageStore messageManager;
     private final CompilationUnit compilationUnit;
     private final File file;
 
@@ -38,7 +38,7 @@ class SourceClassVisitor extends ASTVisitor
     private Set<String> normalImports;
     private Set<String> onDemandImports;
 
-    public SourceClassVisitor(JavaSourceConfiguration configuration, TranslatableMessageManager messageManager, CompilationUnit compilationUnit, File file)
+    public SourceClassVisitor(JavaSourceConfiguration configuration, MessageStore messageManager, CompilationUnit compilationUnit, File file)
     {
         this.configuration = configuration;
         this.messageManager = messageManager;

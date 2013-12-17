@@ -4,11 +4,11 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class TranslatableMessageManager implements Iterable<TranslatableMessage>
+public class MessageStore implements Iterable<TranslatableMessage>
 {
     private Set<TranslatableMessage> messages;
 
-    public TranslatableMessageManager()
+    public MessageStore()
     {
         this.messages = new TreeSet<TranslatableMessage>();
     }

@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
+import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
 
 public interface CatalogFormat
 {
-    void write(MessageCatalog messageCatalog, CatalogConfiguration config, TranslatableMessageManager manager) throws IOException;
-    TranslatableMessageManager read(MessageCatalog messageCatalog, CatalogConfiguration config) throws IOException;
+    void write(MessageCatalog messageCatalog, CatalogConfiguration config, MessageStore manager) throws IOException;
+    MessageStore read(MessageCatalog messageCatalog, CatalogConfiguration config) throws IOException;
     Class<? extends CatalogConfiguration> getConfigClass();
     String getFileExtension();
-    void init(Logger logger);
 }

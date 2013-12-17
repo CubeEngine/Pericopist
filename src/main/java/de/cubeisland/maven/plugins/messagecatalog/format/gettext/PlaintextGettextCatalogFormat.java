@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
+import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.util.CatalogHeader;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
@@ -25,7 +25,12 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     private CatalogHeader catalogHeader;
     private Logger logger;
 
-    public void write(MessageCatalog messageCatalog, CatalogConfiguration config, TranslatableMessageManager messageManager) throws IOException
+    public PlaintextGettextCatalogFormat(Logger logger)
+    {
+        this.logger = logger;
+    }
+
+    public void write(MessageCatalog messageCatalog, CatalogConfiguration config, MessageStore messageManager) throws IOException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
         Catalog catalog = new Catalog(true);
@@ -64,10 +69,10 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         poWriter.write(catalog, catalogConfig.getTemplateFile());
     }
 
-    public TranslatableMessageManager read(MessageCatalog messageCatalog, CatalogConfiguration config) throws IOException
+    public MessageStore read(MessageCatalog messageCatalog, CatalogConfiguration config) throws IOException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
-        TranslatableMessageManager manager = new TranslatableMessageManager();
+        MessageStore manager = new MessageStore();
 
         Catalog catalog = new Catalog(true);
         PoParser poParser = new PoParser(catalog);
@@ -128,10 +133,5 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     public String getFileExtension()
     {
         return "pot";
-    }
-
-    public void init(Logger logger)
-    {
-        this.logger = logger;
     }
 }
