@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -77,10 +80,10 @@ public class MessageCatalogFactory
         configTemplate.merge(context, stringWriter);
 
         SourceParser sourceParser = null;
-        SourceConfiguration sourceConfiguration = null;
+        Node sourceNode = null;
 
         CatalogFormat catalogFormat = null;
-        CatalogConfiguration catalogConfiguration = null;
+        Node catalogNode = null;
 
         NodeList list = this.getRootNode(stringWriter.toString()).getChildNodes();
         for(int i = 0; i < list.getLength(); i++)
@@ -103,17 +106,7 @@ public class MessageCatalogFactory
                 {
                     throw new ConfigurationException("Could not create a SourceParser instance of " + sourceParserClass.getName());
                 }
-
-                Class<? extends SourceConfiguration> sourceConfigClass = sourceParser.getConfigClass();
-                try
-                {
-                    sourceConfiguration = sourceConfigClass.newInstance();
-                }
-                catch (Exception e)
-                {
-                    throw new ConfigurationException("Could not create a SourceConfiguration instance of " + sourceConfigClass.getName(), e);
-                }
-                sourceConfiguration.parse(node);
+                sourceNode = node;
             }
             else if(node.getNodeName().equals("catalog"))
             {
@@ -131,21 +124,28 @@ public class MessageCatalogFactory
                 {
                     throw new ConfigurationException("Could not create an CatalogFormat instance of " + catalogFormatClass.getName());
                 }
-
-                Class<? extends CatalogConfiguration> catalogConfigClass = catalogFormat.getConfigClass();
-                try
-                {
-                    catalogConfiguration = catalogConfigClass.newInstance();
-                }
-                catch (Exception e)
-                {
-                    throw new ConfigurationException("Could not create an CatalogConfiguration instance of " + catalogConfigClass.getName(), e);
-                }
-                catalogConfiguration.parse(node);
+                catalogNode = node;
             }
         }
 
-        return new MessageCatalog(sourceParser, sourceConfiguration, catalogFormat, catalogConfiguration, context, this.logger);
+        try
+        {
+            Class<? extends SourceConfiguration> sourceConfigurationClass = sourceParser.getConfigClass();
+            Class<? extends CatalogConfiguration> catalogConfigurationClass = catalogFormat.getConfigClass();
+
+            JAXBContext jaxbContext = JAXBContext.newInstance(sourceConfigurationClass, catalogConfigurationClass);
+
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            SourceConfiguration sourceConfiguration = sourceConfigurationClass.cast(unmarshaller.unmarshal(sourceNode));
+            CatalogConfiguration catalogConfiguration = catalogConfigurationClass.cast(unmarshaller.unmarshal(catalogNode));
+
+            return new MessageCatalog(sourceParser, sourceConfiguration, catalogFormat, catalogConfiguration, context, this.logger);
+
+        }
+        catch (JAXBException e)
+        {
+            throw new ConfigurationException(e);
+        }
     }
 
     private Node getRootNode(String xml) throws ConfigurationException

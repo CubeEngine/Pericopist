@@ -1,19 +1,24 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser.java.config;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.cubeisland.maven.plugins.messagecatalog.exception.MissingNodeException;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import de.cubeisland.maven.plugins.messagecatalog.parser.AbstractSourceConfiguration;
 
+@XmlRootElement(name = "source")
 public class JavaSourceConfiguration extends AbstractSourceConfiguration
 {
+    @XmlElementWrapper(name = "methods")
+    @XmlElement(name = "method")
     private Set<TranslatableMethod> translatableMethods = new HashSet<TranslatableMethod>();
+
+    @XmlElementWrapper(name = "annotations")
+    @XmlElement(name = "annotation")
     private Set<TranslatableAnnotation> translatableAnnotations = new HashSet<TranslatableAnnotation>();
 
     public Collection<TranslatableMethod> getTranslatableMethods()
@@ -24,52 +29,6 @@ public class JavaSourceConfiguration extends AbstractSourceConfiguration
     public Collection<TranslatableAnnotation> getTranslatableAnnotations()
     {
         return translatableAnnotations;
-    }
-
-    public void parse(Node node) throws MissingNodeException
-    {
-        System.out.println("found source config " + this.getClass().getName());
-
-        NodeList nodeList = node.getChildNodes();
-        for(int i = 0; i < nodeList.getLength(); i++)
-        {
-            Node subNode = nodeList.item(i);
-            String nodeName = subNode.getNodeName();
-
-            if(nodeName.equals("directory"))
-            {
-                this.directory = new File(subNode.getTextContent().trim());
-            }
-            else if(nodeName.equals("methods"))
-            {
-                NodeList methodList = subNode.getChildNodes();
-                for(int j = 0; j < methodList.getLength(); j++)
-                {
-                    subNode = methodList.item(j);
-                    if(subNode.getNodeName().equals("method"))
-                    {
-                        this.translatableMethods.add(new TranslatableMethod(subNode.getTextContent().trim()));
-                    }
-                }
-            }
-            else if(nodeName.equals("annotations"))
-            {
-                NodeList annotationList = subNode.getChildNodes();
-                for(int j = 0; j < annotationList.getLength(); j++)
-                {
-                    subNode = annotationList.item(j);
-                    if(subNode.getNodeName().equals("annotation"))
-                    {
-                        this.translatableAnnotations.add(new TranslatableAnnotation(subNode.getTextContent().trim()));
-                    }
-                }
-            }
-        }
-
-        if(this.directory == null)
-        {
-            throw MissingNodeException.of(this, "directory");
-        }
     }
 
     public String getLanguage()

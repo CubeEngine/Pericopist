@@ -1,29 +1,19 @@
 package de.cubeisland.maven.plugins.messagecatalog.parser.java.config;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "method")
 public class TranslatableMethod
 {
+    @XmlElement(required = true)
     private String name;
-    private int singularIndex;
-    private int pluralIndex;
 
-    public TranslatableMethod(String method)
-    {
-        String[] parts = method.trim().split(":");
+    @XmlElement(name = "singular")
+    private int singularIndex = 1;
 
-        this.name = parts[0];
-        this.singularIndex = 1;
-        this.pluralIndex = -1;
-
-        if (parts.length > 1)
-        {
-            String[] lines = parts[1].split(",");
-            this.singularIndex = Integer.valueOf(lines[0]);
-            if (lines.length > 1)
-            {
-                this.pluralIndex = Integer.valueOf(lines[1]);
-            }
-        }
-    }
+    @XmlElement(name = "plural")
+    private int pluralIndex = -1;
 
     public String getName()
     {
