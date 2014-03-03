@@ -38,7 +38,7 @@ public class JavaSourceParser implements SourceParser
 
     public MessageStore parse(MessageCatalog messageCatalog, SourceConfiguration config, MessageStore manager)
     {
-        JavaSourceConfiguration sourceConfig = (JavaSourceConfiguration) config;
+        JavaSourceConfiguration sourceConfig = (JavaSourceConfiguration)config;
 
         List<File> files = Misc.scanFilesRecursive(sourceConfig.getDirectory(), this.fileFilter);
 

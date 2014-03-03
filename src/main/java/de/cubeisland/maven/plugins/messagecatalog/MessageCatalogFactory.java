@@ -23,13 +23,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import de.cubeisland.maven.plugins.messagecatalog.exception.ConfigurationException;
 import de.cubeisland.maven.plugins.messagecatalog.exception.ConfigurationNotFoundException;
+import de.cubeisland.maven.plugins.messagecatalog.exception.UnknownCatalogFormatException;
+import de.cubeisland.maven.plugins.messagecatalog.exception.UnknownSourceLanguageException;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
-import de.cubeisland.maven.plugins.messagecatalog.exception.UnknownCatalogFormatException;
 import de.cubeisland.maven.plugins.messagecatalog.format.gettext.PlaintextGettextCatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
-import de.cubeisland.maven.plugins.messagecatalog.exception.UnknownSourceLanguageException;
 import de.cubeisland.maven.plugins.messagecatalog.parser.java.JavaSourceParser;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
@@ -66,7 +66,7 @@ public class MessageCatalogFactory
 
     public MessageCatalog getMessageCatalog(File configuration, Context context) throws ConfigurationException
     {
-        if(!configuration.exists())
+        if (!configuration.exists())
         {
             throw new ConfigurationNotFoundException("The configuration file does not exist!");
         }
@@ -86,14 +86,14 @@ public class MessageCatalogFactory
         Node catalogNode = null;
 
         NodeList list = this.getRootNode(stringWriter.toString()).getChildNodes();
-        for(int i = 0; i < list.getLength(); i++)
+        for (int i = 0; i < list.getLength(); i++)
         {
             Node node = list.item(i);
-            if(node.getNodeName().equals("source"))
+            if (node.getNodeName().equals("source"))
             {
                 String language = node.getAttributes().getNamedItem("language").getTextContent();
                 Class<? extends SourceParser> sourceParserClass = this.getSourceParser(language);
-                if(sourceParserClass == null)
+                if (sourceParserClass == null)
                 {
                     throw new UnknownSourceLanguageException("Unknown source language " + language);
                 }
@@ -108,11 +108,11 @@ public class MessageCatalogFactory
                 }
                 sourceNode = node;
             }
-            else if(node.getNodeName().equals("catalog"))
+            else if (node.getNodeName().equals("catalog"))
             {
                 String format = node.getAttributes().getNamedItem("format").getTextContent();
                 Class<? extends CatalogFormat> catalogFormatClass = this.getCatalogFormat(format);
-                if(catalogFormatClass == null)
+                if (catalogFormatClass == null)
                 {
                     throw new UnknownCatalogFormatException("Unknown catalog format " + format);
                 }
@@ -140,7 +140,6 @@ public class MessageCatalogFactory
             CatalogConfiguration catalogConfiguration = catalogConfigurationClass.cast(unmarshaller.unmarshal(catalogNode));
 
             return new MessageCatalog(sourceParser, sourceConfiguration, catalogFormat, catalogConfiguration, context, this.logger);
-
         }
         catch (JAXBException e)
         {
@@ -165,7 +164,7 @@ public class MessageCatalogFactory
         assert document != null;
 
         NodeList list = document.getElementsByTagName("messagecatalog");
-        if(list.getLength() == 0)
+        if (list.getLength() == 0)
         {
             throw new ConfigurationException("The configuration file doesn't have a <messagecatalog> node");
         }

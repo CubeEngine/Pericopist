@@ -35,12 +35,12 @@ public class MessageCatalog
 
     public SourceConfiguration getSourceConfiguration()
     {
-        return sourceConfiguration;
+        return this.sourceConfiguration;
     }
 
     public CatalogConfiguration getCatalogConfiguration()
     {
-        return catalogConfiguration;
+        return this.catalogConfiguration;
     }
 
     public Context getVelocityContext()

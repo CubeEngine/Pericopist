@@ -1,7 +1,6 @@
 package de.cubeisland.maven.plugins.messagecatalog.format;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;

@@ -32,7 +32,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
     public void write(MessageCatalog messageCatalog, CatalogConfiguration config, MessageStore messageManager) throws IOException
     {
-        GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
+        GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration)config;
         Catalog catalog = new Catalog(true);
 
         for (TranslatableMessage translatableMessage : messageManager)
@@ -71,7 +71,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
     public MessageStore read(MessageCatalog messageCatalog, CatalogConfiguration config) throws IOException
     {
-        GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
+        GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration)config;
         MessageStore manager = new MessageStore();
 
         Catalog catalog = new Catalog(true);
