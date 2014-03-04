@@ -7,7 +7,6 @@ import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -118,7 +117,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             {
                 this.catalogHeader = new CatalogHeader(config.getHeader(), messageCatalog.getVelocityContext());
             }
-            catch (FileNotFoundException e)
+            catch (IOException e)
             {
                 this.logger.warning(e.getClass().getName() + ": " + e.getMessage());
                 return;

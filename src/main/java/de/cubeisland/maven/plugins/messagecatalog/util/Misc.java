@@ -4,10 +4,15 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.FileResourceLoader;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -104,5 +109,48 @@ public class Misc
         properties.put("file.resource.loader.cache", false);
 
         return new VelocityEngine(properties);
+    }
+
+    public static URL getResource(String resource)
+    {
+        File file = new File(resource);
+        if (file.exists() && file.canRead())
+        {
+            try
+            {
+                return file.toURI().toURL();
+            }
+            catch (MalformedURLException ignored)
+            { }
+        }
+
+        try
+        {
+            URL url = new URL(resource);
+            url.openStream().close();
+            return url;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
+    public static String getContent(URL url) throws IOException
+    {
+        URLConnection connection = url.openConnection();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+        StringBuilder content = new StringBuilder();
+        String inputLine;
+
+        while ((inputLine = reader.readLine()) != null)
+        {
+            content.append(inputLine);
+            content.append('\n');
+        }
+
+        reader.close();
+        return content.toString();
     }
 }

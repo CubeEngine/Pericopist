@@ -7,7 +7,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.ToolManager;
 
-import java.io.File;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -26,7 +25,7 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
     /**
      * @parameter
      */
-    private File configuration;
+    private String configuration;
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
@@ -50,7 +49,7 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
         try
         {
             MessageCatalogFactory factory = new MessageCatalogFactory();
-            this.doExecute(factory.getMessageCatalog(configuration, context));
+            this.doExecute(factory.getMessageCatalog(this.configuration, context));
         }
         catch (Exception e)
         {

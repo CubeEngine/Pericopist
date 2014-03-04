@@ -1,6 +1,5 @@
 package de.cubeisland.maven.plugins.messagecatalog;
 
-import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
 import org.w3c.dom.Document;
@@ -8,9 +7,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -22,7 +22,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import de.cubeisland.maven.plugins.messagecatalog.exception.ConfigurationException;
-import de.cubeisland.maven.plugins.messagecatalog.exception.ConfigurationNotFoundException;
 import de.cubeisland.maven.plugins.messagecatalog.exception.UnknownCatalogFormatException;
 import de.cubeisland.maven.plugins.messagecatalog.exception.UnknownSourceLanguageException;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
@@ -64,20 +63,26 @@ public class MessageCatalogFactory
         return this.catalogFormatMap.get(format);
     }
 
-    public MessageCatalog getMessageCatalog(File configuration, Context context) throws ConfigurationException
+    public MessageCatalog getMessageCatalog(String resource, Context context) throws ConfigurationException
     {
-        if (!configuration.exists())
+        URL configurationUrl = Misc.getResource(resource);
+        if (configurationUrl == null)
         {
-            throw new ConfigurationNotFoundException("The configuration file does not exist!");
+            throw new ConfigurationException("The configuration resource '" + resource + "' was not found in file system or as URL.");
         }
 
-        VelocityEngine velocityEngine = Misc.getVelocityEngine(configuration);
+        VelocityEngine velocityEngine = new VelocityEngine();
         velocityEngine.init();
 
-        Template configTemplate = velocityEngine.getTemplate(configuration.getName());
         StringWriter stringWriter = new StringWriter();
-
-        configTemplate.merge(context, stringWriter);
+        try
+        {
+            velocityEngine.evaluate(context, stringWriter, "configuration", Misc.getContent(configurationUrl));
+        }
+        catch (IOException e)
+        {
+            throw new ConfigurationException("The configuration file could not be read.");
+        }
 
         SourceParser sourceParser = null;
         Node sourceNode = null;

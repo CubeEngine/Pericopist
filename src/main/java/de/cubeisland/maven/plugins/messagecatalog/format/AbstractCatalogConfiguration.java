@@ -14,11 +14,11 @@ public abstract class AbstractCatalogConfiguration implements CatalogConfigurati
 
     public final File getTemplateFile()
     {
-        return templateFile;
+        return this.templateFile;
     }
 
     public final boolean getRemoveUnusedMessages()
     {
-        return removeUnusedMessages;
+        return this.removeUnusedMessages;
     }
 }

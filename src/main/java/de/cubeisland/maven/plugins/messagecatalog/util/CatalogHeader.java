@@ -1,13 +1,14 @@
 package de.cubeisland.maven.plugins.messagecatalog.util;
 
-import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,27 +16,23 @@ public class CatalogHeader
 {
     private List<String> comments;
 
-    public CatalogHeader(File file, Context context) throws FileNotFoundException
+    public CatalogHeader(String headerResource, Context context) throws IOException
     {
-        if (!file.exists())
+        URL headerUrl = Misc.getResource(headerResource);
+        if (headerUrl == null)
         {
-            throw new FileNotFoundException("The header file on path '" + file.getAbsolutePath() + " does not exists!");
+            throw new FileNotFoundException("The header resource '" + headerResource + "' was not found in file system or as URL.");
         }
 
         this.comments = new LinkedList<String>();
 
-        VelocityEngine engine = Misc.getVelocityEngine(file);
+        VelocityEngine engine = new VelocityEngine();
         engine.init();
 
-        Template template = engine.getTemplate(file.getName());
-
         StringWriter stringWriter = new StringWriter();
-        template.merge(context, stringWriter);
+        engine.evaluate(context, stringWriter, "catalogheader", Misc.getContent(headerUrl));
 
-        for (String line : stringWriter.toString().split("\n"))
-        {
-            this.comments.add(line);
-        }
+        Collections.addAll(this.comments, stringWriter.toString().split("\n"));
     }
 
     public Collection<String> getComments()

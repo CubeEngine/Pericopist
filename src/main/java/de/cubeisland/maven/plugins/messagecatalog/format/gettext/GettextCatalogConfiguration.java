@@ -1,7 +1,5 @@
 package de.cubeisland.maven.plugins.messagecatalog.format.gettext;
 
-import java.io.File;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -11,9 +9,9 @@ import de.cubeisland.maven.plugins.messagecatalog.format.AbstractCatalogConfigur
 public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
 {
     @XmlElement
-    private File header;
+    private String header;
 
-    public File getHeader()
+    public String getHeader()
     {
         return header;
     }
