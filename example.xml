@@ -33,7 +33,7 @@
     <catalog format="gettext">
         <removeUnusedMessages>false</removeUnusedMessages>
         <template>messages.pot</template>
-        <header>header.txt</header>
+        <!--<header>header.txt</header>-->
     </catalog>
 
 </messagecatalog>

@@ -8,7 +8,6 @@ import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
@@ -22,12 +21,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
     private Message headerMessage;
     private CatalogHeader catalogHeader;
-    private Logger logger;
-
-    public PlaintextGettextCatalogFormat(Logger logger)
-    {
-        this.logger = logger;
-    }
 
     public void write(MessageCatalog messageCatalog, CatalogConfiguration config, MessageStore messageManager) throws IOException
     {
@@ -44,7 +37,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 }
                 else
                 {
-                    this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
+//                    this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
                 }
             }
             Message message = new Message();
@@ -96,7 +89,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return GettextCatalogConfiguration.class;
     }
 
-    private void updateHeaderMessage(MessageCatalog messageCatalog, GettextCatalogConfiguration config)
+    private void updateHeaderMessage(MessageCatalog messageCatalog, GettextCatalogConfiguration config) throws IOException
     {
         if (this.headerMessage == null)
         {
@@ -113,15 +106,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             {
                 return;
             }
-            try
-            {
-                this.catalogHeader = new CatalogHeader(config.getHeader(), messageCatalog.getVelocityContext());
-            }
-            catch (IOException e)
-            {
-                this.logger.warning(e.getClass().getName() + ": " + e.getMessage());
-                return;
-            }
+            this.catalogHeader = new CatalogHeader(config.getHeader(), messageCatalog.getVelocityContext());
         }
         for (String line : this.catalogHeader.getComments())
         {

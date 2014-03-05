@@ -2,7 +2,7 @@ package de.cubeisland.maven.plugins.messagecatalog;
 
 import org.apache.velocity.tools.ToolManager;
 
-import de.cubeisland.maven.plugins.messagecatalog.exception.ConfigurationException;
+import de.cubeisland.maven.plugins.messagecatalog.exception.MessageCatalogException;
 
 public class Test
 {
@@ -14,11 +14,11 @@ public class Test
         MessageCatalog messageCatalog;
         try
         {
-//            messageCatalog = factory.getMessageCatalog("./example.xml", toolManager.createContext());
-            messageCatalog = factory.getMessageCatalog("https://raw.github.com/CubeEngineDev/messagecatalog-maven-plugin/reconstruction/example.xml", toolManager.createContext());
+            messageCatalog = factory.getMessageCatalog("./example.xml", toolManager.createContext());
+//            messageCatalog = factory.getMessageCatalog("https://raw.github.com/CubeEngineDev/messagecatalog-maven-plugin/reconstruction/example.xml", toolManager.createContext());
             messageCatalog.generateCatalog();
         }
-        catch (ConfigurationException e)
+        catch (MessageCatalogException e)
         {
             e.printStackTrace();
         }

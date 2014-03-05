@@ -22,6 +22,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import de.cubeisland.maven.plugins.messagecatalog.exception.ConfigurationException;
+import de.cubeisland.maven.plugins.messagecatalog.exception.ConfigurationNotFoundException;
 import de.cubeisland.maven.plugins.messagecatalog.exception.UnknownCatalogFormatException;
 import de.cubeisland.maven.plugins.messagecatalog.exception.UnknownSourceLanguageException;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
@@ -68,7 +69,7 @@ public class MessageCatalogFactory
         URL configurationUrl = Misc.getResource(resource);
         if (configurationUrl == null)
         {
-            throw new ConfigurationException("The configuration resource '" + resource + "' was not found in file system or as URL.");
+            throw new ConfigurationNotFoundException("The configuration resource '" + resource + "' was not found in file system or as URL.");
         }
 
         VelocityEngine velocityEngine = new VelocityEngine();
@@ -104,8 +105,7 @@ public class MessageCatalogFactory
                 }
                 try
                 {
-                    sourceParserClass.getConstructor(Logger.class).newInstance(this.logger);
-                    sourceParser = sourceParserClass.getConstructor(Logger.class).newInstance(this.logger);
+                    sourceParser = sourceParserClass.newInstance();
                 }
                 catch (Exception e)
                 {
@@ -123,7 +123,7 @@ public class MessageCatalogFactory
                 }
                 try
                 {
-                    catalogFormat = catalogFormatClass.getConstructor(Logger.class).newInstance(this.logger);
+                    catalogFormat = catalogFormatClass.newInstance();
                 }
                 catch (Exception e)
                 {

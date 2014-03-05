@@ -1,6 +1,6 @@
 package de.cubeisland.maven.plugins.messagecatalog.exception;
 
-public class ConfigurationException extends Exception
+public class ConfigurationException extends MessageCatalogException
 {
     public ConfigurationException(String msg)
     {

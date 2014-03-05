@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.cubeisland.maven.plugins.messagecatalog.exception.SourceParserException;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
@@ -53,17 +54,17 @@ public class MessageCatalog
         return this.logger;
     }
 
-    public void generateCatalog()
+    public void generateCatalog() throws SourceParserException
     {
         this.createCatalog(this.parseSourceCode());
     }
 
-    private void generateCatalog(final MessageStore manager)
+    private void generateCatalog(final MessageStore manager) throws SourceParserException
     {
         this.createCatalog(this.parseSourceCode(manager));
     }
 
-    public void updateCatalog()
+    public void updateCatalog() throws SourceParserException
     {
         MessageStore manager = this.readCatalog();
         if (manager == null)
@@ -87,12 +88,12 @@ public class MessageCatalog
         }
     }
 
-    public MessageStore parseSourceCode()
+    public MessageStore parseSourceCode() throws SourceParserException
     {
         return this.sourceParser.parse(this, this.sourceConfiguration);
     }
 
-    public MessageStore parseSourceCode(MessageStore manager)
+    public MessageStore parseSourceCode(MessageStore manager) throws SourceParserException
     {
         return this.sourceParser.parse(this, this.sourceConfiguration, manager);
     }

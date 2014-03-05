@@ -6,14 +6,4 @@ public class ConfigurationNotFoundException extends ConfigurationException
     {
         super(msg);
     }
-
-    public ConfigurationNotFoundException(Throwable t)
-    {
-        super(t);
-    }
-
-    public ConfigurationNotFoundException(String msg, Throwable t)
-    {
-        super(msg, t);
-    }
 }

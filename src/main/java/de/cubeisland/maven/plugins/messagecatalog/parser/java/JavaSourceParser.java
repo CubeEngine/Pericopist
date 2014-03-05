@@ -10,10 +10,9 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
+import de.cubeisland.maven.plugins.messagecatalog.exception.SourceParserException;
 import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
@@ -23,20 +22,18 @@ import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 public class JavaSourceParser implements SourceParser
 {
     private final FileFilter fileFilter;
-    private Logger logger;
 
-    public JavaSourceParser(Logger logger)
+    public JavaSourceParser()
     {
         this.fileFilter = new JavaFileFilter();
-        this.logger = logger;
     }
 
-    public MessageStore parse(MessageCatalog messageCatalog, SourceConfiguration config)
+    public MessageStore parse(MessageCatalog messageCatalog, SourceConfiguration config) throws SourceParserException
     {
         return this.parse(messageCatalog, config, null);
     }
 
-    public MessageStore parse(MessageCatalog messageCatalog, SourceConfiguration config, MessageStore manager)
+    public MessageStore parse(MessageCatalog messageCatalog, SourceConfiguration config, MessageStore manager) throws SourceParserException
     {
         JavaSourceConfiguration sourceConfig = (JavaSourceConfiguration)config;
 
@@ -69,11 +66,9 @@ public class JavaSourceParser implements SourceParser
                 SourceClassVisitor visitor = new SourceClassVisitor(sourceConfig, manager, compilationUnit, file);
                 compilationUnit.accept(visitor);
             }
-            catch (IOException ignored)
-            {}
-            catch (Exception e)
+            catch (IOException e)
             {
-                this.logger.log(Level.WARNING, "Failed to parse the file >" + file.getAbsolutePath() + "<", e);
+                throw new SourceParserException("The file on path '" + file.getAbsolutePath() + "' could not be parsed.", e);
             }
         }
 

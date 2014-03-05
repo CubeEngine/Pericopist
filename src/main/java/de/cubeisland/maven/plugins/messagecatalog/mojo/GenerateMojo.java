@@ -1,9 +1,7 @@
 package de.cubeisland.maven.plugins.messagecatalog.mojo;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
+import de.cubeisland.maven.plugins.messagecatalog.exception.MessageCatalogException;
 
 /**
  * Blabla
@@ -13,7 +11,7 @@ import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 public class GenerateMojo extends AbstractMessageCatalogMojo
 {
     @Override
-    public void doExecute(MessageCatalog catalog) throws MojoExecutionException, MojoFailureException
+    public void doExecute(MessageCatalog catalog) throws MessageCatalogException
     {
         catalog.generateCatalog();
     }

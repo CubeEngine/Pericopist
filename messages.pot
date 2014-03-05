@@ -1,0 +1,38 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-05 23:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: test/Main.java:32
+msgid "annotationString"
+msgstr ""
+
+#: test/SecondTestclass.java:14
+msgid "goodbye"
+msgstr ""
+
+#: test/Main.java:19
+msgid "hope %s is fine?"
+msgid_plural "hope you are fine"
+msgstr[0] ""
+
+#: test/Main.java:26
+msgid "pre-added"
+msgstr ""
+
+#: test/SecondTestclass.java:12
+msgid "what's up?"
+msgstr ""
+
+#: test/Main.java:13
+#: test/Main.java:14
+msgid "whats up?"
+msgstr ""

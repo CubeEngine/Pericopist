@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalogFactory;
+import de.cubeisland.maven.plugins.messagecatalog.exception.MessageCatalogException;
 
 public abstract class AbstractMessageCatalogMojo extends AbstractMojo
 {
@@ -51,11 +52,11 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
             MessageCatalogFactory factory = new MessageCatalogFactory();
             this.doExecute(factory.getMessageCatalog(this.configuration, context));
         }
-        catch (Exception e)
+        catch (MessageCatalogException e)
         {
-            e.printStackTrace();
+            throw new MojoFailureException(e.getMessage(), e.getCause());
         }
     }
 
-    protected abstract void doExecute(MessageCatalog catalog) throws MojoExecutionException, MojoFailureException;
+    protected abstract void doExecute(MessageCatalog catalog) throws MessageCatalogException;
 }
