@@ -13,7 +13,6 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -38,16 +37,8 @@ public class MessageCatalogFactory
     private Map<String, Class<? extends SourceParser>> sourceParserMap;
     private Map<String, Class<? extends CatalogFormat>> catalogFormatMap;
 
-    private Logger logger;
-
     public MessageCatalogFactory()
     {
-        this(Logger.getLogger("messagecatalog"));
-    }
-
-    public MessageCatalogFactory(Logger logger)
-    {
-        this.logger = logger;
         this.sourceParserMap = new HashMap<String, Class<? extends SourceParser>>();
         this.catalogFormatMap = new HashMap<String, Class<? extends CatalogFormat>>();
 
@@ -144,7 +135,7 @@ public class MessageCatalogFactory
             SourceConfiguration sourceConfiguration = sourceConfigurationClass.cast(unmarshaller.unmarshal(sourceNode));
             CatalogConfiguration catalogConfiguration = catalogConfigurationClass.cast(unmarshaller.unmarshal(catalogNode));
 
-            return new MessageCatalog(sourceParser, sourceConfiguration, catalogFormat, catalogConfiguration, context, this.logger);
+            return new MessageCatalog(sourceParser, sourceConfiguration, catalogFormat, catalogConfiguration, context);
         }
         catch (JAXBException e)
         {

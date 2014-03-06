@@ -10,6 +10,7 @@ import org.fedorahosted.tennera.jgettext.PoWriter;
 import java.io.IOException;
 
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
+import de.cubeisland.maven.plugins.messagecatalog.exception.CatalogFormatException;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
@@ -22,7 +23,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     private Message headerMessage;
     private CatalogHeader catalogHeader;
 
-    public void write(MessageCatalog messageCatalog, CatalogConfiguration config, MessageStore messageManager) throws IOException
+    public void write(MessageCatalog messageCatalog, CatalogConfiguration config, MessageStore messageManager) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration)config;
         Catalog catalog = new Catalog(true);
@@ -37,7 +38,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 }
                 else
                 {
-//                    this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
+                    //                    this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
                 }
             }
             Message message = new Message();
@@ -54,21 +55,42 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             catalog.addMessage(message);
         }
 
-        this.updateHeaderMessage(messageCatalog, catalogConfig);
+        try
+        {
+            this.updateHeaderMessage(messageCatalog, catalogConfig);
+        }
+        catch (IOException e)
+        {
+            throw new CatalogFormatException("The header could not be created.", e);
+        }
         catalog.addMessage(this.headerMessage);
 
         PoWriter poWriter = new PoWriter(true);
-        poWriter.write(catalog, catalogConfig.getTemplateFile());
+        try
+        {
+            poWriter.write(catalog, catalogConfig.getTemplateFile());
+        }
+        catch (IOException e)
+        {
+            throw new CatalogFormatException("The catalog could not be created", e);
+        }
     }
 
-    public MessageStore read(MessageCatalog messageCatalog, CatalogConfiguration config) throws IOException
+    public MessageStore read(MessageCatalog messageCatalog, CatalogConfiguration config) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration)config;
         MessageStore manager = new MessageStore();
 
         Catalog catalog = new Catalog(true);
         PoParser poParser = new PoParser(catalog);
-        catalog = poParser.parseCatalog(catalogConfig.getTemplateFile());
+        try
+        {
+            catalog = poParser.parseCatalog(catalogConfig.getTemplateFile());
+        }
+        catch (IOException e)
+        {
+            throw new CatalogFormatException("The catalog could not be read.", e);
+        }
 
         this.headerMessage = catalog.locateHeader();
 

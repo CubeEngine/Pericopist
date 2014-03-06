@@ -15,7 +15,7 @@ public class Test
         try
         {
             messageCatalog = factory.getMessageCatalog("./example.xml", toolManager.createContext());
-//            messageCatalog = factory.getMessageCatalog("https://raw.github.com/CubeEngineDev/messagecatalog-maven-plugin/reconstruction/example.xml", toolManager.createContext());
+            //            messageCatalog = factory.getMessageCatalog("https://raw.github.com/CubeEngineDev/messagecatalog-maven-plugin/reconstruction/example.xml", toolManager.createContext());
             messageCatalog.generateCatalog();
         }
         catch (MessageCatalogException e)
