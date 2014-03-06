@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 import de.cubeisland.maven.plugins.messagecatalog.exception.MessageExtractorException;
 import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
 import de.cubeisland.maven.plugins.messagecatalog.parser.ExtractorConfiguration;
@@ -28,20 +27,20 @@ public class JavaMessageExtractor implements MessageExtractor
         this.fileFilter = new JavaFileFilter();
     }
 
-    public MessageStore parse(MessageCatalog messageCatalog, ExtractorConfiguration config) throws MessageExtractorException
+    public MessageStore extract(ExtractorConfiguration config) throws MessageExtractorException
     {
-        return this.parse(messageCatalog, config, null);
+        return this.extract(config, null);
     }
 
-    public MessageStore parse(MessageCatalog messageCatalog, ExtractorConfiguration config, MessageStore manager) throws MessageExtractorException
+    public MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractorException
     {
-        JavaExtractorConfiguration sourceConfig = (JavaExtractorConfiguration)config;
+        JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration)config;
 
-        List<File> files = Misc.scanFilesRecursive(sourceConfig.getDirectory(), this.fileFilter);
+        List<File> files = Misc.scanFilesRecursive(extractorConfig.getDirectory(), this.fileFilter);
 
-        if (manager == null)
+        if (messageStore == null)
         {
-            manager = new MessageStore();
+            messageStore = new MessageStore();
         }
 
         String[] environment = new String[files.size()];
@@ -63,7 +62,7 @@ public class JavaMessageExtractor implements MessageExtractor
             {
                 parser.setSource(Misc.parseFileToCharArray(file));
                 CompilationUnit compilationUnit = (CompilationUnit)parser.createAST(null);
-                SourceClassVisitor visitor = new SourceClassVisitor(sourceConfig, manager, compilationUnit, file);
+                SourceClassVisitor visitor = new SourceClassVisitor(extractorConfig, messageStore, compilationUnit, file);
                 compilationUnit.accept(visitor);
             }
             catch (IOException e)
@@ -72,7 +71,7 @@ public class JavaMessageExtractor implements MessageExtractor
             }
         }
 
-        return manager;
+        return messageStore;
     }
 
     public Class<? extends ExtractorConfiguration> getConfigClass()

@@ -4,5 +4,5 @@ import de.cubeisland.maven.plugins.messagecatalog.Configuration;
 
 public interface ExtractorConfiguration extends Configuration
 {
-    String getLanguage();
+
 }

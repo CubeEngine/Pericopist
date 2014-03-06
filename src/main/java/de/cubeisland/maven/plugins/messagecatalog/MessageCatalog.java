@@ -67,31 +67,31 @@ public class MessageCatalog
 
     public void updateCatalog() throws MessageCatalogException
     {
-        MessageStore manager = this.readCatalog();
-        if (manager == null)
+        MessageStore messageStore = null;
+        if(this.catalogConfiguration.getTemplateFile().exists())
         {
-            throw new CatalogFormatException("The old catalog file could not be read.");
+            messageStore = this.readCatalog();
         }
-        this.generateCatalog(manager);
+        this.generateCatalog(messageStore);
     }
 
     private MessageStore readCatalog() throws CatalogFormatException
     {
-        return this.catalogFormat.read(this, this.catalogConfiguration);
+        return this.catalogFormat.read(this.catalogConfiguration);
     }
 
     private MessageStore parseSourceCode() throws MessageExtractorException
     {
-        return this.messageExtractor.parse(this, this.extractorConfiguration);
+        return this.messageExtractor.extract(this.extractorConfiguration);
     }
 
-    private MessageStore parseSourceCode(MessageStore manager) throws MessageExtractorException
+    private MessageStore parseSourceCode(MessageStore messageStore) throws MessageExtractorException
     {
-        return this.messageExtractor.parse(this, this.extractorConfiguration, manager);
+        return this.messageExtractor.extract(this.extractorConfiguration, messageStore);
     }
 
     private void createCatalog(MessageStore messageStore) throws CatalogFormatException
     {
-        this.catalogFormat.write(this, this.catalogConfiguration, messageStore);
+        this.catalogFormat.write(this.catalogConfiguration, this.getVelocityContext(), messageStore);
     }
 }

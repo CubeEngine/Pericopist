@@ -171,11 +171,11 @@ public class MessageCatalogFactory
         }
         catch (ParserConfigurationException e)
         {
-            throw new ConfigurationException("Could not parse the configuration file", e);
+            throw new ConfigurationException("Could not extract the configuration file", e);
         }
         catch (SAXException e)
         {
-            throw new ConfigurationException("Could not parse the configuration file", e);
+            throw new ConfigurationException("Could not extract the configuration file", e);
         }
         catch (IOException e)
         {

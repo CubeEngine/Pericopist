@@ -30,7 +30,7 @@ import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 class SourceClassVisitor extends ASTVisitor
 {
     private final JavaExtractorConfiguration configuration;
-    private final MessageStore messageManager;
+    private final MessageStore messageStore;
     private final CompilationUnit compilationUnit;
     private final File file;
 
@@ -41,7 +41,7 @@ class SourceClassVisitor extends ASTVisitor
     public SourceClassVisitor(JavaExtractorConfiguration configuration, MessageStore messageManager, CompilationUnit compilationUnit, File file)
     {
         this.configuration = configuration;
-        this.messageManager = messageManager;
+        this.messageStore = messageManager;
         this.compilationUnit = compilationUnit;
         this.file = file;
 
@@ -123,7 +123,7 @@ class SourceClassVisitor extends ASTVisitor
                     Expression expr = pair.getValue();
                     if (expr instanceof StringLiteral)
                     {
-                        this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(Misc.getRelativizedFile(this.configuration.getDirectory(), this.file), this.getLine(expr)));
+                        this.messageStore.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(Misc.getRelativizedFile(this.configuration.getDirectory(), this.file), this.getLine(expr)));
                     }
                 }
             }
@@ -140,7 +140,7 @@ class SourceClassVisitor extends ASTVisitor
             Expression expr = node.getValue();
             if (expr instanceof StringLiteral)
             {
-                this.messageManager.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(Misc.getRelativizedFile(this.configuration.getDirectory(), this.file), this.getLine(expr)));
+                this.messageStore.addMessage(((StringLiteral)expr).getLiteralValue(), null, new Occurrence(Misc.getRelativizedFile(this.configuration.getDirectory(), this.file), this.getLine(expr)));
             }
         }
         return super.visit(node);
@@ -196,7 +196,7 @@ class SourceClassVisitor extends ASTVisitor
 
             if (singular != null)
             {
-                this.messageManager.addMessage(singular, plural, new Occurrence(Misc.getRelativizedFile(this.configuration.getDirectory(), this.file), this.getLine(node)));
+                this.messageStore.addMessage(singular, plural, new Occurrence(Misc.getRelativizedFile(this.configuration.getDirectory(), this.file), this.getLine(node)));
             }
         }
 

@@ -30,6 +30,12 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
+        if(this.project.getPackaging().equalsIgnoreCase("pom"))
+        {
+            this.getLog().info("Skipped the project '" + this.project.getName() + "' ...");
+            return;
+        }
+
         ToolManager toolManager = new ToolManager();
         Context context = toolManager.createContext();
 
