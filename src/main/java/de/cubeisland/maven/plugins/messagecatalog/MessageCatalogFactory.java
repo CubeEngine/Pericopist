@@ -45,12 +45,12 @@ public class MessageCatalogFactory
         this.loadDefaultClasses();
     }
 
-    public Class<? extends SourceParser> getSourceParser(String language)
+    private Class<? extends SourceParser> getSourceParser(String language)
     {
         return this.sourceParserMap.get(language);
     }
 
-    public Class<? extends CatalogFormat> getCatalogFormat(String format)
+    private Class<? extends CatalogFormat> getCatalogFormat(String format)
     {
         return this.catalogFormatMap.get(format);
     }

@@ -20,7 +20,7 @@ public class MessageCatalog
     private final CatalogFormat catalogFormat;
     private final CatalogConfiguration catalogConfiguration;
 
-    public MessageCatalog(SourceParser sourceParser, SourceConfiguration sourceConfiguration, CatalogFormat catalogFormat, CatalogConfiguration catalogConfiguration, Context context)
+    protected MessageCatalog(SourceParser sourceParser, SourceConfiguration sourceConfiguration, CatalogFormat catalogFormat, CatalogConfiguration catalogConfiguration, Context context)
     {
         this.sourceParser = sourceParser;
         this.sourceConfiguration = sourceConfiguration;
@@ -60,9 +60,9 @@ public class MessageCatalog
         this.createCatalog(this.parseSourceCode());
     }
 
-    private void generateCatalog(final MessageStore manager) throws MessageCatalogException
+    private void generateCatalog(final MessageStore messageStore) throws MessageCatalogException
     {
-        this.createCatalog(this.parseSourceCode(manager));
+        this.createCatalog(this.parseSourceCode(messageStore));
     }
 
     public void updateCatalog() throws MessageCatalogException
@@ -75,23 +75,23 @@ public class MessageCatalog
         this.generateCatalog(manager);
     }
 
-    public MessageStore readCatalog() throws CatalogFormatException
+    private MessageStore readCatalog() throws CatalogFormatException
     {
         return this.catalogFormat.read(this, this.catalogConfiguration);
     }
 
-    public MessageStore parseSourceCode() throws SourceParserException
+    private MessageStore parseSourceCode() throws SourceParserException
     {
         return this.sourceParser.parse(this, this.sourceConfiguration);
     }
 
-    public MessageStore parseSourceCode(MessageStore manager) throws SourceParserException
+    private MessageStore parseSourceCode(MessageStore manager) throws SourceParserException
     {
         return this.sourceParser.parse(this, this.sourceConfiguration, manager);
     }
 
-    public void createCatalog(MessageStore manager) throws CatalogFormatException
+    private void createCatalog(MessageStore messageStore) throws CatalogFormatException
     {
-        this.catalogFormat.write(this, this.catalogConfiguration, manager);
+        this.catalogFormat.write(this, this.catalogConfiguration, messageStore);
     }
 }
