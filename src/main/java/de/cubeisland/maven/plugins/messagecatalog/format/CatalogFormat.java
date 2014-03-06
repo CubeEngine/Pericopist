@@ -1,13 +1,13 @@
 package de.cubeisland.maven.plugins.messagecatalog.format;
 
-import java.io.File;
-import java.io.IOException;
-
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
+import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
+import de.cubeisland.maven.plugins.messagecatalog.exception.CatalogFormatException;
+import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
 
 public interface CatalogFormat
 {
-    void write(File file, TranslatableMessageManager manager) throws IOException;
-    TranslatableMessageManager read(File file) throws IOException;
+    void write(MessageCatalog messageCatalog, CatalogConfiguration config, MessageStore manager) throws CatalogFormatException;
+    MessageStore read(MessageCatalog messageCatalog, CatalogConfiguration config) throws CatalogFormatException;
+    Class<? extends CatalogConfiguration> getConfigClass();
     String getFileExtension();
 }

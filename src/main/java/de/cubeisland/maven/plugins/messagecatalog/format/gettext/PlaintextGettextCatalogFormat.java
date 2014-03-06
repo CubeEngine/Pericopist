@@ -1,6 +1,5 @@
 package de.cubeisland.maven.plugins.messagecatalog.format.gettext;
 
-import org.apache.maven.plugin.logging.Log;
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.HeaderFields;
 import org.fedorahosted.tennera.jgettext.HeaderUtil;
@@ -8,46 +7,46 @@ import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Logger;
 
-import de.cubeisland.maven.plugins.messagecatalog.config.Config;
+import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
+import de.cubeisland.maven.plugins.messagecatalog.exception.CatalogFormatException;
+import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
+import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
 import de.cubeisland.maven.plugins.messagecatalog.message.Occurrence;
 import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessage;
-import de.cubeisland.maven.plugins.messagecatalog.message.TranslatableMessageManager;
 import de.cubeisland.maven.plugins.messagecatalog.util.CatalogHeader;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
-    private final Config config;
-    private final Log log;
-
     private Message headerMessage;
     private CatalogHeader catalogHeader;
 
-    public PlaintextGettextCatalogFormat(Config config, Log log)
-    {
-        this.config = config;
-        this.log = log;
-    }
+    private Logger logger;
 
-    public void write(File file, TranslatableMessageManager messageManager) throws IOException
+    public void write(MessageCatalog messageCatalog, CatalogConfiguration config, MessageStore messageManager) throws CatalogFormatException
     {
+        GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration)config;
         Catalog catalog = new Catalog(true);
+
+        if (this.logger == null && !catalogConfig.getRemoveUnusedMessages())
+        {
+            this.logger = Logger.getLogger("messagecatalog_catalogformat");
+        }
 
         for (TranslatableMessage translatableMessage : messageManager)
         {
             if (translatableMessage.getOccurrences().isEmpty())
             {
-                if (this.config.getCatalog().getRemoveUnusedMessages())
+                if (catalogConfig.getRemoveUnusedMessages())
                 {
                     continue;
                 }
                 else
                 {
-                    this.log.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
+                    this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
                 }
             }
             Message message = new Message();
@@ -64,20 +63,42 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             catalog.addMessage(message);
         }
 
-        this.updateHeaderMessage();
+        try
+        {
+            this.updateHeaderMessage(messageCatalog, catalogConfig);
+        }
+        catch (IOException e)
+        {
+            throw new CatalogFormatException("The header could not be created.", e);
+        }
         catalog.addMessage(this.headerMessage);
 
         PoWriter poWriter = new PoWriter(true);
-        poWriter.write(catalog, file);
+        try
+        {
+            poWriter.write(catalog, catalogConfig.getTemplateFile());
+        }
+        catch (IOException e)
+        {
+            throw new CatalogFormatException("The catalog could not be created", e);
+        }
     }
 
-    public TranslatableMessageManager read(File file) throws IOException
+    public MessageStore read(MessageCatalog messageCatalog, CatalogConfiguration config) throws CatalogFormatException
     {
-        TranslatableMessageManager manager = new TranslatableMessageManager();
+        GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration)config;
+        MessageStore manager = new MessageStore();
 
         Catalog catalog = new Catalog(true);
         PoParser poParser = new PoParser(catalog);
-        catalog = poParser.parseCatalog(file);
+        try
+        {
+            catalog = poParser.parseCatalog(catalogConfig.getTemplateFile());
+        }
+        catch (IOException e)
+        {
+            throw new CatalogFormatException("The catalog could not be read.", e);
+        }
 
         this.headerMessage = catalog.locateHeader();
 
@@ -93,7 +114,12 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return manager;
     }
 
-    private void updateHeaderMessage()
+    public Class<? extends CatalogConfiguration> getConfigClass()
+    {
+        return GettextCatalogConfiguration.class;
+    }
+
+    private void updateHeaderMessage(MessageCatalog messageCatalog, GettextCatalogConfiguration config) throws IOException
     {
         if (this.headerMessage == null)
         {
@@ -106,19 +132,11 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         if (this.catalogHeader == null)
         {
-            if (this.config.getCatalog().getHeader() == null)
+            if (config.getHeader() == null)
             {
                 return;
             }
-            try
-            {
-                this.catalogHeader = new CatalogHeader(this.config.getCatalog().getHeader(), this.config.getCatalog().getVelocityContext());
-            }
-            catch (FileNotFoundException e)
-            {
-                this.log.warn(e.getClass().getName() + ": " + e.getMessage());
-                return;
-            }
+            this.catalogHeader = new CatalogHeader(config.getHeader(), messageCatalog.getVelocityContext());
         }
         for (String line : this.catalogHeader.getComments())
         {
@@ -129,5 +147,15 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     public String getFileExtension()
     {
         return "pot";
+    }
+
+    public Logger getLogger()
+    {
+        return this.logger;
+    }
+
+    public void setLogger(Logger logger)
+    {
+        this.logger = logger;
     }
 }

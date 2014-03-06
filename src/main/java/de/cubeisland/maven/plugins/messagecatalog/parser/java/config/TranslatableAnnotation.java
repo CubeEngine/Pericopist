@@ -1,34 +1,26 @@
-package de.cubeisland.maven.plugins.messagecatalog.parser.java.translatables;
+package de.cubeisland.maven.plugins.messagecatalog.parser.java.config;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "annotation")
 public class TranslatableAnnotation
 {
-    private final String fqn;
-    private final Set<String> fields;
+    @XmlElement(name = "name", required = true)
+    private String fqn;
 
-    public TranslatableAnnotation(String annotation)
+    @XmlElementWrapper(name = "fields")
+    @XmlElement(name = "field")
+    private Set<String> fields = new HashSet<String>()
     {
-        String[] parts = annotation.split(":");
-
-        this.fqn = parts[0];
-        this.fields = new HashSet<String>();
-
-        if (parts.length > 1)
         {
-            String[] fieldNames = parts[1].split(",");
-
-            for (String field : fieldNames)
-            {
-                this.fields.add(field);
-            }
+            this.add("value");
         }
-        else
-        {
-            this.fields.add("value");   // default is a SingleValueAnnotation
-        }
-    }
+    };
 
     public String getFullQualifiedName()
     {

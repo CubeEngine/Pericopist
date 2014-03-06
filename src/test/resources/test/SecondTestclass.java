@@ -1,8 +1,9 @@
 package test;
 
-import static test.I18n._;
 import test.anot.TestNormalAnnotation;
 import test.wronganot.TestSingleMemberAnnotation;
+
+import static test.I18n._;
 
 public class SecondTestclass
 {
