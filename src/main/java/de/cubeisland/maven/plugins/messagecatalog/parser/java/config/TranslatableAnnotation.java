@@ -15,12 +15,13 @@ public class TranslatableAnnotation
 
     @XmlElementWrapper(name = "fields")
     @XmlElement(name = "field")
-    private Set<String> fields = new HashSet<String>()
+    private Set<String> fields;
+
+    public TranslatableAnnotation()
     {
-        {
-            this.add("value");
-        }
-    };
+        this.fields = new HashSet<String>(1);
+        this.fields.add("value");
+    }
 
     public String getFullQualifiedName()
     {

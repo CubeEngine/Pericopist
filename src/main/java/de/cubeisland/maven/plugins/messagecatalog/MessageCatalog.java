@@ -8,8 +8,8 @@ import de.cubeisland.maven.plugins.messagecatalog.exception.MessageExtractorExce
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
-import de.cubeisland.maven.plugins.messagecatalog.parser.MessageExtractor;
 import de.cubeisland.maven.plugins.messagecatalog.parser.ExtractorConfiguration;
+import de.cubeisland.maven.plugins.messagecatalog.parser.MessageExtractor;
 
 public class MessageCatalog
 {
