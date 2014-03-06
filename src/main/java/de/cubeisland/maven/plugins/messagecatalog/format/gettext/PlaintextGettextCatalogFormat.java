@@ -8,6 +8,7 @@ import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 import de.cubeisland.maven.plugins.messagecatalog.exception.CatalogFormatException;
@@ -23,10 +24,17 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     private Message headerMessage;
     private CatalogHeader catalogHeader;
 
+    private Logger logger;
+
     public void write(MessageCatalog messageCatalog, CatalogConfiguration config, MessageStore messageManager) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration)config;
         Catalog catalog = new Catalog(true);
+
+        if (this.logger == null && !catalogConfig.getRemoveUnusedMessages())
+        {
+            this.logger = Logger.getLogger("messagecatalog_catalogformat");
+        }
 
         for (TranslatableMessage translatableMessage : messageManager)
         {
@@ -38,7 +46,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 }
                 else
                 {
-                    //                    this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
+                    this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
                 }
             }
             Message message = new Message();
@@ -139,5 +147,15 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     public String getFileExtension()
     {
         return "pot";
+    }
+
+    public Logger getLogger()
+    {
+        return this.logger;
+    }
+
+    public void setLogger(Logger logger)
+    {
+        this.logger = logger;
     }
 }

@@ -35,9 +35,19 @@ public class MessageCatalog
         return this.sourceConfiguration;
     }
 
+    public SourceParser getSourceParser()
+    {
+        return this.sourceParser;
+    }
+
     public CatalogConfiguration getCatalogConfiguration()
     {
         return this.catalogConfiguration;
+    }
+
+    public CatalogFormat getCatalogFormat()
+    {
+        return this.catalogFormat;
     }
 
     public Context getVelocityContext()
