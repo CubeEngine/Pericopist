@@ -8,10 +8,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.cubeisland.maven.plugins.messagecatalog.parser.AbstractSourceConfiguration;
+import de.cubeisland.maven.plugins.messagecatalog.parser.AbstractExtractorConfiguration;
 
 @XmlRootElement(name = "source")
-public class JavaSourceConfiguration extends AbstractSourceConfiguration
+public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 {
     @XmlElementWrapper(name = "methods")
     @XmlElement(name = "method")

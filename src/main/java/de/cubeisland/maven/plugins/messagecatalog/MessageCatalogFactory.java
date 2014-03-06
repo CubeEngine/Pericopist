@@ -27,25 +27,25 @@ import de.cubeisland.maven.plugins.messagecatalog.exception.UnknownSourceLanguag
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.format.gettext.PlaintextGettextCatalogFormat;
-import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfiguration;
-import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
-import de.cubeisland.maven.plugins.messagecatalog.parser.java.JavaSourceParser;
+import de.cubeisland.maven.plugins.messagecatalog.parser.ExtractorConfiguration;
+import de.cubeisland.maven.plugins.messagecatalog.parser.MessageExtractor;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.JavaMessageExtractor;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
 public class MessageCatalogFactory
 {
-    private Map<String, Class<? extends SourceParser>> sourceParserMap;
+    private Map<String, Class<? extends MessageExtractor>> sourceParserMap;
     private Map<String, Class<? extends CatalogFormat>> catalogFormatMap;
 
     public MessageCatalogFactory()
     {
-        this.sourceParserMap = new HashMap<String, Class<? extends SourceParser>>();
+        this.sourceParserMap = new HashMap<String, Class<? extends MessageExtractor>>();
         this.catalogFormatMap = new HashMap<String, Class<? extends CatalogFormat>>();
 
         this.loadDefaultClasses();
     }
 
-    private Class<? extends SourceParser> getSourceParser(String language)
+    private Class<? extends MessageExtractor> getSourceParser(String language)
     {
         return this.sourceParserMap.get(language);
     }
@@ -76,7 +76,7 @@ public class MessageCatalogFactory
             throw new ConfigurationException("The configuration file could not be read.");
         }
 
-        SourceParser sourceParser = null;
+        MessageExtractor messageExtractor = null;
         Node sourceNode = null;
 
         CatalogFormat catalogFormat = null;
@@ -89,18 +89,18 @@ public class MessageCatalogFactory
             if (node.getNodeName().equals("source"))
             {
                 String language = node.getAttributes().getNamedItem("language").getTextContent();
-                Class<? extends SourceParser> sourceParserClass = this.getSourceParser(language);
+                Class<? extends MessageExtractor> sourceParserClass = this.getSourceParser(language);
                 if (sourceParserClass == null)
                 {
                     throw new UnknownSourceLanguageException("Unknown source language " + language);
                 }
                 try
                 {
-                    sourceParser = sourceParserClass.newInstance();
+                    messageExtractor = sourceParserClass.newInstance();
                 }
                 catch (Exception e)
                 {
-                    throw new ConfigurationException("Could not create a SourceParser instance of " + sourceParserClass.getName());
+                    throw new ConfigurationException("Could not create a MessageExtractor instance of " + sourceParserClass.getName());
                 }
                 sourceNode = node;
             }
@@ -126,16 +126,16 @@ public class MessageCatalogFactory
 
         try
         {
-            Class<? extends SourceConfiguration> sourceConfigurationClass = sourceParser.getConfigClass();
+            Class<? extends ExtractorConfiguration> sourceConfigurationClass = messageExtractor.getConfigClass();
             Class<? extends CatalogConfiguration> catalogConfigurationClass = catalogFormat.getConfigClass();
 
             JAXBContext jaxbContext = JAXBContext.newInstance(sourceConfigurationClass, catalogConfigurationClass);
 
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            SourceConfiguration sourceConfiguration = sourceConfigurationClass.cast(unmarshaller.unmarshal(sourceNode));
+            ExtractorConfiguration extractorConfiguration = sourceConfigurationClass.cast(unmarshaller.unmarshal(sourceNode));
             CatalogConfiguration catalogConfiguration = catalogConfigurationClass.cast(unmarshaller.unmarshal(catalogNode));
 
-            return new MessageCatalog(sourceParser, sourceConfiguration, catalogFormat, catalogConfiguration, context);
+            return new MessageCatalog(messageExtractor, extractorConfiguration, catalogFormat, catalogConfiguration, context);
         }
         catch (JAXBException e)
         {
@@ -173,7 +173,7 @@ public class MessageCatalogFactory
 
     private void loadDefaultClasses()
     {
-        this.sourceParserMap.put("java", JavaSourceParser.class);
+        this.sourceParserMap.put("java", JavaMessageExtractor.class);
         this.catalogFormatMap.put("gettext", PlaintextGettextCatalogFormat.class);
     }
 }

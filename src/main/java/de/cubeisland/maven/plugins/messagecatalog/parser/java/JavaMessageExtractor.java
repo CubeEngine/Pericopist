@@ -12,30 +12,30 @@ import java.util.List;
 import java.util.Map;
 
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
-import de.cubeisland.maven.plugins.messagecatalog.exception.SourceParserException;
+import de.cubeisland.maven.plugins.messagecatalog.exception.MessageExtractorException;
 import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
-import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfiguration;
-import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
-import de.cubeisland.maven.plugins.messagecatalog.parser.java.config.JavaSourceConfiguration;
+import de.cubeisland.maven.plugins.messagecatalog.parser.ExtractorConfiguration;
+import de.cubeisland.maven.plugins.messagecatalog.parser.MessageExtractor;
+import de.cubeisland.maven.plugins.messagecatalog.parser.java.config.JavaExtractorConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.util.Misc;
 
-public class JavaSourceParser implements SourceParser
+public class JavaMessageExtractor implements MessageExtractor
 {
     private final FileFilter fileFilter;
 
-    public JavaSourceParser()
+    public JavaMessageExtractor()
     {
         this.fileFilter = new JavaFileFilter();
     }
 
-    public MessageStore parse(MessageCatalog messageCatalog, SourceConfiguration config) throws SourceParserException
+    public MessageStore parse(MessageCatalog messageCatalog, ExtractorConfiguration config) throws MessageExtractorException
     {
         return this.parse(messageCatalog, config, null);
     }
 
-    public MessageStore parse(MessageCatalog messageCatalog, SourceConfiguration config, MessageStore manager) throws SourceParserException
+    public MessageStore parse(MessageCatalog messageCatalog, ExtractorConfiguration config, MessageStore manager) throws MessageExtractorException
     {
-        JavaSourceConfiguration sourceConfig = (JavaSourceConfiguration)config;
+        JavaExtractorConfiguration sourceConfig = (JavaExtractorConfiguration)config;
 
         List<File> files = Misc.scanFilesRecursive(sourceConfig.getDirectory(), this.fileFilter);
 
@@ -68,16 +68,16 @@ public class JavaSourceParser implements SourceParser
             }
             catch (IOException e)
             {
-                throw new SourceParserException("The file on path '" + file.getAbsolutePath() + "' could not be parsed.", e);
+                throw new MessageExtractorException("The file on path '" + file.getAbsolutePath() + "' could not be parsed.", e);
             }
         }
 
         return manager;
     }
 
-    public Class<? extends SourceConfiguration> getConfigClass()
+    public Class<? extends ExtractorConfiguration> getConfigClass()
     {
-        return JavaSourceConfiguration.class;
+        return JavaExtractorConfiguration.class;
     }
 
     private class JavaFileFilter implements FileFilter

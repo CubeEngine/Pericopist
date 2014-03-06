@@ -4,7 +4,7 @@ import java.io.File;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public abstract class AbstractSourceConfiguration implements SourceConfiguration
+public abstract class AbstractExtractorConfiguration implements ExtractorConfiguration
 {
     @XmlElement
     protected File directory = new File("./src/main/java");

@@ -4,40 +4,40 @@ import org.apache.velocity.context.Context;
 
 import de.cubeisland.maven.plugins.messagecatalog.exception.CatalogFormatException;
 import de.cubeisland.maven.plugins.messagecatalog.exception.MessageCatalogException;
-import de.cubeisland.maven.plugins.messagecatalog.exception.SourceParserException;
+import de.cubeisland.maven.plugins.messagecatalog.exception.MessageExtractorException;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
-import de.cubeisland.maven.plugins.messagecatalog.parser.SourceConfiguration;
-import de.cubeisland.maven.plugins.messagecatalog.parser.SourceParser;
+import de.cubeisland.maven.plugins.messagecatalog.parser.MessageExtractor;
+import de.cubeisland.maven.plugins.messagecatalog.parser.ExtractorConfiguration;
 
 public class MessageCatalog
 {
     private final Context context;
 
-    private final SourceParser sourceParser;
-    private final SourceConfiguration sourceConfiguration;
+    private final MessageExtractor messageExtractor;
+    private final ExtractorConfiguration extractorConfiguration;
     private final CatalogFormat catalogFormat;
     private final CatalogConfiguration catalogConfiguration;
 
-    protected MessageCatalog(SourceParser sourceParser, SourceConfiguration sourceConfiguration, CatalogFormat catalogFormat, CatalogConfiguration catalogConfiguration, Context context)
+    protected MessageCatalog(MessageExtractor messageExtractor, ExtractorConfiguration extractorConfiguration, CatalogFormat catalogFormat, CatalogConfiguration catalogConfiguration, Context context)
     {
-        this.sourceParser = sourceParser;
-        this.sourceConfiguration = sourceConfiguration;
+        this.messageExtractor = messageExtractor;
+        this.extractorConfiguration = extractorConfiguration;
         this.catalogFormat = catalogFormat;
         this.catalogConfiguration = catalogConfiguration;
 
         this.context = context;
     }
 
-    public SourceConfiguration getSourceConfiguration()
+    public ExtractorConfiguration getExtractorConfiguration()
     {
-        return this.sourceConfiguration;
+        return this.extractorConfiguration;
     }
 
-    public SourceParser getSourceParser()
+    public MessageExtractor getMessageExtractor()
     {
-        return this.sourceParser;
+        return this.messageExtractor;
     }
 
     public CatalogConfiguration getCatalogConfiguration()
@@ -80,14 +80,14 @@ public class MessageCatalog
         return this.catalogFormat.read(this, this.catalogConfiguration);
     }
 
-    private MessageStore parseSourceCode() throws SourceParserException
+    private MessageStore parseSourceCode() throws MessageExtractorException
     {
-        return this.sourceParser.parse(this, this.sourceConfiguration);
+        return this.messageExtractor.parse(this, this.extractorConfiguration);
     }
 
-    private MessageStore parseSourceCode(MessageStore manager) throws SourceParserException
+    private MessageStore parseSourceCode(MessageStore manager) throws MessageExtractorException
     {
-        return this.sourceParser.parse(this, this.sourceConfiguration, manager);
+        return this.messageExtractor.parse(this, this.extractorConfiguration, manager);
     }
 
     private void createCatalog(MessageStore messageStore) throws CatalogFormatException
