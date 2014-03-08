@@ -14,7 +14,9 @@ public interface CatalogFormat
      * This method never returns null and implementations have to ensure this.
      *
      * @param config
+     *
      * @return a MessageCatalog instance holding all messages
+     *
      * @throws CatalogFormatException
      */
     MessageStore read(CatalogConfiguration config) throws CatalogFormatException;

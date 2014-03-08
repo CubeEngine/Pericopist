@@ -68,7 +68,7 @@ public class MessageCatalog
     public void updateCatalog() throws MessageCatalogException
     {
         MessageStore messageStore = null;
-        if(this.catalogConfiguration.getTemplateFile().exists())
+        if (this.catalogConfiguration.getTemplateFile().exists())
         {
             messageStore = this.readCatalog();
         }

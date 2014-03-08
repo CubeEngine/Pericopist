@@ -37,7 +37,7 @@ public class JavaMessageExtractor implements MessageExtractor
     {
         JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration)config;
 
-        if(!extractorConfig.getDirectory().exists())
+        if (!extractorConfig.getDirectory().exists())
         {
             throw new SourceDirectoryNotExistsException();
         }

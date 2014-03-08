@@ -66,11 +66,11 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         final File template = catalogConfig.getTemplateFile();
 
-        if(template.exists() && catalogConfig.getDeleteOldTemplate() &&!template.delete())
+        if (template.exists() && catalogConfig.getDeleteOldTemplate() && !template.delete())
         {
             throw new CatalogFormatException("The old template could not be deleted.");
         }
-        if(catalog.size() == 0 && !catalogConfig.getCreateEmptyTemplate())
+        if (catalog.size() == 0 && !catalogConfig.getCreateEmptyTemplate())
         {
             this.logger.info("The project does not contain any translatable message. The template was not created.");
             return;
