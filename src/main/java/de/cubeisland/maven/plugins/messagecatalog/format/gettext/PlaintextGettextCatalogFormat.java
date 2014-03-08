@@ -66,7 +66,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         final File template = catalogConfig.getTemplateFile();
 
-        if (template.exists() && catalogConfig.getDeleteOldTemplate() && !template.delete())
+        if (template.exists() && !template.delete())
         {
             throw new CatalogFormatException("The old template could not be deleted.");
         }
