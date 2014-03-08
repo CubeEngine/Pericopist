@@ -13,6 +13,7 @@ import java.util.Properties;
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalogFactory;
 import de.cubeisland.maven.plugins.messagecatalog.exception.MessageCatalogException;
+import de.cubeisland.maven.plugins.messagecatalog.exception.SourceDirectoryNotExistsException;
 
 public abstract class AbstractMessageCatalogMojo extends AbstractMojo
 {
@@ -30,7 +31,7 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        if(this.project.getPackaging().equalsIgnoreCase("pom"))
+        if (this.project.getPackaging().equalsIgnoreCase("pom"))
         {
             this.getLog().info("Skipped the project '" + this.project.getName() + "' ...");
             return;
@@ -57,6 +58,11 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
         {
             MessageCatalogFactory factory = new MessageCatalogFactory();
             this.doExecute(factory.getMessageCatalog(this.configuration, context));
+        }
+        catch (SourceDirectoryNotExistsException e)
+        {
+            this.getLog().info(e.getMessage());
+            this.getLog().info("Skipped the project '" + this.project.getName() + "'' ...");
         }
         catch (MessageCatalogException e)
         {

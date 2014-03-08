@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.cubeisland.maven.plugins.messagecatalog.exception.MessageExtractorException;
+import de.cubeisland.maven.plugins.messagecatalog.exception.SourceDirectoryNotExistsException;
 import de.cubeisland.maven.plugins.messagecatalog.message.MessageStore;
 import de.cubeisland.maven.plugins.messagecatalog.parser.ExtractorConfiguration;
 import de.cubeisland.maven.plugins.messagecatalog.parser.MessageExtractor;
@@ -36,6 +37,10 @@ public class JavaMessageExtractor implements MessageExtractor
     {
         JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration)config;
 
+        if(!extractorConfig.getDirectory().exists())
+        {
+            throw new SourceDirectoryNotExistsException();
+        }
         List<File> files = Misc.scanFilesRecursive(extractorConfig.getDirectory(), this.fileFilter);
 
         if (messageStore == null)

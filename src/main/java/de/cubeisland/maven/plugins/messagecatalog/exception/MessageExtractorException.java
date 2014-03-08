@@ -2,8 +2,13 @@ package de.cubeisland.maven.plugins.messagecatalog.exception;
 
 public class MessageExtractorException extends MessageCatalogException
 {
-    public MessageExtractorException(String message, Throwable t)
+    public MessageExtractorException(String msg)
     {
-        super(message, t);
+        super(msg);
+    }
+
+    public MessageExtractorException(String msg, Throwable t)
+    {
+        super(msg, t);
     }
 }
