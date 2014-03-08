@@ -12,6 +12,12 @@ public abstract class AbstractCatalogConfiguration implements CatalogConfigurati
     @XmlElement
     protected boolean removeUnusedMessages = true;
 
+    @XmlElement
+    protected boolean createEmptyTemplate = false;
+
+    @XmlElement
+    protected boolean deleteOldTemplate = false;
+
     public final File getTemplateFile()
     {
         return this.templateFile;
@@ -20,5 +26,15 @@ public abstract class AbstractCatalogConfiguration implements CatalogConfigurati
     public final boolean getRemoveUnusedMessages()
     {
         return this.removeUnusedMessages;
+    }
+
+    public final boolean getCreateEmptyTemplate()
+    {
+        return this.createEmptyTemplate;
+    }
+
+    public final boolean getDeleteOldTemplate()
+    {
+        return this.deleteOldTemplate;
     }
 }

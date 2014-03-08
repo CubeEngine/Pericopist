@@ -32,7 +32,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration)config;
         Catalog catalog = new Catalog(true);
 
-        if (this.logger == null && !catalogConfig.getRemoveUnusedMessages())
+        if (this.logger == null)
         {
             this.logger = Logger.getLogger("messagecatalog_catalogformat");
         }
@@ -64,6 +64,18 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             catalog.addMessage(message);
         }
 
+        final File template = catalogConfig.getTemplateFile();
+
+        if(template.exists() && catalogConfig.getDeleteOldTemplate() &&!template.delete())
+        {
+            throw new CatalogFormatException("The old template could not be deleted.");
+        }
+        if(catalog.size() == 0 && !catalogConfig.getCreateEmptyTemplate())
+        {
+            this.logger.info("The project does not contain any translatable message. The template was not created.");
+            return;
+        }
+
         try
         {
             this.updateHeaderMessage(catalogConfig, velocityContext);
@@ -75,7 +87,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         catalog.addMessage(this.headerMessage);
 
         final PoWriter poWriter = new PoWriter(true);
-        final File template = catalogConfig.getTemplateFile();
         try
         {
             final File directory = template.getParentFile();
