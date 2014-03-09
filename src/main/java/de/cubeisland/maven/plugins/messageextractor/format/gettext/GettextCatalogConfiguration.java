@@ -4,15 +4,16 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.cubeisland.maven.plugins.messageextractor.format.AbstractCatalogConfiguration;
+import de.cubeisland.maven.plugins.messageextractor.format.HeaderSection;
 
 @XmlRootElement(name = "catalog")
 public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
 {
     @XmlElement(name = "header")
-    private GettextHeaderConfiguration headerConfiguration;
+    private HeaderSection headerSection;
 
-    public GettextHeaderConfiguration getHeaderConfiguration()
+    public HeaderSection getHeaderSection()
     {
-        return this.headerConfiguration;
+        return this.headerSection;
     }
 }

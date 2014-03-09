@@ -1,4 +1,4 @@
-package de.cubeisland.maven.plugins.messageextractor.format.gettext;
+package de.cubeisland.maven.plugins.messageextractor.format;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 
 @XmlRootElement(name = "header")
-public class GettextHeaderConfiguration
+public class HeaderSection
 {
     @XmlElement
     public String comments;
