@@ -33,7 +33,14 @@
     <catalog format="gettext">
         <removeUnusedMessages>false</removeUnusedMessages>
         <template>./messages.pot</template>
-        <!--<header>header.txt</header>-->
+        <header>
+            <comments>header.txt</comments>
+            <metadata>
+                <entry key="date">${date}</entry>
+                <entry key="version">${project.version}</entry>
+                <entry key="bla">blub</entry>
+            </metadata>
+        </header>
     </catalog>
 
 </extractor>

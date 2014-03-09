@@ -8,16 +8,11 @@ import de.cubeisland.maven.plugins.messageextractor.format.AbstractCatalogConfig
 @XmlRootElement(name = "catalog")
 public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
 {
-    @XmlElement
-    private String header;
+    @XmlElement(name = "header")
+    private GettextHeaderConfiguration headerConfiguration;
 
-    public String getHeader()
+    public GettextHeaderConfiguration getHeaderConfiguration()
     {
-        return header;
-    }
-
-    public String getFormat()
-    {
-        return "gettext";
+        return this.headerConfiguration;
     }
 }
