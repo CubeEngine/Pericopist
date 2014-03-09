@@ -10,6 +10,7 @@ import org.fedorahosted.tennera.jgettext.PoWriter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import de.cubeisland.maven.plugins.messagecatalog.exception.CatalogFormatException;
@@ -22,7 +23,7 @@ import de.cubeisland.maven.plugins.messagecatalog.util.CatalogHeader;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
-    private Message headerMessage;
+    private Catalog oldCatalog;
     private CatalogHeader catalogHeader;
 
     private Logger logger;
@@ -64,27 +65,31 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             catalog.addMessage(message);
         }
 
+        try
+        {
+            catalog.addMessage(this.getHeaderMessage(catalogConfig, velocityContext));
+        }
+        catch (IOException e)
+        {
+            throw new CatalogFormatException("The header could not be created.", e);
+        }
+
+        if (this.compareCatalogs(this.oldCatalog, catalog))
+        {
+            this.logger.info("Did not create a new catalog, because it's the same like the old one.");
+            return;
+        }
         final File template = catalogConfig.getTemplateFile();
 
         if (template.exists() && !template.delete())
         {
             throw new CatalogFormatException("The old template could not be deleted.");
         }
-        if (catalog.size() == 0 && !catalogConfig.getCreateEmptyTemplate())
+        if (catalog.size() == 1 && !catalogConfig.getCreateEmptyTemplate())
         {
             this.logger.info("The project does not contain any translatable message. The template was not created.");
             return;
         }
-
-        try
-        {
-            this.updateHeaderMessage(catalogConfig, velocityContext);
-        }
-        catch (IOException e)
-        {
-            throw new CatalogFormatException("The header could not be created.", e);
-        }
-        catalog.addMessage(this.headerMessage);
 
         final PoWriter poWriter = new PoWriter(true);
         try
@@ -121,7 +126,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             throw new CatalogFormatException("The catalog could not be read.", e);
         }
 
-        this.headerMessage = catalog.locateHeader();
+        this.oldCatalog = catalog;
 
         int i = 0;
         for (Message message : catalog)
@@ -140,34 +145,82 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return GettextCatalogConfiguration.class;
     }
 
-    private void updateHeaderMessage(GettextCatalogConfiguration config, Context velocityContext) throws IOException
+    private Message getHeaderMessage(GettextCatalogConfiguration config, Context velocityContext) throws IOException
     {
-        if (this.headerMessage == null)
+        Message headerMessage = null;
+
+        if (this.oldCatalog != null)
         {
-            this.headerMessage = HeaderUtil.generateDefaultHeader();
+            headerMessage = this.oldCatalog.locateHeader();
         }
-        HeaderFields headerFields = HeaderFields.wrap(this.headerMessage);
+        if (headerMessage == null)
+        {
+            headerMessage = HeaderUtil.generateDefaultHeader();
+        }
+        HeaderFields headerFields = HeaderFields.wrap(headerMessage);
         headerFields.updatePOTCreationDate();
 
-        this.headerMessage = headerFields.unwrap();
+        headerMessage = headerFields.unwrap();
 
         if (this.catalogHeader == null)
         {
             if (config.getHeader() == null)
             {
-                return;
+                return headerMessage;
             }
             this.catalogHeader = new CatalogHeader(config.getHeader(), velocityContext);
         }
         for (String line : this.catalogHeader.getComments())
         {
-            this.headerMessage.addComment(line);
+            headerMessage.addComment(line);
         }
+
+        return headerMessage;
     }
 
-    public String getFileExtension()
+    private boolean compareCatalogs(Catalog first, Catalog second)
     {
-        return "pot";
+        if (first == null || second == null)
+        {
+            return false;
+        }
+
+        if (first.size() != second.size())
+        {
+            return false;
+        }
+
+        for (Message firstMessage : first)
+        {
+            if (firstMessage.isHeader())
+            {
+                continue;
+            }
+
+            Message secondMessage = second.locateMessage(firstMessage.getMsgctxt(), firstMessage.getMsgid());
+
+            if (secondMessage == null)
+            {
+                return false;
+            }
+
+            List<String> firstSourceReferences = firstMessage.getSourceReferences();
+            List<String> secondSourceReferences = secondMessage.getSourceReferences();
+
+            if (firstSourceReferences.size() != secondSourceReferences.size())
+            {
+                return false;
+            }
+
+            for (String firstSourceReference : firstSourceReferences)
+            {
+                if (!secondSourceReferences.contains(firstSourceReference))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public Logger getLogger()
