@@ -50,18 +50,15 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
         ToolManager toolManager = new ToolManager();
         Context velocityContext = toolManager.createContext();
 
-        if (this.project != null)
+        velocityContext.put("project", this.project.getModel());
+        velocityContext.put("artifactId", this.project.getArtifactId());
+        velocityContext.put("groupId", this.project.getGroupId());
+        velocityContext.put("version", this.project.getVersion());
+        velocityContext.put("basedir", this.project.getBasedir());
+        Properties properties = this.project.getProperties();
+        for (Entry entry : properties.entrySet())
         {
-            velocityContext.put("project", this.project.getModel());
-            velocityContext.put("artifactId", this.project.getArtifactId());
-            velocityContext.put("groupId", this.project.getGroupId());
-            velocityContext.put("version", this.project.getVersion());
-            velocityContext.put("basedir", this.project.getBasedir());
-            Properties properties = this.project.getProperties();
-            for (Entry entry : properties.entrySet())
-            {
-                velocityContext.put((String)entry.getKey(), entry.getValue());
-            }
+            velocityContext.put((String)entry.getKey(), entry.getValue());
         }
 
         MessageCatalogFactory factory = new MessageCatalogFactory();
