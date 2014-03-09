@@ -40,6 +40,35 @@ public class Occurrence implements Comparable<Occurrence>
     }
 
     @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        Occurrence that = (Occurrence)o;
+
+        if (line != that.line)
+        {
+            return false;
+        }
+        return file.equals(that.file);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = file.hashCode();
+        result = 31 * result + line;
+        return result;
+    }
+
+    @Override
     public String toString()
     {
         return this.file.getPath() + ":" + this.line;

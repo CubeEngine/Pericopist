@@ -92,4 +92,43 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         }
         return Integer.compare(this.position, o.position);
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        TranslatableMessage that = (TranslatableMessage)o;
+
+        if (occurrences != null ? !occurrences.equals(that.occurrences) : that.occurrences != null)
+        {
+            return false;
+        }
+        if (!plural.equals(that.plural))
+        {
+            return false;
+        }
+        if (!singular.equals(that.singular))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = singular.hashCode();
+        result = 31 * result + plural.hashCode();
+        result = 31 * result + (occurrences != null ? occurrences.hashCode() : 0);
+        return result;
+    }
 }
