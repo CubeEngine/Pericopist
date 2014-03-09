@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalog;
 import de.cubeisland.maven.plugins.messagecatalog.MessageCatalogFactory;
+import de.cubeisland.maven.plugins.messagecatalog.exception.ConfigurationNotFoundException;
 import de.cubeisland.maven.plugins.messagecatalog.exception.MessageCatalogException;
 import de.cubeisland.maven.plugins.messagecatalog.exception.SourceDirectoryNotExistsException;
 
@@ -27,46 +28,76 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
     /**
      * @parameter
      */
-    private String configuration;
+    private String[] configurations;
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
+        for (String configuration : configurations)
+        {
+            this.getLog().info(configuration);
+        }
         if (this.project.getPackaging().equalsIgnoreCase("pom"))
         {
             this.getLog().info("Skipped the project '" + this.project.getName() + "' ...");
             return;
         }
 
+        if (this.configurations == null || this.configurations.length == 0)
+        {
+            throw new MojoFailureException("An extractor configuration is not specified.");
+        }
+
         ToolManager toolManager = new ToolManager();
-        Context context = toolManager.createContext();
+        Context velocityContext = toolManager.createContext();
 
         if (this.project != null)
         {
-            context.put("project", this.project.getModel());
-            context.put("artifactId", this.project.getArtifactId());
-            context.put("groupId", this.project.getGroupId());
-            context.put("version", this.project.getVersion());
-            context.put("basedir", this.project.getBasedir());
+            velocityContext.put("project", this.project.getModel());
+            velocityContext.put("artifactId", this.project.getArtifactId());
+            velocityContext.put("groupId", this.project.getGroupId());
+            velocityContext.put("version", this.project.getVersion());
+            velocityContext.put("basedir", this.project.getBasedir());
             Properties properties = this.project.getProperties();
             for (Entry entry : properties.entrySet())
             {
-                context.put((String)entry.getKey(), entry.getValue());
+                velocityContext.put((String)entry.getKey(), entry.getValue());
             }
         }
 
-        try
+        MessageCatalogFactory factory = new MessageCatalogFactory();
+
+        boolean foundConfiguration = false;
+        int i = 0;
+        do
         {
-            MessageCatalogFactory factory = new MessageCatalogFactory();
-            this.doExecute(factory.getMessageCatalog(this.configuration, context));
+            String configuration = this.configurations[i++];
+
+            this.getLog().info("uses extractor configuration '" + configuration + "'.");
+
+            try
+            {
+                this.doExecute(factory.getMessageCatalog(configuration, velocityContext));
+                foundConfiguration = true;
+            }
+            catch (ConfigurationNotFoundException e)
+            {
+                this.getLog().warn("Build the template failed. " + e.getMessage());
+            }
+            catch (SourceDirectoryNotExistsException e)
+            {
+                this.getLog().info(e.getMessage());
+                this.getLog().info("Skipped the project '" + this.project.getName() + "'' ...");
+            }
+            catch (MessageCatalogException e)
+            {
+                throw new MojoFailureException(e.getMessage(), e.getCause());
+            }
         }
-        catch (SourceDirectoryNotExistsException e)
+        while (!foundConfiguration && i < this.configurations.length);
+
+        if (!foundConfiguration)
         {
-            this.getLog().info(e.getMessage());
-            this.getLog().info("Skipped the project '" + this.project.getName() + "'' ...");
-        }
-        catch (MessageCatalogException e)
-        {
-            throw new MojoFailureException(e.getMessage(), e.getCause());
+            throw new MojoFailureException("The template could not be created. Did not find any of the specified configurations.");
         }
     }
 
