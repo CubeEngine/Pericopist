@@ -32,9 +32,9 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        for (String configuration : configurations)
+        if (this.project == null)
         {
-            this.getLog().info(configuration);
+            throw new MojoFailureException("It's not a maven project, isn't it?");
         }
         if (this.project.getPackaging().equalsIgnoreCase("pom"))
         {
@@ -90,7 +90,7 @@ public abstract class AbstractMessageCatalogMojo extends AbstractMojo
             }
             catch (MessageCatalogException e)
             {
-                throw new MojoFailureException(e.getMessage(), e.getCause());
+                throw new MojoFailureException(e.getMessage(), e);
             }
         }
         while (!foundConfiguration && i < this.configurations.length);

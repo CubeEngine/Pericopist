@@ -83,7 +83,7 @@ public class MessageCatalogFactory
         }
         catch (IOException e)
         {
-            throw new ConfigurationException("The configuration file could not be read.");
+            throw new ConfigurationException("The configuration file could not be read.", e);
         }
 
         MessageExtractor messageExtractor = null;
@@ -110,7 +110,7 @@ public class MessageCatalogFactory
                 }
                 catch (Exception e)
                 {
-                    throw new ConfigurationException("Could not create a MessageExtractor instance of " + messageExtractorClass.getName());
+                    throw new ConfigurationException("Could not create a MessageExtractor instance of '" + messageExtractorClass.getName() + "'.", e);
                 }
                 sourceNode = node;
             }
@@ -128,7 +128,7 @@ public class MessageCatalogFactory
                 }
                 catch (Exception e)
                 {
-                    throw new ConfigurationException("Could not create an CatalogFormat instance of " + catalogFormatClass.getName());
+                    throw new ConfigurationException("Could not create an CatalogFormat instance of '" + catalogFormatClass.getName() + "'.", e);
                 }
                 catalogNode = node;
             }
