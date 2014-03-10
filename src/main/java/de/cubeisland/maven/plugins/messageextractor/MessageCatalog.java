@@ -4,7 +4,7 @@ import org.apache.velocity.context.Context;
 
 import de.cubeisland.maven.plugins.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.maven.plugins.messageextractor.exception.MessageCatalogException;
-import de.cubeisland.maven.plugins.messageextractor.exception.MessageExtractorException;
+import de.cubeisland.maven.plugins.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.maven.plugins.messageextractor.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messageextractor.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messageextractor.message.MessageStore;
@@ -80,12 +80,12 @@ public class MessageCatalog
         return this.catalogFormat.read(this.catalogConfiguration);
     }
 
-    private MessageStore parseSourceCode() throws MessageExtractorException
+    private MessageStore parseSourceCode() throws MessageExtractionException
     {
         return this.messageExtractor.extract(this.extractorConfiguration);
     }
 
-    private MessageStore parseSourceCode(MessageStore messageStore) throws MessageExtractorException
+    private MessageStore parseSourceCode(MessageStore messageStore) throws MessageExtractionException
     {
         return this.messageExtractor.extract(this.extractorConfiguration, messageStore);
     }

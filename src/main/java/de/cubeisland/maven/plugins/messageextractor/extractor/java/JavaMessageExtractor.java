@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import de.cubeisland.maven.plugins.messageextractor.exception.MessageExtractorException;
-import de.cubeisland.maven.plugins.messageextractor.exception.SourceDirectoryNotExistsException;
+import de.cubeisland.maven.plugins.messageextractor.exception.MessageExtractionException;
+import de.cubeisland.maven.plugins.messageextractor.exception.SourceDirectoryNotExistingException;
 import de.cubeisland.maven.plugins.messageextractor.message.MessageStore;
 import de.cubeisland.maven.plugins.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.maven.plugins.messageextractor.extractor.MessageExtractor;
@@ -28,20 +28,28 @@ public class JavaMessageExtractor implements MessageExtractor
         this.fileFilter = new JavaFileFilter();
     }
 
-    public MessageStore extract(ExtractorConfiguration config) throws MessageExtractorException
+    public MessageStore extract(ExtractorConfiguration config) throws MessageExtractionException
     {
         return this.extract(config, null);
     }
 
-    public MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractorException
+    public MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractionException
     {
         JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration)config;
 
         if (!extractorConfig.getDirectory().exists())
         {
-            throw new SourceDirectoryNotExistsException();
+            throw new SourceDirectoryNotExistingException();
         }
-        List<File> files = Misc.scanFilesRecursive(extractorConfig.getDirectory(), this.fileFilter);
+        List<File> files;
+        try
+        {
+            files = Misc.scanFilesRecursive(extractorConfig.getDirectory(), this.fileFilter);
+        }
+        catch (IOException e)
+        {
+            throw new MessageExtractionException("Failed to enlist the applicable files!", e);
+        }
 
         if (messageStore == null)
         {
@@ -72,7 +80,7 @@ public class JavaMessageExtractor implements MessageExtractor
             }
             catch (IOException e)
             {
-                throw new MessageExtractorException("The file on path '" + file.getAbsolutePath() + "' could not be parsed.", e);
+                throw new MessageExtractionException("The file on path '" + file.getAbsolutePath() + "' could not be parsed.", e);
             }
         }
 

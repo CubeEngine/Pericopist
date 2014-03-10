@@ -12,9 +12,10 @@ import java.util.Properties;
 
 import de.cubeisland.maven.plugins.messageextractor.MessageCatalog;
 import de.cubeisland.maven.plugins.messageextractor.MessageCatalogFactory;
+import de.cubeisland.maven.plugins.messageextractor.exception.ConfigurationException;
 import de.cubeisland.maven.plugins.messageextractor.exception.ConfigurationNotFoundException;
 import de.cubeisland.maven.plugins.messageextractor.exception.MessageCatalogException;
-import de.cubeisland.maven.plugins.messageextractor.exception.SourceDirectoryNotExistsException;
+import de.cubeisland.maven.plugins.messageextractor.exception.SourceDirectoryNotExistingException;
 
 public abstract class AbstractMessageExtractorMojo extends AbstractMojo
 {
@@ -62,39 +63,44 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
         }
 
         MessageCatalogFactory factory = new MessageCatalogFactory();
+        MessageCatalog catalog = null;
 
-        boolean foundConfiguration = false;
-        int i = 0;
-        do
+        for (String configuration : this.configurations)
         {
-            String configuration = this.configurations[i++];
-
             this.getLog().info("uses extractor configuration '" + configuration + "'.");
 
             try
             {
-                this.doExecute(factory.getMessageCatalog(configuration, velocityContext));
-                foundConfiguration = true;
+                catalog = factory.getMessageCatalog(configuration, velocityContext);
+                break;
             }
             catch (ConfigurationNotFoundException e)
             {
-                this.getLog().warn("Build the template failed.", e);
+                this.getLog().info("Configuration not found: " + configuration);
             }
-            catch (SourceDirectoryNotExistsException e)
+            catch (ConfigurationException e)
             {
-                this.getLog().info(e.getMessage());
-                this.getLog().info("Skipped the project '" + this.project.getName() + "'' ...", e);
-            }
-            catch (MessageCatalogException e)
-            {
-                throw new MojoFailureException(e.getMessage(), e);
+                throw new MojoFailureException("Failed to read the configuration '" + configuration + "'!", e);
             }
         }
-        while (!foundConfiguration && i < this.configurations.length);
 
-        if (!foundConfiguration)
+        if (catalog == null)
         {
             throw new MojoFailureException("The template could not be created. Did not find any of the specified configurations.");
+        }
+
+        try
+        {
+            this.doExecute(catalog);
+        }
+        catch (SourceDirectoryNotExistingException e)
+        {
+            this.getLog().info(e.getMessage());
+            this.getLog().info("Skipped the project '" + this.project.getName() + "'' ...", e);
+        }
+        catch (MessageCatalogException e)
+        {
+            throw new MojoFailureException(e.getMessage(), e);
         }
     }
 

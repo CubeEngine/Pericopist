@@ -90,7 +90,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         {
             return -1;
         }
-        return Integer.compare(this.position, o.position);
+        return this.position.compareTo(o.position);
     }
 
     @Override
