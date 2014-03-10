@@ -3,7 +3,6 @@ package de.cubeisland.maven.plugins.messageextractor.format.gettext;
 import org.apache.velocity.context.Context;
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.HeaderFields;
-import org.fedorahosted.tennera.jgettext.HeaderUtil;
 import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
@@ -16,15 +15,15 @@ import java.util.logging.Logger;
 import de.cubeisland.maven.plugins.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.maven.plugins.messageextractor.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messageextractor.format.CatalogFormat;
+import de.cubeisland.maven.plugins.messageextractor.format.HeaderSection;
+import de.cubeisland.maven.plugins.messageextractor.format.HeaderSection.MetadataEntry;
 import de.cubeisland.maven.plugins.messageextractor.message.MessageStore;
 import de.cubeisland.maven.plugins.messageextractor.message.Occurrence;
 import de.cubeisland.maven.plugins.messageextractor.message.TranslatableMessage;
-import de.cubeisland.maven.plugins.messageextractor.util.CatalogHeader;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
     private Catalog oldCatalog;
-    private CatalogHeader catalogHeader;
 
     private Logger logger;
 
@@ -65,13 +64,16 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             catalog.addMessage(message);
         }
 
-        try
+        if (catalogConfig.getHeaderSection() != null)
         {
-            catalog.addMessage(this.getHeaderMessage(catalogConfig, velocityContext));
-        }
-        catch (IOException e)
-        {
-            throw new CatalogFormatException("The header could not be created.", e);
+            try
+            {
+                catalog.addMessage(this.getHeaderMessage(catalogConfig.getHeaderSection(), velocityContext));
+            }
+            catch (IOException e)
+            {
+                throw new CatalogFormatException("The header could not be created.", e);
+            }
         }
 
         if (this.compareCatalogs(this.oldCatalog, catalog))
@@ -85,7 +87,13 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         {
             throw new CatalogFormatException("The old template could not be deleted.");
         }
-        if (catalog.size() == 1 && !catalogConfig.getCreateEmptyTemplate())
+
+        int messageCount = catalog.size();
+        if (catalogConfig.getHeaderSection() != null)
+        {
+            messageCount--;
+        }
+        if (messageCount == 0 && !catalogConfig.getCreateEmptyTemplate())
         {
             this.logger.info("The project does not contain any translatable message. The template was not created.");
             return;
@@ -145,34 +153,22 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return GettextCatalogConfiguration.class;
     }
 
-    private Message getHeaderMessage(GettextCatalogConfiguration config, Context velocityContext) throws IOException
+    private Message getHeaderMessage(HeaderSection config, Context velocityContext) throws IOException
     {
-        Message headerMessage = null;
-
-        if (this.oldCatalog != null)
+        HeaderFields headerFields = new HeaderFields();
+        if (config.getMetadata() != null)
         {
-            headerMessage = this.oldCatalog.locateHeader();
-        }
-        if (headerMessage == null)
-        {
-            headerMessage = HeaderUtil.generateDefaultHeader();
-        }
-        HeaderFields headerFields = HeaderFields.wrap(headerMessage);
-        headerFields.updatePOTCreationDate();
-
-        headerMessage = headerFields.unwrap();
-
-        if (this.catalogHeader == null)
-        {
-            if (config.getHeader() == null)
+            for (MetadataEntry entry : config.getMetadata())
             {
-                return headerMessage;
+                headerFields.setValue(entry.getKey(), entry.getValue());
             }
-            this.catalogHeader = new CatalogHeader(config.getHeader(), velocityContext);
         }
-        for (String line : this.catalogHeader.getComments())
+
+        Message headerMessage = headerFields.unwrap();
+
+        if (config.getCommentsResource() != null)
         {
-            headerMessage.addComment(line);
+            headerMessage.addComment(config.getComments(velocityContext));
         }
 
         return headerMessage;

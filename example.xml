@@ -36,9 +36,9 @@
         <header>
             <comments>header.txt</comments>
             <metadata>
-                <entry key="date">${date}</entry>
-                <entry key="version">${project.version}</entry>
-                <entry key="bla">blub</entry>
+                <entry key="Project-Id-Version">PACKAGE VERSION</entry>
+                <entry key="POT-Creation-Date">${date.get('yyyy-M-d H:m:s z')}</entry>
+                <entry key="Last-Translator">FULL NAME &lt;EMAIL@ADDRESS&gt;</entry>
             </metadata>
         </header>
     </catalog>

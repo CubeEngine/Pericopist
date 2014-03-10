@@ -5,11 +5,11 @@ import org.apache.velocity.context.Context;
 import de.cubeisland.maven.plugins.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.maven.plugins.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.maven.plugins.messageextractor.exception.MessageExtractionException;
+import de.cubeisland.maven.plugins.messageextractor.extractor.ExtractorConfiguration;
+import de.cubeisland.maven.plugins.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.maven.plugins.messageextractor.format.CatalogConfiguration;
 import de.cubeisland.maven.plugins.messageextractor.format.CatalogFormat;
 import de.cubeisland.maven.plugins.messageextractor.message.MessageStore;
-import de.cubeisland.maven.plugins.messageextractor.extractor.ExtractorConfiguration;
-import de.cubeisland.maven.plugins.messageextractor.extractor.MessageExtractor;
 
 public class MessageCatalog
 {
