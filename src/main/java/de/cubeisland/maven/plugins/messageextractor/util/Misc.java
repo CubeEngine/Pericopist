@@ -17,7 +17,6 @@ public class Misc
 {
     private static final FileFilter DUMMY_FILTER = new FileFilter()
     {
-
         public boolean accept(File file)
         {
             return true;
@@ -27,12 +26,12 @@ public class Misc
     private Misc()
     {}
 
-    public static List<File> scanFilesRecursive(File baseDir)
+    public static List<File> scanFilesRecursive(File baseDir) throws IOException
     {
         return scanFilesRecursive(baseDir, DUMMY_FILTER);
     }
 
-    public static List<File> scanFilesRecursive(File baseDir, FileFilter filter)
+    public static List<File> scanFilesRecursive(File baseDir, FileFilter filter) throws IOException
     {
         if (baseDir == null)
         {
@@ -53,9 +52,14 @@ public class Misc
         return files;
     }
 
-    private static void scanFilesRecursive0(File directory, List<File> files, FileFilter filter)
+    private static void scanFilesRecursive0(File directory, List<File> files, FileFilter filter) throws IOException
     {
-        for (File file : directory.listFiles())
+        final File[] directoryListing = directory.listFiles();
+        if (directoryListing == null)
+        {
+            throw new IOException("Failed to enlist the directory '" + directory.getPath() + "' !");
+        }
+        for (File file : directoryListing)
         {
             if (file.isDirectory())
             {

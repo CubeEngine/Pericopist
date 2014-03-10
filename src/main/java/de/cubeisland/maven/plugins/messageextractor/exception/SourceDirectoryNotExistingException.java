@@ -1,8 +1,8 @@
 package de.cubeisland.maven.plugins.messageextractor.exception;
 
-public class SourceDirectoryNotExistsException extends MessageExtractorException
+public class SourceDirectoryNotExistingException extends MessageExtractionException
 {
-    public SourceDirectoryNotExistsException()
+    public SourceDirectoryNotExistingException()
     {
         super("The source directory does not exist.");
     }
