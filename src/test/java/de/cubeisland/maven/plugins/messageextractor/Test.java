@@ -16,7 +16,7 @@ public class Test
         {
             messageCatalog = factory.getMessageCatalog("./example.xml", toolManager.createContext());
             //            messageCatalog = factory.getMessageCatalog("https://raw.github.com/CubeEngineDev/messageextractor-maven-plugin/reconstruction/example.xml", toolManager.createContext());
-            messageCatalog.generateCatalog();
+            messageCatalog.updateCatalog();
         }
         catch (MessageCatalogException e)
         {

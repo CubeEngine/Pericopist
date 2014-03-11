@@ -1,11 +1,11 @@
 # Hey this are test header comments.
 # you can use the velocity context in your comments.
-# for example: 10.03.2014 19:32:52
+# for example: 8
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-3-10 19:32:51 MEZ\n"
+"POT-Creation-Date: 2014-03-11 21:00:49 MEZ\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #: test/Main.java:32

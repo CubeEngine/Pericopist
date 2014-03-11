@@ -62,6 +62,9 @@ public class HeaderSection
         @XmlValue
         private String value;
 
+        @XmlAttribute
+        private boolean variable = false;
+
         public String getKey()
         {
             return this.key;
@@ -70,6 +73,11 @@ public class HeaderSection
         public String getValue()
         {
             return this.value;
+        }
+
+        public boolean isVariable()
+        {
+            return this.variable;
         }
     }
 }
