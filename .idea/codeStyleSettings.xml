@@ -85,15 +85,6 @@
           <indentOptions>
             <option name="CONTINUATION_INDENT_SIZE" value="4" />
           </indentOptions>
-          <arrangement>
-            <rules>
-              <rule>
-                <match>
-                  <NAME>xmlns:.*</NAME>
-                </match>
-              </rule>
-            </rules>
-          </arrangement>
         </codeStyleSettings>
       </value>
     </option>
