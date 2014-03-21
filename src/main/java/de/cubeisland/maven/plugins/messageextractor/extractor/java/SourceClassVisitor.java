@@ -20,11 +20,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.cubeisland.maven.plugins.messageextractor.message.MessageStore;
-import de.cubeisland.maven.plugins.messageextractor.message.Occurrence;
 import de.cubeisland.maven.plugins.messageextractor.extractor.java.config.JavaExtractorConfiguration;
 import de.cubeisland.maven.plugins.messageextractor.extractor.java.config.TranslatableAnnotation;
 import de.cubeisland.maven.plugins.messageextractor.extractor.java.config.TranslatableMethod;
+import de.cubeisland.maven.plugins.messageextractor.message.MessageStore;
+import de.cubeisland.maven.plugins.messageextractor.message.Occurrence;
 import de.cubeisland.maven.plugins.messageextractor.util.Misc;
 
 class SourceClassVisitor extends ASTVisitor

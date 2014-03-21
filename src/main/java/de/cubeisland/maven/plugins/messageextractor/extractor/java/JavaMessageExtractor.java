@@ -13,10 +13,10 @@ import java.util.Map;
 
 import de.cubeisland.maven.plugins.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.maven.plugins.messageextractor.exception.SourceDirectoryNotExistingException;
-import de.cubeisland.maven.plugins.messageextractor.message.MessageStore;
 import de.cubeisland.maven.plugins.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.maven.plugins.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.maven.plugins.messageextractor.extractor.java.config.JavaExtractorConfiguration;
+import de.cubeisland.maven.plugins.messageextractor.message.MessageStore;
 import de.cubeisland.maven.plugins.messageextractor.util.Misc;
 
 public class JavaMessageExtractor implements MessageExtractor

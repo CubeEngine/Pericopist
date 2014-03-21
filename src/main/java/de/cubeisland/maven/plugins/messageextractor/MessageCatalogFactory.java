@@ -25,12 +25,12 @@ import de.cubeisland.maven.plugins.messageextractor.exception.ConfigurationExcep
 import de.cubeisland.maven.plugins.messageextractor.exception.ConfigurationNotFoundException;
 import de.cubeisland.maven.plugins.messageextractor.exception.UnknownCatalogFormatException;
 import de.cubeisland.maven.plugins.messageextractor.exception.UnknownSourceLanguageException;
-import de.cubeisland.maven.plugins.messageextractor.format.CatalogConfiguration;
-import de.cubeisland.maven.plugins.messageextractor.format.CatalogFormat;
-import de.cubeisland.maven.plugins.messageextractor.format.gettext.PlaintextGettextCatalogFormat;
 import de.cubeisland.maven.plugins.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.maven.plugins.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.maven.plugins.messageextractor.extractor.java.JavaMessageExtractor;
+import de.cubeisland.maven.plugins.messageextractor.format.CatalogConfiguration;
+import de.cubeisland.maven.plugins.messageextractor.format.CatalogFormat;
+import de.cubeisland.maven.plugins.messageextractor.format.gettext.PlaintextGettextCatalogFormat;
 import de.cubeisland.maven.plugins.messageextractor.util.Misc;
 
 public class MessageCatalogFactory
