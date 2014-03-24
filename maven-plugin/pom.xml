@@ -18,6 +18,10 @@
   <name>${project.artifactId}</name>
   <description>A maven plugin to extract messages from your source code and generate message catalogs.</description>
 
+  <scm>
+    <developerConnection>scm:git:https://github.com/CubeEngineDev/messageextractor</developerConnection>
+  </scm>
+
   <licenses>
     <license>
       <name>GNU General Public License Version 3</name>
@@ -29,7 +33,7 @@
     <dependency>
       <groupId>de.cubeisland</groupId>
       <artifactId>messageextractor-core</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
