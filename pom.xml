@@ -1,131 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.cubeisland.maven.plugins</groupId>
-    <artifactId>messageextractor-maven-plugin</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>maven-plugin</packaging>
+  <groupId>de.cubeisland</groupId>
+  <artifactId>messageextractor</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
-    <name>Maven message extractor plugin</name>
-    <description>Generates message catalogs.</description>
-    <url>https://engine.cubeisland.de</url>
+  <name>Message Extractor</name>
+  <description>Generates message catalogs.</description>
+  <url>https://engine.cubeisland.de</url>
 
-    <licenses>
-        <license>
-            <name>GNU General Public License Version 3</name>
-            <url>LICENSE.txt</url>
-        </license>
-    </licenses>
+  <modules>
+    <module>parent</module>
+    <module>core</module>
+    <module>maven-plugin</module>
+  </modules>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
-
-    <developers>
-        <developer>
-            <id>pschichtel</id>
-            <name>Phillip Schichtel</name>
-            <roles>
-                <role>Project Lead</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>boeserwolf91</id>
-            <name>Stefan Wolf</name>
-            <roles>
-                <role>Contributor</role>
-            </roles>
-        </developer>
-    </developers>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
-    <scm>
-        <url>scm:git:https://github.com/CubeEngineDev/messageextractor-maven-plugin</url>
-        <connection>scm:git:https://github.com/CubeEngineDev/messageextractor-maven-plugin</connection>
-        <developerConnection>scm:git:https://github.com/CubeEngineDev/messageextractor-maven-plugin</developerConnection>
-    </scm>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>3.0.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-project</artifactId>
-            <version>2.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jdt</groupId>
-            <artifactId>org.eclipse.jdt.core</artifactId>
-            <version>3.7.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.fedorahosted.tennera</groupId>
-            <artifactId>jgettext</artifactId>
-            <version>0.13</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <version>1.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity-tools</artifactId>
-            <version>2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.2.11</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.xml.stream</groupId>
-            <artifactId>stax-api</artifactId>
-            <version>1.0-2</version>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <defaultGoal>clean install</defaultGoal>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.16</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.4.2</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.1</version>
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <defaultGoal>clean install</defaultGoal>
+  </build>
 </project>
