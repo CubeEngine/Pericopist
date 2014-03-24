@@ -2,6 +2,8 @@ package de.cubeisland.maven.plugins.messageextractor;
 
 import org.apache.velocity.context.Context;
 
+import java.nio.charset.Charset;
+
 import de.cubeisland.maven.plugins.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.maven.plugins.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.maven.plugins.messageextractor.exception.MessageExtractionException;
@@ -20,6 +22,8 @@ public class MessageCatalog
     private final CatalogFormat catalogFormat;
     private final CatalogConfiguration catalogConfiguration;
 
+    private Charset charset;
+
     protected MessageCatalog(MessageExtractor messageExtractor, ExtractorConfiguration extractorConfiguration, CatalogFormat catalogFormat, CatalogConfiguration catalogConfiguration, Context context)
     {
         this.messageExtractor = messageExtractor;
@@ -28,6 +32,15 @@ public class MessageCatalog
         this.catalogConfiguration = catalogConfiguration;
 
         this.context = context;
+
+        if (this.catalogConfiguration.getCharsetName() == null)
+        {
+            this.charset = Charset.forName("UTF-8");
+        }
+        else
+        {
+            this.charset = Charset.forName(this.catalogConfiguration.getCharsetName());
+        }
     }
 
     public ExtractorConfiguration getExtractorConfiguration()
@@ -55,6 +68,16 @@ public class MessageCatalog
         return this.context;
     }
 
+    public Charset getCharset()
+    {
+        return this.charset;
+    }
+
+    public void setCharset(Charset charset)
+    {
+        this.charset = charset;
+    }
+
     public void generateCatalog() throws MessageCatalogException
     {
         this.createCatalog(this.parseSourceCode());
@@ -77,7 +100,7 @@ public class MessageCatalog
 
     private MessageStore readCatalog() throws CatalogFormatException
     {
-        return this.catalogFormat.read(this.catalogConfiguration);
+        return this.catalogFormat.read(this.catalogConfiguration, this.getCharset());
     }
 
     private MessageStore parseSourceCode() throws MessageExtractionException
@@ -92,6 +115,6 @@ public class MessageCatalog
 
     private void createCatalog(MessageStore messageStore) throws CatalogFormatException
     {
-        this.catalogFormat.write(this.catalogConfiguration, this.getVelocityContext(), messageStore);
+        this.catalogFormat.write(this.catalogConfiguration, this.getCharset(), this.getVelocityContext(), messageStore);
     }
 }

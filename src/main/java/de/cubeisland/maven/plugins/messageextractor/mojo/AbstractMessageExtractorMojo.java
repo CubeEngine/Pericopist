@@ -7,6 +7,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.ToolManager;
 
+import java.nio.charset.Charset;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -24,12 +25,18 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
      * @required
      * @readonly
      */
-    private MavenProject project;
+    private MavenProject project = null;
 
     /**
      * @parameter
      */
-    private String[] configurations;
+    private String[] configurations = null;
+
+    /**
+     * @parameter default-value="${project.build.sourceEncoding}"
+     * @readonly
+     */
+    private String charset = null;
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
@@ -72,6 +79,10 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
             try
             {
                 catalog = factory.getMessageCatalog(configuration, velocityContext);
+                if (catalog.getCatalogConfiguration().getCharsetName() == null && this.charset != null)
+                {
+                    catalog.setCharset(Charset.forName(this.charset));
+                }
                 break;
             }
             catch (ConfigurationNotFoundException e)

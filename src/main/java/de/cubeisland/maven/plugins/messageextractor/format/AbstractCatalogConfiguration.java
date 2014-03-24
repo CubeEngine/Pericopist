@@ -2,6 +2,7 @@ package de.cubeisland.maven.plugins.messageextractor.format;
 
 import java.io.File;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 public abstract class AbstractCatalogConfiguration implements CatalogConfiguration
@@ -14,6 +15,9 @@ public abstract class AbstractCatalogConfiguration implements CatalogConfigurati
 
     @XmlElement
     protected boolean createEmptyTemplate = false;
+
+    @XmlAttribute(name = "charset")
+    protected String charsetName;
 
     public final File getTemplateFile()
     {
@@ -28,5 +32,10 @@ public abstract class AbstractCatalogConfiguration implements CatalogConfigurati
     public final boolean getCreateEmptyTemplate()
     {
         return this.createEmptyTemplate;
+    }
+
+    public String getCharsetName()
+    {
+        return this.charsetName;
     }
 }

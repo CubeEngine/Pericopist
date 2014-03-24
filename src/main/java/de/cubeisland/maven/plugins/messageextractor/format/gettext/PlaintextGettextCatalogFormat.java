@@ -8,7 +8,10 @@ import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -27,7 +30,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
     private Logger logger;
 
-    public void write(CatalogConfiguration config, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
+    public void write(CatalogConfiguration config, Charset charset, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration)config;
         Catalog catalog = new Catalog(true);
@@ -105,7 +108,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             final File directory = template.getParentFile();
             if (directory.exists() || directory.mkdirs())
             {
-                poWriter.write(catalog, template);
+                poWriter.write(catalog, new FileOutputStream(template), charset);
             }
             else
             {
@@ -118,7 +121,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         }
     }
 
-    public MessageStore read(CatalogConfiguration config) throws CatalogFormatException
+    public MessageStore read(CatalogConfiguration config, Charset charset) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration)config;
         MessageStore messageStore = new MessageStore();
@@ -127,7 +130,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         PoParser poParser = new PoParser(catalog);
         try
         {
-            catalog = poParser.parseCatalog(catalogConfig.getTemplateFile());
+            catalog = poParser.parseCatalog(new FileInputStream(catalogConfig.getTemplateFile()), charset, true);
         }
         catch (IOException e)
         {

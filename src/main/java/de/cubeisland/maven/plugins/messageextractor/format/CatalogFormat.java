@@ -2,12 +2,14 @@ package de.cubeisland.maven.plugins.messageextractor.format;
 
 import org.apache.velocity.context.Context;
 
+import java.nio.charset.Charset;
+
 import de.cubeisland.maven.plugins.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.maven.plugins.messageextractor.message.MessageStore;
 
 public interface CatalogFormat
 {
-    void write(CatalogConfiguration config, Context velocityContext, MessageStore messageStore) throws CatalogFormatException;
+    void write(CatalogConfiguration config, Charset charset, Context velocityContext, MessageStore messageStore) throws CatalogFormatException;
 
     /**
      * Reads in the catalog file and returns a message store.
@@ -19,7 +21,7 @@ public interface CatalogFormat
      *
      * @throws CatalogFormatException
      */
-    MessageStore read(CatalogConfiguration config) throws CatalogFormatException;
+    MessageStore read(CatalogConfiguration config, Charset charset) throws CatalogFormatException;
 
     Class<? extends CatalogConfiguration> getConfigClass();
 }

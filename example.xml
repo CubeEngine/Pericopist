@@ -30,14 +30,14 @@
 
     </source>
 
-    <catalog format="gettext">
+    <catalog format="gettext" charset="utf-8">
         <removeUnusedMessages>false</removeUnusedMessages>
         <template>./messages.pot</template>
         <header>
             <comments>header.txt</comments>
             <metadata>
                 <entry key="Project-Id-Version">PACKAGE VERSION</entry>
-                <entry key="POT-Creation-Date" variable="true">${date.get('yyyy-MM-dd HH:mm:ss z')}</entry>
+                <entry key="POT-Creation-Date" variable="true">${date.get('yyyy-MM-dd HH:mm:ssZ')}</entry>
                 <entry key="Last-Translator">FULL NAME &lt;EMAIL@ADDRESS&gt;</entry>
             </metadata>
         </header>

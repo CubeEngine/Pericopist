@@ -7,4 +7,6 @@ import de.cubeisland.maven.plugins.messageextractor.Configuration;
 public interface CatalogConfiguration extends Configuration
 {
     File getTemplateFile();
+
+    String getCharsetName();
 }
