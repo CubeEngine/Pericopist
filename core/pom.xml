@@ -18,7 +18,6 @@
 
   <scm>
     <developerConnection>scm:git:https://github.com/CubeEngineDev/messageextractor</developerConnection>
-    <tag>HEAD</tag>
   </scm>
 
   <licenses>

@@ -12,6 +12,10 @@
   <description>Generates message catalogs.</description>
   <url>https://engine.cubeisland.de</url>
 
+  <scm>
+    <developerConnection>scm:git:https://github.com/CubeEngineDev/messageextractor</developerConnection>
+  </scm>
+
   <modules>
     <module>core</module>
     <module>maven-plugin</module>
