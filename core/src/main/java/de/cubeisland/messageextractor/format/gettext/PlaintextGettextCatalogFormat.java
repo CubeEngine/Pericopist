@@ -93,7 +93,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         {
             try
             {
-                catalog.addMessage(this.getHeaderMessage(catalogConfig.getHeaderSection(), velocityContext));
+                catalog.addMessage(this.getHeaderMessage(catalogConfig.getHeaderSection(), charset, velocityContext));
             }
             catch (IOException e)
             {
@@ -179,7 +179,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return GettextCatalogConfiguration.class;
     }
 
-    private Message getHeaderMessage(HeaderSection config, Context velocityContext) throws IOException
+    private Message getHeaderMessage(HeaderSection config, Charset charset, Context velocityContext) throws IOException
     {
         HeaderFields headerFields = new HeaderFields();
         if (config.getMetadata() != null)
@@ -194,7 +194,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         if (config.getCommentsResource() != null)
         {
-            for (String comment : config.getComments(velocityContext).split("\n"))
+            for (String comment : config.getComments(charset, velocityContext).split("\n"))
             {
                 headerMessage.addComment(comment);
             }

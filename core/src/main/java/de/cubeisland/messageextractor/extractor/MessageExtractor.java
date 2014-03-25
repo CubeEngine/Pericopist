@@ -26,11 +26,13 @@ package de.cubeisland.messageextractor.extractor;
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.message.MessageStore;
 
+import java.nio.charset.Charset;
+
 public interface MessageExtractor
 {
-    MessageStore extract(ExtractorConfiguration config) throws MessageExtractionException;
+    MessageStore extract(ExtractorConfiguration config, Charset charset) throws MessageExtractionException;
 
-    MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractionException;
+    MessageStore extract(ExtractorConfiguration config, Charset charset, MessageStore messageStore) throws MessageExtractionException;
 
     Class<? extends ExtractorConfiguration> getConfigClass();
 }

@@ -26,6 +26,7 @@ package de.cubeisland.messageextractor.extractor.java;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
@@ -50,12 +51,12 @@ public class JavaMessageExtractor implements MessageExtractor
         this.fileFilter = new JavaFileFilter();
     }
 
-    public MessageStore extract(ExtractorConfiguration config) throws MessageExtractionException
+    public MessageStore extract(ExtractorConfiguration config, Charset charset) throws MessageExtractionException
     {
-        return this.extract(config, null);
+        return this.extract(config, charset, null);
     }
 
-    public MessageStore extract(ExtractorConfiguration config, MessageStore loadedMessageStore) throws MessageExtractionException
+    public MessageStore extract(ExtractorConfiguration config, Charset charset, MessageStore loadedMessageStore) throws MessageExtractionException
     {
         JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration)config;
 
@@ -96,7 +97,7 @@ public class JavaMessageExtractor implements MessageExtractor
         {
             try
             {
-                parser.setSource(Misc.parseFileToCharArray(file));
+                parser.setSource(Misc.parseFileToCharArray(file, charset));
                 CompilationUnit compilationUnit = (CompilationUnit)parser.createAST(null);
                 SourceClassVisitor visitor = new SourceClassVisitor(extractorConfig, messageStore, compilationUnit, file);
                 compilationUnit.accept(visitor);

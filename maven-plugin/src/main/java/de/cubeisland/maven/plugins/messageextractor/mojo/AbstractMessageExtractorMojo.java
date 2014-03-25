@@ -52,7 +52,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
      * @parameter default-value="${project.build.sourceEncoding}"
      * @readonly
      */
-    private String charset = null;
+    private String charsetName = null;
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
@@ -88,17 +88,33 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
         MessageCatalogFactory factory = new MessageCatalogFactory();
         MessageCatalog catalog = null;
 
+        Charset charset;
+        if(this.charsetName != null)
+        {
+            charset = Charset.forName(this.charsetName);
+        }
+        else
+        {
+            charset = Charset.forName("UTF-8");
+        }
+
         for (String configuration : this.configurations)
         {
             this.getLog().info("uses extractor configuration '" + configuration + "'.");
 
             try
             {
-                catalog = factory.getMessageCatalog(configuration, velocityContext);
-                if (catalog.getCatalogConfiguration().getCharsetName() == null && this.charset != null)
+                catalog = factory.getMessageCatalog(configuration, charset, velocityContext);
+
+                if(catalog.getCatalogConfiguration().getCharsetName() == null)
                 {
-                    catalog.setCharset(Charset.forName(this.charset));
+                    catalog.setCatalogCharset(charset);
                 }
+                if(catalog.getExtractorConfiguration().getCharsetName() == null)
+                {
+                    catalog.setSourceCharset(charset);
+                }
+
                 break;
             }
             catch (ConfigurationNotFoundException e)

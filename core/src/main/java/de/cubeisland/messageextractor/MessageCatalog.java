@@ -44,7 +44,8 @@ public class MessageCatalog
     private final CatalogFormat catalogFormat;
     private final CatalogConfiguration catalogConfiguration;
 
-    private Charset charset;
+    private Charset catalogCharset;
+    private Charset sourceCharset;
 
     protected MessageCatalog(MessageExtractor messageExtractor, ExtractorConfiguration extractorConfiguration, CatalogFormat catalogFormat, CatalogConfiguration catalogConfiguration, Context context)
     {
@@ -57,11 +58,20 @@ public class MessageCatalog
 
         if (this.catalogConfiguration.getCharsetName() == null)
         {
-            this.charset = Charset.forName("UTF-8");
+            this.catalogCharset = Charset.forName("UTF-8");
         }
         else
         {
-            this.charset = Charset.forName(this.catalogConfiguration.getCharsetName());
+            this.catalogCharset = Charset.forName(this.catalogConfiguration.getCharsetName());
+        }
+
+        if(this.extractorConfiguration.getCharsetName() == null)
+        {
+            this.sourceCharset = Charset.forName("UTF-8");
+        }
+        else
+        {
+            this.sourceCharset = Charset.forName(this.extractorConfiguration.getCharsetName());
         }
     }
 
@@ -90,14 +100,24 @@ public class MessageCatalog
         return this.context;
     }
 
-    public Charset getCharset()
+    public Charset getCatalogCharset()
     {
-        return this.charset;
+        return this.catalogCharset;
     }
 
-    public void setCharset(Charset charset)
+    public void setCatalogCharset(Charset charset)
     {
-        this.charset = charset;
+        this.catalogCharset = charset;
+    }
+
+    public Charset getSourceCharset()
+    {
+        return this.sourceCharset;
+    }
+
+    public void setSourceCharset(Charset sourceCharset)
+    {
+        this.sourceCharset = sourceCharset;
     }
 
     public void generateCatalog() throws MessageCatalogException
@@ -122,21 +142,21 @@ public class MessageCatalog
 
     private MessageStore readCatalog() throws CatalogFormatException
     {
-        return this.catalogFormat.read(this.catalogConfiguration, this.getCharset());
+        return this.catalogFormat.read(this.catalogConfiguration, this.getCatalogCharset());
     }
 
     private MessageStore parseSourceCode() throws MessageExtractionException
     {
-        return this.messageExtractor.extract(this.extractorConfiguration);
+        return this.messageExtractor.extract(this.extractorConfiguration, this.getSourceCharset());
     }
 
     private MessageStore parseSourceCode(MessageStore messageStore) throws MessageExtractionException
     {
-        return this.messageExtractor.extract(this.extractorConfiguration, messageStore);
+        return this.messageExtractor.extract(this.extractorConfiguration, this.getSourceCharset(), messageStore);
     }
 
     private void createCatalog(MessageStore messageStore) throws CatalogFormatException
     {
-        this.catalogFormat.write(this.catalogConfiguration, this.getCharset(), this.getVelocityContext(), messageStore);
+        this.catalogFormat.write(this.catalogConfiguration, this.getCatalogCharset(), this.getVelocityContext(), messageStore);
     }
 }

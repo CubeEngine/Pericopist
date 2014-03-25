@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.JAXBContext;
@@ -81,12 +82,12 @@ public class MessageCatalogFactory
         return this.catalogFormatMap.get(format);
     }
 
-    public MessageCatalog getMessageCatalog(String resource) throws ConfigurationException
+    public MessageCatalog getMessageCatalog(String resource, Charset charset) throws ConfigurationException
     {
-        return this.getMessageCatalog(resource, null);
+        return this.getMessageCatalog(resource, charset, null);
     }
 
-    public MessageCatalog getMessageCatalog(String resource, Context context) throws ConfigurationException
+    public MessageCatalog getMessageCatalog(String resource, Charset charset, Context context) throws ConfigurationException
     {
         URL configurationUrl = Misc.getResource(resource);
         if (configurationUrl == null)
@@ -100,7 +101,7 @@ public class MessageCatalogFactory
         StringWriter stringWriter = new StringWriter();
         try
         {
-            velocityEngine.evaluate(context, stringWriter, "configuration", Misc.getContent(configurationUrl));
+            velocityEngine.evaluate(context, stringWriter, "configuration", Misc.getContent(configurationUrl, charset));
         }
         catch (IOException e)
         {

@@ -27,5 +27,5 @@ import de.cubeisland.messageextractor.Configuration;
 
 public interface ExtractorConfiguration extends Configuration
 {
-
+    String getCharsetName();
 }

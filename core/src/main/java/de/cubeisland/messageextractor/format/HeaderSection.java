@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -58,7 +59,7 @@ public class HeaderSection
         return this.metadata;
     }
 
-    public String getComments(Context velocityContext) throws IOException
+    public String getComments(Charset charset, Context velocityContext) throws IOException
     {
         URL commentsUrl = Misc.getResource(this.getCommentsResource());
         if (commentsUrl == null)
@@ -71,7 +72,7 @@ public class HeaderSection
         engine.init();
 
         StringWriter stringWriter = new StringWriter();
-        engine.evaluate(velocityContext, stringWriter, "catalog_header_comments", Misc.getContent(commentsUrl));
+        engine.evaluate(velocityContext, stringWriter, "catalog_header_comments", Misc.getContent(commentsUrl, charset));
 
         return stringWriter.toString();
     }

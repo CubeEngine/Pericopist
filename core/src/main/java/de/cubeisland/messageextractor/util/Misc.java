@@ -33,6 +33,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -96,7 +97,7 @@ public class Misc
         }
     }
 
-    public static char[] parseFileToCharArray(File file) throws IOException
+    public static char[] parseFileToCharArray(File file, Charset charset) throws IOException
     {
         BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file));
         StringBuilder sb = new StringBuilder();
@@ -107,7 +108,7 @@ public class Misc
         {
             if (bytesRead > 0)
             {
-                sb.append(new String(buffer, 0, bytesRead));
+                sb.append(new String(buffer, 0, bytesRead, charset));
             }
         }
 
@@ -146,10 +147,10 @@ public class Misc
         }
     }
 
-    public static String getContent(URL url) throws IOException
+    public static String getContent(URL url, Charset charset) throws IOException
     {
         URLConnection connection = url.openConnection();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), charset));
 
         StringBuilder content = new StringBuilder();
         String inputLine;

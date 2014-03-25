@@ -24,6 +24,7 @@
 package de.cubeisland.messageextractor.extractor;
 
 import java.io.File;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 public abstract class AbstractExtractorConfiguration implements ExtractorConfiguration
@@ -31,8 +32,16 @@ public abstract class AbstractExtractorConfiguration implements ExtractorConfigu
     @XmlElement
     protected File directory = new File("./src/main/java");
 
+    @XmlAttribute(name = "charset")
+    protected String charsetName;
+
     public File getDirectory()
     {
         return this.directory;
+    }
+
+    public String getCharsetName()
+    {
+        return this.charsetName;
     }
 }

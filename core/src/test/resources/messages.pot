@@ -5,31 +5,31 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-03-24 21:08:34+0100\n"
+"POT-Creation-Date: 2014-03-25 14:39:13+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
-#: test/Main.java:32
+#: test/Main.java:55
 msgid "annotationString"
 msgstr ""
 
-#: test/SecondTestclass.java:14
+#: test/SecondTestclass.java:37
 msgid "goodbye"
 msgstr ""
 
-#: test/Main.java:19
+#: test/Main.java:42
 msgid "hope %s is fine?"
 msgid_plural "hope you are fine"
 msgstr[0] ""
 
-#: test/Main.java:26
+#: test/Main.java:49
 msgid "pre-added"
 msgstr ""
 
-#: test/SecondTestclass.java:12
+#: test/SecondTestclass.java:35
 msgid "what's up?"
 msgstr ""
 
-#: test/Main.java:13
-#: test/Main.java:14
+#: test/Main.java:36
+#: test/Main.java:37
 msgid "whats up?"
 msgstr ""

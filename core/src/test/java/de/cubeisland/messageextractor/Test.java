@@ -26,6 +26,8 @@ package de.cubeisland.messageextractor;
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import org.apache.velocity.tools.ToolManager;
 
+import java.nio.charset.Charset;
+
 public class Test
 {
     public static void main(String[] args)
@@ -37,7 +39,7 @@ public class Test
         try
         {
             messageCatalog = factory
-                .getMessageCatalog("./core/src/test/resources/example.xml", toolManager.createContext());
+                .getMessageCatalog("./core/src/test/resources/example.xml", Charset.forName("UTF-8"), toolManager.createContext());
             messageCatalog.updateCatalog();
         }
         catch (MessageCatalogException e)
