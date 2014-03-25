@@ -117,7 +117,7 @@ public class MessageCatalogFactory
         for (int i = 0; i < list.getLength(); i++)
         {
             Node node = list.item(i);
-            if (node.getNodeName().equals("source"))
+            if ("source".equals(node.getNodeName()))
             {
                 String language = node.getAttributes().getNamedItem("language").getTextContent();
                 Class<? extends MessageExtractor> messageExtractorClass = this.getSourceParser(language);
@@ -136,7 +136,7 @@ public class MessageCatalogFactory
                 }
                 sourceNode = node;
             }
-            else if (node.getNodeName().equals("catalog"))
+            else if ("catalog".equals(node.getNodeName()))
             {
                 String format = node.getAttributes().getNamedItem("format").getTextContent();
                 Class<? extends CatalogFormat> catalogFormatClass = this.getCatalogFormat(format);

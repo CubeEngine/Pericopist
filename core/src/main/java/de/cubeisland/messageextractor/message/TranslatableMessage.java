@@ -32,7 +32,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     private final String plural;
     private final Set<Occurrence> occurrences;
 
-    public final Integer position;
+    private final Integer position;
 
     public TranslatableMessage(String singular, String plural, Integer position)
     {

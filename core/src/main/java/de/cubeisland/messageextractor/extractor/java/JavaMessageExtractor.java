@@ -55,7 +55,7 @@ public class JavaMessageExtractor implements MessageExtractor
         return this.extract(config, null);
     }
 
-    public MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractionException
+    public MessageStore extract(ExtractorConfiguration config, MessageStore loadedMessageStore) throws MessageExtractionException
     {
         JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration)config;
 
@@ -73,6 +73,7 @@ public class JavaMessageExtractor implements MessageExtractor
             throw new MessageExtractionException("Failed to enlist the applicable files!", e);
         }
 
+        MessageStore messageStore = loadedMessageStore;
         if (messageStore == null)
         {
             messageStore = new MessageStore();
@@ -113,13 +114,5 @@ public class JavaMessageExtractor implements MessageExtractor
     public Class<? extends ExtractorConfiguration> getConfigClass()
     {
         return JavaExtractorConfiguration.class;
-    }
-
-    private class JavaFileFilter implements FileFilter
-    {
-        public boolean accept(File file)
-        {
-            return file.getAbsolutePath().endsWith(".java");
-        }
     }
 }

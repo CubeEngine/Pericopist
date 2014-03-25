@@ -59,11 +59,11 @@ public class Misc
     {
         if (baseDir == null)
         {
-            throw new NullPointerException("The base directory must not be null!");
+            throw new IllegalArgumentException("The base directory must not be null!");
         }
         if (filter == null)
         {
-            throw new NullPointerException("The filter must not be null!");
+            throw new IllegalArgumentException("The filter must not be null!");
         }
         if (!baseDir.isDirectory())
         {

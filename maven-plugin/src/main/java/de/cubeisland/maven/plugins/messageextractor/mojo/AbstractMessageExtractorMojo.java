@@ -60,7 +60,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
         {
             throw new MojoFailureException("It's not a maven project, isn't it?");
         }
-        if (this.project.getPackaging().equalsIgnoreCase("pom"))
+        if ("pom".equalsIgnoreCase(this.project.getPackaging()))
         {
             this.getLog().info("Skipped the project '" + this.project.getName() + "' ...");
             return;
@@ -103,7 +103,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
             }
             catch (ConfigurationNotFoundException e)
             {
-                this.getLog().info("Configuration not found: " + configuration);
+                this.getLog().info("Configuration not found: " + configuration, e);
             }
             catch (ConfigurationException e)
             {
