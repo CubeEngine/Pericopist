@@ -23,11 +23,12 @@
  */
 package de.cubeisland.messageextractor.format;
 
+import org.apache.velocity.context.Context;
+
 import java.nio.charset.Charset;
 
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.messageextractor.message.MessageStore;
-import org.apache.velocity.context.Context;
 
 public interface CatalogFormat
 {

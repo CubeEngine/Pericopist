@@ -71,8 +71,7 @@ public class MessageStore implements Iterable<TranslatableMessage>
     {
         for (TranslatableMessage message : this.messages)
         {
-            if (message.getSingular().equals(singular) && (plural == null && !message.hasPlural() || message
-                .hasPlural() && message.getPlural().equals(plural)))
+            if (message.getSingular().equals(singular) && (plural == null && !message.hasPlural() || message.hasPlural() && message.getPlural().equals(plural)))
             {
                 return message;
             }

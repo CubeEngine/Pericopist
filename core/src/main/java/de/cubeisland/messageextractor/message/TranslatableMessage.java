@@ -128,7 +128,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
             return false;
         }
 
-        TranslatableMessage that = (TranslatableMessage)o;
+        TranslatableMessage that = (TranslatableMessage) o;
 
         if (occurrences != null ? !occurrences.equals(that.occurrences) : that.occurrences != null)
         {

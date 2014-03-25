@@ -23,6 +23,11 @@
  */
 package de.cubeisland.messageextractor.extractor.java;
 
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -37,10 +42,6 @@ import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.extractor.java.config.JavaExtractorConfiguration;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.util.Misc;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
 
 public class JavaMessageExtractor implements MessageExtractor
 {
@@ -58,7 +59,7 @@ public class JavaMessageExtractor implements MessageExtractor
 
     public MessageStore extract(ExtractorConfiguration config, Charset charset, MessageStore loadedMessageStore) throws MessageExtractionException
     {
-        JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration)config;
+        JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration) config;
 
         if (!extractorConfig.getDirectory().exists())
         {
@@ -98,14 +99,13 @@ public class JavaMessageExtractor implements MessageExtractor
             try
             {
                 parser.setSource(Misc.parseFileToCharArray(file, charset));
-                CompilationUnit compilationUnit = (CompilationUnit)parser.createAST(null);
+                CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
                 SourceClassVisitor visitor = new SourceClassVisitor(extractorConfig, messageStore, compilationUnit, file);
                 compilationUnit.accept(visitor);
             }
             catch (IOException e)
             {
-                throw new MessageExtractionException("The file on path '" + file
-                    .getAbsolutePath() + "' could not be parsed.", e);
+                throw new MessageExtractionException("The file on path '" + file.getAbsolutePath() + "' could not be parsed.", e);
             }
         }
 

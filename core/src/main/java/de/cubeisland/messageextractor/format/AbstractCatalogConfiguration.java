@@ -24,6 +24,7 @@
 package de.cubeisland.messageextractor.format;
 
 import java.io.File;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 

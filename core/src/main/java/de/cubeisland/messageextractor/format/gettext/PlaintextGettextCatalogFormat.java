@@ -23,6 +23,13 @@
  */
 package de.cubeisland.messageextractor.format.gettext;
 
+import org.apache.velocity.context.Context;
+import org.fedorahosted.tennera.jgettext.Catalog;
+import org.fedorahosted.tennera.jgettext.HeaderFields;
+import org.fedorahosted.tennera.jgettext.Message;
+import org.fedorahosted.tennera.jgettext.PoParser;
+import org.fedorahosted.tennera.jgettext.PoWriter;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -39,12 +46,6 @@ import de.cubeisland.messageextractor.format.HeaderSection.MetadataEntry;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.Occurrence;
 import de.cubeisland.messageextractor.message.TranslatableMessage;
-import org.apache.velocity.context.Context;
-import org.fedorahosted.tennera.jgettext.Catalog;
-import org.fedorahosted.tennera.jgettext.HeaderFields;
-import org.fedorahosted.tennera.jgettext.Message;
-import org.fedorahosted.tennera.jgettext.PoParser;
-import org.fedorahosted.tennera.jgettext.PoWriter;
 
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
@@ -54,7 +55,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
     public void write(CatalogConfiguration config, Charset charset, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
     {
-        GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration)config;
+        GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
         Catalog catalog = new Catalog(true);
 
         if (this.logger == null)
@@ -134,8 +135,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             }
             else
             {
-                throw new CatalogFormatException("Failed to create the directory '" + directory
-                    .getAbsolutePath() + "'!");
+                throw new CatalogFormatException("Failed to create the directory '" + directory.getAbsolutePath() + "'!");
             }
         }
         catch (IOException e)
@@ -146,7 +146,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
     public MessageStore read(CatalogConfiguration config, Charset charset) throws CatalogFormatException
     {
-        GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration)config;
+        GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
         MessageStore messageStore = new MessageStore();
 
         Catalog catalog = new Catalog(true);

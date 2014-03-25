@@ -1,54 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>de.cubeisland</groupId>
-  <artifactId>messageextractor</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+    <groupId>de.cubeisland</groupId>
+    <artifactId>messageextractor</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-  <name>Message Extractor</name>
-  <description>Generates message catalogs.</description>
-  <url>https://engine.cubeisland.de</url>
+    <name>Message Extractor</name>
+    <description>Generates message catalogs.</description>
+    <url>https://engine.cubeisland.de</url>
 
-  <scm>
-    <url>scm:git:https://github.com/CubeEngineDev/messageextractor</url>
-    <connection>scm:git:https://github.com/CubeEngineDev/messageextractor</connection>
-    <developerConnection>scm:git:https://github.com/CubeEngineDev/messageextractor</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
+    <scm>
+        <url>scm:git:https://github.com/CubeEngineDev/messageextractor</url>
+        <connection>scm:git:https://github.com/CubeEngineDev/messageextractor</connection>
+        <developerConnection>scm:git:https://github.com/CubeEngineDev/messageextractor</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
-  <distributionManagement>
-    <repository>
-      <id>sonatype-nexus</id>
-      <name>Nexus Release Repository</name>
-      <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-    <snapshotRepository>
-      <id>sonatype-nexus</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>http://oss.sonatype.org/content/repositories/snapshots/</url>
-      <uniqueVersion>false</uniqueVersion>
-    </snapshotRepository>
-  </distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>sonatype-nexus</id>
+            <name>Nexus Release Repository</name>
+            <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <snapshotRepository>
+            <id>sonatype-nexus</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>http://oss.sonatype.org/content/repositories/snapshots/</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
 
-  <modules>
-    <module>core</module>
-    <module>maven-plugin</module>
-  </modules>
+    <modules>
+        <module>core</module>
+        <module>maven-plugin</module>
+    </modules>
 
-  <build>
-    <defaultGoal>clean install</defaultGoal>
+    <build>
+        <defaultGoal>clean install</defaultGoal>
 
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.8.1</version>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.1</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

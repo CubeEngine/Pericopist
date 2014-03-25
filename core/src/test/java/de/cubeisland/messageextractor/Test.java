@@ -23,10 +23,11 @@
  */
 package de.cubeisland.messageextractor;
 
-import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import org.apache.velocity.tools.ToolManager;
 
 import java.nio.charset.Charset;
+
+import de.cubeisland.messageextractor.exception.MessageCatalogException;
 
 public class Test
 {
@@ -38,8 +39,7 @@ public class Test
         MessageCatalog messageCatalog;
         try
         {
-            messageCatalog = factory
-                .getMessageCatalog("./core/src/test/resources/example.xml", Charset.forName("UTF-8"), toolManager.createContext());
+            messageCatalog = factory.getMessageCatalog("./core/src/test/resources/example.xml", Charset.forName("UTF-8"), toolManager.createContext());
             messageCatalog.updateCatalog();
         }
         catch (MessageCatalogException e)

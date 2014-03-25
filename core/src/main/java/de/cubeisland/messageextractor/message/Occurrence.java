@@ -54,8 +54,7 @@ public class Occurrence implements Comparable<Occurrence>
 
     public int compareTo(Occurrence o)
     {
-        int cmp = this.getFile().getPath().toLowerCase(Locale.ENGLISH)
-                      .compareTo(o.getFile().getPath().toLowerCase(Locale.ENGLISH));
+        int cmp = this.getFile().getPath().toLowerCase(Locale.ENGLISH).compareTo(o.getFile().getPath().toLowerCase(Locale.ENGLISH));
         if (cmp == 0)
         {
             return Integer.valueOf(this.line).compareTo(o.line);
@@ -75,7 +74,7 @@ public class Occurrence implements Comparable<Occurrence>
             return false;
         }
 
-        Occurrence that = (Occurrence)o;
+        Occurrence that = (Occurrence) o;
 
         if (line != that.line)
         {

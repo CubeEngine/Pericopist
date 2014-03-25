@@ -23,6 +23,8 @@
  */
 package de.cubeisland.messageextractor;
 
+import org.apache.velocity.context.Context;
+
 import java.nio.charset.Charset;
 
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
@@ -33,7 +35,6 @@ import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.format.CatalogConfiguration;
 import de.cubeisland.messageextractor.format.CatalogFormat;
 import de.cubeisland.messageextractor.message.MessageStore;
-import org.apache.velocity.context.Context;
 
 public class MessageCatalog
 {
@@ -65,7 +66,7 @@ public class MessageCatalog
             this.catalogCharset = Charset.forName(this.catalogConfiguration.getCharsetName());
         }
 
-        if(this.extractorConfiguration.getCharsetName() == null)
+        if (this.extractorConfiguration.getCharsetName() == null)
         {
             this.sourceCharset = Charset.forName("UTF-8");
         }

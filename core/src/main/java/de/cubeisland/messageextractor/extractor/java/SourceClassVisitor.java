@@ -23,18 +23,6 @@
  */
 package de.cubeisland.messageextractor.extractor.java;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import de.cubeisland.messageextractor.extractor.java.config.JavaExtractorConfiguration;
-import de.cubeisland.messageextractor.extractor.java.config.TranslatableAnnotation;
-import de.cubeisland.messageextractor.extractor.java.config.TranslatableMethod;
-import de.cubeisland.messageextractor.message.MessageStore;
-import de.cubeisland.messageextractor.message.Occurrence;
-import de.cubeisland.messageextractor.util.Misc;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -48,6 +36,19 @@ import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.StringLiteral;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import de.cubeisland.messageextractor.extractor.java.config.JavaExtractorConfiguration;
+import de.cubeisland.messageextractor.extractor.java.config.TranslatableAnnotation;
+import de.cubeisland.messageextractor.extractor.java.config.TranslatableMethod;
+import de.cubeisland.messageextractor.message.MessageStore;
+import de.cubeisland.messageextractor.message.Occurrence;
+import de.cubeisland.messageextractor.util.Misc;
 
 class SourceClassVisitor extends ASTVisitor
 {
@@ -138,17 +139,14 @@ class SourceClassVisitor extends ASTVisitor
                 {
                     continue;
                 }
-                MemberValuePair pair = (MemberValuePair)o;
+                MemberValuePair pair = (MemberValuePair) o;
 
                 if (annotation.hasField(pair.getName().getFullyQualifiedName()))
                 {
                     Expression expr = pair.getValue();
                     if (expr instanceof StringLiteral)
                     {
-                        this.messageStore.addMessage(((StringLiteral)expr)
-                                                         .getLiteralValue(), null, new Occurrence(Misc.getRelativizedFile(this.configuration
-                                                                                                                              .getDirectory(), this.file), this
-                                                                                                      .getLine(expr)));
+                        this.messageStore.addMessage(((StringLiteral) expr).getLiteralValue(), null, new Occurrence(Misc.getRelativizedFile(this.configuration.getDirectory(), this.file), this.getLine(expr)));
                     }
                 }
             }
@@ -165,10 +163,7 @@ class SourceClassVisitor extends ASTVisitor
             Expression expr = node.getValue();
             if (expr instanceof StringLiteral)
             {
-                this.messageStore.addMessage(((StringLiteral)expr)
-                                                 .getLiteralValue(), null, new Occurrence(Misc.getRelativizedFile(this.configuration
-                                                                                                                      .getDirectory(), this.file), this
-                                                                                              .getLine(expr)));
+                this.messageStore.addMessage(((StringLiteral) expr).getLiteralValue(), null, new Occurrence(Misc.getRelativizedFile(this.configuration.getDirectory(), this.file), this.getLine(expr)));
             }
         }
         return super.visit(node);
@@ -199,34 +194,32 @@ class SourceClassVisitor extends ASTVisitor
             List args = node.arguments();
             if (args.size() > method.getSingularIndex())
             {
-                Expression expr = (Expression)args.get(method.getSingularIndex());
+                Expression expr = (Expression) args.get(method.getSingularIndex());
                 if (expr instanceof StringLiteral)
                 {
-                    singular = ((StringLiteral)expr).getLiteralValue();
+                    singular = ((StringLiteral) expr).getLiteralValue();
                 }
                 else if (expr instanceof InfixExpression)
                 {
-                    singular = this.getString((InfixExpression)expr);
+                    singular = this.getString((InfixExpression) expr);
                 }
             }
             if (method.hasPlural() && args.size() > method.getPluralIndex())
             {
-                Expression expr = (Expression)args.get(method.getPluralIndex());
+                Expression expr = (Expression) args.get(method.getPluralIndex());
                 if (expr instanceof StringLiteral)
                 {
-                    plural = ((StringLiteral)expr).getLiteralValue();
+                    plural = ((StringLiteral) expr).getLiteralValue();
                 }
                 else if (expr instanceof InfixExpression)
                 {
-                    plural = this.getString((InfixExpression)expr);
+                    plural = this.getString((InfixExpression) expr);
                 }
             }
 
             if (singular != null)
             {
-                this.messageStore.addMessage(singular, plural, new Occurrence(Misc.getRelativizedFile(this.configuration
-                                                                                                          .getDirectory(), this.file), this
-                                                                                  .getLine(node)));
+                this.messageStore.addMessage(singular, plural, new Occurrence(Misc.getRelativizedFile(this.configuration.getDirectory(), this.file), this.getLine(node)));
             }
         }
 
@@ -244,7 +237,7 @@ class SourceClassVisitor extends ASTVisitor
         {
             if (o instanceof Expression)
             {
-                expressions.add((Expression)o);
+                expressions.add((Expression) o);
             }
         }
 
@@ -252,11 +245,11 @@ class SourceClassVisitor extends ASTVisitor
         {
             if (e instanceof StringLiteral)
             {
-                value.append(((StringLiteral)e).getLiteralValue());
+                value.append(((StringLiteral) e).getLiteralValue());
             }
             else if (e instanceof InfixExpression)
             {
-                value.append(this.getString((InfixExpression)e));
+                value.append(this.getString((InfixExpression) e));
             }
             else
             {

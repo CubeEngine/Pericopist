@@ -17,6 +17,13 @@
  */
 package de.cubeisland.maven.plugins.messageextractor.mojo;
 
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+import org.apache.velocity.context.Context;
+import org.apache.velocity.tools.ToolManager;
+
 import java.nio.charset.Charset;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -27,12 +34,6 @@ import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.exception.ConfigurationNotFoundException;
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
-import org.apache.velocity.context.Context;
-import org.apache.velocity.tools.ToolManager;
 
 public abstract class AbstractMessageExtractorMojo extends AbstractMojo
 {
@@ -82,14 +83,14 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
         Properties properties = this.project.getProperties();
         for (Entry entry : properties.entrySet())
         {
-            velocityContext.put((String)entry.getKey(), entry.getValue());
+            velocityContext.put((String) entry.getKey(), entry.getValue());
         }
 
         MessageCatalogFactory factory = new MessageCatalogFactory();
         MessageCatalog catalog = null;
 
         Charset charset;
-        if(this.charsetName != null)
+        if (this.charsetName != null)
         {
             charset = Charset.forName(this.charsetName);
         }
@@ -106,11 +107,11 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
             {
                 catalog = factory.getMessageCatalog(configuration, charset, velocityContext);
 
-                if(catalog.getCatalogConfiguration().getCharsetName() == null)
+                if (catalog.getCatalogConfiguration().getCharsetName() == null)
                 {
                     catalog.setCatalogCharset(charset);
                 }
-                if(catalog.getExtractorConfiguration().getCharsetName() == null)
+                if (catalog.getExtractorConfiguration().getCharsetName() == null)
                 {
                     catalog.setSourceCharset(charset);
                 }

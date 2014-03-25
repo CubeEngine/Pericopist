@@ -23,6 +23,14 @@
  */
 package de.cubeisland.messageextractor;
 
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.context.Context;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -30,6 +38,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -47,13 +56,6 @@ import de.cubeisland.messageextractor.format.CatalogConfiguration;
 import de.cubeisland.messageextractor.format.CatalogFormat;
 import de.cubeisland.messageextractor.format.gettext.PlaintextGettextCatalogFormat;
 import de.cubeisland.messageextractor.util.Misc;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.context.Context;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 public class MessageCatalogFactory
 {
@@ -132,8 +134,7 @@ public class MessageCatalogFactory
                 }
                 catch (Exception e)
                 {
-                    throw new ConfigurationException("Could not create a MessageExtractor instance of '" + messageExtractorClass
-                        .getName() + "'.", e);
+                    throw new ConfigurationException("Could not create a MessageExtractor instance of '" + messageExtractorClass.getName() + "'.", e);
                 }
                 sourceNode = node;
             }
@@ -151,8 +152,7 @@ public class MessageCatalogFactory
                 }
                 catch (Exception e)
                 {
-                    throw new ConfigurationException("Could not create an CatalogFormat instance of '" + catalogFormatClass
-                        .getName() + "'.", e);
+                    throw new ConfigurationException("Could not create an CatalogFormat instance of '" + catalogFormatClass.getName() + "'.", e);
                 }
                 catalogNode = node;
             }
@@ -175,10 +175,8 @@ public class MessageCatalogFactory
             JAXBContext jaxbContext = JAXBContext.newInstance(extractorConfigurationClass, catalogConfigurationClass);
 
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            ExtractorConfiguration extractorConfiguration = extractorConfigurationClass
-                .cast(unmarshaller.unmarshal(sourceNode));
-            CatalogConfiguration catalogConfiguration = catalogConfigurationClass
-                .cast(unmarshaller.unmarshal(catalogNode));
+            ExtractorConfiguration extractorConfiguration = extractorConfigurationClass.cast(unmarshaller.unmarshal(sourceNode));
+            CatalogConfiguration catalogConfiguration = catalogConfigurationClass.cast(unmarshaller.unmarshal(catalogNode));
 
             return new MessageCatalog(messageExtractor, extractorConfiguration, catalogFormat, catalogConfiguration, context);
         }

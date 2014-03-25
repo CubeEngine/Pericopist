@@ -23,12 +23,16 @@
  */
 package de.cubeisland.messageextractor.format;
 
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.context.Context;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -36,8 +40,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 
 import de.cubeisland.messageextractor.util.Misc;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.context.Context;
 
 @XmlRootElement(name = "header")
 public class HeaderSection
@@ -64,8 +66,7 @@ public class HeaderSection
         URL commentsUrl = Misc.getResource(this.getCommentsResource());
         if (commentsUrl == null)
         {
-            throw new FileNotFoundException("The header comments resource '" + this
-                .getCommentsResource() + "' was not found in file system or as URL.");
+            throw new FileNotFoundException("The header comments resource '" + this.getCommentsResource() + "' was not found in file system or as URL.");
         }
 
         VelocityEngine engine = new VelocityEngine();

@@ -23,10 +23,10 @@
  */
 package de.cubeisland.messageextractor.extractor;
 
+import java.nio.charset.Charset;
+
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.message.MessageStore;
-
-import java.nio.charset.Charset;
 
 public interface MessageExtractor
 {
