@@ -13,7 +13,6 @@
   <url>https://engine.cubeisland.de</url>
 
   <modules>
-    <module>parent</module>
     <module>core</module>
     <module>maven-plugin</module>
   </modules>
