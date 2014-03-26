@@ -80,6 +80,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
         velocityContext.put("groupId", this.project.getGroupId());
         velocityContext.put("version", this.project.getVersion());
         velocityContext.put("basedir", this.project.getBasedir());
+        velocityContext.put("sourceEncoding", this.charsetName);
         Properties properties = this.project.getProperties();
         for (Entry entry : properties.entrySet())
         {
