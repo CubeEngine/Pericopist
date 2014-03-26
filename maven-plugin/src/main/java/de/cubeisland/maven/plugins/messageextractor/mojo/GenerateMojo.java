@@ -21,12 +21,19 @@ import de.cubeisland.messageextractor.MessageCatalog;
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 
 /**
- * Blabla
+ * This Mojo implements the goal generate. This goal creates a message catalog
  *
  * @goal generate
  */
 public class GenerateMojo extends AbstractMessageExtractorMojo
 {
+    /**
+     * This method generates the message catalog
+     *
+     * @param catalog the MessageCatalog instance
+     *
+     * @throws MessageCatalogException
+     */
     @Override
     public void doExecute(MessageCatalog catalog) throws MessageCatalogException
     {

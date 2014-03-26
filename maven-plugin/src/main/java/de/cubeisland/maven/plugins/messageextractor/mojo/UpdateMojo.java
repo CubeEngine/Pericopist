@@ -21,6 +21,8 @@ import de.cubeisland.messageextractor.MessageCatalog;
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 
 /**
+ * This Mojo implements the goal update. This goal updates a message catalog
+ *
  * @goal update
  */
 public class UpdateMojo extends AbstractMessageExtractorMojo

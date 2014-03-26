@@ -55,7 +55,10 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
      */
     private String charsetName = null;
 
-    public void execute() throws MojoExecutionException, MojoFailureException
+    /**
+     * {@inheritDoc}
+     */
+    public final void execute() throws MojoExecutionException, MojoFailureException
     {
         if (this.project == null)
         {
@@ -66,39 +69,16 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
             this.getLog().info("Skipped the project '" + this.project.getName() + "' ...");
             return;
         }
-
         if (this.configurations == null || this.configurations.length == 0)
         {
             throw new MojoFailureException("An extractor configuration is not specified.");
         }
 
-        ToolManager toolManager = new ToolManager();
-        Context velocityContext = toolManager.createContext();
-
-        velocityContext.put("project", this.project.getModel());
-        velocityContext.put("artifactId", this.project.getArtifactId());
-        velocityContext.put("groupId", this.project.getGroupId());
-        velocityContext.put("version", this.project.getVersion());
-        velocityContext.put("basedir", this.project.getBasedir());
-        velocityContext.put("sourceEncoding", this.charsetName);
-        Properties properties = this.project.getProperties();
-        for (Entry entry : properties.entrySet())
-        {
-            velocityContext.put((String) entry.getKey(), entry.getValue());
-        }
-
         MessageCatalogFactory factory = new MessageCatalogFactory();
-        MessageCatalog catalog = null;
+        Context velocityContext = this.getVelocityContext();
+        Charset charset = this.getCharset();
 
-        Charset charset;
-        if (this.charsetName != null)
-        {
-            charset = Charset.forName(this.charsetName);
-        }
-        else
-        {
-            charset = Charset.forName("UTF-8");
-        }
+        MessageCatalog catalog = null;
 
         for (String configuration : this.configurations)
         {
@@ -106,17 +86,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
 
             try
             {
-                catalog = factory.getMessageCatalog(configuration, charset, velocityContext);
-
-                if (catalog.getCatalogConfiguration().getCharsetName() == null)
-                {
-                    catalog.setCatalogCharset(charset);
-                }
-                if (catalog.getExtractorConfiguration().getCharsetName() == null)
-                {
-                    catalog.setSourceCharset(charset);
-                }
-
+                catalog = this.getMessageCatalog(factory, configuration, charset, velocityContext);
                 break;
             }
             catch (ConfigurationNotFoundException e)
@@ -149,5 +119,79 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
         }
     }
 
+    /**
+     * This method creates and prepares a velocity context
+     *
+     * @return the prepared velocity context
+     */
+    private Context getVelocityContext()
+    {
+        ToolManager toolManager = new ToolManager();
+        Context velocityContext = toolManager.createContext();
+
+        velocityContext.put("project", this.project.getModel());
+        velocityContext.put("artifactId", this.project.getArtifactId());
+        velocityContext.put("groupId", this.project.getGroupId());
+        velocityContext.put("version", this.project.getVersion());
+        velocityContext.put("basedir", this.project.getBasedir());
+        velocityContext.put("sourceEncoding", this.charsetName);
+        Properties properties = this.project.getProperties();
+        for (Entry entry : properties.entrySet())
+        {
+            velocityContext.put((String) entry.getKey(), entry.getValue());
+        }
+
+        return velocityContext;
+    }
+
+    /**
+     * This method returns the charset which shall be used as default by the message catalog
+     *
+     * @return the default charset
+     */
+    private Charset getCharset()
+    {
+        if (this.charsetName != null)
+        {
+            return Charset.forName(this.charsetName);
+        }
+        return Charset.forName("UTF-8");
+    }
+
+    /**
+     * This method creates and prepares the MessageCatalog instance which shall be used to create the catalog
+     *
+     * @param factory         the MessageCatalogFactory which shall be taken to create the MessageCatalog instance
+     * @param resource        the url to the configuration of the instance
+     * @param charset         the default charset
+     * @param velocityContext the velocity context
+     *
+     * @return the MessageCatalog instance
+     *
+     * @throws ConfigurationException if the configuration cannot be parsed this exception will be thrown
+     */
+    private MessageCatalog getMessageCatalog(MessageCatalogFactory factory, String resource, Charset charset, Context velocityContext) throws ConfigurationException
+    {
+        MessageCatalog catalog = factory.getMessageCatalog(resource, charset, velocityContext);
+
+        if (catalog.getCatalogConfiguration().getCharsetName() == null)
+        {
+            catalog.setCatalogCharset(charset);
+        }
+        if (catalog.getExtractorConfiguration().getCharsetName() == null)
+        {
+            catalog.setSourceCharset(charset);
+        }
+
+        return catalog;
+    }
+
+    /**
+     * This method is called after a MessageCatalog instance was loaded successfully by the execute method.
+     *
+     * @param catalog the MessageCatalog instance
+     *
+     * @throws MessageCatalogException an exception thrown by the MessageCatalog instance
+     */
     protected abstract void doExecute(MessageCatalog catalog) throws MessageCatalogException;
 }
