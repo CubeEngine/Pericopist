@@ -74,31 +74,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
             throw new MojoFailureException("An extractor configuration is not specified.");
         }
 
-        MessageCatalogFactory factory = new MessageCatalogFactory();
-        Context velocityContext = this.getVelocityContext();
-        Charset charset = this.getCharset();
-
-        MessageCatalog catalog = null;
-
-        for (String configuration : this.configurations)
-        {
-            this.getLog().info("uses extractor configuration '" + configuration + "'.");
-
-            try
-            {
-                catalog = this.getMessageCatalog(factory, configuration, charset, velocityContext);
-                break;
-            }
-            catch (ConfigurationNotFoundException e)
-            {
-                this.getLog().info("Configuration not found: " + configuration, e);
-            }
-            catch (ConfigurationException e)
-            {
-                throw new MojoFailureException("Failed to read the configuration '" + configuration + "'!", e);
-            }
-        }
-
+        MessageCatalog catalog = this.getMessageCatalog(new MessageCatalogFactory());
         if (catalog == null)
         {
             throw new MojoFailureException("The template could not be created. Did not find any of the specified configurations.");
@@ -161,29 +137,47 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
     /**
      * This method creates and prepares the MessageCatalog instance which shall be used to create the catalog
      *
-     * @param factory         the MessageCatalogFactory which shall be taken to create the MessageCatalog instance
-     * @param resource        the url to the configuration of the instance
-     * @param charset         the default charset
-     * @param velocityContext the velocity context
+     * @param factory the MessageCatalogFactory which shall be taken to create the MessageCatalog instance
      *
      * @return the MessageCatalog instance
      *
-     * @throws ConfigurationException if the configuration cannot be parsed this exception will be thrown
+     * @throws MojoFailureException
      */
-    private MessageCatalog getMessageCatalog(MessageCatalogFactory factory, String resource, Charset charset, Context velocityContext) throws ConfigurationException
+    private MessageCatalog getMessageCatalog(MessageCatalogFactory factory) throws MojoFailureException
     {
-        MessageCatalog catalog = factory.getMessageCatalog(resource, charset, velocityContext);
+        Context velocityContext = this.getVelocityContext();
+        Charset charset = this.getCharset();
 
-        if (catalog.getCatalogConfiguration().getCharsetName() == null)
+        for (String configuration : this.configurations)
         {
-            catalog.setCatalogCharset(charset);
-        }
-        if (catalog.getExtractorConfiguration().getCharsetName() == null)
-        {
-            catalog.setSourceCharset(charset);
+            this.getLog().info("uses extractor configuration '" + configuration + "'.");
+
+            try
+            {
+                MessageCatalog catalog = factory.getMessageCatalog(configuration, charset, velocityContext);
+
+                if (catalog.getCatalogConfiguration().getCharsetName() == null)
+                {
+                    catalog.setCatalogCharset(charset);
+                }
+                if (catalog.getExtractorConfiguration().getCharsetName() == null)
+                {
+                    catalog.setSourceCharset(charset);
+                }
+
+                return catalog;
+            }
+            catch (ConfigurationNotFoundException e)
+            {
+                this.getLog().info("Configuration not found: " + configuration, e);
+            }
+            catch (ConfigurationException e)
+            {
+                throw new MojoFailureException("Failed to read the configuration '" + configuration + "'!", e);
+            }
         }
 
-        return catalog;
+        return null;
     }
 
     /**
