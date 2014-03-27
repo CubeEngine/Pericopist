@@ -114,10 +114,10 @@ public class MessageCatalogFactory
         Node catalogNode = null;
 
         Node rootNode = this.getRootNode(stringWriter.toString());
-        String charsetName = rootNode.getAttributes().getNamedItem("charset").getTextContent();
-        if (charsetName != null && charsetName.length() > 0)
+        Node charsetNode = rootNode.getAttributes().getNamedItem("charset");
+        if (charsetNode != null)
         {
-            defaultCharset = Charset.forName(charsetName);
+            defaultCharset = Charset.forName(charsetNode.getTextContent());
         }
 
         NodeList list = rootNode.getChildNodes();
