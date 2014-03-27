@@ -54,6 +54,9 @@ public class MessageCatalog
         this.extractorConfiguration = extractorConfiguration;
         this.catalogConfiguration = catalogConfiguration;
 
+        this.extractorConfiguration.validateConfiguration();
+        this.catalogConfiguration.validateConfiguration();
+
         this.context = context;
 
         try

@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import de.cubeisland.messageextractor.configuration.AbstractCatalogConfiguration;
 import de.cubeisland.messageextractor.configuration.HeaderConfiguration;
+import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.format.CatalogFormat;
 
 @XmlRootElement(name = "catalog")
@@ -50,5 +51,23 @@ public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
     public Class<? extends CatalogFormat> getCatalogFormatClass()
     {
         return PlaintextGettextCatalogFormat.class;
+    }
+
+    @Override
+    public void validateConfiguration() throws ConfigurationException
+    {
+        if (this.getTemplateFile() == null)
+        {
+            throw new ConfigurationException("You must specify the path which contains the location of the template");
+        }
+
+        if (this.getHeaderConfiguration() != null)
+        {
+            if (this.getHeaderConfiguration().getCharset() == null)
+            {
+                this.getHeaderConfiguration().setCharset(this.getCharset());
+            }
+            this.getHeaderConfiguration().validateConfiguration();
+        }
     }
 }

@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.cubeisland.messageextractor.configuration.AbstractExtractorConfiguration;
+import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.extractor.java.JavaMessageExtractor;
 
@@ -92,5 +93,14 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
     public Class<? extends MessageExtractor> getExtractorClass()
     {
         return JavaMessageExtractor.class;
+    }
+
+    @Override
+    public void validateConfiguration() throws ConfigurationException
+    {
+        if (this.getAnnotations().size() == 0 && this.getMethods().size() == 0)
+        {
+            throw new ConfigurationException("You must specify at least one way which describes how to extract the messages");
+        }
     }
 }

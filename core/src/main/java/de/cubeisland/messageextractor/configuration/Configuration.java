@@ -25,11 +25,13 @@ package de.cubeisland.messageextractor.configuration;
 
 import java.nio.charset.Charset;
 
+import de.cubeisland.messageextractor.exception.ConfigurationException;
+
 public interface Configuration
 {
     Charset getCharset();
 
     void setCharset(Charset charset);
 
-    //   TODO void validateConfiguration() throws ConfigurationException;
+    void validateConfiguration() throws ConfigurationException;
 }

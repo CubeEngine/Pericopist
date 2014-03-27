@@ -33,7 +33,7 @@
     <catalog format="gettext">
         <removeUnusedMessages>false</removeUnusedMessages>
         <template>./core/src/test/resources/messages.pot</template>
-        <header charset="UTF-8">
+        <header>
             <comments>./core/src/test/resources/header.txt</comments>
             <metadata>
                 <entry key="Project-Id-Version">PACKAGE VERSION</entry>

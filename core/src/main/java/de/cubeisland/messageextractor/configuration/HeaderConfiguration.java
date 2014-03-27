@@ -40,6 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.util.Misc;
 import de.cubeisland.messageextractor.util.XmlCharsetAdapter;
 
@@ -86,6 +87,11 @@ public class HeaderConfiguration implements Configuration
     public void setMetadata(List<MetadataEntry> metadata)
     {
         this.metadata = metadata;
+    }
+
+    @Override
+    public void validateConfiguration() throws ConfigurationException
+    {
     }
 
     // TODO remove method due to a change of comments value
