@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.configuration;
+package de.cubeisland.messageextractor.format;
 
 import java.io.File;
 import java.nio.charset.Charset;

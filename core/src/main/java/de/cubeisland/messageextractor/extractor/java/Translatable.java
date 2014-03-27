@@ -21,44 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.configuration;
+package de.cubeisland.messageextractor.extractor.java;
 
-import java.io.File;
-import java.nio.charset.Charset;
-
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import de.cubeisland.messageextractor.util.XmlCharsetAdapter;
-
-public abstract class AbstractExtractorConfiguration implements ExtractorConfiguration
+public abstract class Translatable
 {
-    private File directory = new File("./src/main/java");
-    private Charset charset;
+    private String name;
+    private String description;
 
-    @XmlElement(name = "directory")
-    public final void setDirectory(File directory)
+    public String getName()
     {
-        this.directory = directory;
+        return this.name;
     }
 
-    public final File getDirectory()
+    @XmlElement(name = "name")
+    public void setName(String name)
     {
-        return this.directory;
+        this.name = name;
     }
 
-    @XmlAttribute(name = "charset")
-    @XmlJavaTypeAdapter(XmlCharsetAdapter.class)
-    @Override
-    public final void setCharset(Charset charset)
+    public String getDescription()
     {
-        this.charset = charset;
+        return description;
     }
 
-    @Override
-    public final Charset getCharset()
+    @XmlElement(name = "description")
+    public void setDescription(String description)
     {
-        return this.charset;
+        this.description = description;
     }
 }

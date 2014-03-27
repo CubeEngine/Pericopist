@@ -45,14 +45,14 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import de.cubeisland.messageextractor.configuration.CatalogConfiguration;
-import de.cubeisland.messageextractor.configuration.ExtractorConfiguration;
+import de.cubeisland.messageextractor.format.CatalogConfiguration;
+import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.exception.ConfigurationNotFoundException;
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.messageextractor.exception.UnknownCatalogFormatException;
 import de.cubeisland.messageextractor.exception.UnknownSourceLanguageException;
-import de.cubeisland.messageextractor.extractor.java.config.JavaExtractorConfiguration;
+import de.cubeisland.messageextractor.extractor.java.JavaExtractorConfiguration;
 import de.cubeisland.messageextractor.format.gettext.GettextCatalogConfiguration;
 import de.cubeisland.messageextractor.util.Misc;
 

@@ -23,7 +23,6 @@
  */
 package de.cubeisland.messageextractor.extractor;
 
-import de.cubeisland.messageextractor.configuration.ExtractorConfiguration;
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.message.MessageStore;
 

@@ -25,8 +25,8 @@ package de.cubeisland.messageextractor;
 
 import org.apache.velocity.context.Context;
 
-import de.cubeisland.messageextractor.configuration.CatalogConfiguration;
-import de.cubeisland.messageextractor.configuration.ExtractorConfiguration;
+import de.cubeisland.messageextractor.format.CatalogConfiguration;
+import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.messageextractor.exception.MessageExtractionException;

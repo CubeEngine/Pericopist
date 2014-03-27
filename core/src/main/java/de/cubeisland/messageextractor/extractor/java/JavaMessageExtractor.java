@@ -34,11 +34,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import de.cubeisland.messageextractor.configuration.ExtractorConfiguration;
+import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
-import de.cubeisland.messageextractor.extractor.java.config.JavaExtractorConfiguration;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.util.Misc;
 

@@ -21,15 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.configuration;
+package de.cubeisland.messageextractor.extractor.java;
 
-import java.io.File;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import de.cubeisland.messageextractor.format.CatalogFormat;
-
-public interface CatalogConfiguration extends Configuration
+@XmlRootElement(name = "method")
+public class Method extends Translatable
 {
-    File getTemplateFile();
+    private int singularIndex = 0;
+    private int pluralIndex = -1;
 
-    Class<? extends CatalogFormat> getCatalogFormatClass();
+    public int getSingularIndex()
+    {
+        return singularIndex;
+    }
+
+    @XmlElement(name = "singular")
+    public void setSingularIndex(int singularIndex)
+    {
+        this.singularIndex = singularIndex;
+    }
+
+    public int getPluralIndex()
+    {
+        return pluralIndex;
+    }
+
+    @XmlElement(name = "plural")
+    public void setPluralIndex(int pluralIndex)
+    {
+        this.pluralIndex = pluralIndex;
+    }
+
+    public boolean hasPlural()
+    {
+        return this.pluralIndex > -1;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.getName() + ":" + this.singularIndex + (this.hasPlural() ? "," + this.pluralIndex : "");
+    }
 }

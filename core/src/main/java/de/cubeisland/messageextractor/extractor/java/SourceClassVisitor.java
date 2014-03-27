@@ -42,9 +42,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.cubeisland.messageextractor.extractor.java.config.Annotation;
-import de.cubeisland.messageextractor.extractor.java.config.JavaExtractorConfiguration;
-import de.cubeisland.messageextractor.extractor.java.config.Method;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.Occurrence;
 import de.cubeisland.messageextractor.util.Misc;

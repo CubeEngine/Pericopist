@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.configuration;
+package de.cubeisland.messageextractor.extractor;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
@@ -40,6 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import de.cubeisland.messageextractor.configuration.Configuration;
 import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.util.Misc;
 import de.cubeisland.messageextractor.util.XmlCharsetAdapter;
