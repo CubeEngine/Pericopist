@@ -26,9 +26,34 @@ package de.cubeisland.messageextractor.extractor;
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.message.MessageStore;
 
+/**
+ * This class is used to extract all the messages which shall be translated from a complete project.
+ * The messages will be stored in a message store which can be processed with a catalog format.
+ *
+ * @see de.cubeisland.messageextractor.format.CatalogFormat
+ */
 public interface MessageExtractor
 {
+    /**
+     * This method scans the source directory and extracts the translatable messages of the source files.
+     *
+     * @param config the config which shall be used to extract the messages
+     *
+     * @return a message store containing all the messages
+     *
+     * @throws MessageExtractionException
+     */
     MessageStore extract(ExtractorConfiguration config) throws MessageExtractionException;
 
+    /**
+     * This method scans the source directory and extracts the translatable messages of the source files.
+     *
+     * @param config       the config which shall be used to extract the messages
+     * @param messageStore a messagestore containing the messages from the old catalog
+     *
+     * @return a message store containing all the messages
+     *
+     * @throws MessageExtractionException
+     */
     MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractionException;
 }

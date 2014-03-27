@@ -28,15 +28,35 @@ import org.apache.velocity.context.Context;
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.messageextractor.message.MessageStore;
 
+/**
+ * This class is needed to read from or rather write a catalog.
+ * It creates a message catalog which contains all messages from a message store.
+ * Furthermore it's able to store the messages of an old catalog in a message store by reading it.
+ *
+ * @see de.cubeisland.messageextractor.extractor.MessageExtractor
+ */
 public interface CatalogFormat
 {
+    /**
+     * This method writes the catalog file.
+     *
+     * @param config          config which shall be used to write the catalog
+     * @param velocityContext a velocity context which can be used to update a string value
+     * @param messageStore    the message store containing the messages for the catalog
+     *
+     * @throws CatalogFormatException
+     */
     void write(CatalogConfiguration config, Context velocityContext, MessageStore messageStore) throws CatalogFormatException;
 
     /**
-     * Reads in the catalog file and returns a message store.
+     * This method reads the catalog file and returns a message store containing the messages.
      * This method never returns null and implementations have to ensure this.
      *
+     * @param config config which shall be used to read the catalog
+     *
      * @return a MessageCatalog instance holding all messages
+     *
+     * @throws CatalogFormatException
      */
     MessageStore read(CatalogConfiguration config) throws CatalogFormatException;
 }

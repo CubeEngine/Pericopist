@@ -37,10 +37,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
-import de.cubeisland.messageextractor.format.CatalogConfiguration;
+import de.cubeisland.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.messageextractor.extractor.HeaderConfiguration;
 import de.cubeisland.messageextractor.extractor.HeaderConfiguration.MetadataEntry;
-import de.cubeisland.messageextractor.exception.CatalogFormatException;
+import de.cubeisland.messageextractor.format.CatalogConfiguration;
 import de.cubeisland.messageextractor.format.CatalogFormat;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.Occurrence;
@@ -49,9 +49,18 @@ import de.cubeisland.messageextractor.message.TranslatableMessage;
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
     private Catalog oldCatalog;
-
     private Logger logger;
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param config          config which shall be used to write the catalog
+     * @param velocityContext a velocity context which can be used to update a string value
+     * @param messageStore    the message store containing the messages for the catalog
+     *
+     * @throws CatalogFormatException
+     */
+    @Override
     public void write(CatalogConfiguration config, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
@@ -156,6 +165,16 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return catalog;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param config config which shall be used to read the catalog
+     *
+     * @return
+     *
+     * @throws CatalogFormatException
+     */
+    @Override
     public MessageStore read(CatalogConfiguration config) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
@@ -360,11 +379,21 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return this.compareCatalogHeader(old.locateHeader(), newCatalog.locateHeader(), headerConfiguration);
     }
 
+    /**
+     * This method returns the logger which is used by this class
+     *
+     * @return logger which is used by this class
+     */
     public Logger getLogger()
     {
         return this.logger;
     }
 
+    /**
+     * This method sets a logger which shall be used by this class
+     *
+     * @param logger logger which shall be used.
+     */
     public void setLogger(Logger logger)
     {
         this.logger = logger;

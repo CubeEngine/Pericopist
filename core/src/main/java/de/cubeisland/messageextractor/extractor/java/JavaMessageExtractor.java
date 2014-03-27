@@ -34,9 +34,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
+import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.util.Misc;
@@ -45,16 +45,40 @@ public class JavaMessageExtractor implements MessageExtractor
 {
     private final FileFilter fileFilter;
 
+    /**
+     * constructor creates an instance of this class
+     */
     public JavaMessageExtractor()
     {
         this.fileFilter = new JavaFileFilter();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param config the config which shall be used to extract the messages
+     *
+     * @return
+     *
+     * @throws MessageExtractionException
+     */
+    @Override
     public MessageStore extract(ExtractorConfiguration config) throws MessageExtractionException
     {
         return this.extract(config, null);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param config             the config which shall be used to extract the messages
+     * @param loadedMessageStore a messagestore containing the messages from the old catalog
+     *
+     * @return
+     *
+     * @throws MessageExtractionException
+     */
+    @Override
     public MessageStore extract(ExtractorConfiguration config, MessageStore loadedMessageStore) throws MessageExtractionException
     {
         JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration) config;

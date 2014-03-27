@@ -39,6 +39,9 @@ import java.util.List;
 
 public class Misc
 {
+    /**
+     * It's a FileFilter object which accepts every file
+     */
     private static final FileFilter DUMMY_FILTER = new FileFilter()
     {
         @Override
@@ -50,13 +53,34 @@ public class Misc
 
     private Misc()
     {
+        // nothing to do here. It's not permitted to create an instance of this class
     }
 
+    /**
+     * This method returns every file which is inside the specified directory
+     *
+     * @param baseDir the directory
+     *
+     * @return every file inside the directory
+     *
+     * @throws IOException
+     */
     public static List<File> scanFilesRecursive(File baseDir) throws IOException
     {
         return scanFilesRecursive(baseDir, DUMMY_FILTER);
     }
 
+    /**
+     * This mehtod returns every file which is inside the specified directory and conforms
+     * to the rules of the FileFilter instance.
+     *
+     * @param baseDir the directory
+     * @param filter  the filter which shall be used
+     *
+     * @return every file inside the directory conforming the filter rules
+     *
+     * @throws IOException
+     */
     public static List<File> scanFilesRecursive(File baseDir, FileFilter filter) throws IOException
     {
         if (baseDir == null)
@@ -98,6 +122,16 @@ public class Misc
         }
     }
 
+    /**
+     * This method parses the content of a file to into a char array
+     *
+     * @param file    the file
+     * @param charset the charset of the file
+     *
+     * @return the content of the file as a char array
+     *
+     * @throws IOException
+     */
     public static char[] parseFileToCharArray(File file, Charset charset) throws IOException
     {
         BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file));
@@ -117,13 +151,31 @@ public class Misc
         return sb.toString().toCharArray();
     }
 
+    /**
+     * This method returns a file which has an relative path from another file.
+     *
+     * @param base the base file
+     * @param file the file which shall be related to the base
+     *
+     * @return a new file instance which is relative to the base and describes the same file like the file param
+     */
     public static File getRelativizedFile(File base, File file)
     {
         return new File(base.toURI().relativize(file.toURI()).getPath());
     }
 
+    /**
+     * This method looks for the specified resource and returns it as an url object.
+     * Therefore it looks at first whether it's a file path. As a second step it tries
+     * to read it as an url.
+     *
+     * @param resource the resource url string
+     *
+     * @return the resource string as an url
+     */
     public static URL getResource(String resource)
     {
+        // 1. tries to read resource as a file object
         File file = new File(resource);
         if (file.exists() && file.canRead())
         {
@@ -133,9 +185,11 @@ public class Misc
             }
             catch (MalformedURLException ignored)
             {
+                // Ignore
             }
         }
 
+        // 2. tries to read resource as an url
         try
         {
             URL url = new URL(resource);
@@ -148,6 +202,16 @@ public class Misc
         }
     }
 
+    /**
+     * This method reads an url and returns the content as a String object
+     *
+     * @param url     the url
+     * @param charset the charset of the url content
+     *
+     * @return the content of the url
+     *
+     * @throws IOException
+     */
     public static String getContent(URL url, Charset charset) throws IOException
     {
         URLConnection connection = url.openConnection();

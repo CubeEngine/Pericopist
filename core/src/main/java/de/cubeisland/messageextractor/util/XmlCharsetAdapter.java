@@ -27,16 +27,35 @@ import java.nio.charset.Charset;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
+/**
+ * This class is a converter for the JAXB-XmlSerializer. It converts
+ * a XML string to a Charset and vice versa
+ */
 public class XmlCharsetAdapter extends XmlAdapter<String, Charset>
 {
+    /**
+     * This method converts the XML-String to a Charset
+     *
+     * @param v XML string
+     *
+     * @return Charset object
+     */
     @Override
-    public Charset unmarshal(String v) throws Exception
+    public Charset unmarshal(String v)
     {
         return Charset.forName(v);
     }
 
+    /**
+     * This method converts the Charset to a XML-String.
+     * Thats not needed in this context!
+     *
+     * @param v charset
+     *
+     * @return the XML string
+     */
     @Override
-    public String marshal(Charset v) throws Exception
+    public String marshal(Charset v)
     {
         return v.displayName();
     }
