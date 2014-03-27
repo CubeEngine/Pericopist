@@ -185,7 +185,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         return messageStore;
     }
-    
+
     private Message getHeaderMessage(HeaderConfiguration config, Context velocityContext) throws IOException
     {
         HeaderFields headerFields = new HeaderFields();

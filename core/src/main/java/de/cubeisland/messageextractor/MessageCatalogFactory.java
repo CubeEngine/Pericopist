@@ -143,18 +143,26 @@ public class MessageCatalogFactory
             throw new ConfigurationException("The configuration does not have a catalog tag");
         }
 
-        String sourceLanguage = sourceNode.getAttributes().getNamedItem("language").getTextContent();
-        Class<? extends ExtractorConfiguration> extractorConfigurationClass = this.getExtractorConfigurationClass(sourceLanguage);
+        Node sourceLanguageNode = sourceNode.getAttributes().getNamedItem("language");
+        if (sourceLanguageNode == null)
+        {
+            throw new UnknownSourceLanguageException("You must specify a language attribute to the source tag");
+        }
+        Class<? extends ExtractorConfiguration> extractorConfigurationClass = this.getExtractorConfigurationClass(sourceLanguageNode.getTextContent());
         if (extractorConfigurationClass == null)
         {
-            throw new UnknownSourceLanguageException("Unknown source language " + sourceLanguage);
+            throw new UnknownSourceLanguageException("Unknown source language " + sourceLanguageNode.getTextContent());
         }
 
-        String catalogFormat = catalogNode.getAttributes().getNamedItem("format").getTextContent();
-        Class<? extends CatalogConfiguration> catalogConfigurationClass = this.getCatalogConfigurationClass(catalogFormat);
+        Node catalogFormatNode = catalogNode.getAttributes().getNamedItem("format");
+        if (catalogFormatNode == null)
+        {
+            throw new UnknownCatalogFormatException("You must specify a format attribute to the catalog tag");
+        }
+        Class<? extends CatalogConfiguration> catalogConfigurationClass = this.getCatalogConfigurationClass(catalogFormatNode.getTextContent());
         if (catalogConfigurationClass == null)
         {
-            throw new UnknownCatalogFormatException("Unknown catalog format " + catalogFormat);
+            throw new UnknownCatalogFormatException("Unknown catalog format " + catalogFormatNode.getTextContent());
         }
 
         return this.createMessageCatalog(extractorConfigurationClass, sourceNode, catalogConfigurationClass, catalogNode, defaultCharset, veloctiyContext);
