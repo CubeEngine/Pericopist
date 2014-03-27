@@ -34,15 +34,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.logging.Logger;
 
+import de.cubeisland.messageextractor.configuration.CatalogConfiguration;
+import de.cubeisland.messageextractor.configuration.HeaderConfiguration;
+import de.cubeisland.messageextractor.configuration.HeaderConfiguration.MetadataEntry;
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
-import de.cubeisland.messageextractor.format.CatalogConfiguration;
 import de.cubeisland.messageextractor.format.CatalogFormat;
-import de.cubeisland.messageextractor.format.HeaderSection;
-import de.cubeisland.messageextractor.format.HeaderSection.MetadataEntry;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.Occurrence;
 import de.cubeisland.messageextractor.message.TranslatableMessage;
@@ -53,7 +52,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
     private Logger logger;
 
-    public void write(CatalogConfiguration config, Charset charset, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
+    public void write(CatalogConfiguration config, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
         Catalog catalog = new Catalog(true);
@@ -90,11 +89,11 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             catalog.addMessage(message);
         }
 
-        if (catalogConfig.getHeaderSection() != null)
+        if (catalogConfig.getHeaderConfiguration() != null)
         {
             try
             {
-                catalog.addMessage(this.getHeaderMessage(catalogConfig.getHeaderSection(), charset, velocityContext));
+                catalog.addMessage(this.getHeaderMessage(catalogConfig.getHeaderConfiguration(), velocityContext));
             }
             catch (IOException e)
             {
@@ -102,7 +101,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             }
         }
 
-        if (this.compareCatalogs(this.oldCatalog, catalog, catalogConfig.getHeaderSection()))
+        if (this.compareCatalogs(this.oldCatalog, catalog, catalogConfig.getHeaderConfiguration()))
         {
             this.logger.info("Did not create a new catalog, because it's the same like the old one.");
             return;
@@ -115,7 +114,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         }
 
         int messageCount = catalog.size();
-        if (catalogConfig.getHeaderSection() != null)
+        if (catalogConfig.getHeaderConfiguration() != null)
         {
             messageCount--;
         }
@@ -131,7 +130,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             final File directory = template.getParentFile();
             if (directory.exists() || directory.mkdirs())
             {
-                poWriter.write(catalog, new FileOutputStream(template), charset);
+                poWriter.write(catalog, new FileOutputStream(template), catalogConfig.getCharset());
             }
             else
             {
@@ -144,7 +143,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         }
     }
 
-    public MessageStore read(CatalogConfiguration config, Charset charset) throws CatalogFormatException
+    public MessageStore read(CatalogConfiguration config) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
         MessageStore messageStore = new MessageStore();
@@ -153,7 +152,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         PoParser poParser = new PoParser(catalog);
         try
         {
-            catalog = poParser.parseCatalog(new FileInputStream(catalogConfig.getTemplateFile()), charset, true);
+            catalog = poParser.parseCatalog(new FileInputStream(catalogConfig.getTemplateFile()), catalogConfig.getCharset(), true);
         }
         catch (IOException e)
         {
@@ -179,7 +178,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return GettextCatalogConfiguration.class;
     }
 
-    private Message getHeaderMessage(HeaderSection config, Charset charset, Context velocityContext) throws IOException
+    private Message getHeaderMessage(HeaderConfiguration config, Context velocityContext) throws IOException
     {
         HeaderFields headerFields = new HeaderFields();
         if (config.getMetadata() != null)
@@ -192,9 +191,9 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         Message headerMessage = headerFields.unwrap();
 
-        if (config.getCommentsResource() != null)
+        if (config.getComments() != null)
         {
-            for (String comment : config.getComments(charset, velocityContext).split("\n"))
+            for (String comment : config.getComments(config.getCharset(), velocityContext).split("\n"))
             {
                 headerMessage.addComment(comment);
             }
@@ -249,13 +248,13 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     /**
      * This method compares the header of the old catalog with the header of the new one.
      *
-     * @param old           the old catalog
-     * @param newHeader     the new catalog
-     * @param headerSection the header configuration
+     * @param old                 the old catalog
+     * @param newHeader           the new catalog
+     * @param headerConfiguration the header configuration
      *
      * @return returns whether the new header of the catalog is the same as the old one
      */
-    private boolean compareCatalogHeader(Message old, Message newHeader, HeaderSection headerSection)
+    private boolean compareCatalogHeader(Message old, Message newHeader, HeaderConfiguration headerConfiguration)
     {
         if (old == null || newHeader == null)
         {
@@ -278,7 +277,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         }
 
         String[] fields = old.getMsgstr().split("\n");
-        if (fields.length != headerSection.getMetadata().size())
+        if (fields.length != headerConfiguration.getMetadata().size())
         {
             return false;
         }
@@ -286,7 +285,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         for (int i = 0; i < fields.length; i++)
         {
             String[] parts = fields[i].split(":");
-            MetadataEntry entry = headerSection.getMetadata().get(i);
+            MetadataEntry entry = headerConfiguration.getMetadata().get(i);
 
             if (!parts[0].equals(entry.getKey()))
             {
@@ -316,13 +315,13 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     /**
      * This method compares the current catalog with a new one
      *
-     * @param old           the current catalog
-     * @param newCatalog    the new catalog
-     * @param headerSection the header configuration of the new catalog
+     * @param old                 the current catalog
+     * @param newCatalog          the new catalog
+     * @param headerConfiguration the header configuration of the new catalog
      *
      * @return returns whether the new catalog is the same as the old one
      */
-    private boolean compareCatalogs(Catalog old, Catalog newCatalog, HeaderSection headerSection)
+    private boolean compareCatalogs(Catalog old, Catalog newCatalog, HeaderConfiguration headerConfiguration)
     {
         if (old == null || newCatalog == null)
         {
@@ -337,7 +336,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             return false;
         }
 
-        return this.compareCatalogHeader(old.locateHeader(), newCatalog.locateHeader(), headerSection);
+        return this.compareCatalogHeader(old.locateHeader(), newCatalog.locateHeader(), headerConfiguration);
     }
 
     public Logger getLogger()

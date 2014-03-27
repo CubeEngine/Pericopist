@@ -21,44 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.format;
+package de.cubeisland.messageextractor.configuration;
 
 import java.io.File;
+import java.nio.charset.Charset;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-public abstract class AbstractCatalogConfiguration implements CatalogConfiguration
+import de.cubeisland.messageextractor.util.XmlCharsetAdapter;
+
+public abstract class AbstractExtractorConfiguration implements ExtractorConfiguration
 {
-    @XmlElement(name = "template", required = true)
-    protected File templateFile;
+    private File directory = new File("./src/main/java");
+    private Charset charset;
 
-    @XmlElement
-    protected boolean removeUnusedMessages = true;
+    @XmlElement(name = "directory")
+    public final void setDirectory(File directory)
+    {
+        this.directory = directory;
+    }
 
-    @XmlElement
-    protected boolean createEmptyTemplate = false;
+    public final File getDirectory()
+    {
+        return this.directory;
+    }
 
     @XmlAttribute(name = "charset")
-    protected String charsetName;
-
-    public final File getTemplateFile()
+    @XmlJavaTypeAdapter(XmlCharsetAdapter.class)
+    @Override
+    public final void setCharset(Charset charset)
     {
-        return this.templateFile;
+        this.charset = charset;
     }
 
-    public final boolean getRemoveUnusedMessages()
+    @Override
+    public final Charset getCharset()
     {
-        return this.removeUnusedMessages;
-    }
-
-    public final boolean getCreateEmptyTemplate()
-    {
-        return this.createEmptyTemplate;
-    }
-
-    public String getCharsetName()
-    {
-        return this.charsetName;
+        return this.charset;
     }
 }

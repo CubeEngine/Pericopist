@@ -25,14 +25,12 @@ package de.cubeisland.messageextractor;
 
 import org.apache.velocity.context.Context;
 
-import java.nio.charset.Charset;
-
+import de.cubeisland.messageextractor.configuration.CatalogConfiguration;
+import de.cubeisland.messageextractor.configuration.ExtractorConfiguration;
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
-import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
-import de.cubeisland.messageextractor.format.CatalogConfiguration;
 import de.cubeisland.messageextractor.format.CatalogFormat;
 import de.cubeisland.messageextractor.message.MessageStore;
 
@@ -40,39 +38,40 @@ public class MessageCatalog
 {
     private final Context context;
 
-    private final MessageExtractor messageExtractor;
     private final ExtractorConfiguration extractorConfiguration;
-    private final CatalogFormat catalogFormat;
     private final CatalogConfiguration catalogConfiguration;
 
-    private Charset catalogCharset;
-    private Charset sourceCharset;
+    private final MessageExtractor messageExtractor;
+    private final CatalogFormat catalogFormat;
 
-    protected MessageCatalog(MessageExtractor messageExtractor, ExtractorConfiguration extractorConfiguration, CatalogFormat catalogFormat, CatalogConfiguration catalogConfiguration, Context context)
+    public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration) throws MessageCatalogException
     {
-        this.messageExtractor = messageExtractor;
+        this(extractorConfiguration, catalogConfiguration, null);
+    }
+
+    public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration, Context context) throws MessageCatalogException
+    {
         this.extractorConfiguration = extractorConfiguration;
-        this.catalogFormat = catalogFormat;
         this.catalogConfiguration = catalogConfiguration;
 
         this.context = context;
 
-        if (this.catalogConfiguration.getCharsetName() == null)
+        try
         {
-            this.catalogCharset = Charset.forName("UTF-8");
+            this.messageExtractor = extractorConfiguration.getExtractorClass().newInstance();
         }
-        else
+        catch (Exception e)
         {
-            this.catalogCharset = Charset.forName(this.catalogConfiguration.getCharsetName());
+            throw new MessageCatalogException("Could not create a MessageExtractor instance of '" + extractorConfiguration.getExtractorClass().getName() + "'.", e);
         }
 
-        if (this.extractorConfiguration.getCharsetName() == null)
+        try
         {
-            this.sourceCharset = Charset.forName("UTF-8");
+            this.catalogFormat = catalogConfiguration.getCatalogFormatClass().newInstance();
         }
-        else
+        catch (Exception e)
         {
-            this.sourceCharset = Charset.forName(this.extractorConfiguration.getCharsetName());
+            throw new MessageCatalogException("Could not create a CatalogFormat instance of '" + catalogConfiguration.getCatalogFormatClass().getName() + "'.", e);
         }
     }
 
@@ -101,26 +100,6 @@ public class MessageCatalog
         return this.context;
     }
 
-    public Charset getCatalogCharset()
-    {
-        return this.catalogCharset;
-    }
-
-    public void setCatalogCharset(Charset charset)
-    {
-        this.catalogCharset = charset;
-    }
-
-    public Charset getSourceCharset()
-    {
-        return this.sourceCharset;
-    }
-
-    public void setSourceCharset(Charset sourceCharset)
-    {
-        this.sourceCharset = sourceCharset;
-    }
-
     public void generateCatalog() throws MessageCatalogException
     {
         this.createCatalog(this.parseSourceCode());
@@ -143,21 +122,21 @@ public class MessageCatalog
 
     private MessageStore readCatalog() throws CatalogFormatException
     {
-        return this.catalogFormat.read(this.catalogConfiguration, this.getCatalogCharset());
+        return this.catalogFormat.read(this.catalogConfiguration);
     }
 
     private MessageStore parseSourceCode() throws MessageExtractionException
     {
-        return this.messageExtractor.extract(this.extractorConfiguration, this.getSourceCharset());
+        return this.messageExtractor.extract(this.extractorConfiguration);
     }
 
     private MessageStore parseSourceCode(MessageStore messageStore) throws MessageExtractionException
     {
-        return this.messageExtractor.extract(this.extractorConfiguration, this.getSourceCharset(), messageStore);
+        return this.messageExtractor.extract(this.extractorConfiguration, messageStore);
     }
 
     private void createCatalog(MessageStore messageStore) throws CatalogFormatException
     {
-        this.catalogFormat.write(this.catalogConfiguration, this.getCatalogCharset(), this.getVelocityContext(), messageStore);
+        this.catalogFormat.write(this.catalogConfiguration, this.getVelocityContext(), messageStore);
     }
 }

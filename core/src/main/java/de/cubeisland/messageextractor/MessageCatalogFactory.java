@@ -45,51 +45,50 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import de.cubeisland.messageextractor.configuration.CatalogConfiguration;
+import de.cubeisland.messageextractor.configuration.ExtractorConfiguration;
 import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.exception.ConfigurationNotFoundException;
+import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.messageextractor.exception.UnknownCatalogFormatException;
 import de.cubeisland.messageextractor.exception.UnknownSourceLanguageException;
-import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
-import de.cubeisland.messageextractor.extractor.MessageExtractor;
-import de.cubeisland.messageextractor.extractor.java.JavaMessageExtractor;
-import de.cubeisland.messageextractor.format.CatalogConfiguration;
-import de.cubeisland.messageextractor.format.CatalogFormat;
-import de.cubeisland.messageextractor.format.gettext.PlaintextGettextCatalogFormat;
+import de.cubeisland.messageextractor.extractor.java.config.JavaExtractorConfiguration;
+import de.cubeisland.messageextractor.format.gettext.GettextCatalogConfiguration;
 import de.cubeisland.messageextractor.util.Misc;
 
 public class MessageCatalogFactory
 {
-    private Map<String, Class<? extends MessageExtractor>> sourceParserMap;
-    private Map<String, Class<? extends CatalogFormat>> catalogFormatMap;
+    private Map<String, Class<? extends ExtractorConfiguration>> extractorConfigurationMap;
+    private Map<String, Class<? extends CatalogConfiguration>> catalogConfigurationMap;
 
     private final DocumentBuilderFactory documentBuilderFactory;
 
     public MessageCatalogFactory()
     {
-        this.sourceParserMap = new HashMap<String, Class<? extends MessageExtractor>>();
-        this.catalogFormatMap = new HashMap<String, Class<? extends CatalogFormat>>();
+        this.extractorConfigurationMap = new HashMap<String, Class<? extends ExtractorConfiguration>>();
+        this.catalogConfigurationMap = new HashMap<String, Class<? extends CatalogConfiguration>>();
 
         this.documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
         this.loadDefaultClasses();
     }
 
-    private Class<? extends MessageExtractor> getSourceParser(String language)
+    private Class<? extends ExtractorConfiguration> getExtractorConfigurationClass(String language)
     {
-        return this.sourceParserMap.get(language);
+        return this.extractorConfigurationMap.get(language);
     }
 
-    private Class<? extends CatalogFormat> getCatalogFormat(String format)
+    private Class<? extends CatalogConfiguration> getCatalogConfigurationClass(String format)
     {
-        return this.catalogFormatMap.get(format);
+        return this.catalogConfigurationMap.get(format);
     }
 
-    public MessageCatalog getMessageCatalog(String resource, Charset charset) throws ConfigurationException
+    public MessageCatalog getMessageCatalog(String resource, Charset charset) throws MessageCatalogException
     {
         return this.getMessageCatalog(resource, charset, null);
     }
 
-    public MessageCatalog getMessageCatalog(String resource, Charset charset, Context context) throws ConfigurationException
+    public MessageCatalog getMessageCatalog(String resource, Charset charset, Context veloctiyContext) throws MessageCatalogException
     {
         URL configurationUrl = Misc.getResource(resource);
         if (configurationUrl == null)
@@ -103,86 +102,83 @@ public class MessageCatalogFactory
         StringWriter stringWriter = new StringWriter();
         try
         {
-            velocityEngine.evaluate(context, stringWriter, "configuration", Misc.getContent(configurationUrl, charset));
+            velocityEngine.evaluate(veloctiyContext, stringWriter, "configuration", Misc.getContent(configurationUrl, charset));
         }
         catch (IOException e)
         {
             throw new ConfigurationException("The configuration file could not be read.", e);
         }
 
-        MessageExtractor messageExtractor = null;
+        Charset defaultCharset = charset;
         Node sourceNode = null;
-
-        CatalogFormat catalogFormat = null;
         Node catalogNode = null;
 
-        NodeList list = this.getRootNode(stringWriter.toString()).getChildNodes();
+        Node rootNode = this.getRootNode(stringWriter.toString());
+        String charsetName = rootNode.getAttributes().getNamedItem("charset").getTextContent();
+        if (charsetName != null && charsetName.length() > 0)
+        {
+            defaultCharset = Charset.forName(charsetName);
+        }
+
+        NodeList list = rootNode.getChildNodes();
         for (int i = 0; i < list.getLength(); i++)
         {
             Node node = list.item(i);
             if ("source".equals(node.getNodeName()))
             {
-                String language = node.getAttributes().getNamedItem("language").getTextContent();
-                Class<? extends MessageExtractor> messageExtractorClass = this.getSourceParser(language);
-                if (messageExtractorClass == null)
-                {
-                    throw new UnknownSourceLanguageException("Unknown source language " + language);
-                }
-                try
-                {
-                    messageExtractor = messageExtractorClass.newInstance();
-                }
-                catch (Exception e)
-                {
-                    throw new ConfigurationException("Could not create a MessageExtractor instance of '" + messageExtractorClass.getName() + "'.", e);
-                }
                 sourceNode = node;
             }
             else if ("catalog".equals(node.getNodeName()))
             {
-                String format = node.getAttributes().getNamedItem("format").getTextContent();
-                Class<? extends CatalogFormat> catalogFormatClass = this.getCatalogFormat(format);
-                if (catalogFormatClass == null)
-                {
-                    throw new UnknownCatalogFormatException("Unknown catalog format " + format);
-                }
-                try
-                {
-                    catalogFormat = catalogFormatClass.newInstance();
-                }
-                catch (Exception e)
-                {
-                    throw new ConfigurationException("Could not create an CatalogFormat instance of '" + catalogFormatClass.getName() + "'.", e);
-                }
                 catalogNode = node;
             }
         }
 
-        if (messageExtractor == null)
+        if (sourceNode == null)
         {
             throw new ConfigurationException("The configuration does not have a source tag");
         }
-        if (catalogFormat == null)
+        if (catalogNode == null)
         {
             throw new ConfigurationException("The configuration does not have a catalog tag");
         }
 
+        String sourceLanguage = sourceNode.getAttributes().getNamedItem("language").getTextContent();
+        Class<? extends ExtractorConfiguration> extractorConfigurationClass = this.getExtractorConfigurationClass(sourceLanguage);
+        if (extractorConfigurationClass == null)
+        {
+            throw new UnknownSourceLanguageException("Unknown source language " + sourceLanguage);
+        }
+
+        String catalogFormat = catalogNode.getAttributes().getNamedItem("format").getTextContent();
+        Class<? extends CatalogConfiguration> catalogConfigurationClass = this.getCatalogConfigurationClass(catalogFormat);
+        if (catalogConfigurationClass == null)
+        {
+            throw new UnknownCatalogFormatException("Unknown catalog format " + catalogFormat);
+        }
+
         try
         {
-            Class<? extends ExtractorConfiguration> extractorConfigurationClass = messageExtractor.getConfigClass();
-            Class<? extends CatalogConfiguration> catalogConfigurationClass = catalogFormat.getConfigClass();
-
             JAXBContext jaxbContext = JAXBContext.newInstance(extractorConfigurationClass, catalogConfigurationClass);
-
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
             ExtractorConfiguration extractorConfiguration = extractorConfigurationClass.cast(unmarshaller.unmarshal(sourceNode));
             CatalogConfiguration catalogConfiguration = catalogConfigurationClass.cast(unmarshaller.unmarshal(catalogNode));
 
-            return new MessageCatalog(messageExtractor, extractorConfiguration, catalogFormat, catalogConfiguration, context);
+            if (extractorConfiguration.getCharset() == null)
+            {
+                extractorConfiguration.setCharset(defaultCharset);
+            }
+            if (catalogConfiguration.getCharset() == null)
+            {
+                catalogConfiguration.setCharset(defaultCharset);
+            }
+
+            return new MessageCatalog(extractorConfiguration, catalogConfiguration, veloctiyContext);
         }
         catch (JAXBException e)
         {
-            throw new ConfigurationException(e);
+            throw new ConfigurationException("The configuration file could not be parsed", e);
         }
     }
 
@@ -220,7 +216,7 @@ public class MessageCatalogFactory
 
     private void loadDefaultClasses()
     {
-        this.sourceParserMap.put("java", JavaMessageExtractor.class);
-        this.catalogFormatMap.put("gettext", PlaintextGettextCatalogFormat.class);
+        this.extractorConfigurationMap.put("java", JavaExtractorConfiguration.class);
+        this.catalogConfigurationMap.put("gettext", GettextCatalogConfiguration.class);
     }
 }

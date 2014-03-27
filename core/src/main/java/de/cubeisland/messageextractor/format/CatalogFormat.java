@@ -25,14 +25,13 @@ package de.cubeisland.messageextractor.format;
 
 import org.apache.velocity.context.Context;
 
-import java.nio.charset.Charset;
-
+import de.cubeisland.messageextractor.configuration.CatalogConfiguration;
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.messageextractor.message.MessageStore;
 
 public interface CatalogFormat
 {
-    void write(CatalogConfiguration config, Charset charset, Context velocityContext, MessageStore messageStore) throws CatalogFormatException;
+    void write(CatalogConfiguration config, Context velocityContext, MessageStore messageStore) throws CatalogFormatException;
 
     /**
      * Reads in the catalog file and returns a message store.
@@ -40,7 +39,5 @@ public interface CatalogFormat
      *
      * @return a MessageCatalog instance holding all messages
      */
-    MessageStore read(CatalogConfiguration config, Charset charset) throws CatalogFormatException;
-
-    Class<? extends CatalogConfiguration> getConfigClass();
+    MessageStore read(CatalogConfiguration config) throws CatalogFormatException;
 }

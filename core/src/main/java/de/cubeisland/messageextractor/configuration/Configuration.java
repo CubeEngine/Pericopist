@@ -21,11 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.extractor;
+package de.cubeisland.messageextractor.configuration;
 
-import de.cubeisland.messageextractor.Configuration;
+import java.nio.charset.Charset;
 
-public interface ExtractorConfiguration extends Configuration
+public interface Configuration
 {
-    String getCharsetName();
+    Charset getCharset();
+
+    void setCharset(Charset charset);
+
+    //   TODO void validateConfiguration() throws ConfigurationException;
 }

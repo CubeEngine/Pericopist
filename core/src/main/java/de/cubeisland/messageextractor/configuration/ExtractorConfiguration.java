@@ -21,15 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.extractor;
+package de.cubeisland.messageextractor.configuration;
 
-import de.cubeisland.messageextractor.configuration.ExtractorConfiguration;
-import de.cubeisland.messageextractor.exception.MessageExtractionException;
-import de.cubeisland.messageextractor.message.MessageStore;
+import de.cubeisland.messageextractor.extractor.MessageExtractor;
 
-public interface MessageExtractor
+public interface ExtractorConfiguration extends Configuration
 {
-    MessageStore extract(ExtractorConfiguration config) throws MessageExtractionException;
-
-    MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractionException;
+    Class<? extends MessageExtractor> getExtractorClass();
 }

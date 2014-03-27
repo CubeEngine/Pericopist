@@ -31,35 +31,26 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "annotation")
-public class TranslatableAnnotation
+public class Annotation extends Translatable
 {
-    @XmlElement(name = "name", required = true)
-    private String fqn;
-
-    @XmlElementWrapper(name = "fields")
-    @XmlElement(name = "field")
     private Set<String> fields;
 
-    public TranslatableAnnotation()
+    public Annotation()
     {
         this.fields = new HashSet<String>(1);
         this.fields.add("value");
     }
 
-    public String getFullQualifiedName()
-    {
-        return this.fqn;
-    }
-
-    public String getSimpleName()
-    {
-        int ind = this.fqn.lastIndexOf(".");
-        return ind < 0 ? this.fqn : this.fqn.substring(ind + 1);
-    }
-
     public Set<String> getFields()
     {
         return this.fields;
+    }
+
+    @XmlElementWrapper(name = "fields")
+    @XmlElement(name = "field")
+    public void setFields(Set<String> fields)
+    {
+        this.fields = fields;
     }
 
     public boolean hasField(String name)
@@ -74,10 +65,16 @@ public class TranslatableAnnotation
         return false;
     }
 
+    public String getSimpleName()
+    {
+        int ind = this.getName().lastIndexOf(".");
+        return ind < 0 ? this.getName() : this.getName().substring(ind + 1);
+    }
+
     @Override
     public String toString()
     {
-        StringBuilder builder = new StringBuilder(this.fqn);
+        StringBuilder builder = new StringBuilder(this.getName());
         int fieldAmount = this.getFields().size();
         if (fieldAmount != 0)
         {

@@ -42,9 +42,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import de.cubeisland.messageextractor.extractor.java.config.Annotation;
 import de.cubeisland.messageextractor.extractor.java.config.JavaExtractorConfiguration;
-import de.cubeisland.messageextractor.extractor.java.config.TranslatableAnnotation;
-import de.cubeisland.messageextractor.extractor.java.config.TranslatableMethod;
+import de.cubeisland.messageextractor.extractor.java.config.Method;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.Occurrence;
 import de.cubeisland.messageextractor.util.Misc;
@@ -77,9 +77,9 @@ class SourceClassVisitor extends ASTVisitor
         return this.compilationUnit.getLineNumber(node.getStartPosition());
     }
 
-    private TranslatableAnnotation getTranslatableAnnotation(String simpleName)
+    private Annotation getTranslatableAnnotation(String simpleName)
     {
-        TranslatableAnnotation annotation;
+        Annotation annotation;
         for (String normal : this.normalImports)
         {
             if (normal.endsWith(simpleName))
@@ -129,7 +129,7 @@ class SourceClassVisitor extends ASTVisitor
     @Override
     public boolean visit(NormalAnnotation node)
     {
-        TranslatableAnnotation annotation = this.getTranslatableAnnotation(node.getTypeName().getFullyQualifiedName());
+        Annotation annotation = this.getTranslatableAnnotation(node.getTypeName().getFullyQualifiedName());
 
         if (annotation == null)
         {
@@ -164,7 +164,7 @@ class SourceClassVisitor extends ASTVisitor
     @Override
     public boolean visit(SingleMemberAnnotation node)
     {
-        TranslatableAnnotation annotation = this.getTranslatableAnnotation(node.getTypeName().getFullyQualifiedName());
+        Annotation annotation = this.getTranslatableAnnotation(node.getTypeName().getFullyQualifiedName());
 
         if (annotation == null || !annotation.hasField("value"))
         {
@@ -187,7 +187,7 @@ class SourceClassVisitor extends ASTVisitor
     @Override
     public boolean visit(MethodInvocation node)
     {
-        TranslatableMethod method = this.configuration.getMethod(node.getName().getIdentifier());
+        Method method = this.configuration.getMethod(node.getName().getIdentifier());
 
         if (method == null)
         {

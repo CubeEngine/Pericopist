@@ -27,35 +27,36 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "method")
-public class TranslatableMethod
+public class Method extends Translatable
 {
-    @XmlElement(required = true)
-    private String name;
-
-    @XmlElement(name = "singular")
-    private int singularIndex = 1;
-
-    @XmlElement(name = "plural")
+    private int singularIndex = 0;
     private int pluralIndex = -1;
-
-    public String getName()
-    {
-        return this.name;
-    }
 
     public int getSingularIndex()
     {
-        return this.singularIndex - 1;
+        return singularIndex;
     }
 
-    public boolean hasPlural()
+    @XmlElement(name = "singular")
+    public void setSingularIndex(int singularIndex)
     {
-        return this.pluralIndex != -1;
+        this.singularIndex = singularIndex;
     }
 
     public int getPluralIndex()
     {
-        return this.pluralIndex - 1;
+        return pluralIndex;
+    }
+
+    @XmlElement(name = "plural")
+    public void setPluralIndex(int pluralIndex)
+    {
+        this.pluralIndex = pluralIndex;
+    }
+
+    public boolean hasPlural()
+    {
+        return this.pluralIndex > -1;
     }
 
     @Override

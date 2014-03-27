@@ -143,7 +143,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
      *
      * @throws MojoFailureException
      */
-    private MessageCatalog getMessageCatalog(MessageCatalogFactory factory) throws MojoFailureException
+    private MessageCatalog getMessageCatalog(MessageCatalogFactory factory) throws MojoFailureException, MojoExecutionException
     {
         Context velocityContext = this.getVelocityContext();
         Charset charset = this.getCharset();
@@ -154,18 +154,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
 
             try
             {
-                MessageCatalog catalog = factory.getMessageCatalog(configuration, charset, velocityContext);
-
-                if (catalog.getCatalogConfiguration().getCharsetName() == null)
-                {
-                    catalog.setCatalogCharset(charset);
-                }
-                if (catalog.getExtractorConfiguration().getCharsetName() == null)
-                {
-                    catalog.setSourceCharset(charset);
-                }
-
-                return catalog;
+                return factory.getMessageCatalog(configuration, charset, velocityContext);
             }
             catch (ConfigurationNotFoundException e)
             {
@@ -174,6 +163,10 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
             catch (ConfigurationException e)
             {
                 throw new MojoFailureException("Failed to read the configuration '" + configuration + "'!", e);
+            }
+            catch (MessageCatalogException e)
+            {
+                throw new MojoExecutionException(e.getMessage(), e);
             }
         }
 

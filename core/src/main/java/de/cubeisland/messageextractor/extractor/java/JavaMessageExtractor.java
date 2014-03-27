@@ -31,13 +31,12 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
+import de.cubeisland.messageextractor.configuration.ExtractorConfiguration;
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
-import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.extractor.java.config.JavaExtractorConfiguration;
 import de.cubeisland.messageextractor.message.MessageStore;
@@ -52,12 +51,12 @@ public class JavaMessageExtractor implements MessageExtractor
         this.fileFilter = new JavaFileFilter();
     }
 
-    public MessageStore extract(ExtractorConfiguration config, Charset charset) throws MessageExtractionException
+    public MessageStore extract(ExtractorConfiguration config) throws MessageExtractionException
     {
-        return this.extract(config, charset, null);
+        return this.extract(config, null);
     }
 
-    public MessageStore extract(ExtractorConfiguration config, Charset charset, MessageStore loadedMessageStore) throws MessageExtractionException
+    public MessageStore extract(ExtractorConfiguration config, MessageStore loadedMessageStore) throws MessageExtractionException
     {
         JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration) config;
 
@@ -98,7 +97,7 @@ public class JavaMessageExtractor implements MessageExtractor
         {
             try
             {
-                parser.setSource(Misc.parseFileToCharArray(file, charset));
+                parser.setSource(Misc.parseFileToCharArray(file, extractorConfig.getCharset()));
                 CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
                 SourceClassVisitor visitor = new SourceClassVisitor(extractorConfig, messageStore, compilationUnit, file);
                 compilationUnit.accept(visitor);
@@ -110,10 +109,5 @@ public class JavaMessageExtractor implements MessageExtractor
         }
 
         return messageStore;
-    }
-
-    public Class<? extends ExtractorConfiguration> getConfigClass()
-    {
-        return JavaExtractorConfiguration.class;
     }
 }

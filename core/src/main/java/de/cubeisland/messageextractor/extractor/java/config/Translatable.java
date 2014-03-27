@@ -21,15 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.format;
+package de.cubeisland.messageextractor.extractor.java.config;
 
-import java.io.File;
+import javax.xml.bind.annotation.XmlElement;
 
-import de.cubeisland.messageextractor.Configuration;
-
-public interface CatalogConfiguration extends Configuration
+public abstract class Translatable
 {
-    File getTemplateFile();
+    private String name;
+    private String description;
 
-    String getCharsetName();
+    public String getName()
+    {
+        return this.name;
+    }
+
+    @XmlElement(name = "name")
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    @XmlElement(name = "description")
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
 }

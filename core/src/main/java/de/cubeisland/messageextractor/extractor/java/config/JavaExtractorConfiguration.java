@@ -23,7 +23,6 @@
  */
 package de.cubeisland.messageextractor.extractor.java.config;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,37 +30,43 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.cubeisland.messageextractor.extractor.AbstractExtractorConfiguration;
+import de.cubeisland.messageextractor.configuration.AbstractExtractorConfiguration;
+import de.cubeisland.messageextractor.extractor.MessageExtractor;
+import de.cubeisland.messageextractor.extractor.java.JavaMessageExtractor;
 
 @XmlRootElement(name = "source")
 public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 {
+    private Set<Method> methods = new HashSet<Method>();
+    private Set<Annotation> annotations = new HashSet<Annotation>();
+
+    public Set<Method> getMethods()
+    {
+        return methods;
+    }
+
     @XmlElementWrapper(name = "methods")
     @XmlElement(name = "method")
-    private Set<TranslatableMethod> translatableMethods = new HashSet<TranslatableMethod>();
+    public void setMethods(Set<Method> methods)
+    {
+        this.methods = methods;
+    }
+
+    public Set<Annotation> getAnnotations()
+    {
+        return annotations;
+    }
 
     @XmlElementWrapper(name = "annotations")
     @XmlElement(name = "annotation")
-    private Set<TranslatableAnnotation> translatableAnnotations = new HashSet<TranslatableAnnotation>();
-
-    public Collection<TranslatableMethod> getTranslatableMethods()
+    public void setAnnotations(Set<Annotation> annotations)
     {
-        return translatableMethods;
+        this.annotations = annotations;
     }
 
-    public Collection<TranslatableAnnotation> getTranslatableAnnotations()
+    public Method getMethod(String name)
     {
-        return translatableAnnotations;
-    }
-
-    public String getLanguage()
-    {
-        return "java";
-    }
-
-    public TranslatableMethod getMethod(String name)
-    {
-        for (TranslatableMethod method : this.translatableMethods)
+        for (Method method : this.getMethods())
         {
             if (method.getName().equals(name))
             {
@@ -71,15 +76,21 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
         return null;
     }
 
-    public TranslatableAnnotation getAnnotation(String name)
+    public Annotation getAnnotation(String name)
     {
-        for (TranslatableAnnotation annotation : this.translatableAnnotations)
+        for (Annotation annotation : this.getAnnotations())
         {
-            if (annotation.getFullQualifiedName().equals(name))
+            if (annotation.getName().equals(name))
             {
                 return annotation;
             }
         }
         return null;
+    }
+
+    @Override
+    public Class<? extends MessageExtractor> getExtractorClass()
+    {
+        return JavaMessageExtractor.class;
     }
 }

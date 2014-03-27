@@ -21,8 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor;
+package de.cubeisland.messageextractor.configuration;
 
-public interface Configuration
+import java.io.File;
+
+import de.cubeisland.messageextractor.format.CatalogFormat;
+
+public interface CatalogConfiguration extends Configuration
 {
+    File getTemplateFile();
+
+    Class<? extends CatalogFormat> getCatalogFormatClass();
 }

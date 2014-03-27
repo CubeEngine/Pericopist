@@ -21,28 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.extractor;
+package de.cubeisland.messageextractor.util;
 
-import java.io.File;
+import java.nio.charset.Charset;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public abstract class AbstractExtractorConfiguration implements ExtractorConfiguration
+public class XmlCharsetAdapter extends XmlAdapter<String, Charset>
 {
-    @XmlElement
-    protected File directory = new File("./src/main/java");
-
-    @XmlAttribute(name = "charset")
-    protected String charsetName;
-
-    public File getDirectory()
+    @Override
+    public Charset unmarshal(String v) throws Exception
     {
-        return this.directory;
+        return Charset.forName(v);
     }
 
-    public String getCharsetName()
+    @Override
+    public String marshal(Charset v) throws Exception
     {
-        return this.charsetName;
+        return v.displayName();
     }
 }

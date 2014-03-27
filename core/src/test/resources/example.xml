@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extractor>
+<extractor charset="utf-8">
     <source language="java">
 
         <directory>./core/src/test/resources</directory>
@@ -10,8 +10,8 @@
             </method>
             <method>
                 <name>getTranslationN</name>
-                <singular>1</singular>
-                <plural>2</plural>
+                <singular>0</singular>
+                <plural>1</plural>
             </method>
         </methods>
 
@@ -30,10 +30,10 @@
 
     </source>
 
-    <catalog format="gettext" charset="utf-8">
+    <catalog format="gettext">
         <removeUnusedMessages>false</removeUnusedMessages>
         <template>./core/src/test/resources/messages.pot</template>
-        <header>
+        <header charset="UTF-8">
             <comments>./core/src/test/resources/header.txt</comments>
             <metadata>
                 <entry key="Project-Id-Version">PACKAGE VERSION</entry>
