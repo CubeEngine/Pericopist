@@ -42,17 +42,20 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
      * @required
      * @readonly
      */
+    @SuppressWarnings("UWF_NULL_FIELD")
     private MavenProject project = null;
 
     /**
      * @parameter
      */
+    @SuppressWarnings("UWF_NULL_FIELD")
     private String[] configurations = null;
 
     /**
      * @parameter default-value="${project.build.sourceEncoding}"
      * @readonly
      */
+    @SuppressWarnings("UWF_NULL_FIELD")
     private String charsetName = null;
 
     /**
