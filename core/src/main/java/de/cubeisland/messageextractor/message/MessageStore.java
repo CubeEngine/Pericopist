@@ -71,9 +71,12 @@ public class MessageStore implements Iterable<TranslatableMessage>
     {
         for (TranslatableMessage message : this.messages)
         {
-            if (message.getSingular().equals(singular) && (plural == null && !message.hasPlural() || message.hasPlural() && message.getPlural().equals(plural)))
+            if (message.getSingular().equals(singular))
             {
-                return message;
+                if (plural == null && !message.hasPlural() || message.hasPlural() && message.getPlural().equals(plural))
+                {
+                    return message;
+                }
             }
         }
         return null;
@@ -84,6 +87,7 @@ public class MessageStore implements Iterable<TranslatableMessage>
         return messages;
     }
 
+    @Override
     public Iterator<TranslatableMessage> iterator()
     {
         return this.getMessages().iterator();

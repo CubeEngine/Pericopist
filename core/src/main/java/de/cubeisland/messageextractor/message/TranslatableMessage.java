@@ -83,6 +83,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         return occurrences;
     }
 
+    @Override
     public int compareTo(TranslatableMessage o)
     {
         if (this.position == null)
@@ -123,17 +124,25 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
+        if (o == null || this.getClass() != o.getClass())
         {
             return false;
         }
 
         TranslatableMessage that = (TranslatableMessage) o;
 
-        if (occurrences != null ? !occurrences.equals(that.occurrences) : that.occurrences != null)
+        if (this.occurrences != null)
+        {
+            if (!this.occurrences.equals(that.occurrences))
+            {
+                return false;
+            }
+        }
+        else if (that.occurrences != null)
         {
             return false;
         }
+
         if (!plural.equals(that.plural))
         {
             return false;

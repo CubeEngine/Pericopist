@@ -52,6 +52,7 @@ public class Occurrence implements Comparable<Occurrence>
         return line;
     }
 
+    @Override
     public int compareTo(Occurrence o)
     {
         int cmp = this.getFile().getPath().toLowerCase(Locale.ENGLISH).compareTo(o.getFile().getPath().toLowerCase(Locale.ENGLISH));

@@ -41,6 +41,7 @@ public class Misc
 {
     private static final FileFilter DUMMY_FILTER = new FileFilter()
     {
+        @Override
         public boolean accept(File file)
         {
             return true;

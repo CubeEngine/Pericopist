@@ -157,6 +157,11 @@ public class MessageCatalogFactory
             throw new UnknownCatalogFormatException("Unknown catalog format " + catalogFormat);
         }
 
+        return this.createMessageCatalog(extractorConfigurationClass, sourceNode, catalogConfigurationClass, catalogNode, defaultCharset, veloctiyContext);
+    }
+
+    private MessageCatalog createMessageCatalog(Class<? extends ExtractorConfiguration> extractorConfigurationClass, Node sourceNode, Class<? extends CatalogConfiguration> catalogConfigurationClass, Node catalogNode, Charset charset, Context velocityContext) throws MessageCatalogException
+    {
         try
         {
             JAXBContext jaxbContext = JAXBContext.newInstance(extractorConfigurationClass, catalogConfigurationClass);
@@ -167,14 +172,14 @@ public class MessageCatalogFactory
 
             if (extractorConfiguration.getCharset() == null)
             {
-                extractorConfiguration.setCharset(defaultCharset);
+                extractorConfiguration.setCharset(charset);
             }
             if (catalogConfiguration.getCharset() == null)
             {
-                catalogConfiguration.setCharset(defaultCharset);
+                catalogConfiguration.setCharset(charset);
             }
 
-            return new MessageCatalog(extractorConfiguration, catalogConfiguration, veloctiyContext);
+            return new MessageCatalog(extractorConfiguration, catalogConfiguration, velocityContext);
         }
         catch (JAXBException e)
         {

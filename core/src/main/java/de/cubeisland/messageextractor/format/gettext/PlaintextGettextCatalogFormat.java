@@ -55,39 +55,13 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     public void write(CatalogConfiguration config, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
-        Catalog catalog = new Catalog(true);
 
         if (this.logger == null)
         {
             this.logger = Logger.getLogger("messageextractor");
         }
 
-        for (TranslatableMessage translatableMessage : messageStore)
-        {
-            if (translatableMessage.getOccurrences().isEmpty())
-            {
-                if (catalogConfig.getRemoveUnusedMessages())
-                {
-                    continue;
-                }
-                else
-                {
-                    this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
-                }
-            }
-            Message message = new Message();
-            for (Occurrence occurrence : translatableMessage.getOccurrences())
-            {
-                message.addSourceReference(occurrence.getPath(), occurrence.getLine());
-            }
-            message.setMsgid(translatableMessage.getSingular());
-            if (translatableMessage.hasPlural())
-            {
-                message.setMsgidPlural(translatableMessage.getPlural());
-            }
-
-            catalog.addMessage(message);
-        }
+        Catalog catalog = this.getCatalog(catalogConfig, messageStore);
 
         if (catalogConfig.getHeaderConfiguration() != null)
         {
@@ -124,13 +98,18 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             return;
         }
 
+        this.writeCatalog(catalog, catalogConfig, template);
+    }
+
+    private void writeCatalog(Catalog catalog, GettextCatalogConfiguration configuration, File template) throws CatalogFormatException
+    {
         final PoWriter poWriter = new PoWriter(true);
         try
         {
             final File directory = template.getParentFile();
             if (directory.exists() || directory.mkdirs())
             {
-                poWriter.write(catalog, new FileOutputStream(template), catalogConfig.getCharset());
+                poWriter.write(catalog, new FileOutputStream(template), configuration.getCharset());
             }
             else
             {
@@ -141,6 +120,40 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         {
             throw new CatalogFormatException("The catalog could not be created", e);
         }
+    }
+
+    private Catalog getCatalog(GettextCatalogConfiguration configuration, MessageStore messageStore)
+    {
+        Catalog catalog = new Catalog(true);
+
+        for (TranslatableMessage translatableMessage : messageStore)
+        {
+            if (translatableMessage.getOccurrences().isEmpty())
+            {
+                if (configuration.getRemoveUnusedMessages())
+                {
+                    continue;
+                }
+                else
+                {
+                    this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
+                }
+            }
+            Message message = new Message();
+            for (Occurrence occurrence : translatableMessage.getOccurrences())
+            {
+                message.addSourceReference(occurrence.getPath(), occurrence.getLine());
+            }
+            message.setMsgid(translatableMessage.getSingular());
+            if (translatableMessage.hasPlural())
+            {
+                message.setMsgidPlural(translatableMessage.getPlural());
+            }
+
+            catalog.addMessage(message);
+        }
+
+        return catalog;
     }
 
     public MessageStore read(CatalogConfiguration config) throws CatalogFormatException
@@ -172,12 +185,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         return messageStore;
     }
-
-    public Class<? extends CatalogConfiguration> getConfigClass()
-    {
-        return GettextCatalogConfiguration.class;
-    }
-
+    
     private Message getHeaderMessage(HeaderConfiguration config, Context velocityContext) throws IOException
     {
         HeaderFields headerFields = new HeaderFields();
@@ -276,7 +284,20 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             }
         }
 
-        String[] fields = old.getMsgstr().split("\n");
+        return this.compareHeaderFields(old.getMsgstr().split("\n"), headerConfiguration);
+    }
+
+    /**
+     * This method compares the fields of a header with the fields which are specified within the
+     * header configuration
+     *
+     * @param fields              the fields of the header
+     * @param headerConfiguration the header configuration
+     *
+     * @return whether the fields fits with the configuration
+     */
+    public boolean compareHeaderFields(String[] fields, HeaderConfiguration headerConfiguration)
+    {
         if (fields.length != headerConfiguration.getMetadata().size())
         {
             return false;

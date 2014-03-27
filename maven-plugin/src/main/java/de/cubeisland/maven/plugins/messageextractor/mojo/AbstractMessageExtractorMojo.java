@@ -58,6 +58,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
     /**
      * {@inheritDoc}
      */
+    @Override
     public final void execute() throws MojoExecutionException, MojoFailureException
     {
         if (this.project == null)
