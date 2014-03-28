@@ -42,18 +42,18 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
      * @required
      * @readonly
      */
-    private MavenProject project = null; //NOSONAR
+    private MavenProject project = null;
 
     /**
      * @parameter
      */
-    private String[] configurations = null; //NOSONAR
+    private String[] configurations = null;
 
     /**
      * @parameter default-value="${project.build.sourceEncoding}"
      * @readonly
      */
-    private String charsetName = null; //NOSONAR
+    private String charsetName = null;
 
     /**
      * {@inheritDoc}
