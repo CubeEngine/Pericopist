@@ -38,10 +38,10 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
-import de.cubeisland.messageextractor.extractor.HeaderConfiguration;
-import de.cubeisland.messageextractor.extractor.HeaderConfiguration.MetadataEntry;
 import de.cubeisland.messageextractor.format.CatalogConfiguration;
 import de.cubeisland.messageextractor.format.CatalogFormat;
+import de.cubeisland.messageextractor.format.HeaderConfiguration;
+import de.cubeisland.messageextractor.format.HeaderConfiguration.MetadataEntry;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.Occurrence;
 import de.cubeisland.messageextractor.message.TranslatableMessage;

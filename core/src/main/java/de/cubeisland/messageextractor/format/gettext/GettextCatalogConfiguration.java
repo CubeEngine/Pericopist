@@ -27,9 +27,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.cubeisland.messageextractor.exception.ConfigurationException;
-import de.cubeisland.messageextractor.extractor.HeaderConfiguration;
 import de.cubeisland.messageextractor.format.AbstractCatalogConfiguration;
 import de.cubeisland.messageextractor.format.CatalogFormat;
+import de.cubeisland.messageextractor.format.HeaderConfiguration;
 
 @XmlRootElement(name = "catalog")
 public class GettextCatalogConfiguration extends AbstractCatalogConfiguration

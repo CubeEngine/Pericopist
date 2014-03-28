@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.extractor;
+package de.cubeisland.messageextractor.format;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
@@ -93,6 +93,7 @@ public class HeaderConfiguration implements Configuration
     @Override
     public void validateConfiguration() throws ConfigurationException
     {
+        // this configuration doesn't have an obligation field
     }
 
     // TODO remove method due to a change of comments value
