@@ -159,7 +159,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
             }
             catch (ConfigurationNotFoundException e)
             {
-                this.getLog().info("Configuration not found: " + configuration, e);
+                this.getLog().info("Configuration not found: " + configuration);
             }
             catch (ConfigurationException e)
             {
