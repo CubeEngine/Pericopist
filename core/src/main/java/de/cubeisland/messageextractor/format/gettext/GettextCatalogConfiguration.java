@@ -26,15 +26,16 @@ package de.cubeisland.messageextractor.format.gettext;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.cubeisland.messageextractor.format.AbstractCatalogConfiguration;
-import de.cubeisland.messageextractor.extractor.HeaderConfiguration;
 import de.cubeisland.messageextractor.exception.ConfigurationException;
+import de.cubeisland.messageextractor.extractor.HeaderConfiguration;
+import de.cubeisland.messageextractor.format.AbstractCatalogConfiguration;
 import de.cubeisland.messageextractor.format.CatalogFormat;
 
 @XmlRootElement(name = "catalog")
 public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
 {
     private HeaderConfiguration headerConfiguration;
+    private int pluralAmount = 2;
 
     public HeaderConfiguration getHeaderConfiguration()
     {
@@ -45,6 +46,17 @@ public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
     public void setHeaderConfiguration(HeaderConfiguration headerConfiguration)
     {
         this.headerConfiguration = headerConfiguration;
+    }
+
+    public int getPluralAmount()
+    {
+        return pluralAmount;
+    }
+
+    @XmlElement(name = "pluralAmount")
+    public void setPluralAmount(int pluralAmount)
+    {
+        this.pluralAmount = pluralAmount;
     }
 
     @Override

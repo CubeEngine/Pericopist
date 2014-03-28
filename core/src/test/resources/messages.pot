@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-03-25 14:39:13+0100\n"
+"POT-Creation-Date: 2014-03-28 14:07:50+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #: test/Main.java:55
@@ -20,6 +20,9 @@ msgstr ""
 msgid "hope %s is fine?"
 msgid_plural "hope you are fine"
 msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: test/Main.java:49
 msgid "pre-added"

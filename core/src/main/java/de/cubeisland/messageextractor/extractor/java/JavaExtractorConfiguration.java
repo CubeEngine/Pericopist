@@ -30,8 +30,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.cubeisland.messageextractor.extractor.AbstractExtractorConfiguration;
 import de.cubeisland.messageextractor.exception.ConfigurationException;
+import de.cubeisland.messageextractor.extractor.AbstractExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
 
 @XmlRootElement(name = "source")

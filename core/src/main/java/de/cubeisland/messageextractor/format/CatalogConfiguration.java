@@ -26,7 +26,6 @@ package de.cubeisland.messageextractor.format;
 import java.io.File;
 
 import de.cubeisland.messageextractor.configuration.Configuration;
-import de.cubeisland.messageextractor.format.CatalogFormat;
 
 public interface CatalogConfiguration extends Configuration
 {

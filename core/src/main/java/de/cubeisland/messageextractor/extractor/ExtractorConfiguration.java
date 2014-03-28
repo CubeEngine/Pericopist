@@ -24,7 +24,6 @@
 package de.cubeisland.messageextractor.extractor;
 
 import de.cubeisland.messageextractor.configuration.Configuration;
-import de.cubeisland.messageextractor.extractor.MessageExtractor;
 
 public interface ExtractorConfiguration extends Configuration
 {

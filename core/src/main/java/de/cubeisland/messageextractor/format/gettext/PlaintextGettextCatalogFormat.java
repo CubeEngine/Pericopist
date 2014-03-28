@@ -157,6 +157,10 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             if (translatableMessage.hasPlural())
             {
                 message.setMsgidPlural(translatableMessage.getPlural());
+                for (int i = 0; i < configuration.getPluralAmount(); i++)
+                {
+                    message.addMsgstrPlural("", i);
+                }
             }
 
             catalog.addMessage(message);
@@ -253,6 +257,11 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 return false;
             }
 
+            if (!this.comparePluralMsgstr(firstMessage.getMsgstrPlural(), secondMessage.getMsgstrPlural()))
+            {
+                return false;
+            }
+
             List<String> firstSourceReferences = firstMessage.getSourceReferences();
             List<String> secondSourceReferences = secondMessage.getSourceReferences();
 
@@ -269,6 +278,32 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 }
             }
         }
+        return true;
+    }
+
+    /**
+     * This methods compares two different lists of plural messages and returns whether they are equals
+     *
+     * @param first  the first list of plural messages
+     * @param second the second list of plural messages
+     *
+     * @return whether the lists has the same content
+     */
+    private boolean comparePluralMsgstr(List<String> first, List<String> second)
+    {
+        if (first.size() != second.size())
+        {
+            return false;
+        }
+
+        for (int i = 0; i < first.size(); i++)
+        {
+            if (!first.get(i).equals(second.get(i)))
+            {
+                return false;
+            }
+        }
+
         return true;
     }
 
