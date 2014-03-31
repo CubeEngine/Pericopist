@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -163,10 +164,72 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 }
             }
 
+            this.setPreviousMessageIds(message);
+
             catalog.addMessage(message);
         }
 
         return catalog;
+    }
+
+    private void setPreviousMessageIds(Message message)
+    {
+        if (this.oldCatalog == null)
+        {
+            return;
+        }
+
+        Message obsoleteMessage = this.oldCatalog.locateMessage(message.getMsgctxt(), message.getMsgid());
+        if (obsoleteMessage != null)
+        {
+            message.setPrevMsgctx(obsoleteMessage.getPrevMsgctx());
+            message.setPrevMsgid(obsoleteMessage.getPrevMsgid());
+            message.setPrevMsgidPlural(obsoleteMessage.getPrevMsgidPlural());
+
+            return;
+        }
+
+        List<Message> messageList = new ArrayList<Message>(1);
+
+        for (String reference : message.getSourceReferences())
+        {
+            for (Message oldMessage : this.oldCatalog)
+            {
+                for (String oldReference : oldMessage.getSourceReferences())
+                {
+                    if (reference.equals(oldReference))
+                    {
+                        messageList.add(oldMessage);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (messageList.isEmpty())
+        {
+            return;
+        }
+
+        Message oldMessage = this.getPreviousMessage(message, messageList);
+
+        if (oldMessage.getMsgctxt() != null && !oldMessage.getMsgctxt().equals(message.getMsgctxt()))
+        {
+            message.setPrevMsgctx(oldMessage.getMsgctxt());
+        }
+        if (!message.getMsgid().equals(oldMessage.getMsgid()))
+        {
+            message.setPrevMsgid(oldMessage.getMsgid());
+        }
+        if (oldMessage.getMsgidPlural() != null && !oldMessage.getMsgidPlural().equals(message.getMsgidPlural()))
+        {
+            message.setPrevMsgidPlural(oldMessage.getMsgidPlural());
+        }
+    }
+
+    private Message getPreviousMessage(Message current, List<Message> oldMessages)
+    {
+        return oldMessages.get(0); // TODO compare current with old messages and return the best one.
     }
 
     /**
