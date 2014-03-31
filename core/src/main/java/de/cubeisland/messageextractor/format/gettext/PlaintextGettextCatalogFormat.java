@@ -186,6 +186,11 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             message.setPrevMsgid(obsoleteMessage.getPrevMsgid());
             message.setPrevMsgidPlural(obsoleteMessage.getPrevMsgidPlural());
 
+            if (message.isPlural() && !message.getMsgidPlural().equals(obsoleteMessage.getMsgidPlural()))
+            {
+                message.setPrevMsgidPlural(obsoleteMessage.getMsgidPlural());
+            }
+
             return;
         }
 
@@ -321,6 +326,11 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             }
 
             if (!this.comparePluralMsgstr(firstMessage.getMsgstrPlural(), secondMessage.getMsgstrPlural()))
+            {
+                return false;
+            }
+
+            if (firstMessage.isPlural() != secondMessage.isPlural() || (firstMessage.isPlural() && !firstMessage.getMsgidPlural().equals(secondMessage.getMsgidPlural())))
             {
                 return false;
             }

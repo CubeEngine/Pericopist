@@ -31,7 +31,7 @@
     </source>
 
     <catalog format="gettext">
-        <removeUnusedMessages>false</removeUnusedMessages>
+        <removeUnusedMessages>true</removeUnusedMessages>
         <pluralAmount>4</pluralAmount>
         <template>./core/src/test/resources/messages.pot</template>
         <header>

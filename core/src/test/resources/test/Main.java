@@ -39,7 +39,7 @@ public class Main
         i18n.getTranslation((question ? "true" : "false")); // TODO
         i18n.getTranslation((question ? "right" : "wring") + "answer"); // TODO
 
-        i18n.getTranslationN("hope %s is fine?", "hope you are fine", getOnlinePersons(), "Phillip");
+        i18n.getTranslationN("hope %s is fine?", "hope you are fine?", getOnlinePersons(), "Phillip");
 
         SecondTestclass second = new SecondTestclass(i18n, "hello");
 
