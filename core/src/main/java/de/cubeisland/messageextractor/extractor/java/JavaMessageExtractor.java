@@ -23,16 +23,13 @@
  */
 package de.cubeisland.messageextractor.extractor.java;
 
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
+import com.martiansoftware.jsap.JSAPException;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
@@ -40,6 +37,12 @@ import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.util.Misc;
+import spoon.Launcher;
+import spoon.compiler.SpoonCompiler;
+import spoon.compiler.SpoonResourceHelper;
+import spoon.processing.ProcessingManager;
+import spoon.reflect.factory.Factory;
+import spoon.support.QueueProcessingManager;
 
 public class JavaMessageExtractor implements MessageExtractor
 {
@@ -109,26 +112,34 @@ public class JavaMessageExtractor implements MessageExtractor
             environment[i] = files.get(i).getAbsolutePath();
         }
 
-        Map options = JavaCore.getOptions();
-        JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
-
-        ASTParser parser = ASTParser.newParser(AST.JLS3);
-        parser.setEnvironment(null, environment, null, true);
-        parser.setCompilerOptions(options);
-
-        for (File file : files)
+        try
         {
-            try
-            {
-                parser.setSource(Misc.parseFileToCharArray(file, extractorConfig.getCharset()));
-                CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
-                SourceClassVisitor visitor = new SourceClassVisitor(extractorConfig, messageStore, compilationUnit, file);
-                compilationUnit.accept(visitor);
-            }
-            catch (IOException e)
-            {
-                throw new MessageExtractionException("The file on path '" + file.getAbsolutePath() + "' could not be parsed.", e);
-            }
+            Launcher launcher = new Launcher();
+            SpoonCompiler compiler = launcher.createCompiler();
+            compiler.addInputSources(SpoonResourceHelper.resources(environment));
+
+            compiler.setEncoding(config.getCharset().name());
+
+            Factory spoonFactory = compiler.getFactory();
+            ProcessingManager processManager = new QueueProcessingManager(spoonFactory);
+//            processManager.addProcessor();
+
+            spoonFactory.getEnvironment().setManager(processManager);
+            compiler.build();
+
+            processManager.process();
+        }
+        catch (JSAPException e)
+        {
+            e.printStackTrace();
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
 
         return messageStore;
