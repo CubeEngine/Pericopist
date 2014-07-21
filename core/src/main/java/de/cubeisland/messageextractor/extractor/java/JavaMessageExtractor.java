@@ -35,6 +35,7 @@ import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
 import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
+import de.cubeisland.messageextractor.extractor.java.processor.AnnotationProcessor;
 import de.cubeisland.messageextractor.extractor.java.processor.MethodInvocationProcessor;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.util.Misc;
@@ -124,6 +125,7 @@ public class JavaMessageExtractor implements MessageExtractor
             Factory spoonFactory = compiler.getFactory();
             ProcessingManager processManager = new QueueProcessingManager(spoonFactory);
             processManager.addProcessor(new MethodInvocationProcessor((JavaExtractorConfiguration) config, messageStore));
+            processManager.addProcessor(new AnnotationProcessor((JavaExtractorConfiguration) config, messageStore));
 
             spoonFactory.getEnvironment().setManager(processManager);
             compiler.build();
