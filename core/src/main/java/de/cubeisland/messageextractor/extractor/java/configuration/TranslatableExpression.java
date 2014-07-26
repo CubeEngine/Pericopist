@@ -25,6 +25,8 @@ package de.cubeisland.messageextractor.extractor.java.configuration;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import spoon.reflect.declaration.CtElement;
+
 public abstract class TranslatableExpression
 {
     private String name;
@@ -39,4 +41,6 @@ public abstract class TranslatableExpression
     {
         this.name = name;
     }
+
+    public abstract boolean describes(CtElement element);
 }

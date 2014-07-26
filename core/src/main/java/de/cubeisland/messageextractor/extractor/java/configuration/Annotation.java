@@ -31,6 +31,8 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.cubeisland.messageextractor.extractor.java.configuration.TranslatableExpression;
+import spoon.reflect.declaration.CtAnnotation;
+import spoon.reflect.declaration.CtElement;
 
 @XmlRootElement(name = "annotation")
 public class Annotation extends TranslatableExpression
@@ -67,12 +69,6 @@ public class Annotation extends TranslatableExpression
         return false;
     }
 
-    public String getSimpleName()
-    {
-        int ind = this.getName().lastIndexOf(".");
-        return ind < 0 ? this.getName() : this.getName().substring(ind + 1);
-    }
-
     @Override
     public String toString()
     {
@@ -92,5 +88,17 @@ public class Annotation extends TranslatableExpression
             }
         }
         return builder.toString();
+    }
+
+    @Override
+    public boolean describes(CtElement element)
+    {
+        if(!(element instanceof CtAnnotation<?>))
+        {
+            return false;
+        }
+
+        String qfn = ((CtAnnotation<?>) element).getAnnotationType().getQualifiedName();
+        return this.getName().equals(qfn);
     }
 }

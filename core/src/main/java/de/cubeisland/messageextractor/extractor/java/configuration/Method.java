@@ -28,6 +28,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.cubeisland.messageextractor.extractor.java.configuration.TranslatableExpression;
+import spoon.reflect.code.CtInvocation;
+import spoon.reflect.declaration.CtElement;
+import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.reference.CtExecutableReference;
 
 @XmlRootElement(name = "method")
 public class Method extends CallableExpression
@@ -51,5 +55,27 @@ public class Method extends CallableExpression
     public String toString()
     {
         return this.getName() + ":" + this.getSingularIndex() + (this.hasPlural() ? "," + this.getPluralIndex() : "");
+    }
+
+    @Override
+    public boolean describes(CtElement element)
+    {
+        if(!(element instanceof CtInvocation<?>))
+        {
+            return false;
+        }
+        CtExecutableReference<?> executable = ((CtInvocation<?>) element).getExecutable();
+
+        if(!this.getName().equals(this.getFullQualifiedName(executable)))
+        {
+            return false;
+        }
+
+        return this.isStatic() == executable.isStatic();
+    }
+
+    private String getFullQualifiedName(CtExecutableReference<?> executable)
+    {
+        return executable.getDeclaringType().getQualifiedName() + Method.CLASS_METHOD_NAME_DIVIDER + executable.getSimpleName();
     }
 }

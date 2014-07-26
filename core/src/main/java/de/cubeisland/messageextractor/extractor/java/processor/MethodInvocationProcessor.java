@@ -49,7 +49,7 @@ public class MethodInvocationProcessor extends MessageProcessor<CtInvocation<CtM
             return;
         }
 
-        Method method = this.getConfiguration().getMethod(this.getFullQualifiedName(executable), executable.isStatic());
+        Method method = this.getConfiguration().getTranslatable(Method.class, element);
         if (method == null)
         {
             return;
@@ -72,10 +72,5 @@ public class MethodInvocationProcessor extends MessageProcessor<CtInvocation<CtM
         {
             this.addMessage(element, singular, plural);
         }
-    }
-
-    private String getFullQualifiedName(CtExecutableReference<?> executable)
-    {
-        return executable.getDeclaringType().getQualifiedName() + Method.CLASS_METHOD_NAME_DIVIDER + executable.getSimpleName();
     }
 }

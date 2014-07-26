@@ -31,7 +31,7 @@ import de.cubeisland.messageextractor.message.MessageStore;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.declaration.CtAnnotation;
 
-public class AnnotationProcessor extends MessageProcessor<CtAnnotation>
+public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
 {
     public AnnotationProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore)
     {
@@ -39,10 +39,9 @@ public class AnnotationProcessor extends MessageProcessor<CtAnnotation>
     }
 
     @Override
-    public void process(CtAnnotation element)
+    public void process(CtAnnotation<?> element)
     {
-        Annotation annotation = this.getConfiguration().getAnnotation(element.getAnnotationType().getQualifiedName());
-
+        Annotation annotation = this.getConfiguration().getTranslatable(Annotation.class, element);
         if (annotation == null)
         {
             return;

@@ -28,6 +28,7 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.cubeisland.messageextractor.exception.ConfigurationException;
@@ -36,57 +37,40 @@ import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.extractor.java.JavaMessageExtractor;
 import de.cubeisland.messageextractor.extractor.java.configuration.Annotation;
 import de.cubeisland.messageextractor.extractor.java.configuration.Method;
+import spoon.reflect.declaration.CtElement;
 
 @XmlRootElement(name = "source")
 public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 {
-    private Set<Method> methods = new HashSet<Method>();
-    private Set<Annotation> annotations = new HashSet<Annotation>();
+    private Set<TranslatableExpression> translatableExpressions = new HashSet<TranslatableExpression>();
 
-    public Set<Method> getMethods()
+    public Set<TranslatableExpression> getTranslatableExpressions()
     {
-        return methods;
+        return translatableExpressions;
     }
 
-    @XmlElementWrapper(name = "methods")
-    @XmlElement(name = "method")
-    public void setMethods(Set<Method> methods)
+    @XmlElementWrapper(name = "translatables")
+    @XmlElements({
+        @XmlElement(name = "method", type = Method.class),
+        @XmlElement(name = "annotation", type = Annotation.class)
+    })
+    public void setTranslatableExpressions(Set<TranslatableExpression> translatableExpressions)
     {
-        this.methods = methods;
+        this.translatableExpressions = translatableExpressions;
     }
 
-    public Set<Annotation> getAnnotations()
+    public <T> T getTranslatable(Class<T> clazz, CtElement element)
     {
-        return annotations;
-    }
-
-    @XmlElementWrapper(name = "annotations")
-    @XmlElement(name = "annotation")
-    public void setAnnotations(Set<Annotation> annotations)
-    {
-        this.annotations = annotations;
-    }
-
-    public Method getMethod(String name, boolean isStatic)
-    {
-        System.out.println("Method: " + name);
-        for (Method method : this.getMethods())
+        for (TranslatableExpression expression : this.getTranslatableExpressions())
         {
-            if (method.getName().equals(name) && isStatic == method.isStatic())
+            if(!clazz.isAssignableFrom(expression.getClass()))
             {
-                return method;
+                continue;
             }
-        }
-        return null;
-    }
 
-    public Annotation getAnnotation(String name)
-    {
-        for (Annotation annotation : this.getAnnotations())
-        {
-            if (annotation.getName().equals(name))
+            if(expression.describes(element))
             {
-                return annotation;
+                return (T) expression;
             }
         }
         return null;
@@ -101,7 +85,7 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
     @Override
     public void validateConfiguration() throws ConfigurationException
     {
-        if (this.getAnnotations().size() == 0 && this.getMethods().size() == 0)
+        if (this.getTranslatableExpressions().size() == 0)
         {
             throw new ConfigurationException("You must specify at least one way which describes how to extract the messages");
         }

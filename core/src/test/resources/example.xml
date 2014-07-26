@@ -4,7 +4,7 @@
 
         <directory>./core/src/test/resources</directory>
 
-        <methods>
+        <translatables>
             <method>
                 <name>test.I18n#getTranslation</name>
             </method>
@@ -18,9 +18,7 @@
             <method static="true">
                 <name>test.I18n#_</name>
             </method>
-        </methods>
 
-        <annotations>
             <annotation>
                 <name>test.anot.TestSingleMemberAnnotation</name>
             </annotation>
@@ -32,8 +30,7 @@
                     <field>usage</field>
                 </fields>
             </annotation>
-        </annotations>
-
+        </translatables>
     </source>
 
     <catalog format="gettext">
