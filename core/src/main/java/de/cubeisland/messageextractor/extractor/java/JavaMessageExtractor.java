@@ -25,11 +25,7 @@ package de.cubeisland.messageextractor.extractor.java;
 
 import com.martiansoftware.jsap.JSAPException;
 
-import java.io.File;
-import java.io.FileFilter;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
 
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
@@ -38,26 +34,14 @@ import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.extractor.java.processor.AnnotationProcessor;
 import de.cubeisland.messageextractor.extractor.java.processor.MethodInvocationProcessor;
 import de.cubeisland.messageextractor.message.MessageStore;
-import de.cubeisland.messageextractor.util.Misc;
 import spoon.Launcher;
 import spoon.compiler.SpoonCompiler;
-import spoon.compiler.SpoonResourceHelper;
 import spoon.processing.ProcessingManager;
 import spoon.reflect.factory.Factory;
 import spoon.support.QueueProcessingManager;
 
 public class JavaMessageExtractor implements MessageExtractor
 {
-    private final FileFilter fileFilter;
-
-    /**
-     * constructor creates an instance of this class
-     */
-    public JavaMessageExtractor()
-    {
-        this.fileFilter = new JavaFileFilter();
-    }
-
     /**
      * {@inheritDoc}
      *
@@ -92,15 +76,6 @@ public class JavaMessageExtractor implements MessageExtractor
         {
             throw new SourceDirectoryNotExistingException();
         }
-        List<File> files;
-        try
-        {
-            files = Misc.scanFilesRecursive(extractorConfig.getDirectory(), this.fileFilter);
-        }
-        catch (IOException e)
-        {
-            throw new MessageExtractionException("Failed to enlist the applicable files!", e);
-        }
 
         MessageStore messageStore = loadedMessageStore;
         if (messageStore == null)
@@ -108,17 +83,12 @@ public class JavaMessageExtractor implements MessageExtractor
             messageStore = new MessageStore();
         }
 
-        String[] environment = new String[files.size()];
-        for (int i = 0; i < environment.length; i++)
-        {
-            environment[i] = files.get(i).getAbsolutePath();
-        }
-
         try
         {
             Launcher launcher = new Launcher();
             SpoonCompiler compiler = launcher.createCompiler();
-            compiler.addInputSources(SpoonResourceHelper.resources(environment));
+            compiler.addInputSource(extractorConfig.getDirectory());
+            compiler.setSourceClasspath(System.getProperty("java.class.path"));
 
             compiler.setEncoding(config.getCharset().name());
 

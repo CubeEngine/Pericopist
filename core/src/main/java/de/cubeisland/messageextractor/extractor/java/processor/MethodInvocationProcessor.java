@@ -44,7 +44,7 @@ public class MethodInvocationProcessor extends MessageProcessor<CtInvocation<CtM
     public void process(CtInvocation<CtMethod<?>> element)
     {
         CtExecutableReference<CtMethod<?>> executable = element.getExecutable();
-        if(executable == null)
+        if (executable == null)
         {
             return;
         }
