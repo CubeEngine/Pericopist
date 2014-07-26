@@ -21,14 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.extractor.java;
+package de.cubeisland.messageextractor.extractor.java.configuration;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public abstract class Translatable
+public abstract class TranslatableExpression
 {
     private String name;
-    private String description;
 
     public String getName()
     {
@@ -39,16 +38,5 @@ public abstract class Translatable
     public void setName(String name)
     {
         this.name = name;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    @XmlElement(name = "description")
-    public void setDescription(String description)
-    {
-        this.description = description;
     }
 }

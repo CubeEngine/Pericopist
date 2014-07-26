@@ -6,12 +6,17 @@
 
         <methods>
             <method>
-                <name>getTranslation</name>
+                <name>test.I18n#getTranslation</name>
             </method>
+
             <method>
-                <name>getTranslationN</name>
+                <name>test.I18n#getTranslationN</name>
                 <singular>0</singular>
                 <plural>1</plural>
+            </method>
+
+            <method static="true">
+                <name>test.I18n#_</name>
             </method>
         </methods>
 
@@ -19,6 +24,7 @@
             <annotation>
                 <name>test.anot.TestSingleMemberAnnotation</name>
             </annotation>
+
             <annotation>
                 <name>text.anot.TestNormalAnnotation</name>
                 <fields>

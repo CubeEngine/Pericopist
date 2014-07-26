@@ -23,7 +23,7 @@
  */
 package de.cubeisland.messageextractor.extractor.java.processor;
 
-import de.cubeisland.messageextractor.extractor.java.JavaExtractorConfiguration;
+import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.Occurrence;
 import de.cubeisland.messageextractor.util.Misc;

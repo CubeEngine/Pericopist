@@ -25,8 +25,8 @@ package de.cubeisland.messageextractor.extractor.java.processor;
 
 import java.util.Map.Entry;
 
-import de.cubeisland.messageextractor.extractor.java.Annotation;
-import de.cubeisland.messageextractor.extractor.java.JavaExtractorConfiguration;
+import de.cubeisland.messageextractor.extractor.java.configuration.Annotation;
+import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
 import de.cubeisland.messageextractor.message.MessageStore;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.declaration.CtAnnotation;

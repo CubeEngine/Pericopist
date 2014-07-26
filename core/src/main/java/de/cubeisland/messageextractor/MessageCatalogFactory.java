@@ -51,7 +51,7 @@ import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.messageextractor.exception.UnknownCatalogFormatException;
 import de.cubeisland.messageextractor.exception.UnknownSourceLanguageException;
 import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
-import de.cubeisland.messageextractor.extractor.java.JavaExtractorConfiguration;
+import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
 import de.cubeisland.messageextractor.format.CatalogConfiguration;
 import de.cubeisland.messageextractor.format.gettext.GettextCatalogConfiguration;
 import de.cubeisland.messageextractor.util.Misc;

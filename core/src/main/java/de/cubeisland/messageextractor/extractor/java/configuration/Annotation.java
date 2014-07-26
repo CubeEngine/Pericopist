@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.extractor.java;
+package de.cubeisland.messageextractor.extractor.java.configuration;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,8 +30,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.cubeisland.messageextractor.extractor.java.configuration.TranslatableExpression;
+
 @XmlRootElement(name = "annotation")
-public class Annotation extends Translatable
+public class Annotation extends TranslatableExpression
 {
     private Set<String> fields;
 

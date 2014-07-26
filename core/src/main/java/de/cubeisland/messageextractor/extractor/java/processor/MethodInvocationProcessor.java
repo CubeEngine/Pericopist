@@ -25,8 +25,8 @@ package de.cubeisland.messageextractor.extractor.java.processor;
 
 import java.util.List;
 
-import de.cubeisland.messageextractor.extractor.java.JavaExtractorConfiguration;
-import de.cubeisland.messageextractor.extractor.java.Method;
+import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
+import de.cubeisland.messageextractor.extractor.java.configuration.Method;
 import de.cubeisland.messageextractor.message.MessageStore;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtInvocation;
@@ -49,8 +49,7 @@ public class MethodInvocationProcessor extends MessageProcessor<CtInvocation<CtM
             return;
         }
 
-        Method method = this.getConfiguration().getMethod(executable.getSimpleName());
-
+        Method method = this.getConfiguration().getMethod(this.getFullQualifiedName(executable), executable.isStatic());
         if (method == null)
         {
             return;
@@ -73,5 +72,10 @@ public class MethodInvocationProcessor extends MessageProcessor<CtInvocation<CtM
         {
             this.addMessage(element, singular, plural);
         }
+    }
+
+    private String getFullQualifiedName(CtExecutableReference<?> executable)
+    {
+        return executable.getDeclaringType().getQualifiedName() + Method.CLASS_METHOD_NAME_DIVIDER + executable.getSimpleName();
     }
 }

@@ -31,6 +31,7 @@ import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
 import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
+import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.java.processor.AnnotationProcessor;
 import de.cubeisland.messageextractor.extractor.java.processor.MethodInvocationProcessor;
 import de.cubeisland.messageextractor.message.MessageStore;

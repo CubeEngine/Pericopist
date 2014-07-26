@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.extractor.java;
+package de.cubeisland.messageextractor.extractor.java.configuration;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,6 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.extractor.AbstractExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
+import de.cubeisland.messageextractor.extractor.java.JavaMessageExtractor;
+import de.cubeisland.messageextractor.extractor.java.configuration.Annotation;
+import de.cubeisland.messageextractor.extractor.java.configuration.Method;
 
 @XmlRootElement(name = "source")
 public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
@@ -64,11 +67,12 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
         this.annotations = annotations;
     }
 
-    public Method getMethod(String name)
+    public Method getMethod(String name, boolean isStatic)
     {
+        System.out.println("Method: " + name);
         for (Method method : this.getMethods())
         {
-            if (method.getName().equals(name))
+            if (method.getName().equals(name) && isStatic == method.isStatic())
             {
                 return method;
             }
