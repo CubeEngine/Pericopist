@@ -103,17 +103,13 @@ public class JavaMessageExtractor implements MessageExtractor
 
             processManager.process();
         }
-        catch (JSAPException e)
-        {
-            e.printStackTrace();
-        }
         catch (FileNotFoundException e)
         {
-            e.printStackTrace();
+            throw new MessageExtractionException("A file was not found.", e);
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            throw new MessageExtractionException(e);
         }
 
         return messageStore;

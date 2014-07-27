@@ -34,4 +34,9 @@ public class MessageExtractionException extends MessageCatalogException
     {
         super(msg, t);
     }
+
+    public MessageExtractionException(Throwable t)
+    {
+        super(t);
+    }
 }
