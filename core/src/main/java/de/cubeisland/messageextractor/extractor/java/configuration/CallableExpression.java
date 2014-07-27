@@ -23,37 +23,76 @@
  */
 package de.cubeisland.messageextractor.extractor.java.configuration;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+
+import de.cubeisland.messageextractor.extractor.java.configuration.CallableSignatureType.CallableSignatureTypeUsage;
+import spoon.reflect.reference.CtExecutableReference;
+import spoon.reflect.reference.CtTypeReference;
 
 public abstract class CallableExpression extends TranslatableExpression
 {
-    private int singularIndex = 0;
-    private int pluralIndex = -1;
+    private CallableSignatureType[] signature;
+
+    public CallableSignatureType[] getSignature()
+    {
+        return signature;
+    }
+
+    @XmlElementWrapper(name = "signature")
+    @XmlElement(name = "type")
+    public void setSignature(CallableSignatureType[] signature)
+    {
+        this.signature = signature;
+    }
 
     public int getSingularIndex()
     {
-        return singularIndex;
-    }
-
-    @XmlElement(name = "singular")
-    public void setSingularIndex(int singularIndex)
-    {
-        this.singularIndex = singularIndex;
+        return this.getFirstIndexOf(CallableSignatureTypeUsage.SINGULAR);
     }
 
     public int getPluralIndex()
     {
-        return pluralIndex;
-    }
-
-    @XmlElement(name = "plural")
-    public void setPluralIndex(int pluralIndex)
-    {
-        this.pluralIndex = pluralIndex;
+        return this.getFirstIndexOf(CallableSignatureTypeUsage.PLURAL);
     }
 
     public boolean hasPlural()
     {
-        return this.pluralIndex > -1;
+        return this.getPluralIndex() > -1;
+    }
+
+    private int getFirstIndexOf(CallableSignatureTypeUsage usage)
+    {
+        int i = 0;
+        for(CallableSignatureType type : this.signature)
+        {
+            if(type.getUsage().equals(usage))
+            {
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
+
+    protected boolean matchesSignature(CtExecutableReference<?> executable)
+    {
+        List<CtTypeReference<?>> parameters = executable.getParameterTypes();
+
+        if(parameters.size() != this.getSignature().length)
+        {
+            return false;
+        }
+
+        for(int i = 0; i < parameters.size(); i++)
+        {
+            if(!parameters.get(i).toString().equals(this.getSignature()[i].getType()))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

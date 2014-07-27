@@ -24,55 +24,50 @@
 package de.cubeisland.messageextractor.extractor.java.configuration;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlValue;
 
-import spoon.reflect.code.CtInvocation;
-import spoon.reflect.declaration.CtElement;
-import spoon.reflect.reference.CtExecutableReference;
-
-@XmlRootElement(name = "method")
-public class Method extends CallableExpression
+@XmlRootElement(name = "type")
+public class CallableSignatureType
 {
-    public static final String CLASS_METHOD_NAME_DIVIDER = "#";
+    private CallableSignatureTypeUsage usage = CallableSignatureTypeUsage.NONE;
+    private String type;
 
-    private boolean isStatic;
-
-    public boolean isStatic()
+    public CallableSignatureTypeUsage getUsage()
     {
-        return this.isStatic;
+        return this.usage;
     }
 
-    @XmlAttribute(name = "static")
-    public void setStatic(boolean isStatic)
+    @XmlAttribute(name = "use-as")
+    public void setUsage(CallableSignatureTypeUsage usage)
     {
-        this.isStatic = isStatic;
+        this.usage = usage;
     }
 
-    @Override
-    public String toString()
+    public String getType()
     {
-        return this.getName() + ":" + this.getSingularIndex() + (this.hasPlural() ? "," + this.getPluralIndex() : "");
+        return this.type;
     }
 
-    @Override
-    public boolean matches(CtElement element)
+    @XmlValue
+    public void setType(String type)
     {
-        if(!(element instanceof CtInvocation<?>))
-        {
-            return false;
-        }
-        CtExecutableReference<?> executable = ((CtInvocation<?>) element).getExecutable();
-
-        if(!this.getName().equals(this.getFullyQualifiedName(executable)))
-        {
-            return false;
-        }
-
-        return this.isStatic() == executable.isStatic() && this.matchesSignature(executable);
+        this.type = type;
     }
 
-    private String getFullyQualifiedName(CtExecutableReference<?> executable)
+    @XmlRootElement(name = "use-as")
+    @XmlEnum
+    public enum CallableSignatureTypeUsage
     {
-        return executable.getDeclaringType().getQualifiedName() + Method.CLASS_METHOD_NAME_DIVIDER + executable.getSimpleName();
+        @XmlEnumValue("none")
+        NONE,
+
+        @XmlEnumValue("singular")
+        SINGULAR,
+
+        @XmlEnumValue("plural")
+        PLURAL
     }
 }
