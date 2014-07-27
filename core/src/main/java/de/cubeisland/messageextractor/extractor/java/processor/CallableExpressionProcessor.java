@@ -25,32 +25,24 @@ package de.cubeisland.messageextractor.extractor.java.processor;
 
 import java.util.List;
 
+import de.cubeisland.messageextractor.extractor.java.configuration.CallableExpression;
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
-import de.cubeisland.messageextractor.extractor.java.configuration.Method;
 import de.cubeisland.messageextractor.message.MessageStore;
+import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtExpression;
-import spoon.reflect.code.CtInvocation;
-import spoon.reflect.declaration.CtMethod;
-import spoon.reflect.reference.CtExecutableReference;
 
-public class MethodInvocationProcessor extends MessageProcessor<CtInvocation<CtMethod<?>>>
+public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvocation<?>>
 {
-    public MethodInvocationProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore)
+    public CallableExpressionProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore)
     {
         super(configuration, messageStore);
     }
 
     @Override
-    public void process(CtInvocation<CtMethod<?>> element)
+    public void process(CtAbstractInvocation<?> element)
     {
-        CtExecutableReference<CtMethod<?>> executable = element.getExecutable();
-        if (executable == null)
-        {
-            return;
-        }
-
-        Method method = this.getConfiguration().getTranslatable(Method.class, element);
-        if (method == null)
+        CallableExpression callableExpression = this.getConfiguration().getTranslatable(CallableExpression.class, element);
+        if(callableExpression == null)
         {
             return;
         }
@@ -59,13 +51,13 @@ public class MethodInvocationProcessor extends MessageProcessor<CtInvocation<CtM
         String plural = null;
 
         List<CtExpression<?>> arguments = element.getArguments();
-        if (arguments.size() > method.getSingularIndex())
+        if (arguments.size() > callableExpression.getSingularIndex())
         {
-            singular = this.getString(arguments.get(method.getSingularIndex()));
+            singular = this.getString(arguments.get(callableExpression.getSingularIndex()));
         }
-        if (method.hasPlural() && arguments.size() > method.getPluralIndex())
+        if (callableExpression.hasPlural() && arguments.size() > callableExpression.getPluralIndex())
         {
-            plural = this.getString(arguments.get(method.getPluralIndex()));
+            plural = this.getString(arguments.get(callableExpression.getPluralIndex()));
         }
 
         if (singular != null)

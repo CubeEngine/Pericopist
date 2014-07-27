@@ -33,7 +33,7 @@ import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.java.processor.AnnotationProcessor;
-import de.cubeisland.messageextractor.extractor.java.processor.MethodInvocationProcessor;
+import de.cubeisland.messageextractor.extractor.java.processor.CallableExpressionProcessor;
 import de.cubeisland.messageextractor.message.MessageStore;
 import spoon.Launcher;
 import spoon.compiler.SpoonCompiler;
@@ -95,7 +95,7 @@ public class JavaMessageExtractor implements MessageExtractor
 
             Factory spoonFactory = compiler.getFactory();
             ProcessingManager processManager = new QueueProcessingManager(spoonFactory);
-            processManager.addProcessor(new MethodInvocationProcessor((JavaExtractorConfiguration) config, messageStore));
+            processManager.addProcessor(new CallableExpressionProcessor((JavaExtractorConfiguration) config, messageStore));
             processManager.addProcessor(new AnnotationProcessor((JavaExtractorConfiguration) config, messageStore));
 
             spoonFactory.getEnvironment().setManager(processManager);

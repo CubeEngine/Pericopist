@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-07-26 18:51:45+0200\n"
+"POT-Creation-Date: 2014-07-27 12:42:07+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
-#: test/Main.java:55
+#: test/Main.java:58
 msgid "annotationString"
 msgstr ""
 
@@ -16,7 +16,7 @@ msgstr ""
 msgid "goodbye"
 msgstr ""
 
-#: test/Main.java:49
+#: test/Main.java:52
 msgid "pre-added"
 msgstr ""
 
@@ -24,12 +24,12 @@ msgstr ""
 msgid "what's up?"
 msgstr ""
 
-#: test/Main.java:36
-#: test/Main.java:37
+#: test/Main.java:39
+#: test/Main.java:40
 msgid "whats up?"
 msgstr ""
 
-#: test/Main.java:42
+#: test/Main.java:45
 #| msgid_plural "hope you are fine"
 msgid "hope %s is fine?"
 msgid_plural "hope you are fine?"
@@ -40,4 +40,8 @@ msgstr[3] ""
 
 #: test/SecondTestclass.java:44
 msgid "hello everyone"
+msgstr ""
+
+#: test/Main.java:36
+msgid "this is a constructor test."
 msgstr ""

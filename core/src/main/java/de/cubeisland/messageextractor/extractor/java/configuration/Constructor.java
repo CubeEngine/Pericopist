@@ -21,43 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package test;
+package de.cubeisland.messageextractor.extractor.java.configuration;
 
-import test.I18n.TranslatableClass;
-import test.anot.TestSingleMemberAnnotation;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class Main
+import spoon.reflect.code.CtAbstractInvocation;
+import spoon.reflect.declaration.CtElement;
+import spoon.reflect.reference.CtExecutableReference;
+
+@XmlRootElement(name = "constructor")
+public class Constructor extends CallableExpression
 {
-    public void main(String[] args)
+    @Override
+    public boolean matches(CtElement element)
     {
-        I18n i18n = new I18n();
-        boolean question = true;
+        if(!(element instanceof CtAbstractInvocation<?>))
+        {
+            return false;
+        }
 
-        TranslatableClass translatableClass = new TranslatableClass("this is a constructor test.");
+        CtExecutableReference<?> executable = ((CtAbstractInvocation<?>) element).getExecutable();
 
-        i18n.sendTranslated("hello everyone");
-        i18n.getTranslation("whats up?");
-        i18n.getTranslation("whats up?");
+        if(!executable.isConstructor())
+        {
+            return false;
+        }
 
-        i18n.getTranslation((question ? "true" : "false")); // TODO
-        i18n.getTranslation((question ? "right" : "wring") + "answer"); // TODO
+        if(!this.getName().equals(executable.getDeclaringType().getQualifiedName()))
+        {
+            return false;
+        }
 
-        i18n.getTranslationN("hope %s is fine?", "hope you are fine?", getOnlinePersons(), "Phillip");
-
-        SecondTestclass second = new SecondTestclass(i18n, "hello");
-
-        this.getNonTranslation("Bye bye!");
-    }
-
-    @TestSingleMemberAnnotation("pre-added")
-    private String getNonTranslation(String string, Object... o)
-    {
-        return String.format(string, o);
-    }
-
-    @TestSingleMemberAnnotation("annotationString")
-    private int getOnlinePersons()
-    {
-        return 2;
+        return this.matchesSignature(executable);
     }
 }

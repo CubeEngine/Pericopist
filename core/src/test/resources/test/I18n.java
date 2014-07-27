@@ -25,6 +25,22 @@ package test;
 
 public class I18n
 {
+    public class TranslatableClass
+    {
+        public TranslatableClass(String msg)
+        {
+
+        }
+    }
+
+    public class NonTranslatableClass extends TranslatableClass
+    {
+        public NonTranslatableClass(String msg)
+        {
+            super(msg);
+        }
+    }
+
     public String getTranslation(String message, Object... objects)
     {
         return null;
