@@ -47,10 +47,8 @@ public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
             return;
         }
 
-        for (Object fieldValue : element.getElementValues().entrySet())
+        for (Entry<String, Object> fieldEntry : element.getElementValues().entrySet())
         {
-            Entry<String, Object> fieldEntry = (Entry<String, Object>) fieldValue; // TODO
-
             if (!annotation.hasField(fieldEntry.getKey()))
             {
                 continue;
