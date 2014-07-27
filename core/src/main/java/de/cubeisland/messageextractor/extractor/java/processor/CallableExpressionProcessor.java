@@ -42,7 +42,7 @@ public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvo
     public void process(CtAbstractInvocation<?> element)
     {
         CallableExpression callableExpression = this.getConfiguration().getTranslatable(CallableExpression.class, element);
-        if(callableExpression == null)
+        if (callableExpression == null)
         {
             return;
         }

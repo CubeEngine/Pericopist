@@ -23,8 +23,6 @@
  */
 package de.cubeisland.messageextractor.extractor.java;
 
-import com.martiansoftware.jsap.JSAPException;
-
 import java.io.FileNotFoundException;
 
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
