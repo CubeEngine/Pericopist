@@ -87,7 +87,6 @@ public class JavaMessageExtractor implements MessageExtractor
             Launcher launcher = new Launcher();
             SpoonCompiler compiler = launcher.createCompiler();
             compiler.addInputSource(extractorConfig.getDirectory());
-            compiler.setSourceClasspath(System.getProperty("java.class.path"));
             compiler.setSourceClasspath(extractorConfig.getClasspath());
 
             compiler.setEncoding(config.getCharset().name());
