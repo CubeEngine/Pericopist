@@ -24,13 +24,10 @@
 package de.cubeisland.messageextractor.extractor.java.configuration;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.cubeisland.messageextractor.extractor.java.configuration.TranslatableExpression;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.declaration.CtElement;
-import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.reference.CtExecutableReference;
 
 @XmlRootElement(name = "method")
@@ -66,7 +63,7 @@ public class Method extends CallableExpression
         }
         CtExecutableReference<?> executable = ((CtInvocation<?>) element).getExecutable();
 
-        if(!this.getName().equals(this.getFullQualifiedName(executable)))
+        if(!this.getName().equals(this.getFullyQualifiedName(executable)))
         {
             return false;
         }
@@ -74,7 +71,7 @@ public class Method extends CallableExpression
         return this.isStatic() == executable.isStatic();
     }
 
-    private String getFullQualifiedName(CtExecutableReference<?> executable)
+    private String getFullyQualifiedName(CtExecutableReference<?> executable)
     {
         return executable.getDeclaringType().getQualifiedName() + Method.CLASS_METHOD_NAME_DIVIDER + executable.getSimpleName();
     }
