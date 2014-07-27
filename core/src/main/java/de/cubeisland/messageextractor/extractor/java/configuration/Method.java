@@ -57,13 +57,13 @@ public class Method extends CallableExpression
     @Override
     public boolean matches(CtElement element)
     {
-        if(!(element instanceof CtInvocation<?>))
+        if (!(element instanceof CtInvocation<?>))
         {
             return false;
         }
         CtExecutableReference<?> executable = ((CtInvocation<?>) element).getExecutable();
 
-        if(!this.getName().equals(this.getFullyQualifiedName(executable)))
+        if (!this.getName().equals(this.getFullyQualifiedName(executable)))
         {
             return false;
         }

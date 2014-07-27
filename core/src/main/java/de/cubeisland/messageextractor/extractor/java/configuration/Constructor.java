@@ -35,19 +35,19 @@ public class Constructor extends CallableExpression
     @Override
     public boolean matches(CtElement element)
     {
-        if(!(element instanceof CtAbstractInvocation<?>))
+        if (!(element instanceof CtAbstractInvocation<?>))
         {
             return false;
         }
 
         CtExecutableReference<?> executable = ((CtAbstractInvocation<?>) element).getExecutable();
 
-        if(!executable.isConstructor())
+        if (!executable.isConstructor())
         {
             return false;
         }
 
-        if(!this.getName().equals(executable.getDeclaringType().getQualifiedName()))
+        if (!this.getName().equals(executable.getDeclaringType().getQualifiedName()))
         {
             return false;
         }

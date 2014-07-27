@@ -49,9 +49,9 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 
     @XmlElementWrapper(name = "translatables")
     @XmlElements({
-        @XmlElement(name = "method", type = Method.class),
-        @XmlElement(name = "annotation", type = Annotation.class),
-        @XmlElement(name = "constructor", type = Constructor.class)
+            @XmlElement(name = "method", type = Method.class),
+            @XmlElement(name = "annotation", type = Annotation.class),
+            @XmlElement(name = "constructor", type = Constructor.class)
     })
     public void setTranslatableExpressions(Set<TranslatableExpression> translatableExpressions)
     {
@@ -62,12 +62,12 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
     {
         for (TranslatableExpression expression : this.getTranslatableExpressions())
         {
-            if(!clazz.isAssignableFrom(expression.getClass()))
+            if (!clazz.isAssignableFrom(expression.getClass()))
             {
                 continue;
             }
 
-            if(expression.matches(element))
+            if (expression.matches(element))
             {
                 return (T) expression;
             }
@@ -87,6 +87,11 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
         if (this.getTranslatableExpressions().size() == 0)
         {
             throw new ConfigurationException("You must specify at least one way which describes how to extract the messages");
+        }
+
+        for (TranslatableExpression expression : this.getTranslatableExpressions())
+        {
+            expression.validate();
         }
     }
 }

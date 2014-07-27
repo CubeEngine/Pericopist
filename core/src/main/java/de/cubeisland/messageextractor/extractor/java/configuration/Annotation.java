@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.cubeisland.messageextractor.extractor.java.configuration.TranslatableExpression;
 import spoon.reflect.declaration.CtAnnotation;
 import spoon.reflect.declaration.CtElement;
 
@@ -93,7 +92,7 @@ public class Annotation extends TranslatableExpression
     @Override
     public boolean matches(CtElement element)
     {
-        if(!(element instanceof CtAnnotation<?>))
+        if (!(element instanceof CtAnnotation<?>))
         {
             return false;
         }

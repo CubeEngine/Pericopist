@@ -25,6 +25,7 @@ package de.cubeisland.messageextractor.extractor.java.configuration;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import de.cubeisland.messageextractor.exception.ConfigurationException;
 import spoon.reflect.declaration.CtElement;
 
 public abstract class TranslatableExpression
@@ -40,6 +41,14 @@ public abstract class TranslatableExpression
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public void validate() throws ConfigurationException
+    {
+        if (this.getName() == null)
+        {
+            throw new ConfigurationException("A translatable expressions needs a name. Specify it with a name tag.");
+        }
     }
 
     public abstract boolean matches(CtElement element);
