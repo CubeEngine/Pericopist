@@ -41,6 +41,7 @@ import spoon.reflect.declaration.CtElement;
 public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 {
     private Set<TranslatableExpression> translatableExpressions = new HashSet<TranslatableExpression>();
+    private String classpath = System.getProperty("java.class.path");
 
     public Set<TranslatableExpression> getTranslatableExpressions()
     {
@@ -56,6 +57,17 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
     public void setTranslatableExpressions(Set<TranslatableExpression> translatableExpressions)
     {
         this.translatableExpressions = translatableExpressions;
+    }
+
+    public String getClasspath()
+    {
+        return this.classpath;
+    }
+
+    @XmlElement(name = "classpath")
+    public void setClasspath(String classpath)
+    {
+        this.classpath = classpath;
     }
 
     public <T> T getTranslatable(Class<T> clazz, CtElement element)
