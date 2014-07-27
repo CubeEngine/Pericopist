@@ -42,5 +42,5 @@ public abstract class TranslatableExpression
         this.name = name;
     }
 
-    public abstract boolean describes(CtElement element);
+    public abstract boolean matches(CtElement element);
 }

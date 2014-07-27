@@ -91,7 +91,7 @@ public class Annotation extends TranslatableExpression
     }
 
     @Override
-    public boolean describes(CtElement element)
+    public boolean matches(CtElement element)
     {
         if(!(element instanceof CtAnnotation<?>))
         {

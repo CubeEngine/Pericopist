@@ -35,8 +35,6 @@ import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.extractor.AbstractExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.extractor.java.JavaMessageExtractor;
-import de.cubeisland.messageextractor.extractor.java.configuration.Annotation;
-import de.cubeisland.messageextractor.extractor.java.configuration.Method;
 import spoon.reflect.declaration.CtElement;
 
 @XmlRootElement(name = "source")
@@ -68,7 +66,7 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
                 continue;
             }
 
-            if(expression.describes(element))
+            if(expression.matches(element))
             {
                 return (T) expression;
             }

@@ -55,7 +55,7 @@ public class Method extends CallableExpression
     }
 
     @Override
-    public boolean describes(CtElement element)
+    public boolean matches(CtElement element)
     {
         if(!(element instanceof CtInvocation<?>))
         {
