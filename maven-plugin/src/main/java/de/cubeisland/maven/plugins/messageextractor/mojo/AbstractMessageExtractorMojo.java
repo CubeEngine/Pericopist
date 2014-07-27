@@ -17,6 +17,7 @@
  */
 package de.cubeisland.maven.plugins.messageextractor.mojo;
 
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -24,9 +25,12 @@ import org.apache.maven.project.MavenProject;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.ToolManager;
 
+import java.io.File;
 import java.nio.charset.Charset;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import de.cubeisland.messageextractor.MessageCatalog;
 import de.cubeisland.messageextractor.MessageCatalogFactory;
@@ -35,6 +39,9 @@ import de.cubeisland.messageextractor.exception.ConfigurationNotFoundException;
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
 
+/**
+ * @requiresDependencyResolution test
+ */
 public abstract class AbstractMessageExtractorMojo extends AbstractMojo
 {
     /**
@@ -74,6 +81,8 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
         {
             throw new MojoFailureException("An extractor configuration is not specified.");
         }
+
+        this.loadClasspath();
 
         MessageCatalog catalog = this.getMessageCatalog(new MessageCatalogFactory());
         if (catalog == null)
@@ -172,6 +181,35 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
         }
 
         return null;
+    }
+
+    /**
+     * This method loads the classpath of the maven project and adds the classpath elements
+     * to the current classpath
+     */
+    private void loadClasspath() throws MojoFailureException
+    {
+        try
+        {
+            Set<Object> elements = new HashSet<Object>();
+            elements.addAll(this.project.getCompileClasspathElements());
+            elements.addAll(this.project.getRuntimeClasspathElements());
+            elements.addAll(this.project.getSystemClasspathElements());
+            elements.addAll(this.project.getTestClasspathElements());
+
+            StringBuilder classpath = new StringBuilder(System.getProperty("java.class.path"));
+            for (Object element : elements)
+            {
+                classpath.append(File.pathSeparator);
+                classpath.append(element.toString());
+            }
+
+            System.setProperty("java.class.path", classpath.toString());
+        }
+        catch (DependencyResolutionRequiredException e)
+        {
+            throw new MojoFailureException("The dependencies of the maven project couldn't be loaded.", e);
+        }
     }
 
     /**
