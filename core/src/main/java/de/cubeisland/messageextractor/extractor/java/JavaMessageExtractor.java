@@ -23,7 +23,13 @@
  */
 package de.cubeisland.messageextractor.extractor.java;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.HashSet;
+import java.util.Set;
 
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
@@ -86,8 +92,10 @@ public class JavaMessageExtractor implements MessageExtractor
         {
             Launcher launcher = new Launcher();
             SpoonCompiler compiler = launcher.createCompiler();
+
             compiler.addInputSource(extractorConfig.getDirectory());
             compiler.setSourceClasspath(extractorConfig.getClasspath());
+            this.loadClassLoader(extractorConfig.getClasspath());
 
             compiler.setEncoding(config.getCharset().name());
 
@@ -111,5 +119,25 @@ public class JavaMessageExtractor implements MessageExtractor
         }
 
         return messageStore;
+    }
+
+    /**
+     * This method creates a new ClassLoader instance which
+     * contains the specified classpath and the current one.
+     *
+     * @param classpath the new classpath
+     *
+     * @throws MalformedURLException
+     */
+    private void loadClassLoader(String classpath) throws MalformedURLException
+    {
+        Set<URL> urls = new HashSet<URL>();
+        for (String element : classpath.split(File.pathSeparator))
+        {
+            urls.add(new File(element).toURI().toURL());
+        }
+
+        ClassLoader contextClassLoader = URLClassLoader.newInstance(urls.toArray(new URL[urls.size()]), Thread.currentThread().getContextClassLoader());
+        Thread.currentThread().setContextClassLoader(contextClassLoader);
     }
 }
