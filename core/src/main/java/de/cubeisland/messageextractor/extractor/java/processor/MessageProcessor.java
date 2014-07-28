@@ -23,6 +23,9 @@
  */
 package de.cubeisland.messageextractor.extractor.java.processor;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
@@ -34,7 +37,9 @@ import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.BinaryOperatorKind;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.declaration.CtElement;
+import spoon.reflect.reference.CtFieldReference;
 import spoon.support.reflect.code.CtBinaryOperatorImpl;
+import spoon.support.reflect.code.CtFieldAccessImpl;
 import spoon.support.reflect.code.CtLiteralImpl;
 
 public abstract class MessageProcessor<E extends CtElement> extends AbstractProcessor<E>
@@ -64,7 +69,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
     {
         Occurrence occurrence = new Occurrence(Misc.getRelativizedFile(this.getConfiguration().getDirectory(), element.getPosition().getFile()), element.getPosition().getLine());
 
-        if(singular == null)
+        if (singular == null)
         {
             StringBuilder builder = new StringBuilder("A translatable message couldn't be extracted.");
             builder.append("\n\tType: ");
@@ -80,7 +85,6 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             return;
         }
 
-
         this.getMessageStore().addMessage(singular, plural, occurrence);
     }
 
@@ -94,12 +98,16 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         {
             return this.getString((CtBinaryOperatorImpl<?>) expression);
         }
+        else if (expression instanceof CtFieldAccessImpl<?>)
+        {
+            return this.getString((CtFieldAccessImpl<?>) expression);
+        }
 
-        this.getLogger().info("The Expression '" + expression.getClass().getName() + "' isn't supported yet.");
+        this.getLogger().info("The expression '" + expression.getClass().getName() + "' isn't supported yet.");
         return null;
     }
 
-    protected String getString(CtBinaryOperatorImpl<?> expression)
+    private String getString(CtBinaryOperatorImpl<?> expression)
     {
         StringBuilder value = new StringBuilder(2);
 
@@ -124,6 +132,28 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         value.append(string);
 
         return value.toString();
+    }
+
+    private String getString(CtFieldAccessImpl<?> expression)
+    {
+        CtFieldReference<?> fieldReference = expression.getVariable();
+        Member member = fieldReference.getActualField();
+        if (member == null || !(member instanceof Field))
+        {
+            return null;
+        }
+
+        Field field = (Field) member;
+
+        try
+        {
+            return field.get(null).toString();
+        }
+        catch (IllegalAccessException e)
+        {
+            this.logger.log(Level.SEVERE, "The expression '" + expression.getClass().getName() + "' couldn't be parsed. The field '" + field.getName() + "' of the class '" + field.getDeclaringClass().getName() + "' couldn't be accessed.", e);
+        }
+        return null;
     }
 
     public Logger getLogger()
