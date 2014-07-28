@@ -23,12 +23,19 @@
  */
 package de.cubeisland.messageextractor.extractor.java.configuration;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+import java.util.Set;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import spoon.reflect.code.CtInvocation;
+import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtElement;
+import spoon.reflect.declaration.CtExecutable;
 import spoon.reflect.reference.CtExecutableReference;
+import spoon.reflect.reference.CtTypeReference;
 
 @XmlRootElement(name = "method")
 public class Method extends CallableExpression
@@ -48,6 +55,18 @@ public class Method extends CallableExpression
         this.isStatic = isStatic;
     }
 
+    public String getMethodName()
+    {
+        String name = this.getName();
+        return name.substring(name.lastIndexOf(CLASS_METHOD_NAME_DIVIDER) + 1);
+    }
+
+    public String getClassName()
+    {
+        String name = this.getName();
+        return name.substring(0, name.lastIndexOf(CLASS_METHOD_NAME_DIVIDER));
+    }
+
     @Override
     public String toString()
     {
@@ -63,12 +82,56 @@ public class Method extends CallableExpression
         }
         CtExecutableReference<?> executable = ((CtInvocation<?>) element).getExecutable();
 
-        if (!this.getName().equals(this.getFullyQualifiedName(executable)))
+        if(!executable.getSimpleName().equals(this.getMethodName()))
         {
             return false;
         }
 
-        return this.isStatic() == executable.isStatic() && this.matchesSignature(executable);
+        if(this.isStatic() != executable.isStatic())
+        {
+            return false;
+        }
+        if (!this.matchesSignature(executable))
+        {
+            return false;
+        }
+
+        return this.isAssignableFrom(executable);
+    }
+
+    private boolean isAssignableFrom(CtExecutableReference<?> executable)
+    {
+        String className = this.getClassName();
+
+        Queue<CtTypeReference<?>> queue = new ArrayDeque<CtTypeReference<?>>();
+        queue.offer(executable.getDeclaringType());
+
+        while (!queue.isEmpty())
+        {
+            CtTypeReference<?> typeReference = queue.poll();
+
+            if(className.equals(typeReference.getQualifiedName()))
+            {
+                queue.clear();
+                return true;
+            }
+
+            CtTypeReference<?> superClass = typeReference.getSuperclass();
+            Set<CtTypeReference<?>> superInterfaces = typeReference.getSuperInterfaces();
+
+            if(superClass != null)
+            {
+                queue.offer(typeReference.getSuperclass());
+            }
+            if(superInterfaces != null)
+            {
+                for(CtTypeReference<?> interfaceReference : typeReference.getSuperInterfaces())
+                {
+                    queue.offer(interfaceReference);
+                }
+            }
+        }
+        return false;
     }
 
     private String getFullyQualifiedName(CtExecutableReference<?> executable)
