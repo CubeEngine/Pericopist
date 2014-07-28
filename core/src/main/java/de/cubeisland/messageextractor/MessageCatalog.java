@@ -25,6 +25,8 @@ package de.cubeisland.messageextractor;
 
 import org.apache.velocity.context.Context;
 
+import java.util.logging.Logger;
+
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
@@ -46,11 +48,26 @@ public class MessageCatalog
 
     public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration) throws MessageCatalogException
     {
-        this(extractorConfiguration, catalogConfiguration, null);
+        this(extractorConfiguration, catalogConfiguration, (Context) null);
+    }
+
+    public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration, Logger logger) throws MessageCatalogException
+    {
+        this(extractorConfiguration, catalogConfiguration, null, logger);
     }
 
     public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration, Context context) throws MessageCatalogException
     {
+        this(extractorConfiguration, catalogConfiguration, context, null);
+    }
+
+    public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration, Context context, Logger logger) throws MessageCatalogException
+    {
+        if(logger == null)
+        {
+            logger = Logger.getLogger("messageextractor");
+        }
+
         this.extractorConfiguration = extractorConfiguration;
         this.catalogConfiguration = catalogConfiguration;
 
@@ -62,6 +79,7 @@ public class MessageCatalog
         try
         {
             this.messageExtractor = extractorConfiguration.getExtractorClass().newInstance();
+            this.messageExtractor.setLogger(logger);
         }
         catch (Exception e)
         {
@@ -71,6 +89,7 @@ public class MessageCatalog
         try
         {
             this.catalogFormat = catalogConfiguration.getCatalogFormatClass().newInstance();
+            this.catalogFormat.setLogger(logger);
         }
         catch (Exception e)
         {

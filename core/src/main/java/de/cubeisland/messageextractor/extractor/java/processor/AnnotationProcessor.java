@@ -24,6 +24,7 @@
 package de.cubeisland.messageextractor.extractor.java.processor;
 
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.extractor.java.configuration.Annotation;
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
@@ -33,9 +34,9 @@ import spoon.reflect.declaration.CtAnnotation;
 
 public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
 {
-    public AnnotationProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore)
+    public AnnotationProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore, Logger logger)
     {
-        super(configuration, messageStore);
+        super(configuration, messageStore, logger);
     }
 
     @Override
@@ -56,11 +57,7 @@ public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
 
             if (fieldEntry.getValue() instanceof CtExpression<?>)
             {
-                String message = this.getString((CtExpression<?>) fieldEntry.getValue());
-                if (message != null)
-                {
-                    this.addMessage(element, message, null);
-                }
+                this.addMessage(annotation, element, this.getString((CtExpression<?>) fieldEntry.getValue()), null);
             }
         }
     }

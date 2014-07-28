@@ -24,6 +24,7 @@
 package de.cubeisland.messageextractor.extractor.java.processor;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.extractor.java.configuration.CallableExpression;
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
@@ -33,9 +34,9 @@ import spoon.reflect.code.CtExpression;
 
 public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvocation<?>>
 {
-    public CallableExpressionProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore)
+    public CallableExpressionProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore, Logger logger)
     {
-        super(configuration, messageStore);
+        super(configuration, messageStore, logger);
     }
 
     @Override
@@ -60,9 +61,6 @@ public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvo
             plural = this.getString(arguments.get(callableExpression.getPluralIndex()));
         }
 
-        if (singular != null)
-        {
-            this.addMessage(element, singular, plural);
-        }
+        this.addMessage(callableExpression, element, singular, plural);
     }
 }

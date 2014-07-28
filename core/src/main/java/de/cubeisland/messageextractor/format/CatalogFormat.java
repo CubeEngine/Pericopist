@@ -25,6 +25,8 @@ package de.cubeisland.messageextractor.format;
 
 import org.apache.velocity.context.Context;
 
+import java.util.logging.Logger;
+
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.messageextractor.message.MessageStore;
 
@@ -59,4 +61,11 @@ public interface CatalogFormat
      * @throws CatalogFormatException
      */
     MessageStore read(CatalogConfiguration config) throws CatalogFormatException;
+
+    /**
+     * This method sets the logger which is used by the CatalogFormat
+     *
+     * @param logger the logger
+     */
+    void setLogger(Logger logger);
 }

@@ -66,11 +66,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
 
-        if (this.logger == null)
-        {
-            this.logger = Logger.getLogger("messageextractor");
-        }
-
         Catalog catalog = this.getCatalog(catalogConfig, messageStore);
 
         if (catalogConfig.getHeaderConfiguration() != null)
@@ -109,6 +104,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         }
 
         this.writeCatalog(catalog, catalogConfig, template);
+        this.logger.info("The " + this.getClass().getSimpleName() + " created a new template with " + messageCount + " messages.");
     }
 
     private void writeCatalog(Catalog catalog, GettextCatalogConfiguration configuration, File template) throws CatalogFormatException
@@ -273,6 +269,8 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 messageStore.addMessage(message.getMsgid(), message.getMsgidPlural(), i++);
             }
         }
+
+        this.logger.info("The " + this.getClass().getSimpleName() + " read " + messageStore.size() + " messages from the old catalog.");
 
         return messageStore;
     }
@@ -487,21 +485,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return this.compareCatalogHeader(old.locateHeader(), newCatalog.locateHeader(), headerConfiguration);
     }
 
-    /**
-     * This method returns the logger which is used by this class
-     *
-     * @return logger which is used by this class
-     */
-    public Logger getLogger()
-    {
-        return this.logger;
-    }
-
-    /**
-     * This method sets a logger which shall be used by this class
-     *
-     * @param logger logger which shall be used.
-     */
+    @Override
     public void setLogger(Logger logger)
     {
         this.logger = logger;

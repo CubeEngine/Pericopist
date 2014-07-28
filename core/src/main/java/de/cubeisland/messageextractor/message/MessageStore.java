@@ -87,6 +87,11 @@ public class MessageStore implements Iterable<TranslatableMessage>
         return messages;
     }
 
+    public int size()
+    {
+        return this.getMessages().size();
+    }
+
     @Override
     public Iterator<TranslatableMessage> iterator()
     {

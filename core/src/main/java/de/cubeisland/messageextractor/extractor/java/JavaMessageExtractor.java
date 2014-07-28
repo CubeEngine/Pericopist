@@ -30,6 +30,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
@@ -47,6 +48,8 @@ import spoon.support.QueueProcessingManager;
 
 public class JavaMessageExtractor implements MessageExtractor
 {
+    private Logger logger;
+
     /**
      * {@inheritDoc}
      *
@@ -87,6 +90,7 @@ public class JavaMessageExtractor implements MessageExtractor
         {
             messageStore = new MessageStore();
         }
+        int messageAmount = messageStore.size();
 
         try
         {
@@ -101,8 +105,8 @@ public class JavaMessageExtractor implements MessageExtractor
 
             Factory spoonFactory = compiler.getFactory();
             ProcessingManager processManager = new QueueProcessingManager(spoonFactory);
-            processManager.addProcessor(new CallableExpressionProcessor((JavaExtractorConfiguration) config, messageStore));
-            processManager.addProcessor(new AnnotationProcessor((JavaExtractorConfiguration) config, messageStore));
+            processManager.addProcessor(new CallableExpressionProcessor((JavaExtractorConfiguration) config, messageStore, this.logger));
+            processManager.addProcessor(new AnnotationProcessor((JavaExtractorConfiguration) config, messageStore, this.logger));
 
             spoonFactory.getEnvironment().setManager(processManager);
             compiler.build();
@@ -118,7 +122,15 @@ public class JavaMessageExtractor implements MessageExtractor
             throw new MessageExtractionException(e);
         }
 
+        this.logger.info("The " + this.getClass().getSimpleName() + " extracted " + (messageStore.size() - messageAmount) + " new messages from the source code.");
+
         return messageStore;
+    }
+
+    @Override
+    public void setLogger(Logger logger)
+    {
+        this.logger = logger;
     }
 
     /**

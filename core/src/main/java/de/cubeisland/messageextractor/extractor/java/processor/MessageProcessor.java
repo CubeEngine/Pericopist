@@ -23,7 +23,10 @@
  */
 package de.cubeisland.messageextractor.extractor.java.processor;
 
+import java.util.logging.Logger;
+
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
+import de.cubeisland.messageextractor.extractor.java.configuration.TranslatableExpression;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.Occurrence;
 import de.cubeisland.messageextractor.util.Misc;
@@ -38,11 +41,13 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
 {
     private final JavaExtractorConfiguration configuration;
     private final MessageStore messageStore;
+    private final Logger logger;
 
-    public MessageProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore)
+    public MessageProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore, Logger logger)
     {
         this.configuration = configuration;
         this.messageStore = messageStore;
+        this.logger = logger;
     }
 
     public JavaExtractorConfiguration getConfiguration()
@@ -55,9 +60,25 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         return messageStore;
     }
 
-    public void addMessage(E element, String singular, String plural)
+    public void addMessage(TranslatableExpression translatableExpression, E element, String singular, String plural)
     {
         Occurrence occurrence = new Occurrence(Misc.getRelativizedFile(this.getConfiguration().getDirectory(), element.getPosition().getFile()), element.getPosition().getLine());
+
+        if(singular == null)
+        {
+            StringBuilder builder = new StringBuilder("A translatable message couldn't be extracted.");
+            builder.append("\n\tType: ");
+            builder.append(translatableExpression.getClass().getSimpleName());
+            builder.append("\n\tName: ");
+            builder.append(translatableExpression.getName());
+            builder.append("\n\tOccurence: ");
+            builder.append(occurrence.toString());
+
+            this.getLogger().warning(builder.toString());
+            return;
+        }
+
+
         this.getMessageStore().addMessage(singular, plural, occurrence);
     }
 
@@ -72,7 +93,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             return this.getString((CtBinaryOperatorImpl<?>) expression);
         }
 
-        System.out.println("The Expression '" + expression.getClass().getName() + "' isn't supported yet.");
+        this.getLogger().info("The Expression '" + expression.getClass().getName() + "' isn't supported yet.");
         return null;
     }
 
@@ -82,7 +103,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
 
         if (!BinaryOperatorKind.PLUS.equals(expression.getKind()))
         {
-            System.out.println("Just the '+' binary operator can be used for string operations. '" + expression.getKind().name() + "' isn't supported.");
+            this.getLogger().warning("Just the '+' binary operator can be used for string operations. '" + expression.getKind().name() + "' isn't supported.");
             return null;
         }
 
@@ -101,5 +122,10 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         value.append(string);
 
         return value.toString();
+    }
+
+    public Logger getLogger()
+    {
+        return logger;
     }
 }

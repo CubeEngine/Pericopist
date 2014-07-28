@@ -23,6 +23,8 @@
  */
 package de.cubeisland.messageextractor.extractor;
 
+import java.util.logging.Logger;
+
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.message.MessageStore;
 
@@ -56,4 +58,11 @@ public interface MessageExtractor
      * @throws MessageExtractionException
      */
     MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractionException;
+
+    /**
+     * This method sets the logger which is used by the MessageExtractor
+     *
+     * @param logger the logger
+     */
+    void setLogger(Logger logger);
 }

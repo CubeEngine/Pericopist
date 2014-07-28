@@ -38,6 +38,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -85,10 +86,20 @@ public class MessageCatalogFactory
 
     public MessageCatalog getMessageCatalog(String resource, Charset charset) throws MessageCatalogException
     {
-        return this.getMessageCatalog(resource, charset, null);
+        return this.getMessageCatalog(resource, charset, (Context) null);
+    }
+
+    public MessageCatalog getMessageCatalog(String resource, Charset charset, Logger logger) throws MessageCatalogException
+    {
+        return this.getMessageCatalog(resource, charset, null, logger);
     }
 
     public MessageCatalog getMessageCatalog(String resource, Charset charset, Context veloctiyContext) throws MessageCatalogException
+    {
+        return this.getMessageCatalog(resource, charset, veloctiyContext, null);
+    }
+
+    public MessageCatalog getMessageCatalog(String resource, Charset charset, Context veloctiyContext, Logger logger) throws MessageCatalogException
     {
         URL configurationUrl = Misc.getResource(resource);
         if (configurationUrl == null)
@@ -165,10 +176,10 @@ public class MessageCatalogFactory
             throw new UnknownCatalogFormatException("Unknown catalog format " + catalogFormatNode.getTextContent());
         }
 
-        return this.createMessageCatalog(extractorConfigurationClass, sourceNode, catalogConfigurationClass, catalogNode, defaultCharset, veloctiyContext);
+        return this.createMessageCatalog(extractorConfigurationClass, sourceNode, catalogConfigurationClass, catalogNode, defaultCharset, veloctiyContext, logger);
     }
 
-    private MessageCatalog createMessageCatalog(Class<? extends ExtractorConfiguration> extractorConfigurationClass, Node sourceNode, Class<? extends CatalogConfiguration> catalogConfigurationClass, Node catalogNode, Charset charset, Context velocityContext) throws MessageCatalogException
+    private MessageCatalog createMessageCatalog(Class<? extends ExtractorConfiguration> extractorConfigurationClass, Node sourceNode, Class<? extends CatalogConfiguration> catalogConfigurationClass, Node catalogNode, Charset charset, Context velocityContext, Logger logger) throws MessageCatalogException
     {
         try
         {
@@ -187,7 +198,7 @@ public class MessageCatalogFactory
                 catalogConfiguration.setCharset(charset);
             }
 
-            return new MessageCatalog(extractorConfiguration, catalogConfiguration, velocityContext);
+            return new MessageCatalog(extractorConfiguration, catalogConfiguration, velocityContext, logger);
         }
         catch (JAXBException e)
         {
