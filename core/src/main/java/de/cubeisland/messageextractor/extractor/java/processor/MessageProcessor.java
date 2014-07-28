@@ -71,8 +71,10 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             builder.append(translatableExpression.getClass().getSimpleName());
             builder.append("\n\tName: ");
             builder.append(translatableExpression.getName());
+            builder.append("\n\tExpression: ");
+            builder.append(element);
             builder.append("\n\tOccurence: ");
-            builder.append(occurrence.toString());
+            builder.append(occurrence);
 
             this.getLogger().warning(builder.toString());
             return;
