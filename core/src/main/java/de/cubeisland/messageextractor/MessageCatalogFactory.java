@@ -198,7 +198,10 @@ public class MessageCatalogFactory
                 catalogConfiguration.setCharset(charset);
             }
 
-            return new MessageCatalog(extractorConfiguration, catalogConfiguration, velocityContext, logger);
+            MessageCatalog messageCatalog = new MessageCatalog(extractorConfiguration, catalogConfiguration, logger);
+            messageCatalog.setVelocityContext(velocityContext);
+
+            return messageCatalog;
         }
         catch (JAXBException e)
         {

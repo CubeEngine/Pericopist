@@ -38,30 +38,20 @@ import de.cubeisland.messageextractor.message.MessageStore;
 
 public class MessageCatalog
 {
-    private final Context context;
-
     private final ExtractorConfiguration extractorConfiguration;
     private final CatalogConfiguration catalogConfiguration;
 
     private final MessageExtractor messageExtractor;
     private final CatalogFormat catalogFormat;
 
+    private Context velocityContext;
+
     public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration) throws MessageCatalogException
     {
-        this(extractorConfiguration, catalogConfiguration, (Context) null);
+        this(extractorConfiguration, catalogConfiguration, null);
     }
 
     public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration, Logger logger) throws MessageCatalogException
-    {
-        this(extractorConfiguration, catalogConfiguration, null, logger);
-    }
-
-    public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration, Context context) throws MessageCatalogException
-    {
-        this(extractorConfiguration, catalogConfiguration, context, null);
-    }
-
-    public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration, Context context, Logger logger) throws MessageCatalogException
     {
         if(logger == null)
         {
@@ -73,8 +63,6 @@ public class MessageCatalog
 
         this.extractorConfiguration.validateConfiguration();
         this.catalogConfiguration.validateConfiguration();
-
-        this.context = context;
 
         try
         {
@@ -119,7 +107,12 @@ public class MessageCatalog
 
     public Context getVelocityContext()
     {
-        return this.context;
+        return this.velocityContext;
+    }
+
+    public void setVelocityContext(Context context)
+    {
+        this.velocityContext = context;
     }
 
     public void generateCatalog() throws MessageCatalogException
