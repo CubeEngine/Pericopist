@@ -147,6 +147,15 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
 
         try
         {
+            field.setAccessible(true);
+        }
+        catch (SecurityException e)
+        {
+            this.logger.log(Level.WARNING, "The access level of the field '" + field.getName() + "' from class " + field.getDeclaringClass().getName() + "' couldn't be modified", e);
+        }
+
+        try
+        {
             return field.get(null).toString();
         }
         catch (IllegalAccessException e)
