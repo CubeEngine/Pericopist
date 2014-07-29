@@ -21,30 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor;
+package de.cubeisland.messageextractor.test.command;
 
-import org.apache.velocity.tools.ToolManager;
-
-import java.nio.charset.Charset;
-
-import de.cubeisland.messageextractor.exception.MessageCatalogException;
-
-public class Test
+public interface CommandSender
 {
-    public static void main(String[] args)
-    {
-        ToolManager toolManager = new ToolManager(true);
+    void sendTranslated(String msg, Object ... args);
 
-        MessageCatalogFactory factory = new MessageCatalogFactory();
-        MessageCatalog messageCatalog;
-        try
-        {
-            messageCatalog = factory.getMessageCatalog("./core/src/test/resources/example.xml", Charset.forName("UTF-8"), toolManager.createContext());
-            messageCatalog.updateCatalog();
-        }
-        catch (MessageCatalogException e)
-        {
-            e.printStackTrace();
-        }
-    }
+    void sendTranslatedN(int count, String singular, String plural, Object args);
 }

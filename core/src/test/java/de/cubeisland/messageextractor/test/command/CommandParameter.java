@@ -21,43 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package test;
+package de.cubeisland.messageextractor.test.command;
 
-import test.I18n.TranslatableClass;
-import test.anot.TestSingleMemberAnnotation;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class Main
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface CommandParameter
 {
-    public void main(String[] args)
-    {
-        I18n i18n = new I18n();
-        boolean question = true;
-
-        TranslatableClass translatableClass = new TranslatableClass("this is a constructor test.");
-
-        i18n.sendTranslated("hello everyone");
-        i18n.getTranslation("whats up?");
-        i18n.getTranslation("whats up?");
-
-        i18n.getTranslation((question ? "true" : "false")); // TODO
-        i18n.getTranslation((question ? "right" : "wring") + "answer"); // TODO
-
-        i18n.getTranslationN("hope %s is fine?", "hope you are fine?", getOnlinePersons(), "Phillip");
-
-        SecondTestclass second = new SecondTestclass(i18n, "hello");
-
-        this.getNonTranslation("Bye bye!");
-    }
-
-    @TestSingleMemberAnnotation("pre-added")
-    private String getNonTranslation(String string, Object... o)
-    {
-        return String.format(string, o);
-    }
-
-    @TestSingleMemberAnnotation("annotationString")
-    private int getOnlinePersons()
-    {
-        return 2;
-    }
+    String value();
 }

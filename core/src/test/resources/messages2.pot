@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-07-29 14:57:21+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: ${date.get('yyyy-MM-dd HH:mm:ssZ')}\n"
+"Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 
 #: de/cubeisland/messageextractor/test/MessageExtractorTest.java:68
 #: de/cubeisland/messageextractor/test/MessageExtractorTest2.java:44

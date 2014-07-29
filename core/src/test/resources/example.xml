@@ -2,11 +2,11 @@
 <extractor charset="utf-8">
     <source language="java">
 
-        <directory>./core/src/test/resources</directory>
+        <directory>./src/test/java</directory>
 
         <translatables>
             <method>
-                <name>test.I18n#getTranslation</name>
+                <name>de.cubeisland.messageextractor.test.i18n.I18n#translate</name>
                 <signature>
                     <type use-as="singular">java.lang.String</type>
                     <type>java.lang.Object[]</type>
@@ -14,50 +14,63 @@
             </method>
 
             <method>
-                <name>test.I18n#getTranslationN</name>
+                <name>de.cubeisland.messageextractor.test.i18n.I18n#translateN</name>
                 <signature>
+                    <type>int</type>
                     <type use-as="singular">java.lang.String</type>
                     <type use-as="plural">java.lang.String</type>
+                    <type>java.lang.Object[]</type>
+                </signature>
+            </method>
+
+            <method>
+                <name>de.cubeisland.messageextractor.test.command.User#sendTranslated</name>
+                <signature>
+                    <type use-as="singular">java.lang.String</type>
+                    <type>java.lang.Object[]</type>
+                </signature>
+            </method>
+
+            <method>
+                <name>de.cubeisland.messageextractor.test.command.User#sendTranslatedN</name>
+                <signature>
                     <type>int</type>
+                    <type use-as="singular">java.lang.String</type>
+                    <type use-as="plural">java.lang.String</type>
                     <type>java.lang.Object[]</type>
                 </signature>
             </method>
 
-            <method static="true">
-                <name>test.I18n#_</name>
-                <signature>
-                    <type use-as="singular">java.lang.String</type>
-                    <type>java.lang.Object[]</type>
-                </signature>
-            </method>
-
-            <constructor>
-                <name>test.I18n$TranslatableClass</name>
-                <signature>
-                    <type use-as="singular">java.lang.String</type>
-                </signature>
-            </constructor>
-
             <annotation>
-                <name>test.anot.TestSingleMemberAnnotation</name>
-            </annotation>
-
-            <annotation>
-                <name>text.anot.TestNormalAnnotation</name>
+                <name>de.cubeisland.messageextractor.test.command.Command</name>
                 <fields>
                     <field>desc</field>
                     <field>usage</field>
                 </fields>
             </annotation>
+
+            <constructor>
+                <name>de.cubeisland.messageextractor.test.MessageExtractorTest</name>
+                <signature>
+                    <type use-as="singular">java.lang.String</type>
+                </signature>
+            </constructor>
+
+            <constructor>
+                <name>de.cubeisland.messageextractor.test.exception.WrongUsageException</name>
+                <signature>
+                    <type use-as="singular">java.lang.String</type>
+                </signature>
+            </constructor>
         </translatables>
     </source>
 
     <catalog format="gettext">
         <removeUnusedMessages>true</removeUnusedMessages>
         <pluralAmount>4</pluralAmount>
-        <template>./core/src/test/resources/messages.pot</template>
+        <template>./src/test/resources/messages.pot</template>
         <header>
-            <comments>./core/src/test/resources/header.txt</comments>
+            <comments>./src/test/resources/header.txt</comments>
             <metadata>
                 <entry key="Project-Id-Version">PACKAGE VERSION</entry>
                 <entry key="POT-Creation-Date" variable="true">${date.get('yyyy-MM-dd HH:mm:ssZ')}</entry>

@@ -21,26 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package test;
+package de.cubeisland.messageextractor.test.command;
 
-import test.anot.TestNormalAnnotation;
-import test.wronganot.TestSingleMemberAnnotation;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import static test.I18n._;
-
-public class SecondTestclass
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Command
 {
-    public SecondTestclass(I18n i18n, String hello)
-    {
-        i18n.getTranslation("what's" + " up" + "?");
+    String desc();
 
-        i18n.getTranslation("goodbye");
-    }
+    String usage() default "";
 
-    @TestSingleMemberAnnotation("wrongAnnotation!")
-    @TestNormalAnnotation(desc = "normalAnnotString")
-    public void test()
-    {
-        _("hello everyone");
-    }
+    int value() default 0;
 }

@@ -21,53 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package test;
+package de.cubeisland.messageextractor.test;
 
-public class I18n
+public enum TranslatableEnum
 {
-    public class TranslatableClass
-    {
-        public TranslatableClass(String msg)
-        {
+    FIRST("This is the 1st enum instance."),
+    SECOND("This is the 2nd enum instance."),
+    THIRD("This is the 3rd enum instance.")
+    ;
 
-        }
+    private String text;
+
+    TranslatableEnum(String text)
+    {
+        this.text = text;
     }
 
-    public class NonTranslatableClass extends TranslatableClass
+    @Override
+    public String toString()
     {
-        public NonTranslatableClass(String msg)
-        {
-            super(msg);
-        }
-    }
-
-    public String getTranslation(String message, Object... objects)
-    {
-        return null;
-    }
-
-    public String getTranslationN(String singular, String plural, int amount, Object... objects)
-    {
-        return null;
-    }
-
-    public void sendTranslated(String message, Object... objects)
-    {
-
-    }
-
-    public void sendTranslatedN(String singular, String plural, int amount, Object... objects)
-    {
-
-    }
-
-    public static String _(String message, Object... objects)
-    {
-        return null;
-    }
-
-    public static String _(String singular, String plural, int amount, Object... objects)
-    {
-        return null;
+        return "TranslatableEnum{" +
+                "text='" + text + '\'' +
+                '}';
     }
 }
