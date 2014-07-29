@@ -31,9 +31,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import spoon.reflect.code.CtInvocation;
-import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtElement;
-import spoon.reflect.declaration.CtExecutable;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtTypeReference;
 

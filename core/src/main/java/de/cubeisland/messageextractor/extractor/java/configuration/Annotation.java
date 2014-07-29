@@ -23,9 +23,6 @@
  */
 package de.cubeisland.messageextractor.extractor.java.configuration;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,22 +33,21 @@ import spoon.reflect.declaration.CtElement;
 @XmlRootElement(name = "annotation")
 public class Annotation extends TranslatableExpression
 {
-    private Set<String> fields;
+    private String[] fields;
 
     public Annotation()
     {
-        this.fields = new HashSet<String>(1);
-        this.fields.add("value");
+        this.fields = new String[] {"value"};
     }
 
-    public Set<String> getFields()
+    public String[] getFields()
     {
         return this.fields;
     }
 
     @XmlElementWrapper(name = "fields")
     @XmlElement(name = "field")
-    public void setFields(Set<String> fields)
+    public void setFields(String[] fields)
     {
         this.fields = fields;
     }
@@ -72,7 +68,7 @@ public class Annotation extends TranslatableExpression
     public String toString()
     {
         StringBuilder builder = new StringBuilder(this.getName());
-        int fieldAmount = this.getFields().size();
+        int fieldAmount = this.getFields().length;
         if (fieldAmount != 0)
         {
             builder.append(":");

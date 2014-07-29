@@ -23,9 +23,6 @@
  */
 package de.cubeisland.messageextractor.extractor.java.configuration;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
@@ -40,10 +37,10 @@ import spoon.reflect.declaration.CtElement;
 @XmlRootElement(name = "source")
 public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 {
-    private Set<TranslatableExpression> translatableExpressions = new HashSet<TranslatableExpression>();
+    private TranslatableExpression[] translatableExpressions;
     private String classpath = System.getProperty("java.class.path");
 
-    public Set<TranslatableExpression> getTranslatableExpressions()
+    public TranslatableExpression[] getTranslatableExpressions()
     {
         return translatableExpressions;
     }
@@ -54,7 +51,7 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
             @XmlElement(name = "annotation", type = Annotation.class),
             @XmlElement(name = "constructor", type = Constructor.class)
     })
-    public void setTranslatableExpressions(Set<TranslatableExpression> translatableExpressions)
+    public void setTranslatableExpressions(TranslatableExpression[] translatableExpressions)
     {
         this.translatableExpressions = translatableExpressions;
     }
@@ -96,7 +93,7 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
     @Override
     public void validateConfiguration() throws ConfigurationException
     {
-        if (this.getTranslatableExpressions().size() == 0)
+        if (this.getTranslatableExpressions().length == 0)
         {
             throw new ConfigurationException("You must specify at least one way which describes how to extract the messages");
         }
