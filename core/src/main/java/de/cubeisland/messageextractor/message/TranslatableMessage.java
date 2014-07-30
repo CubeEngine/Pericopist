@@ -143,11 +143,19 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
             return false;
         }
 
-        if (!plural.equals(that.plural))
+        if (this.plural == null)
+        {
+            if(that.plural != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.plural.equals(that.plural))
         {
             return false;
         }
-        if (!singular.equals(that.singular))
+
+        if (!this.singular.equals(that.singular))
         {
             return false;
         }
@@ -158,9 +166,9 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     @Override
     public int hashCode()
     {
-        int result = singular.hashCode();
-        result = 31 * result + plural.hashCode();
-        result = 31 * result + (occurrences != null ? occurrences.hashCode() : 0);
+        int result = this.singular.hashCode();
+        result = 31 * result + (this.plural != null ? this.plural.hashCode() : 0);
+        result = 31 * result + (this.occurrences != null ? this.occurrences.hashCode() : 0);
         return result;
     }
 }
