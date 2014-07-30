@@ -51,7 +51,7 @@ public class HeaderConfiguration implements Configuration
     private Charset charset;
 
     private String comments;    // TODO add ResourceLoader which is able to load resource and make this a string comment not the resource file
-    private List<MetadataEntry> metadata;
+    private MetadataEntry[] metadata;
 
     @XmlAttribute(name = "charset")
     @XmlJavaTypeAdapter(XmlCharsetAdapter.class)
@@ -78,14 +78,14 @@ public class HeaderConfiguration implements Configuration
         this.comments = comments;
     }
 
-    public List<MetadataEntry> getMetadata()
+    public MetadataEntry[] getMetadata()
     {
         return metadata;
     }
 
     @XmlElementWrapper(name = "metadata")
     @XmlElement(name = "entry")
-    public void setMetadata(List<MetadataEntry> metadata)
+    public void setMetadata(MetadataEntry[] metadata)
     {
         this.metadata = metadata;
     }

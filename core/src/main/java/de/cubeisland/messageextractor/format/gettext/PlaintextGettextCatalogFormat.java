@@ -423,7 +423,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      */
     public boolean compareHeaderFields(String[] fields, HeaderConfiguration headerConfiguration)
     {
-        if (fields.length != headerConfiguration.getMetadata().size())
+        if (fields.length != headerConfiguration.getMetadata().length)
         {
             return false;
         }
@@ -431,7 +431,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         for (int i = 0; i < fields.length; i++)
         {
             String[] parts = fields[i].split(":");
-            MetadataEntry entry = headerConfiguration.getMetadata().get(i);
+            MetadataEntry entry = headerConfiguration.getMetadata()[i];
 
             if (!parts[0].equals(entry.getKey()))
             {
