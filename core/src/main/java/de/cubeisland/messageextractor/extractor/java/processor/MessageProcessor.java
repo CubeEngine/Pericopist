@@ -157,7 +157,12 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             {
                 field.setAccessible(true);
             }
-            return field.get(null).toString();
+
+            Object o = field.get(null);
+            if(o != null)
+            {
+                return o.toString();
+            }
         }
         catch (SecurityException e)
         {
