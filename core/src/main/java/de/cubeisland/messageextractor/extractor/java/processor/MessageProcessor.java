@@ -137,6 +137,12 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
     private String getString(CtFieldAccessImpl<?> expression)
     {
         CtFieldReference<?> fieldReference = expression.getVariable();
+        if (!fieldReference.isStatic())
+        {
+            this.getLogger().info("'" + expression.getClass().getName() + "' expressions which aren't static aren't supported.");
+            return null;
+        }
+
         Member member = fieldReference.getActualField();
         if (member == null || !(member instanceof Field))
         {
@@ -147,16 +153,15 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
 
         try
         {
-            field.setAccessible(true);
+            if (!field.isAccessible())
+            {
+                field.setAccessible(true);
+            }
+            return field.get(null).toString();
         }
         catch (SecurityException e)
         {
-            this.logger.log(Level.WARNING, "The access level of the field '" + field.getName() + "' from class " + field.getDeclaringClass().getName() + "' couldn't be modified", e);
-        }
-
-        try
-        {
-            return field.get(null).toString();
+            this.logger.log(Level.SEVERE, "The access level of the field '" + field.getName() + "' from class " + field.getDeclaringClass().getName() + "' couldn't be modified.", e);
         }
         catch (IllegalAccessException e)
         {
