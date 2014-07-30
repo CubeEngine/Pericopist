@@ -28,16 +28,27 @@ import org.apache.velocity.tools.ToolManager;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.Iterator;
+import java.util.Set;
 
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
 import de.cubeisland.messageextractor.format.gettext.GettextCatalogConfiguration;
+import de.cubeisland.messageextractor.format.gettext.PlaintextGettextCatalogFormat;
+import de.cubeisland.messageextractor.message.MessageStore;
+import de.cubeisland.messageextractor.message.TranslatableMessage;
 
-public class JavaGettextCatalogTests
+@RunWith(JUnit4.class)
+public class TestCasesJavaGettextCatalog
 {
+    private File targetCatalogFile;
+    private File catalogFile;
     private MessageCatalog messageCatalog;
 
     @Before
@@ -47,6 +58,9 @@ public class JavaGettextCatalogTests
 
         MessageCatalogFactory factory = new MessageCatalogFactory();
         this.messageCatalog = factory.getMessageCatalog("./src/test/resources/example.xml", Charset.forName("UTF-8"), toolContext);
+
+        this.targetCatalogFile = new File("./src/test/resources/target_catalog.pot");
+        this.catalogFile = new File("./src/test/resources/messages.pot");
     }
 
     @Test
@@ -59,13 +73,12 @@ public class JavaGettextCatalogTests
         Assert.assertEquals("UTF-8", config.getCharset().displayName());
         Assert.assertEquals(false, config.getCreateEmptyTemplate());
         Assert.assertEquals(true, config.getRemoveUnusedMessages());
-        Assert.assertEquals(new File("./src/test/resources/messages.pot").getAbsolutePath(), config.getTemplateFile().getAbsolutePath());
+        Assert.assertEquals(this.catalogFile.getAbsolutePath(), config.getTemplateFile().getAbsolutePath());
         Assert.assertEquals("UTF-8", config.getHeaderConfiguration().getCharset().displayName());
         Assert.assertEquals("./src/test/resources/header.txt", config.getHeaderConfiguration().getComments());
         Assert.assertEquals("Project-Id-Version", config.getHeaderConfiguration().getMetadata()[0].getKey());
         Assert.assertEquals("POT-Creation-Date", config.getHeaderConfiguration().getMetadata()[1].getKey());
         Assert.assertEquals("Last-Translator", config.getHeaderConfiguration().getMetadata()[2].getKey());
-
     }
 
     @Test
@@ -84,5 +97,37 @@ public class JavaGettextCatalogTests
         Assert.assertEquals("de.cubeisland.messageextractor.test.command.Command", config.getTranslatableExpressions()[4].getName());
         Assert.assertEquals("de.cubeisland.messageextractor.test.MessageExtractorTest", config.getTranslatableExpressions()[5].getName());
         Assert.assertEquals("de.cubeisland.messageextractor.test.exception.WrongUsageException", config.getTranslatableExpressions()[6].getName());
+    }
+
+    @Test
+    public void testGenerateCatalog() throws Exception
+    {
+        // 1. generate new catalog
+        this.messageCatalog.generateCatalog();
+
+        // 2. compare new catalog with target one
+        PlaintextGettextCatalogFormat gettextCatalogFormat = (PlaintextGettextCatalogFormat) this.messageCatalog.getCatalogFormat();
+        Assert.assertNotNull("The catalog format isn't a PlaintextGettextCatalogFormat instance.", gettextCatalogFormat);
+        GettextCatalogConfiguration config = (GettextCatalogConfiguration) this.messageCatalog.getCatalogConfiguration();
+        Assert.assertNotNull("The configuration isn't a JavaExtractorConfiguration instance.", config);
+
+        // 2.1. load MessageStore instances from both catalogs
+        MessageStore currentMessageStore = gettextCatalogFormat.read(config);
+        config.setTemplateFile(this.targetCatalogFile);
+        MessageStore targetMessageStore = gettextCatalogFormat.read(config);
+
+        // 2.2. compare MessageStore instances
+        Assert.assertEquals(targetMessageStore.size(), currentMessageStore.size());
+
+        Iterator<TranslatableMessage> currentMessages = currentMessageStore.iterator();
+        Iterator<TranslatableMessage> targetMessages = targetMessageStore.iterator();
+
+        while (currentMessages.hasNext())
+        {
+            Assert.assertEquals(targetMessages.next(), currentMessages.next());
+        }
+
+        // 3. delete catalog
+        Assert.assertEquals(true, this.catalogFile.delete());
     }
 }

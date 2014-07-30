@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-07-29 14:57:21+0200\n"
+"POT-Creation-Date: 2014-07-30 21:05:39+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #: de/cubeisland/messageextractor/test/MessageExtractorTest.java:68
@@ -73,15 +73,6 @@ msgstr ""
 msgid "extracted from command annotation, desc"
 msgstr ""
 
-#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:134
-#: de/cubeisland/messageextractor/test/MessageExtractorTest2.java:54
-msgid "this message was extracted from a WrongUsageException."
-msgstr ""
-
-#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:51
-msgid "welcome %s to the messageextractor test."
-msgstr ""
-
 #: de/cubeisland/messageextractor/test/MessageExtractorTest.java:95
 msgid "test_enum: TranslatableEnum{text='This is the 1st enum instance.'}"
 msgstr ""
@@ -92,4 +83,13 @@ msgstr ""
 
 #: de/cubeisland/messageextractor/test/MessageExtractorTest.java:93
 msgid "test_string_const"
+msgstr ""
+
+#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:134
+#: de/cubeisland/messageextractor/test/MessageExtractorTest2.java:54
+msgid "this message was extracted from a WrongUsageException."
+msgstr ""
+
+#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:51
+msgid "welcome %s to the messageextractor test."
 msgstr ""
