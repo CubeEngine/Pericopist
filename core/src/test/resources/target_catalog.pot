@@ -5,16 +5,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-07-31 10:54:05+0200\n"
+"POT-Creation-Date: 2014-07-31 13:11:25+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
-#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:44
+#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:46
 msgid ""
 "One can extract messages from special methods, constructors and annotation "
 "fields"
 msgstr ""
 
-#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:47
+#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:49
 msgid "One monkey is better than sheep"
 msgid_plural "We've %d monkeys"
 msgstr[0] ""
@@ -22,13 +22,13 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:42
+#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:44
 msgid ""
 "The main task of the project is to generate a message catalog containing all "
 "the string literals of a project by parsing its source tree."
 msgstr ""
 
-#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:45
+#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:47
 msgid "The test is an example of how it works and shows examples."
 msgstr ""
 
@@ -38,12 +38,20 @@ msgid ""
 "constant.' into the catalog."
 msgstr ""
 
-#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:43
+#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:45
 msgid "This is the core module of the messageextractor."
 msgstr ""
 
-#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:33
+#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:35
 msgid "This is the start of the messageextractor test"
+msgstr ""
+
+#: de/cubeisland/messageextractor/test/StringTest.java:37
+msgid "a concatenated string"
+msgstr ""
+
+#: de/cubeisland/messageextractor/test/StringTest.java:36
+msgid "a normal string"
 msgstr ""
 
 #: de/cubeisland/messageextractor/test/MethodI18nTest.java:52
@@ -57,6 +65,10 @@ msgstr ""
 #: de/cubeisland/messageextractor/test/MethodI18nTest.java:36
 msgid ""
 "extracted from I18n interface with polymorphism. uses ExtendedI18n class"
+msgstr ""
+
+#: de/cubeisland/messageextractor/test/MethodCommandSenderTest.java:36
+msgid "extracted from User class"
 msgstr ""
 
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:29
@@ -95,6 +107,26 @@ msgstr ""
 msgid "extracted from the usage field of the command annotation"
 msgstr ""
 
+#: de/cubeisland/messageextractor/test/ConstantTest.java:40
+msgid ""
+"extracted with a constant from MessageExtractorTest class: I'm a test const "
+"for another test class."
+msgstr ""
+
+#: de/cubeisland/messageextractor/test/ConstantTest.java:47
+msgid "extracted with a file constant: ."
+msgstr ""
+
+#: de/cubeisland/messageextractor/test/ConstantTest.java:43
+msgid "extracted with a private int constant: 42"
+msgstr ""
+
+#: de/cubeisland/messageextractor/test/ConstantTest.java:45
+msgid ""
+"extracted with an enum constant: TranslatableEnum{text='This is the 1st enum "
+"instance.'}"
+msgstr ""
+
 #: de/cubeisland/messageextractor/test/MethodI18nTest.java:53
 msgid "singular of a plural message from DefaultI18n class"
 msgid_plural "plural of the plural message from DefaultI18n class"
@@ -111,9 +143,17 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
+#: de/cubeisland/messageextractor/test/MethodCommandSenderTest.java:37
+msgid "singular of a plural message from User class"
+msgid_plural "plural of the plural message from User class"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
 #: de/cubeisland/messageextractor/test/MethodI18nTest.java:37
-msgid "singular of a plural message from polymorphism test"
-msgid_plural "plural of the plural message from polymorphism test"
+msgid "singular of a plural message from polymorphism I18n test"
+msgid_plural "plural of the plural message from polymorphism I18n test"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -127,6 +167,6 @@ msgstr ""
 msgid "this message was extracted from the WrongUsageException constructor."
 msgstr ""
 
-#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:40
+#: de/cubeisland/messageextractor/test/MessageExtractorTest.java:42
 msgid "welcome %s to the messageextractor test."
 msgstr ""

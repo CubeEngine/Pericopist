@@ -23,33 +23,37 @@
  */
 package de.cubeisland.messageextractor.test;
 
-import de.cubeisland.messageextractor.test.i18n.DefaultI18n;
-import de.cubeisland.messageextractor.test.i18n.ExtendedI18n;
-import de.cubeisland.messageextractor.test.i18n.I18n;
+import de.cubeisland.messageextractor.test.command.CommandSender;
+import de.cubeisland.messageextractor.test.command.Console;
+import de.cubeisland.messageextractor.test.command.User;
 
-public class MethodI18nTest
+public class MethodCommandSenderTest
 {
-    public void testExtendedI18nPolymorphism()
+    public void testUser()
     {
-        I18n i18n = new ExtendedI18n();
+        User user = new User();
 
-        i18n.translate("extracted from I18n interface with polymorphism. uses ExtendedI18n class");
-        i18n.translateN(0, "singular of a plural message from polymorphism I18n test", "plural of the plural message from polymorphism I18n test");
+        user.sendTranslated("extracted from User class");
+        user.sendTranslatedN(0, "singular of a plural message from User class", "plural of the plural message from User class");
     }
 
-    public void testExtendedI18n()
+    public void testConsole()
     {
-        ExtendedI18n i18n = new ExtendedI18n();
+        Console console = new Console();
 
-        i18n.translate("extracted from ExtendedI18n class");
-        i18n.translateN(0, "singular of a plural message from ExtendedI18n class", "plural of the plural message from ExtendedI18n class");
+        console.sendTranslated("this message won't be extracted!");
+        console.sendTranslatedN(0, "this singular message won't be extracted!", "this plural message won't be extracted!");
     }
 
-    public void testDefaultI18n()
+    /**
+     * this won't be extracted because polymorphism isn't supported!
+     * The messageextractor thinks that the class is CommandSender, but that class isn't registered.
+     */
+    public void testUserPolymorphism()
     {
-        DefaultI18n i18n = new DefaultI18n();
+        CommandSender sender = new User();
 
-        i18n.translate("extracted from DefaultI18n class");
-        i18n.translateN(0, "singular of a plural message from DefaultI18n class", "plural of the plural message from DefaultI18n class");
+        sender.sendTranslated("this message won't be extracted!");
+        sender.sendTranslatedN(0, "this singular message won't be extracted!", "this plural message won't be extracted!");
     }
 }

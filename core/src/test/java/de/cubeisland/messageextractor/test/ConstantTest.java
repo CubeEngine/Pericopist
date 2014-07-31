@@ -23,33 +23,27 @@
  */
 package de.cubeisland.messageextractor.test;
 
+import java.io.File;
+
 import de.cubeisland.messageextractor.test.i18n.DefaultI18n;
-import de.cubeisland.messageextractor.test.i18n.ExtendedI18n;
 import de.cubeisland.messageextractor.test.i18n.I18n;
 
-public class MethodI18nTest
+public class ConstantTest
 {
-    public void testExtendedI18nPolymorphism()
+    private static final int ANSWER_OF_EVERYTHING = 42;
+    public static final File WORKING_DIR = new File("./");
+
+    public void method()
     {
-        I18n i18n = new ExtendedI18n();
+        I18n i18n = new DefaultI18n();
 
-        i18n.translate("extracted from I18n interface with polymorphism. uses ExtendedI18n class");
-        i18n.translateN(0, "singular of a plural message from polymorphism I18n test", "plural of the plural message from polymorphism I18n test");
-    }
+        i18n.translate("extracted with a constant from MessageExtractorTest class: " + MessageExtractorTest.TEST_CONST);
+        i18n.translate("this won't be extracted! " + MessageExtractorTest.TEST_CONST.toString());
 
-    public void testExtendedI18n()
-    {
-        ExtendedI18n i18n = new ExtendedI18n();
+        i18n.translate("extracted with a private int constant: " + ANSWER_OF_EVERYTHING);
 
-        i18n.translate("extracted from ExtendedI18n class");
-        i18n.translateN(0, "singular of a plural message from ExtendedI18n class", "plural of the plural message from ExtendedI18n class");
-    }
+        i18n.translate("extracted with an enum constant: " + TranslatableEnum.FIRST);
 
-    public void testDefaultI18n()
-    {
-        DefaultI18n i18n = new DefaultI18n();
-
-        i18n.translate("extracted from DefaultI18n class");
-        i18n.translateN(0, "singular of a plural message from DefaultI18n class", "plural of the plural message from DefaultI18n class");
+        i18n.translate("extracted with a file constant: " + WORKING_DIR);
     }
 }

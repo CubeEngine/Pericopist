@@ -24,32 +24,16 @@
 package de.cubeisland.messageextractor.test;
 
 import de.cubeisland.messageextractor.test.i18n.DefaultI18n;
-import de.cubeisland.messageextractor.test.i18n.ExtendedI18n;
 import de.cubeisland.messageextractor.test.i18n.I18n;
 
-public class MethodI18nTest
+public class StringTest
 {
-    public void testExtendedI18nPolymorphism()
+    public void method()
     {
-        I18n i18n = new ExtendedI18n();
+        I18n i18n = new DefaultI18n();
 
-        i18n.translate("extracted from I18n interface with polymorphism. uses ExtendedI18n class");
-        i18n.translateN(0, "singular of a plural message from polymorphism I18n test", "plural of the plural message from polymorphism I18n test");
-    }
-
-    public void testExtendedI18n()
-    {
-        ExtendedI18n i18n = new ExtendedI18n();
-
-        i18n.translate("extracted from ExtendedI18n class");
-        i18n.translateN(0, "singular of a plural message from ExtendedI18n class", "plural of the plural message from ExtendedI18n class");
-    }
-
-    public void testDefaultI18n()
-    {
-        DefaultI18n i18n = new DefaultI18n();
-
-        i18n.translate("extracted from DefaultI18n class");
-        i18n.translateN(0, "singular of a plural message from DefaultI18n class", "plural of the plural message from DefaultI18n class");
+        i18n.translate("a normal string");
+        i18n.translate("a concatenated " + "string");
+        i18n.translate(true ? "ja" : "nein"); // this isn't supported yet! TODO implement it
     }
 }

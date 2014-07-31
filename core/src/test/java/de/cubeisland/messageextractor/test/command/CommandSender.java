@@ -27,5 +27,5 @@ public interface CommandSender
 {
     void sendTranslated(String msg, Object ... args);
 
-    void sendTranslatedN(int count, String singular, String plural, Object args);
+    void sendTranslatedN(int count, String singular, String plural, Object... args);
 }

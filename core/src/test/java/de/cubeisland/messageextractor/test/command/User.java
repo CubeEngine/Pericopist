@@ -32,7 +32,7 @@ public class User implements CommandSender
     }
 
     @Override
-    public void sendTranslatedN(int count, String singular, String plural, Object args)
+    public void sendTranslatedN(int count, String singular, String plural, Object... args)
     {
 
     }
