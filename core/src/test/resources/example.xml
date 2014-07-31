@@ -11,6 +11,7 @@
                     <type use-as="singular">java.lang.String</type>
                     <type>java.lang.Object[]</type>
                 </signature>
+                <description>this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method</description>
             </method>
 
             <method>
@@ -21,6 +22,7 @@
                     <type use-as="plural">java.lang.String</type>
                     <type>java.lang.Object[]</type>
                 </signature>
+                <description>this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translateN method</description>
             </method>
 
             <method>
@@ -29,6 +31,7 @@
                     <type use-as="singular">java.lang.String</type>
                     <type>java.lang.Object[]</type>
                 </signature>
+                <description>this message was extracted with the de.cubeisland.messageextractor.test.command.User#sendTranslated method</description>
             </method>
 
             <method>
@@ -39,6 +42,7 @@
                     <type use-as="plural">java.lang.String</type>
                     <type>java.lang.Object[]</type>
                 </signature>
+                <description>this message was extracted with the de.cubeisland.messageextractor.test.command.User#sendTranslatedN method</description>
             </method>
 
             <annotation>
@@ -47,10 +51,12 @@
                     <field>desc</field>
                     <field>usage</field>
                 </fields>
+                <description>This message was extracted with the de.cubeisland.messageextractor.test.command.Command annotation</description>
             </annotation>
 
             <annotation>
                 <name>de.cubeisland.messageextractor.test.TranslatableAnnotation</name>
+                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation</description>
             </annotation>
 
             <constructor>
@@ -58,6 +64,7 @@
                 <signature>
                     <type use-as="singular">java.lang.String</type>
                 </signature>
+                <description>this message was extracted with a de.cubeisland.messageextractor.test.MessageExtractorTest constructor</description>
             </constructor>
 
             <constructor>
@@ -65,13 +72,14 @@
                 <signature>
                     <type use-as="singular">java.lang.String</type>
                 </signature>
+                <description>this message was extracted with a de.cubeisland.messageextractor.test.exception.WrongUsageException constructor</description>
             </constructor>
         </translatables>
     </source>
 
     <catalog format="gettext">
         <removeUnusedMessages>true</removeUnusedMessages>
-        <pluralAmount>4</pluralAmount>
+        <pluralAmount>2</pluralAmount>
         <template>./src/test/resources/messages.pot</template>
         <header>
             <comments>./src/test/resources/header.txt</comments>
