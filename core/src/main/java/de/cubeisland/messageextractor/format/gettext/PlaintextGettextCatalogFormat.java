@@ -162,6 +162,11 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 }
             }
 
+            for (String description : translatableMessage.getDescriptions())
+            {
+                message.addExtractedComment(description);
+            }
+
             this.setPreviousMessageIds(message);
 
             catalog.addMessage(message);

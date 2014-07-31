@@ -85,7 +85,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             return;
         }
 
-        this.getMessageStore().addMessage(singular, plural, occurrence);
+        this.getMessageStore().addMessage(singular, plural, occurrence, translatableExpression.getDescription());
     }
 
     protected String getString(CtExpression<?> expression)

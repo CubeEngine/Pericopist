@@ -31,6 +31,7 @@ import spoon.reflect.declaration.CtElement;
 public abstract class TranslatableExpression
 {
     private String name;
+    private String description;
 
     public String getName()
     {
@@ -41,6 +42,17 @@ public abstract class TranslatableExpression
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public String getDescription()
+    {
+        return this.description;
+    }
+
+    @XmlElement(name = "description")
+    public void setDescription(String description)
+    {
+        this.description = description;
     }
 
     public void validate() throws ConfigurationException

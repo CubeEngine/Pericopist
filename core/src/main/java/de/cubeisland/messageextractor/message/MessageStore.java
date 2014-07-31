@@ -36,17 +36,17 @@ public class MessageStore implements Iterable<TranslatableMessage>
         this.messages = new TreeSet<TranslatableMessage>();
     }
 
-    public void addMessage(String singular, String plural, Occurrence occurrence)
+    public void addMessage(String singular, String plural, Occurrence occurrence, String description)
     {
-        this.addMessage(singular, plural, null, occurrence);
+        this.addMessage(singular, plural, null, occurrence, description);
     }
 
     public void addMessage(String singular, String plural, Integer position)
     {
-        this.addMessage(singular, plural, position, null);
+        this.addMessage(singular, plural, position, null, null);
     }
 
-    private void addMessage(String singular, String plural, Integer position, Occurrence occurrence)
+    private void addMessage(String singular, String plural, Integer position, Occurrence occurrence, String description)
     {
         TranslatableMessage message = this.getMessage(singular, plural);
         if (message != null)
@@ -64,6 +64,10 @@ public class MessageStore implements Iterable<TranslatableMessage>
                 message = new TranslatableMessage(singular, plural, occurrence);
             }
             this.messages.add(message);
+        }
+        if(description != null)
+        {
+            message.addDescription(description.trim());
         }
     }
 

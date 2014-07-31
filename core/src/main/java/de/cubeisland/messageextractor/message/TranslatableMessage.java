@@ -23,6 +23,7 @@
  */
 package de.cubeisland.messageextractor.message;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -31,6 +32,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     private final String singular;
     private final String plural;
     private final Set<Occurrence> occurrences;
+    private final Set<String> descriptions;
 
     private final Integer position;
 
@@ -51,6 +53,8 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         this.singular = singular;
         this.plural = plural;
 
+        this.descriptions = new HashSet<String>();
+
         this.occurrences = new TreeSet<Occurrence>();
         if (firstOccurrence != null)
         {
@@ -61,6 +65,11 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     public void addOccurrence(Occurrence occurrence)
     {
         this.occurrences.add(occurrence);
+    }
+
+    public void addDescription(String description)
+    {
+        this.descriptions.add(description);
     }
 
     public String getSingular()
@@ -81,6 +90,11 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     public Set<Occurrence> getOccurrences()
     {
         return occurrences;
+    }
+
+    public Set<String> getDescriptions()
+    {
+        return this.descriptions;
     }
 
     @Override
