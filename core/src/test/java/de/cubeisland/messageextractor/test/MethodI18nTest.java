@@ -24,26 +24,32 @@
 package de.cubeisland.messageextractor.test;
 
 import de.cubeisland.messageextractor.test.i18n.DefaultI18n;
+import de.cubeisland.messageextractor.test.i18n.ExtendedI18n;
 import de.cubeisland.messageextractor.test.i18n.I18n;
 
-public class MessageExtractorTest
+public class MethodI18nTest
 {
-    public static void main(String args[])
+    public void testExtendedI18nPolymorphism()
     {
-        new MessageExtractorTest("This is the start of the messageextractor test");
+        I18n i18n = new ExtendedI18n();
+
+        i18n.translate("extracted from I18n interface with polymorphism. uses ExtendedI18n class");
+        i18n.translateN(0, "singular of a plural message from polymorphism test", "plural of the plural message from polymorphism test");
     }
 
-    public MessageExtractorTest(String startMessage)
+    public void testExtendedI18n()
     {
-        I18n i18n = new DefaultI18n();
+        ExtendedI18n i18n = new ExtendedI18n();
 
-        i18n.translate("welcome %s to the messageextractor test.", "YOUR_NAME");
+        i18n.translate("extracted from ExtendedI18n class");
+        i18n.translateN(0, "singular of a plural message from ExtendedI18n class", "plural of the plural message from ExtendedI18n class");
+    }
 
-        i18n.translate("The main task of the project is to generate a message catalog containing all the string literals of a project by parsing its source tree.");
-        i18n.translate("This is the core module of the messageextractor.");
-        i18n.translate("One can extract messages from special methods, constructors and annotation fields");
-        i18n.translate("The test is an example of how it works and shows examples.");
+    public void testDefaultI18n()
+    {
+        DefaultI18n i18n = new DefaultI18n();
 
-        i18n.translateN(0, "One monkey is better than sheep", "We've %d monkeys", 0);
+        i18n.translate("extracted from DefaultI18n class");
+        i18n.translateN(0, "singular of a plural message from DefaultI18n class", "plural of the plural message from DefaultI18n class");
     }
 }

@@ -23,35 +23,18 @@
  */
 package de.cubeisland.messageextractor.test;
 
-import de.cubeisland.messageextractor.test.command.Command;
-import de.cubeisland.messageextractor.test.command.CommandParameter;
-import de.cubeisland.messageextractor.test.command.CommandSender;
-import de.cubeisland.messageextractor.test.command.Console;
-import de.cubeisland.messageextractor.test.command.User;
 import de.cubeisland.messageextractor.test.exception.MissingParameterException;
 import de.cubeisland.messageextractor.test.exception.WrongUsageException;
-import de.cubeisland.messageextractor.test.i18n.ExtendedI18n;
-import de.cubeisland.messageextractor.test.i18n.I18n;
 
-public class MessageExtractorTest2
+public class ConstructorTest
 {
-    @Command(desc = "extracted from command annotation, desc", usage = "command annotation usage")
-    @CommandParameter("This message won't be extracted.")
-    public void extendedI18nTest()
+    public void method()
     {
-        I18n i18n = new ExtendedI18n();
+        new MessageExtractorTest("this message was extracted from the MessageExtractorTest constructor.");
 
-        i18n.translate("A singular message extracted from the ExtendedI18n class");
-        i18n.translateN(0, "One monkey is better than sheep", "We've %d monkeys", 0);
-    }
-
-    @Command(desc = "extracted from command annotation, desc", usage = "command annotation usage")
-    @CommandParameter("This message won't be extracted.")
-    public void constructorTest()
-    {
         try
         {
-            throw new WrongUsageException("this message was extracted from a WrongUsageException.");
+            throw new WrongUsageException("this message was extracted from the WrongUsageException constructor.");
         }
         catch (WrongUsageException e)
         {

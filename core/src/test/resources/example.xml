@@ -49,6 +49,10 @@
                 </fields>
             </annotation>
 
+            <annotation>
+                <name>de.cubeisland.messageextractor.test.TranslatableAnnotation</name>
+            </annotation>
+
             <constructor>
                 <name>de.cubeisland.messageextractor.test.MessageExtractorTest</name>
                 <signature>

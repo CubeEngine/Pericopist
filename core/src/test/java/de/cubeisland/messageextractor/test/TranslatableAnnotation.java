@@ -23,27 +23,7 @@
  */
 package de.cubeisland.messageextractor.test;
 
-import de.cubeisland.messageextractor.test.i18n.DefaultI18n;
-import de.cubeisland.messageextractor.test.i18n.I18n;
-
-public class MessageExtractorTest
+public @interface TranslatableAnnotation
 {
-    public static void main(String args[])
-    {
-        new MessageExtractorTest("This is the start of the messageextractor test");
-    }
-
-    public MessageExtractorTest(String startMessage)
-    {
-        I18n i18n = new DefaultI18n();
-
-        i18n.translate("welcome %s to the messageextractor test.", "YOUR_NAME");
-
-        i18n.translate("The main task of the project is to generate a message catalog containing all the string literals of a project by parsing its source tree.");
-        i18n.translate("This is the core module of the messageextractor.");
-        i18n.translate("One can extract messages from special methods, constructors and annotation fields");
-        i18n.translate("The test is an example of how it works and shows examples.");
-
-        i18n.translateN(0, "One monkey is better than sheep", "We've %d monkeys", 0);
-    }
+    String value();
 }
