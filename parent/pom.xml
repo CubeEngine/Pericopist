@@ -12,7 +12,7 @@
 
     <groupId>de.cubeisland</groupId>
     <artifactId>messageextractor-parent</artifactId>
-    <version>3</version>
+    <version>4</version>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
@@ -46,6 +46,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jdkVersion>1.7</jdkVersion>
     </properties>
 
     <distributionManagement>
@@ -94,8 +95,8 @@
                 <version>3.1</version>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>${jdkVersion}</source>
+                    <target>${jdkVersion}</target>
                     <optimize>true</optimize>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
