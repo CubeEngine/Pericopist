@@ -34,6 +34,6 @@ public class StringTest
 
         i18n.translate("a normal string");
         i18n.translate("a concatenated " + "string");
-        i18n.translate(true ? "ja" : "nein"); // this isn't supported yet! TODO implement it
+        i18n.translate(true ? "yes" : "no"); // this isn't supported yet! TODO implement it
     }
 }
