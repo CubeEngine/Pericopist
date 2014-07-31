@@ -115,9 +115,10 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             final File directory = template.getParentFile();
             if (directory.exists() || directory.mkdirs())
             {
-                FileOutputStream stream = new FileOutputStream(template);
-                poWriter.write(catalog, stream, configuration.getCharset());
-                stream.close();
+                try (FileOutputStream stream = new FileOutputStream(template))
+                {
+                    poWriter.write(catalog, stream, configuration.getCharset());
+                }
             }
             else
             {
@@ -254,9 +255,10 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         PoParser poParser = new PoParser(catalog);
         try
         {
-            FileInputStream stream = new FileInputStream(catalogConfig.getTemplateFile());
-            catalog = poParser.parseCatalog(stream, catalogConfig.getCharset(), true);
-            stream.close();
+            try (FileInputStream stream = new FileInputStream(catalogConfig.getTemplateFile()))
+            {
+                catalog = poParser.parseCatalog(stream, catalogConfig.getCharset(), true);
+            }
         }
         catch (IOException e)
         {
