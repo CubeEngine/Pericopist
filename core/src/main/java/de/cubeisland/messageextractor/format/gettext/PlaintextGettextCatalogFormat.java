@@ -35,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -163,6 +164,11 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 }
             }
 
+            for (String description : translatableMessage.getContext())
+            {
+                message.addExtractedComment(description);
+            }
+
             this.setPreviousMessageIds(message);
 
             catalog.addMessage(message);
@@ -268,11 +274,15 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         this.oldCatalog = catalog;
 
         int i = 0;
-        for (Message message : catalog)
+        for (Message catalogMessage : catalog)
         {
-            if (!message.isHeader())
+            if (!catalogMessage.isHeader())
             {
-                messageStore.addMessage(message.getMsgid(), message.getMsgidPlural(), i++);
+                TranslatableMessage message = messageStore.addMessage(catalogMessage.getMsgid(), catalogMessage.getMsgidPlural(), i++);
+                for(String extractedComment : catalogMessage.getExtractedComments())
+                {
+                    message.addContextEntry(extractedComment);
+                }
             }
         }
 
@@ -342,17 +352,31 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             List<String> firstSourceReferences = firstMessage.getSourceReferences();
             List<String> secondSourceReferences = secondMessage.getSourceReferences();
 
-            if (firstSourceReferences.size() != secondSourceReferences.size())
+            if (firstSourceReferences != null)
+            {
+                if (!firstSourceReferences.equals(secondSourceReferences))
+                {
+                    return false;
+                }
+            }
+            else if (secondSourceReferences != null)
             {
                 return false;
             }
 
-            for (String firstSourceReference : firstSourceReferences)
+            Collection<String> firstExtractedComments = firstMessage.getExtractedComments();
+            Collection<String> secondExtractedComments = secondMessage.getExtractedComments();
+
+            if (firstExtractedComments != null)
             {
-                if (!secondSourceReferences.contains(firstSourceReference))
+                if (!firstExtractedComments.equals(secondExtractedComments))
                 {
                     return false;
                 }
+            }
+            else if (secondExtractedComments != null)
+            {
+                return false;
             }
         }
         return true;

@@ -33,9 +33,7 @@ import org.junit.runners.JUnit4;
 
 import java.io.File;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.Iterator;
-import java.util.Set;
 
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
@@ -69,7 +67,7 @@ public class TestCasesJavaGettextCatalog
         GettextCatalogConfiguration config = (GettextCatalogConfiguration) this.messageCatalog.getCatalogConfiguration();
         Assert.assertNotNull("The configuration isn't a GettextCatalogConfiguration instance.", config);
 
-        Assert.assertEquals(4, config.getPluralAmount());
+        Assert.assertEquals(2, config.getPluralAmount());
         Assert.assertEquals("UTF-8", config.getCharset().displayName());
         Assert.assertEquals(false, config.getCreateEmptyTemplate());
         Assert.assertEquals(true, config.getRemoveUnusedMessages());

@@ -21,47 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.extractor.java.configuration;
+package de.cubeisland.messageextractor.test;
 
-import javax.xml.bind.annotation.XmlElement;
+import de.cubeisland.messageextractor.test.command.User;
 
-import de.cubeisland.messageextractor.exception.ConfigurationException;
-import spoon.reflect.declaration.CtElement;
-
-public abstract class TranslatableExpression
+public class MultipleContextTest
 {
-    private String name;
-    private String description;
-
-    public String getName()
+    @TranslatableAnnotation("a normal string")
+    public void method()
     {
-        return this.name;
-    }
+        @TranslatableAnnotation("a normal string")
+        float useless_float = 3.1415f;
 
-    @XmlElement(name = "name")
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+        @TranslatableAnnotation("a " + "concatenated string")
+        User user = new User();
 
-    public String getDescription()
-    {
-        return this.description;
+        user.sendTranslated("a normal string");
+        user.sendTranslated("a normal string");
+        user.sendTranslated("a concat" + "enated string");
     }
-
-    @XmlElement(name = "description")
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-
-    public void validate() throws ConfigurationException
-    {
-        if (this.getName() == null)
-        {
-            throw new ConfigurationException("A translatable expressions needs a name. Specify it with a name tag.");
-        }
-    }
-
-    public abstract boolean matches(CtElement element);
 }

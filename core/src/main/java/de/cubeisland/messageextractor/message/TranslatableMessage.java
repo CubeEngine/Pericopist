@@ -23,6 +23,7 @@
  */
 package de.cubeisland.messageextractor.message;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -31,6 +32,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     private final String singular;
     private final String plural;
     private final Set<Occurrence> occurrences;
+    private final Set<String> context;
 
     private final Integer position;
 
@@ -51,6 +53,8 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         this.singular = singular;
         this.plural = plural;
 
+        this.context = new HashSet<String>();
+
         this.occurrences = new TreeSet<Occurrence>();
         if (firstOccurrence != null)
         {
@@ -61,6 +65,11 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     public void addOccurrence(Occurrence occurrence)
     {
         this.occurrences.add(occurrence);
+    }
+
+    public void addContextEntry(String description)
+    {
+        this.context.add(description);
     }
 
     public String getSingular()
@@ -81,6 +90,11 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     public Set<Occurrence> getOccurrences()
     {
         return occurrences;
+    }
+
+    public Set<String> getContext()
+    {
+        return this.context;
     }
 
     @Override
@@ -131,14 +145,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
 
         TranslatableMessage that = (TranslatableMessage) o;
 
-        if (this.occurrences != null)
-        {
-            if (!this.occurrences.equals(that.occurrences))
-            {
-                return false;
-            }
-        }
-        else if (that.occurrences != null)
+        if (!this.singular.equals(that.singular))
         {
             return false;
         }
@@ -155,7 +162,26 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
             return false;
         }
 
-        if (!this.singular.equals(that.singular))
+        if (this.occurrences != null)
+        {
+            if (!this.occurrences.equals(that.occurrences))
+            {
+                return false;
+            }
+        }
+        else if (that.occurrences != null)
+        {
+            return false;
+        }
+
+        if (this.context != null)
+        {
+            if (!this.context.equals(that.context))
+            {
+                return false;
+            }
+        }
+        else if (that.context != null)
         {
             return false;
         }
@@ -169,6 +195,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         int result = this.singular.hashCode();
         result = 31 * result + (this.plural != null ? this.plural.hashCode() : 0);
         result = 31 * result + (this.occurrences != null ? this.occurrences.hashCode() : 0);
+        result = 31 * result + (this.context != null ? this.context.hashCode() : 0);
         return result;
     }
 }
