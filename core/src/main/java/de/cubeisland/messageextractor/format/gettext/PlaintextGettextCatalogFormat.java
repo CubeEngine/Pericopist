@@ -30,10 +30,9 @@ import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -63,7 +62,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      * @throws CatalogFormatException
      */
     @Override
-    public void write(CatalogConfiguration config, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
+    public void write(CatalogConfiguration config, OutputStream outputStream, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
 
@@ -86,12 +85,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             this.logger.info("Did not create a new catalog, because it's the same like the old one.");
             return;
         }
-        final File template = catalogConfig.getTemplateFile();
-
-        if (template.exists() && !template.delete())
-        {
-            throw new CatalogFormatException("The old template could not be deleted.");
-        }
 
         int messageCount = catalog.size();
         if (catalogConfig.getHeaderConfiguration() != null)
@@ -104,27 +97,16 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             return;
         }
 
-        this.writeCatalog(catalog, catalogConfig, template);
+        this.writeCatalog(catalog, catalogConfig, outputStream);
         this.logger.info("The " + this.getClass().getSimpleName() + " created a new template with " + messageCount + " messages.");
     }
 
-    private void writeCatalog(Catalog catalog, GettextCatalogConfiguration configuration, File template) throws CatalogFormatException
+    private void writeCatalog(Catalog catalog, GettextCatalogConfiguration configuration, OutputStream outputStream) throws CatalogFormatException
     {
         final PoWriter poWriter = new PoWriter(true);
         try
         {
-            final File directory = template.getParentFile();
-            if (directory.exists() || directory.mkdirs())
-            {
-                try (FileOutputStream stream = new FileOutputStream(template))
-                {
-                    poWriter.write(catalog, stream, configuration.getCharset());
-                }
-            }
-            else
-            {
-                throw new CatalogFormatException("Failed to create the directory '" + directory.getAbsolutePath() + "'!");
-            }
+            poWriter.write(catalog, outputStream, configuration.getCharset());
         }
         catch (IOException e)
         {

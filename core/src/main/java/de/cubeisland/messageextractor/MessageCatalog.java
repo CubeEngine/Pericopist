@@ -25,6 +25,11 @@ package de.cubeisland.messageextractor;
 
 import org.apache.velocity.context.Context;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
@@ -150,8 +155,47 @@ public class MessageCatalog
         return this.messageExtractor.extract(this.extractorConfiguration, messageStore);
     }
 
-    private void createCatalog(MessageStore messageStore) throws CatalogFormatException
+    private void createCatalog(MessageStore messageStore) throws MessageCatalogException
     {
-        this.catalogFormat.write(this.catalogConfiguration, this.getVelocityContext(), messageStore);
+        File tempFile;
+        try
+        {
+            tempFile = File.createTempFile("messageextractor_template", null);
+        }
+        catch (IOException e)
+        {
+            throw new MessageCatalogException("The temp file couldn't be created.", e);
+        }
+
+        try
+        {
+            try (FileOutputStream outputStream = new FileOutputStream(tempFile))
+            {
+                this.catalogFormat.write(this.catalogConfiguration, outputStream, this.getVelocityContext(), messageStore);
+            }
+        }
+        catch (IOException e)
+        {
+            throw new MessageCatalogException("An error occurred while creating and handling the output stream of the template file.", e);
+        }
+
+        try
+        {
+            final File template = this.catalogConfiguration.getTemplateFile();
+            final File directory = template.getParentFile();
+
+            if (directory.exists() || directory.mkdirs())
+            {
+                Files.move(tempFile.toPath(), this.catalogConfiguration.getTemplateFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+            else
+            {
+                throw new CatalogFormatException("The directory of the template in '" + directory.getAbsolutePath() + "' couldn't be created.");
+            }
+        }
+        catch (IOException e)
+        {
+            throw new MessageCatalogException("The temp file couldn't be moved to the specified place.", e);
+        }
     }
 }

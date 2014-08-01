@@ -25,6 +25,7 @@ package de.cubeisland.messageextractor.format;
 
 import org.apache.velocity.context.Context;
 
+import java.io.OutputStream;
 import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
@@ -48,7 +49,7 @@ public interface CatalogFormat
      *
      * @throws CatalogFormatException
      */
-    void write(CatalogConfiguration config, Context velocityContext, MessageStore messageStore) throws CatalogFormatException;
+    void write(CatalogConfiguration config, OutputStream outputStream, Context velocityContext, MessageStore messageStore) throws CatalogFormatException;
 
     /**
      * This method reads the catalog file and returns a message store containing the messages.
