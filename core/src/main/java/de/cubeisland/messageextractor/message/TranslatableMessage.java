@@ -32,7 +32,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     private final String singular;
     private final String plural;
     private final Set<Occurrence> occurrences;
-    private final Set<String> descriptions;
+    private final Set<String> context;
 
     private final Integer position;
 
@@ -53,7 +53,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         this.singular = singular;
         this.plural = plural;
 
-        this.descriptions = new HashSet<String>();
+        this.context = new HashSet<String>();
 
         this.occurrences = new TreeSet<Occurrence>();
         if (firstOccurrence != null)
@@ -67,9 +67,9 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         this.occurrences.add(occurrence);
     }
 
-    public void addDescription(String description)
+    public void addContextEntry(String description)
     {
-        this.descriptions.add(description);
+        this.context.add(description);
     }
 
     public String getSingular()
@@ -92,9 +92,9 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         return occurrences;
     }
 
-    public Set<String> getDescriptions()
+    public Set<String> getContext()
     {
-        return this.descriptions;
+        return this.context;
     }
 
     @Override

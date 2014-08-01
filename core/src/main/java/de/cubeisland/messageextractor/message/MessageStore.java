@@ -67,7 +67,7 @@ public class MessageStore implements Iterable<TranslatableMessage>
         }
         if(description != null)
         {
-            message.addDescription(description.trim());
+            message.addContextEntry(description.trim());
         }
 
         return message;

@@ -162,7 +162,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 }
             }
 
-            for (String description : translatableMessage.getDescriptions())
+            for (String description : translatableMessage.getContext())
             {
                 message.addExtractedComment(description);
             }
@@ -278,7 +278,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 TranslatableMessage message = messageStore.addMessage(catalogMessage.getMsgid(), catalogMessage.getMsgidPlural(), i++);
                 for(String extractedComment : catalogMessage.getExtractedComments())
                 {
-                    message.addDescription(extractedComment);
+                    message.addContextEntry(extractedComment);
                 }
             }
         }
