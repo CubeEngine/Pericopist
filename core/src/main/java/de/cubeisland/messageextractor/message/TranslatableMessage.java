@@ -145,14 +145,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
 
         TranslatableMessage that = (TranslatableMessage) o;
 
-        if (this.occurrences != null)
-        {
-            if (!this.occurrences.equals(that.occurrences))
-            {
-                return false;
-            }
-        }
-        else if (that.occurrences != null)
+        if (!this.singular.equals(that.singular))
         {
             return false;
         }
@@ -169,7 +162,26 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
             return false;
         }
 
-        if (!this.singular.equals(that.singular))
+        if (this.occurrences != null)
+        {
+            if (!this.occurrences.equals(that.occurrences))
+            {
+                return false;
+            }
+        }
+        else if (that.occurrences != null)
+        {
+            return false;
+        }
+
+        if (this.context != null)
+        {
+            if (!this.context.equals(that.context))
+            {
+                return false;
+            }
+        }
+        else if (that.context != null)
         {
             return false;
         }
@@ -183,6 +195,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         int result = this.singular.hashCode();
         result = 31 * result + (this.plural != null ? this.plural.hashCode() : 0);
         result = 31 * result + (this.occurrences != null ? this.occurrences.hashCode() : 0);
+        result = 31 * result + (this.context != null ? this.context.hashCode() : 0);
         return result;
     }
 }
