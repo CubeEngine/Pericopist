@@ -35,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -349,17 +350,31 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             List<String> firstSourceReferences = firstMessage.getSourceReferences();
             List<String> secondSourceReferences = secondMessage.getSourceReferences();
 
-            if (firstSourceReferences.size() != secondSourceReferences.size())
+            if (firstSourceReferences != null)
+            {
+                if (!firstSourceReferences.equals(secondSourceReferences))
+                {
+                    return false;
+                }
+            }
+            else if (secondSourceReferences != null)
             {
                 return false;
             }
 
-            for (String firstSourceReference : firstSourceReferences)
+            Collection<String> firstExtractedComments = firstMessage.getExtractedComments();
+            Collection<String> secondExtractedComments = secondMessage.getExtractedComments();
+
+            if (firstExtractedComments != null)
             {
-                if (!secondSourceReferences.contains(firstSourceReference))
+                if (!firstExtractedComments.equals(secondExtractedComments))
                 {
                     return false;
                 }
+            }
+            else if (secondExtractedComments != null)
+            {
+                return false;
             }
         }
         return true;
