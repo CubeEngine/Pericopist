@@ -271,11 +271,15 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         this.oldCatalog = catalog;
 
         int i = 0;
-        for (Message message : catalog)
+        for (Message catalogMessage : catalog)
         {
-            if (!message.isHeader())
+            if (!catalogMessage.isHeader())
             {
-                messageStore.addMessage(message.getMsgid(), message.getMsgidPlural(), i++);
+                TranslatableMessage message = messageStore.addMessage(catalogMessage.getMsgid(), catalogMessage.getMsgidPlural(), i++);
+                for(String extractedComment : catalogMessage.getExtractedComments())
+                {
+                    message.addDescription(extractedComment);
+                }
             }
         }
 
