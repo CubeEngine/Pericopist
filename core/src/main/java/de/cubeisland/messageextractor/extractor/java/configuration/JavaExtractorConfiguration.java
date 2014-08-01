@@ -34,48 +34,87 @@ import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.extractor.java.JavaMessageExtractor;
 import spoon.reflect.declaration.CtElement;
 
+/**
+ * This configuration is used for parsing the source tree of java projects and extracting its translatable messages.
+ * <p/>
+ * The configuration can be set up with an xml file. {@link de.cubeisland.messageextractor.MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset,
+ * org.apache.velocity.context.Context)}
+ * TODO add configuration with explanation
+ *
+ * @see de.cubeisland.messageextractor.MessageCatalogFactory
+ * @see de.cubeisland.messageextractor.extractor.java.JavaMessageExtractor
+ */
 @XmlRootElement(name = "source")
 public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 {
     private TranslatableExpression[] translatableExpressions;
     private String classpath = System.getProperty("java.class.path");
 
+    /**
+     * This method returns the TranslatableExpression instances describing where the messages shall be extracted.
+     *
+     * @return TranslatableExpression instances
+     */
     public TranslatableExpression[] getTranslatableExpressions()
     {
         return translatableExpressions;
     }
 
+    /**
+     * This method sets the TranslatableExpression instances describing where the messages shall be extracted.
+     *
+     * @param translatableExpressions TranslatableExpression instances
+     */
     @XmlElementWrapper(name = "translatables")
     @XmlElements({
-            @XmlElement(name = "method", type = Method.class),
-            @XmlElement(name = "annotation", type = Annotation.class),
-            @XmlElement(name = "constructor", type = Constructor.class)
+            @XmlElement(name = "method", type = Method.class), @XmlElement(name = "annotation", type = Annotation.class), @XmlElement(name = "constructor", type = Constructor.class)
     })
     public void setTranslatableExpressions(TranslatableExpression[] translatableExpressions)
     {
         this.translatableExpressions = translatableExpressions;
     }
 
+    /**
+     * This method returns the classpath of the java project
+     *
+     * @return classpath of the project
+     */
     public String getClasspath()
     {
         return this.classpath;
     }
 
+    /**
+     * This method sets the classpath of the java project
+     *
+     * @param classpath classpath of the project
+     */
     @XmlElement(name = "classpath")
     public void setClasspath(String classpath)
     {
         this.classpath = classpath;
     }
 
+    /**
+     * This method returns a TranslatableExpression instance which describes the specified CtElement.
+     *
+     * @param clazz   the class of the TranslatableExpression
+     * @param element the CtElement instance which shell be described
+     * @param <T>     The class of the TranslatableExpression
+     *
+     * @return TranslatableExpression instance describing the specified CtElement or null if no expression matches the element
+     */
     public <T> T getTranslatable(Class<T> clazz, CtElement element)
     {
         for (TranslatableExpression expression : this.getTranslatableExpressions())
         {
+            // checks whether expression is a subclass of the specified class
             if (!clazz.isAssignableFrom(expression.getClass()))
             {
                 continue;
             }
 
+            // checks whether the expression describes the element
             if (expression.matches(element))
             {
                 return (T) expression;

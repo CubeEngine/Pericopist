@@ -25,7 +25,18 @@ package de.cubeisland.messageextractor.extractor;
 
 import de.cubeisland.messageextractor.configuration.Configuration;
 
+/**
+ * An ExtractorConfiguration is used to set a MessageExtractor instance up.
+ * One ExtractorConfiguration class relates to one MessageExtractor class.
+ *
+ * @see de.cubeisland.messageextractor.extractor.MessageExtractor
+ */
 public interface ExtractorConfiguration extends Configuration
 {
+    /**
+     * This method returns the related MessageExtractor class.
+     *
+     * @return related MessageExtractor instance
+     */
     Class<? extends MessageExtractor> getExtractorClass();
 }

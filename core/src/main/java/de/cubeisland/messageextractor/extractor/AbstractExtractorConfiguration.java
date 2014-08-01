@@ -32,17 +32,31 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import de.cubeisland.messageextractor.util.XmlCharsetAdapter;
 
+/**
+ * This is an abstract ExtractorConfiguration class which stores information which is needed by every configuration.
+ */
 public abstract class AbstractExtractorConfiguration implements ExtractorConfiguration
 {
     private File directory = new File("./src/main/java");
     private Charset charset;
 
+    /**
+     * This method sets the directory of the source files.
+     * This directory will be scanned for the source files.
+     *
+     * @param directory directory of the source files
+     */
     @XmlElement(name = "directory")
     public final void setDirectory(File directory)
     {
         this.directory = directory;
     }
 
+    /**
+     * This method returns the directory which stores the source files.
+     *
+     * @return directory of the source files
+     */
     public final File getDirectory()
     {
         return this.directory;

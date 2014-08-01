@@ -27,11 +27,29 @@ import java.nio.charset.Charset;
 
 import de.cubeisland.messageextractor.exception.ConfigurationException;
 
+/**
+ * This interface is used by every configuration of the messageextractor.
+ */
 public interface Configuration
 {
+    /**
+     * This method returns the charset which shall be used.
+     *
+     * @return charset
+     */
     Charset getCharset();
 
+    /**
+     * This method sets the charset which shall be used.
+     *
+     * @param charset charset
+     */
     void setCharset(Charset charset);
 
+    /**
+     * This method validates the configuration. It checks whether everything was set in the right way
+     *
+     * @throws ConfigurationException if something was set the right way
+     */
     void validate() throws ConfigurationException;
 }
