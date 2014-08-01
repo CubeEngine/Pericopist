@@ -91,7 +91,7 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
     }
 
     @Override
-    public void validateConfiguration() throws ConfigurationException
+    public void validate() throws ConfigurationException
     {
         if (this.getTranslatableExpressions().length == 0)
         {

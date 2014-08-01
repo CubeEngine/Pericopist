@@ -91,7 +91,7 @@ public class HeaderConfiguration implements Configuration
     }
 
     @Override
-    public void validateConfiguration() throws ConfigurationException
+    public void validate() throws ConfigurationException
     {
         // this configuration doesn't have an obligation field
     }

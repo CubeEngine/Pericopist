@@ -33,5 +33,5 @@ public interface Configuration
 
     void setCharset(Charset charset);
 
-    void validateConfiguration() throws ConfigurationException;
+    void validate() throws ConfigurationException;
 }

@@ -66,7 +66,7 @@ public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
     }
 
     @Override
-    public void validateConfiguration() throws ConfigurationException
+    public void validate() throws ConfigurationException
     {
         if (this.getTemplateFile() == null)
         {
@@ -79,7 +79,7 @@ public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
             {
                 this.getHeaderConfiguration().setCharset(this.getCharset());
             }
-            this.getHeaderConfiguration().validateConfiguration();
+            this.getHeaderConfiguration().validate();
         }
     }
 }

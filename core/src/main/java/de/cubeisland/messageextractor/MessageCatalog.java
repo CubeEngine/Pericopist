@@ -61,8 +61,8 @@ public class MessageCatalog
         this.extractorConfiguration = extractorConfiguration;
         this.catalogConfiguration = catalogConfiguration;
 
-        this.extractorConfiguration.validateConfiguration();
-        this.catalogConfiguration.validateConfiguration();
+        this.extractorConfiguration.validate();
+        this.catalogConfiguration.validate();
 
         try
         {
