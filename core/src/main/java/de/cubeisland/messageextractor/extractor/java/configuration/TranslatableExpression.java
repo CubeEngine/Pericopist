@@ -28,33 +28,66 @@ import javax.xml.bind.annotation.XmlElement;
 import de.cubeisland.messageextractor.exception.ConfigurationException;
 import spoon.reflect.declaration.CtElement;
 
+/**
+ * The TranslatableExpression classes describe where the messages shall be extracted.
+ */
 public abstract class TranslatableExpression
 {
     private String name;
     private String description;
 
+    /**
+     * This method returns the name of the translatable expression
+     *
+     * @return name
+     */
     public String getName()
     {
         return this.name;
     }
 
+    /**
+     * This method sets the name of the translatable expression
+     *
+     * @param name name
+     */
     @XmlElement(name = "name")
     public void setName(String name)
     {
         this.name = name;
     }
 
+    /**
+     * This method returns a description of the translatable expression.
+     * The description will be used for a default translator context if the message was extracted
+     * from this translatable expression.
+     *
+     * @return a description of the translatable expression
+     */
     public String getDescription()
     {
         return this.description;
     }
 
+    /**
+     * This method sets a description of the translatable expression.
+     * The description will be used for a default translator context if the message was extracted
+     * from this translatable expression.
+     *
+     * @param description a description of the translatable expression
+     */
     @XmlElement(name = "description")
     public void setDescription(String description)
     {
         this.description = description;
     }
 
+    /**
+     * This method validates the translatable expression and checks whether it was
+     * set up in the right way
+     *
+     * @throws ConfigurationException if the name is null
+     */
     public void validate() throws ConfigurationException
     {
         if (this.getName() == null)
@@ -63,5 +96,14 @@ public abstract class TranslatableExpression
         }
     }
 
+    /**
+     * This method checks whether this translatable expression describes the specified element.
+     *
+     * @param element element which occured in the MessageProcessor
+     *
+     * @return if this expression matches the element
+     *
+     * @see de.cubeisland.messageextractor.extractor.java.processor.MessageProcessor
+     */
     public abstract boolean matches(CtElement element);
 }

@@ -30,21 +30,48 @@ import javax.xml.bind.annotation.XmlRootElement;
 import spoon.reflect.declaration.CtAnnotation;
 import spoon.reflect.declaration.CtElement;
 
+/**
+ * The annotation describes an annotation.
+ * It can be specified with the xml used for the JavaExtractorConfiguration.
+ * <p/>
+ * Example: <br/>
+ * &lt;annotation&gt; <br/>
+ * &nbsp;&nbsp;&lt;name&gt;i.am.the.annotation&lt;/name&gt; <br/>
+ * &nbsp;&nbsp;&lt;fields&gt; <br/>
+ * &nbsp;&nbsp;&nbsp;&nbsp;&lt;field&gt;translatable_field&lt;/field&gt; <br/>
+ * &nbsp;&nbsp;&nbsp;&nbsp;&lt;field&gt;second_translatable_field&lt;/field&gt; <br/>
+ * &nbsp;&nbsp;&lt;/fields&gt; <br/>
+ * &nbsp;&nbsp;&lt;description&gt;I am a default context&lt;/description&gt; <br/>
+ * &lt;/annotation&gt;
+ */
 @XmlRootElement(name = "annotation")
 public class Annotation extends TranslatableExpression
 {
     private String[] fields;
 
+    /**
+     * The constructor adds the value field as the default one
+     */
     public Annotation()
     {
         this.fields = new String[] {"value"};
     }
 
+    /**
+     * This method returns the translatable fields of the annotation
+     *
+     * @return translatable fields
+     */
     public String[] getFields()
     {
         return this.fields;
     }
 
+    /**
+     * This method sets the translatable fields of the annotation
+     *
+     * @param fields translatable fields
+     */
     @XmlElementWrapper(name = "fields")
     @XmlElement(name = "field")
     public void setFields(String[] fields)
@@ -52,6 +79,13 @@ public class Annotation extends TranslatableExpression
         this.fields = fields;
     }
 
+    /**
+     * This method checks whether the specified string is a translatable field
+     *
+     * @param name name of a field
+     *
+     * @return whether the specified name is a translatable field
+     */
     public boolean hasField(String name)
     {
         for (String field : this.fields)

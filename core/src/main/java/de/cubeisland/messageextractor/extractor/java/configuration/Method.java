@@ -35,30 +35,71 @@ import spoon.reflect.declaration.CtElement;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtTypeReference;
 
+/**
+ * The Method class describes a method invocation.
+ * It can be specified with the xml used for the JavaExtractorConfiguration.
+ * <p/>
+ * Example: <br/>
+ * &lt;method static=&quot;false&quot;&gt; <br/>
+ * &nbsp;&nbsp;&lt;name&gt;i.am.the.class#methodname&lt;/name&gt; <br/>
+ * &nbsp;&nbsp;&lt;signature&gt; <br/>
+ * &nbsp;&nbsp;&nbsp;&nbsp;&lt;type&gt;int&lt;/type&gt; <br/>
+ * &nbsp;&nbsp;&nbsp;&nbsp;&lt;type use-as=&quot;singular&quot;&gt;java.lang.String&lt;/type&gt; <br/>
+ * &nbsp;&nbsp;&nbsp;&nbsp;&lt;type use-as=&quot;plural&quot;&gt;java.lang.String&lt;/type&gt; <br/>
+ * &nbsp;&nbsp;&nbsp;&nbsp;&lt;type&gt;java.lang.Object[]&lt;/type&gt; <br/>
+ * &nbsp;&nbsp;&lt;/signature&gt; <br/>
+ * &nbsp;&nbsp;&lt;description&gt;I am a default context&lt;/description&gt; <br/>
+ * &lt;/method&gt;
+ *
+ * @see de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration
+ */
 @XmlRootElement(name = "method")
 public class Method extends CallableExpression
 {
+    /**
+     * divider which is used between the class and the method name
+     */
     public static final String CLASS_METHOD_NAME_DIVIDER = "#";
 
     private boolean isStatic;
 
+    /**
+     * This method returns the information whether it's a static method
+     *
+     * @return if it's a static method
+     */
     public boolean isStatic()
     {
         return this.isStatic;
     }
 
+    /**
+     * This method sets whether it's a static method
+     *
+     * @param isStatic is static
+     */
     @XmlAttribute(name = "static")
     public void setStatic(boolean isStatic)
     {
         this.isStatic = isStatic;
     }
 
+    /**
+     * This method returns the method name of the method.
+     *
+     * @return method name
+     */
     public String getMethodName()
     {
         String name = this.getName();
         return name.substring(name.lastIndexOf(CLASS_METHOD_NAME_DIVIDER) + 1);
     }
 
+    /**
+     * This method returns the class name of the method
+     *
+     * @return class name
+     */
     public String getClassName()
     {
         String name = this.getName();
@@ -80,12 +121,12 @@ public class Method extends CallableExpression
         }
         CtExecutableReference<?> executable = ((CtInvocation<?>) element).getExecutable();
 
-        if(!executable.getSimpleName().equals(this.getMethodName()))
+        if (!executable.getSimpleName().equals(this.getMethodName()))
         {
             return false;
         }
 
-        if(this.isStatic() != executable.isStatic())
+        if (this.isStatic() != executable.isStatic())
         {
             return false;
         }
@@ -97,6 +138,13 @@ public class Method extends CallableExpression
         return this.isAssignableFrom(executable);
     }
 
+    /**
+     * This method checks whether the class of the occurred method invocation is a subclass of the specified one.
+     *
+     * @param executable method executable
+     *
+     * @return whether the class of the occurred method is a subclass of the specified one
+     */
     private boolean isAssignableFrom(CtExecutableReference<?> executable)
     {
         String className = this.getClassName();
@@ -108,7 +156,7 @@ public class Method extends CallableExpression
         {
             CtTypeReference<?> typeReference = queue.poll();
 
-            if(className.equals(typeReference.getQualifiedName()))
+            if (className.equals(typeReference.getQualifiedName()))
             {
                 queue.clear();
                 return true;
@@ -117,23 +165,18 @@ public class Method extends CallableExpression
             CtTypeReference<?> superClass = typeReference.getSuperclass();
             Set<CtTypeReference<?>> superInterfaces = typeReference.getSuperInterfaces();
 
-            if(superClass != null)
+            if (superClass != null)
             {
                 queue.offer(typeReference.getSuperclass());
             }
-            if(superInterfaces != null)
+            if (superInterfaces != null)
             {
-                for(CtTypeReference<?> interfaceReference : typeReference.getSuperInterfaces())
+                for (CtTypeReference<?> interfaceReference : typeReference.getSuperInterfaces())
                 {
                     queue.offer(interfaceReference);
                 }
             }
         }
         return false;
-    }
-
-    private String getFullyQualifiedName(CtExecutableReference<?> executable)
-    {
-        return executable.getDeclaringType().getQualifiedName() + Method.CLASS_METHOD_NAME_DIVIDER + executable.getSimpleName();
     }
 }

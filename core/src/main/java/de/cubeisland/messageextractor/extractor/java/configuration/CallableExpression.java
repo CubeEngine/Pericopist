@@ -33,15 +33,28 @@ import de.cubeisland.messageextractor.extractor.java.configuration.CallableSigna
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtTypeReference;
 
+/**
+ * This TranslatableExpression describes callable expressions
+ */
 public abstract class CallableExpression extends TranslatableExpression
 {
     private CallableSignatureType[] signature;
 
+    /**
+     * This method returns the signature of the callable expression
+     *
+     * @return signature
+     */
     public CallableSignatureType[] getSignature()
     {
         return signature;
     }
 
+    /**
+     * This method sets the signature of the callable expression
+     *
+     * @param signature signature
+     */
     @XmlElementWrapper(name = "signature")
     @XmlElement(name = "type")
     public void setSignature(CallableSignatureType[] signature)
@@ -49,21 +62,41 @@ public abstract class CallableExpression extends TranslatableExpression
         this.signature = signature;
     }
 
+    /**
+     * This method returns the index of the singular parameter
+     *
+     * @return index of singular parameter
+     */
     public int getSingularIndex()
     {
         return this.getFirstIndexOf(CallableSignatureTypeUsage.SINGULAR);
     }
 
+    /**
+     * This method returns the index of the plural parameter
+     *
+     * @return index of plural parameter
+     */
     public int getPluralIndex()
     {
         return this.getFirstIndexOf(CallableSignatureTypeUsage.PLURAL);
     }
 
+    /**
+     * This method checks whether the callable expression has a plural parameter
+     *
+     * @return if a plural parameter exists
+     */
     public boolean hasPlural()
     {
         return this.getPluralIndex() > -1;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws ConfigurationException if name, signature or a type or usage of a signature type is null. Furthermore if no singular parameter exists.
+     */
     @Override
     public void validate() throws ConfigurationException
     {
@@ -93,6 +126,13 @@ public abstract class CallableExpression extends TranslatableExpression
         }
     }
 
+    /**
+     * This method returns the first index of the specified CallableSignatureTypeUsage instance.
+     *
+     * @param usage usage
+     *
+     * @return index of the specified usage
+     */
     private int getFirstIndexOf(CallableSignatureTypeUsage usage)
     {
         int i = 0;
@@ -107,6 +147,13 @@ public abstract class CallableExpression extends TranslatableExpression
         return -1;
     }
 
+    /**
+     * This method checks whether the specified executable matches the signature
+     *
+     * @param executable CtExecutableReference instance
+     *
+     * @return whether the executable matches the signature
+     */
     protected boolean matchesSignature(CtExecutableReference<?> executable)
     {
         List<CtTypeReference<?>> parameters = executable.getParameterTypes();
