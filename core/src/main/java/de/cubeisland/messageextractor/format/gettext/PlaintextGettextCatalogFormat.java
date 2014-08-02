@@ -30,10 +30,10 @@ import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -63,7 +63,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      * @throws CatalogFormatException
      */
     @Override
-    public void write(CatalogConfiguration config, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
+    public boolean write(CatalogConfiguration config, OutputStream outputStream, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
 
@@ -84,13 +84,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         if (this.compareCatalogs(this.oldCatalog, catalog, catalogConfig.getHeaderConfiguration()))
         {
             this.logger.info("Did not create a new catalog, because it's the same like the old one.");
-            return;
-        }
-        final File template = catalogConfig.getTemplateFile();
-
-        if (template.exists() && !template.delete())
-        {
-            throw new CatalogFormatException("The old template could not be deleted.");
+            return false;
         }
 
         int messageCount = catalog.size();
@@ -101,30 +95,20 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         if (messageCount == 0 && !catalogConfig.getCreateEmptyTemplate())
         {
             this.logger.info("The project does not contain any translatable message. The template was not created.");
-            return;
+            return false;
         }
 
-        this.writeCatalog(catalog, catalogConfig, template);
+        this.writeCatalog(catalog, catalogConfig, outputStream);
         this.logger.info("The " + this.getClass().getSimpleName() + " created a new template with " + messageCount + " messages.");
+        return true;
     }
 
-    private void writeCatalog(Catalog catalog, GettextCatalogConfiguration configuration, File template) throws CatalogFormatException
+    private void writeCatalog(Catalog catalog, GettextCatalogConfiguration configuration, OutputStream outputStream) throws CatalogFormatException
     {
         final PoWriter poWriter = new PoWriter(true);
         try
         {
-            final File directory = template.getParentFile();
-            if (directory.exists() || directory.mkdirs())
-            {
-                try (FileOutputStream stream = new FileOutputStream(template))
-                {
-                    poWriter.write(catalog, stream, configuration.getCharset());
-                }
-            }
-            else
-            {
-                throw new CatalogFormatException("Failed to create the directory '" + directory.getAbsolutePath() + "'!");
-            }
+            poWriter.write(catalog, outputStream, configuration.getCharset());
         }
         catch (IOException e)
         {
@@ -252,24 +236,14 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      * @throws CatalogFormatException
      */
     @Override
-    public MessageStore read(CatalogConfiguration config) throws CatalogFormatException
+    public MessageStore read(CatalogConfiguration config, InputStream inputStream) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
         MessageStore messageStore = new MessageStore();
 
         Catalog catalog = new Catalog(true);
         PoParser poParser = new PoParser(catalog);
-        try
-        {
-            try (FileInputStream stream = new FileInputStream(catalogConfig.getTemplateFile()))
-            {
-                catalog = poParser.parseCatalog(stream, catalogConfig.getCharset(), true);
-            }
-        }
-        catch (IOException e)
-        {
-            throw new CatalogFormatException("The catalog could not be read.", e);
-        }
+        catalog = poParser.parseCatalog(inputStream, catalogConfig.getCharset(), true);
 
         this.oldCatalog = catalog;
 

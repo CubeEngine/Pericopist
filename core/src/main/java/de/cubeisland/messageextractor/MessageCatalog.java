@@ -23,8 +23,19 @@
  */
 package de.cubeisland.messageextractor;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.velocity.context.Context;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
@@ -38,6 +49,8 @@ import de.cubeisland.messageextractor.message.MessageStore;
 
 public class MessageCatalog
 {
+    private final Logger logger;
+
     private final ExtractorConfiguration extractorConfiguration;
     private final CatalogConfiguration catalogConfiguration;
 
@@ -53,10 +66,7 @@ public class MessageCatalog
 
     public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration, Logger logger) throws MessageCatalogException
     {
-        if(logger == null)
-        {
-            logger = Logger.getLogger("messageextractor");
-        }
+        this.logger = logger == null ? Logger.getLogger("messageextractor") : logger;
 
         this.extractorConfiguration = extractorConfiguration;
         this.catalogConfiguration = catalogConfiguration;
@@ -67,7 +77,7 @@ public class MessageCatalog
         try
         {
             this.messageExtractor = extractorConfiguration.getExtractorClass().newInstance();
-            this.messageExtractor.setLogger(logger);
+            this.messageExtractor.setLogger(this.logger);
         }
         catch (Exception e)
         {
@@ -77,7 +87,7 @@ public class MessageCatalog
         try
         {
             this.catalogFormat = catalogConfiguration.getCatalogFormatClass().newInstance();
-            this.catalogFormat.setLogger(logger);
+            this.catalogFormat.setLogger(this.logger);
         }
         catch (Exception e)
         {
@@ -135,11 +145,6 @@ public class MessageCatalog
         this.generateCatalog(messageStore);
     }
 
-    private MessageStore readCatalog() throws CatalogFormatException
-    {
-        return this.catalogFormat.read(this.catalogConfiguration);
-    }
-
     private MessageStore parseSourceCode() throws MessageExtractionException
     {
         return this.messageExtractor.extract(this.extractorConfiguration);
@@ -150,8 +155,89 @@ public class MessageCatalog
         return this.messageExtractor.extract(this.extractorConfiguration, messageStore);
     }
 
-    private void createCatalog(MessageStore messageStore) throws CatalogFormatException
+    private MessageStore readCatalog() throws MessageCatalogException
     {
-        this.catalogFormat.write(this.catalogConfiguration, this.getVelocityContext(), messageStore);
+        MessageStore messageStore;
+        try
+        {
+            try (FileInputStream fileInputStream = new FileInputStream(this.catalogConfiguration.getTemplateFile()))
+            {
+                FileChannel channel = fileInputStream.getChannel();
+                FileLock lock = channel.lock(0L, Long.MAX_VALUE, true);
+
+                messageStore = this.catalogFormat.read(this.catalogConfiguration, fileInputStream);
+
+                if(channel.isOpen())
+                {
+                    lock.release();
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            throw new MessageCatalogException("Couldn't read the catalog.", e);
+        }
+
+        return messageStore;
+    }
+
+    private void createCatalog(MessageStore messageStore) throws MessageCatalogException
+    {
+        Path tempPath;
+
+        try
+        {
+            tempPath = Files.createTempFile("messageextractor.", ".tmp");
+            tempPath.toFile().deleteOnExit();
+        }
+        catch (IOException e)
+        {
+            throw new MessageCatalogException("The temp file couldn't be created.", e);
+        }
+
+        boolean wroteFile = false;
+        try
+        {
+            try (FileOutputStream outputStream = new FileOutputStream(tempPath.toFile()))
+            {
+                wroteFile = this.catalogFormat.write(this.catalogConfiguration, outputStream, this.getVelocityContext(), messageStore);
+            }
+        }
+        catch (IOException e)
+        {
+            this.logger.log(Level.SEVERE, "An error occurred while creating and handling the output stream of the temporary template file.", e);
+        }
+
+        if (!wroteFile)
+        {
+            try
+            {
+                Files.delete(tempPath);
+            }
+            catch (IOException e)
+            {
+                this.logger.log(Level.WARNING, "The temp file in path '" + tempPath + "' couldn't be deleted.", e);
+            }
+            return;
+        }
+
+        try
+        {
+            final File template = this.catalogConfiguration.getTemplateFile();
+            final File directory = template.getParentFile();
+
+            if (directory.exists() || directory.mkdirs())
+            {
+                Files.move(tempPath, this.catalogConfiguration.getTemplateFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+            else
+            {
+                throw new CatalogFormatException("The directory of the template in '" + directory.getAbsolutePath() + "' couldn't be created.");
+            }
+        }
+        catch (IOException e)
+        {
+            throw new MessageCatalogException("The temp file couldn't be moved to the specified place.", e);
+        }
     }
 }
