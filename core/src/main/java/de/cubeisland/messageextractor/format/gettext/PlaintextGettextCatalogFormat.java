@@ -62,7 +62,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      * @throws CatalogFormatException
      */
     @Override
-    public void write(CatalogConfiguration config, OutputStream outputStream, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
+    public boolean write(CatalogConfiguration config, OutputStream outputStream, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
 
@@ -83,7 +83,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         if (this.compareCatalogs(this.oldCatalog, catalog, catalogConfig.getHeaderConfiguration()))
         {
             this.logger.info("Did not create a new catalog, because it's the same like the old one.");
-            return;
+            return false;
         }
 
         int messageCount = catalog.size();
@@ -94,11 +94,12 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         if (messageCount == 0 && !catalogConfig.getCreateEmptyTemplate())
         {
             this.logger.info("The project does not contain any translatable message. The template was not created.");
-            return;
+            return false;
         }
 
         this.writeCatalog(catalog, catalogConfig, outputStream);
         this.logger.info("The " + this.getClass().getSimpleName() + " created a new template with " + messageCount + " messages.");
+        return true;
     }
 
     private void writeCatalog(Catalog catalog, GettextCatalogConfiguration configuration, OutputStream outputStream) throws CatalogFormatException

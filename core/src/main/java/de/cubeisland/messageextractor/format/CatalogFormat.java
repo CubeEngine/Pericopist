@@ -44,12 +44,15 @@ public interface CatalogFormat
      * This method writes the catalog file.
      *
      * @param config          config which shall be used to write the catalog
+     * @param outputStream    the output stream which shall be used to create the catalog
      * @param velocityContext a velocity context which can be used to update a string value
      * @param messageStore    the message store containing the messages for the catalog
      *
+     * @return true if the catalog file was written
+     *
      * @throws CatalogFormatException
      */
-    void write(CatalogConfiguration config, OutputStream outputStream, Context velocityContext, MessageStore messageStore) throws CatalogFormatException;
+    boolean write(CatalogConfiguration config, OutputStream outputStream, Context velocityContext, MessageStore messageStore) throws CatalogFormatException;
 
     /**
      * This method reads the catalog file and returns a message store containing the messages.
