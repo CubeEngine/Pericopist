@@ -162,7 +162,7 @@ public class MessageCatalog
 
         try
         {
-            tempPath = Files.createTempFile("messageextractor_template", null);
+            tempPath = Files.createTempFile("messageextractor.", ".tmp");
             tempPath.toFile().deleteOnExit();
         }
         catch (IOException e)
