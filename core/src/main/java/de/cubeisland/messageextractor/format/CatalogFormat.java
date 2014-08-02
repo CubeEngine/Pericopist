@@ -25,6 +25,7 @@ package de.cubeisland.messageextractor.format;
 
 import org.apache.velocity.context.Context;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Logger;
 
@@ -58,13 +59,14 @@ public interface CatalogFormat
      * This method reads the catalog file and returns a message store containing the messages.
      * This method never returns null and implementations have to ensure this.
      *
-     * @param config config which shall be used to read the catalog
+     * @param config      config which shall be used to read the catalog
+     * @param inputStream the input stream which shall be used to read the catalog
      *
      * @return a MessageCatalog instance holding all messages
      *
      * @throws CatalogFormatException
      */
-    MessageStore read(CatalogConfiguration config) throws CatalogFormatException;
+    MessageStore read(CatalogConfiguration config, InputStream inputStream) throws CatalogFormatException;
 
     /**
      * This method sets the logger which is used by the CatalogFormat

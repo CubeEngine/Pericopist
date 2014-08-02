@@ -23,11 +23,15 @@
  */
 package de.cubeisland.messageextractor;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.velocity.context.Context;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -141,11 +145,6 @@ public class MessageCatalog
         this.generateCatalog(messageStore);
     }
 
-    private MessageStore readCatalog() throws CatalogFormatException
-    {
-        return this.catalogFormat.read(this.catalogConfiguration);
-    }
-
     private MessageStore parseSourceCode() throws MessageExtractionException
     {
         return this.messageExtractor.extract(this.extractorConfiguration);
@@ -154,6 +153,32 @@ public class MessageCatalog
     private MessageStore parseSourceCode(MessageStore messageStore) throws MessageExtractionException
     {
         return this.messageExtractor.extract(this.extractorConfiguration, messageStore);
+    }
+
+    private MessageStore readCatalog() throws MessageCatalogException
+    {
+        MessageStore messageStore;
+        try
+        {
+            try (FileInputStream fileInputStream = new FileInputStream(this.catalogConfiguration.getTemplateFile()))
+            {
+                FileChannel channel = fileInputStream.getChannel();
+                FileLock lock = channel.lock(0L, Long.MAX_VALUE, true);
+
+                messageStore = this.catalogFormat.read(this.catalogConfiguration, fileInputStream);
+
+                if(channel.isOpen())
+                {
+                    lock.release();
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            throw new MessageCatalogException("Couldn't read the catalog.", e);
+        }
+
+        return messageStore;
     }
 
     private void createCatalog(MessageStore messageStore) throws MessageCatalogException

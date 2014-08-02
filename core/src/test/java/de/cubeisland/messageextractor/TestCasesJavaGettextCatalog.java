@@ -32,6 +32,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
@@ -111,9 +112,19 @@ public class TestCasesJavaGettextCatalog
         Assert.assertNotNull("The configuration isn't a JavaExtractorConfiguration instance.", config);
 
         // 2.1. load MessageStore instances from both catalogs
-        MessageStore currentMessageStore = gettextCatalogFormat.read(config);
+        MessageStore currentMessageStore;
+        MessageStore targetMessageStore;
+
+        try (FileInputStream fileInputStream = new FileInputStream(config.getTemplateFile()))
+        {
+            currentMessageStore = gettextCatalogFormat.read(config, fileInputStream);
+        }
+
         config.setTemplateFile(this.targetCatalogFile);
-        MessageStore targetMessageStore = gettextCatalogFormat.read(config);
+        try (FileInputStream fileInputStream = new FileInputStream(config.getTemplateFile()))
+        {
+            targetMessageStore = gettextCatalogFormat.read(config, fileInputStream);
+        }
 
         // 2.2. compare MessageStore instances
         Assert.assertEquals(targetMessageStore.size(), currentMessageStore.size());
@@ -127,6 +138,6 @@ public class TestCasesJavaGettextCatalog
         }
 
         // 3. delete catalog
-        Assert.assertEquals(true, this.catalogFile.delete());
+        Assert.assertTrue(this.catalogFile.delete());
     }
 }

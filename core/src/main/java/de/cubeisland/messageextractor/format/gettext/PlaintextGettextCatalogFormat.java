@@ -32,6 +32,7 @@ import org.fedorahosted.tennera.jgettext.PoWriter;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -235,24 +236,14 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      * @throws CatalogFormatException
      */
     @Override
-    public MessageStore read(CatalogConfiguration config) throws CatalogFormatException
+    public MessageStore read(CatalogConfiguration config, InputStream inputStream) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
         MessageStore messageStore = new MessageStore();
 
         Catalog catalog = new Catalog(true);
         PoParser poParser = new PoParser(catalog);
-        try
-        {
-            try (FileInputStream stream = new FileInputStream(catalogConfig.getTemplateFile()))
-            {
-                catalog = poParser.parseCatalog(stream, catalogConfig.getCharset(), true);
-            }
-        }
-        catch (IOException e)
-        {
-            throw new CatalogFormatException("The catalog could not be read.", e);
-        }
+        catalog = poParser.parseCatalog(inputStream, catalogConfig.getCharset(), true);
 
         this.oldCatalog = catalog;
 
