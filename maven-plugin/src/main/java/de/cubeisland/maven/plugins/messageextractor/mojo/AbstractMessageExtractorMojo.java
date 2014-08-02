@@ -41,6 +41,7 @@ import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingExcept
 
 /**
  * @requiresDependencyResolution test
+ * @threadSafe true
  */
 public abstract class AbstractMessageExtractorMojo extends AbstractMojo
 {
