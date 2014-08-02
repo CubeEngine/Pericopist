@@ -78,10 +78,16 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             builder.append(translatableExpression.getName());
             builder.append("\n\tExpression: ");
             builder.append(element);
-            builder.append("\n\tOccurence: ");
+            builder.append("\n\tOccurrence: ");
             builder.append(occurrence);
 
             this.getLogger().warning(builder.toString());
+            return;
+        }
+
+        if(singular.isEmpty())
+        {
+            this.getLogger().info("The singular message can't be an empty string. Occurrence: " + occurrence);
             return;
         }
 
