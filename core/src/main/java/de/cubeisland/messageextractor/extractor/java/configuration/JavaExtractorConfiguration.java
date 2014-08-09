@@ -104,6 +104,7 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
      *
      * @return TranslatableExpression instance describing the specified CtElement or null if no expression matches the element
      */
+    @SuppressWarnings("unchecked")
     public <T> T getTranslatable(Class<T> clazz, CtElement element)
     {
         for (TranslatableExpression expression : this.getTranslatableExpressions())
