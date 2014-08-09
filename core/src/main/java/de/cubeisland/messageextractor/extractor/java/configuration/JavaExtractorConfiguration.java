@@ -47,7 +47,7 @@ import spoon.reflect.declaration.CtElement;
 @XmlRootElement(name = "source")
 public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 {
-    private TranslatableExpression[] translatableExpressions;
+    private TranslatableExpression[] translatableExpressions = new TranslatableExpression[0];
     private String classpath = System.getProperty("java.class.path");
 
     /**
@@ -135,7 +135,7 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
     {
         if (this.getTranslatableExpressions().length == 0)
         {
-            throw new ConfigurationException("You must specify at least one way which describes how to extract the messages");
+            throw new ConfigurationException("No translatable expression given!");
         }
 
         for (TranslatableExpression expression : this.getTranslatableExpressions())
