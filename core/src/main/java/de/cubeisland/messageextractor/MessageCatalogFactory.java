@@ -107,7 +107,7 @@ public class MessageCatalogFactory
             throw new ConfigurationNotFoundException("The configuration resource '" + resource + "' was not found in file system or as URL.");
         }
 
-        VelocityEngine velocityEngine = new VelocityEngine();
+        VelocityEngine velocityEngine =  Misc.createVelocityEngine();
         velocityEngine.init();
 
         StringWriter stringWriter = new StringWriter();

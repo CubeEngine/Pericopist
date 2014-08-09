@@ -105,7 +105,7 @@ public class HeaderConfiguration implements Configuration
             throw new FileNotFoundException("The header comments resource '" + this.getComments() + "' was not found in file system or as URL.");
         }
 
-        VelocityEngine engine = new VelocityEngine();
+        VelocityEngine engine = Misc.createVelocityEngine();
         engine.init();
 
         StringWriter stringWriter = new StringWriter();

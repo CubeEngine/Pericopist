@@ -2,4 +2,3 @@
 !.idea/codeStyleSettings.xml
 target/
 *.iml
-*.log*
