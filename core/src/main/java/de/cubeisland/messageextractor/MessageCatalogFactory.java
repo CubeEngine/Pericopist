@@ -216,11 +216,7 @@ public class MessageCatalogFactory
         {
             document = this.documentBuilderFactory.newDocumentBuilder().parse(new InputSource(new StringReader(xml)));
         }
-        catch (ParserConfigurationException e)
-        {
-            throw new ConfigurationException("Could not extract the configuration file", e);
-        }
-        catch (SAXException e)
+        catch (ParserConfigurationException | SAXException e)
         {
             throw new ConfigurationException("Could not extract the configuration file", e);
         }
