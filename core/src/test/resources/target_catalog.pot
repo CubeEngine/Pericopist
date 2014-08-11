@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-07-31 20:34:50+0200\n"
+"POT-Creation-Date: 2014-08-11 09:12:06+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
@@ -35,7 +35,7 @@ msgid "The test is an example of how it works and shows examples."
 msgstr ""
 
 #. This message was extracted with the de.cubeisland.messageextractor.test.command.Command annotation
-#: de/cubeisland/messageextractor/test/AnnotationTest.java:52
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:53
 msgid ""
 "This annotation tries to write the private constant 'this is a private test "
 "constant.' into the catalog."
@@ -93,6 +93,11 @@ msgid "extracted from User class"
 msgstr ""
 
 #. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:52
+msgid "extracted from an annotation as a field of another annotation"
+msgstr ""
+
+#. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:29
 msgid "extracted from an annotation with a class target"
 msgstr ""
@@ -113,7 +118,7 @@ msgid "extracted from an annotation with a field target"
 msgstr ""
 
 #. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
-#: de/cubeisland/messageextractor/test/AnnotationTest.java:55
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:56
 msgid "extracted from an annotation with a local parameter target"
 msgstr ""
 
@@ -123,7 +128,7 @@ msgid "extracted from an annotation with a method target"
 msgstr ""
 
 #. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
-#: de/cubeisland/messageextractor/test/AnnotationTest.java:53
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:54
 msgid "extracted from an annotation with a parameter target"
 msgstr ""
 

@@ -49,6 +49,7 @@ public class AnnotationTest
 
     }
 
+    @AnnotationWithInnerAnnotation(@TranslatableAnnotation("extracted from an annotation as a field of another annotation"))
     @Command(desc = "This annotation tries to write the private constant '" + TEST_CONST + "' into the catalog.")
     public void method(@TranslatableAnnotation("extracted from an annotation with a parameter target") String args)
     {
