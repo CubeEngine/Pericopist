@@ -32,6 +32,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import de.cubeisland.messageextractor.util.XmlCharsetAdapter;
 
+/**
+ * This is an abstract CatalogConfiguration class which stores information which is needed by every configuration.
+ */
 public abstract class AbstractCatalogConfiguration implements CatalogConfiguration
 {
     private File templateFile;
@@ -40,33 +43,55 @@ public abstract class AbstractCatalogConfiguration implements CatalogConfigurati
     private Charset charset;
 
     @XmlElement(name = "template")
+    @Override
     public final void setTemplateFile(File file)
     {
         this.templateFile = file;
     }
 
+    @Override
     public final File getTemplateFile()
     {
         return this.templateFile;
     }
 
+    /**
+     * This method sets whether the unused messages shall be removed from the catalog
+     *
+     * @param removeUnusedMessages whether unused messages shell be removed
+     */
     @XmlElement(name = "removeUnusedMessages")
     public final void setRemoveUnusedMessages(boolean removeUnusedMessages)
     {
         this.removeUnusedMessages = removeUnusedMessages;
     }
 
+    /**
+     * This method returns whether the unused messages shall be removed from the catalog
+     *
+     * @return whether the unused messages shall be removed
+     */
     public final boolean getRemoveUnusedMessages()
     {
         return this.removeUnusedMessages;
     }
 
+    /**
+     * This method sets whether an empty catalog file shall be created.
+     *
+     * @param value whether an empty catalog file shall be created
+     */
     @XmlElement(name = "createEmptyTemplate")
     public final void setCreateEmptyTemplate(boolean value)
     {
         this.createEmptyTemplate = value;
     }
 
+    /**
+     * This method returns whether an empty catalog file shall be created.
+     *
+     * @return whether an empty catalog file shall be created
+     */
     public final boolean getCreateEmptyTemplate()
     {
         return this.createEmptyTemplate;

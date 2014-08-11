@@ -27,9 +27,31 @@ import java.io.File;
 
 import de.cubeisland.messageextractor.configuration.Configuration;
 
+/**
+ * An CatalogConfiguration is used to set a CatalogFormat instance up.
+ * One CatalogConfiguration class relates to one CatalogFormat class.
+ *
+ * @see de.cubeisland.messageextractor.format.CatalogFormat
+ */
 public interface CatalogConfiguration extends Configuration
 {
+    /**
+     * This method returns template file of the catalog
+     *
+     * @return template file
+     */
     File getTemplateFile();
 
+    /**
+     * This method sets the template file of the catalog
+     * @param file template file
+     */
+    void setTemplateFile(File file);
+
+    /**
+     * This method returns the related CatalogFormat class.
+     *
+     * @return related CatalogFormat instance
+     */
     Class<? extends CatalogFormat> getCatalogFormatClass();
 }

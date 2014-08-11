@@ -30,7 +30,6 @@ import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -48,6 +47,11 @@ import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.Occurrence;
 import de.cubeisland.messageextractor.message.TranslatableMessage;
 
+/**
+ * This catalog format creates and reads gettext catalogs.
+ *
+ * @see de.cubeisland.messageextractor.format.gettext.GettextCatalogConfiguration
+ */
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
     private Catalog oldCatalog;
@@ -103,6 +107,15 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return true;
     }
 
+    /**
+     * This method writes the catalog file into the specified output stream
+     *
+     * @param catalog       catalog instance
+     * @param configuration configuration of the catalog
+     * @param outputStream  output stream of the catalog
+     *
+     * @throws CatalogFormatException if the catalog couldn't be created
+     */
     private void writeCatalog(Catalog catalog, GettextCatalogConfiguration configuration, OutputStream outputStream) throws CatalogFormatException
     {
         final PoWriter poWriter = new PoWriter(true);
@@ -116,6 +129,14 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         }
     }
 
+    /**
+     * This method creates a catalog instance
+     *
+     * @param configuration configuration of the catalog
+     * @param messageStore  the message store containing the messages for the catalog
+     *
+     * @return catalog containing the specified information
+     */
     private Catalog getCatalog(GettextCatalogConfiguration configuration, MessageStore messageStore)
     {
         Catalog catalog = new Catalog(true);
@@ -161,6 +182,11 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return catalog;
     }
 
+    /**
+     * This method sets the previous message ids of the specified message
+     *
+     * @param message message
+     */
     private void setPreviousMessageIds(Message message)
     {
         if (this.oldCatalog == null)
@@ -169,7 +195,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         }
 
         Message obsoleteMessage = this.oldCatalog.locateMessage(message.getMsgctxt(), message.getMsgid());
-        if (obsoleteMessage != null)
+        if (obsoleteMessage != null) // adds the old previous id's to the message if old message is the same like the current one
         {
             message.setPrevMsgctx(obsoleteMessage.getPrevMsgctx());
             message.setPrevMsgid(obsoleteMessage.getPrevMsgid());
@@ -183,8 +209,8 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             return;
         }
 
+        // adds every message to the list which has the same reference
         List<Message> messageList = new ArrayList<Message>(1);
-
         for (String reference : message.getSourceReferences())
         {
             for (Message oldMessage : this.oldCatalog)
@@ -200,6 +226,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             }
         }
 
+        // return from the method because there is no message with the same reference
         if (messageList.isEmpty())
         {
             return;
@@ -221,6 +248,14 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         }
     }
 
+    /**
+     * This method returns a previous message from the specified list
+     *
+     * @param current     the current message
+     * @param oldMessages every old message which has a same reference
+     *
+     * @return a previous message of the current message
+     */
     private Message getPreviousMessage(Message current, List<Message> oldMessages)
     {
         return oldMessages.get(0); // TODO compare current with old messages and return the best one.
@@ -253,7 +288,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             if (!catalogMessage.isHeader())
             {
                 TranslatableMessage message = messageStore.addMessage(catalogMessage.getMsgid(), catalogMessage.getMsgidPlural(), i++);
-                for(String extractedComment : catalogMessage.getExtractedComments())
+                for (String extractedComment : catalogMessage.getExtractedComments())
                 {
                     message.addContextEntry(extractedComment);
                 }
@@ -265,6 +300,16 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return messageStore;
     }
 
+    /**
+     * This method returns the header message which fits the specified parameters.
+     *
+     * @param config          the configuration of the header
+     * @param velocityContext the config which shall be used to parse the header comments
+     *
+     * @return header message
+     *
+     * @throws IOException if the comments resource couldn't be found
+     */
     private Message getHeaderMessage(HeaderConfiguration config, Context velocityContext) throws IOException
     {
         HeaderFields headerFields = new HeaderFields();

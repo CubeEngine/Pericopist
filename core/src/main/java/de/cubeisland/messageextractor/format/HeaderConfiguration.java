@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
