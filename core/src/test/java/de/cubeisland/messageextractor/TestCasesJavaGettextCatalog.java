@@ -42,6 +42,7 @@ import de.cubeisland.messageextractor.format.gettext.GettextCatalogConfiguration
 import de.cubeisland.messageextractor.format.gettext.PlaintextGettextCatalogFormat;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.TranslatableMessage;
+import de.cubeisland.messageextractor.util.ResourceLoader;
 
 @RunWith(JUnit4.class)
 public class TestCasesJavaGettextCatalog
@@ -54,6 +55,7 @@ public class TestCasesJavaGettextCatalog
     public void setUp() throws MessageCatalogException
     {
         ToolContext toolContext = new ToolManager(true).createContext();
+        toolContext.put("resource", new ResourceLoader());
 
         MessageCatalogFactory factory = new MessageCatalogFactory();
         this.messageCatalog = factory.getMessageCatalog("./src/test/resources/example.xml", Charset.forName("UTF-8"), toolContext);
@@ -74,7 +76,7 @@ public class TestCasesJavaGettextCatalog
         Assert.assertEquals(true, config.getRemoveUnusedMessages());
         Assert.assertEquals(this.catalogFile.getAbsolutePath(), config.getTemplateFile().getAbsolutePath());
         Assert.assertEquals("UTF-8", config.getHeaderConfiguration().getCharset().displayName());
-        Assert.assertEquals("./src/test/resources/header.txt", config.getHeaderConfiguration().getComments());
+        Assert.assertEquals("Hey this are test header comments.\nyou can use the velocity context in your comments.\nfor example: 8\n", config.getHeaderConfiguration().getComments());
         Assert.assertEquals("Project-Id-Version", config.getHeaderConfiguration().getMetadata()[0].getKey());
         Assert.assertEquals("POT-Creation-Date", config.getHeaderConfiguration().getMetadata()[1].getKey());
         Assert.assertEquals("Last-Translator", config.getHeaderConfiguration().getMetadata()[2].getKey());

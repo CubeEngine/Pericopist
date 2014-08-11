@@ -23,10 +23,6 @@
  */
 package de.cubeisland.messageextractor.util;
 
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.log.SystemLogChute;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -232,16 +228,5 @@ public class Misc
 
         reader.close();
         return content.toString();
-    }
-
-    public static VelocityEngine createVelocityEngine()
-    {
-        VelocityEngine velocityEngine = new VelocityEngine();
-
-        velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, SystemLogChute.class.getName());
-        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_LEVEL_KEY, "info");
-        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_SYSTEM_ERR_LEVEL_KEY, "warn");
-
-        return velocityEngine;
     }
 }

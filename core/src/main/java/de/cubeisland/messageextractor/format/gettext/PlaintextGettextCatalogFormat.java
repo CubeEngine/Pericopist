@@ -23,7 +23,6 @@
  */
 package de.cubeisland.messageextractor.format.gettext;
 
-import org.apache.velocity.context.Context;
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.HeaderFields;
 import org.fedorahosted.tennera.jgettext.Message;
@@ -61,13 +60,12 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      * {@inheritDoc}
      *
      * @param config          config which shall be used to write the catalog
-     * @param velocityContext a velocity context which can be used to update a string value
      * @param messageStore    the message store containing the messages for the catalog
      *
      * @throws CatalogFormatException
      */
     @Override
-    public boolean write(CatalogConfiguration config, OutputStream outputStream, Context velocityContext, MessageStore messageStore) throws CatalogFormatException
+    public boolean write(CatalogConfiguration config, OutputStream outputStream, MessageStore messageStore) throws CatalogFormatException
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
 
@@ -77,7 +75,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         {
             try
             {
-                catalog.addMessage(this.getHeaderMessage(catalogConfig.getHeaderConfiguration(), velocityContext));
+                catalog.addMessage(this.getHeaderMessage(catalogConfig.getHeaderConfiguration()));
             }
             catch (IOException e)
             {
@@ -304,13 +302,12 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      * This method returns the header message which fits the specified parameters.
      *
      * @param config          the configuration of the header
-     * @param velocityContext the config which shall be used to parse the header comments
      *
      * @return header message
      *
      * @throws IOException if the comments resource couldn't be found
      */
-    private Message getHeaderMessage(HeaderConfiguration config, Context velocityContext) throws IOException
+    private Message getHeaderMessage(HeaderConfiguration config) throws IOException
     {
         HeaderFields headerFields = new HeaderFields();
         if (config.getMetadata() != null)
@@ -325,7 +322,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         if (config.getComments() != null)
         {
-            for (String comment : config.getComments(config.getCharset(), velocityContext).split("\n"))
+            for (String comment : config.getComments().split("\n"))
             {
                 headerMessage.addComment(comment);
             }

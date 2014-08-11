@@ -38,6 +38,7 @@ import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.exception.ConfigurationNotFoundException;
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
+import de.cubeisland.messageextractor.util.ResourceLoader;
 
 /**
  * @requiresDependencyResolution test
@@ -122,6 +123,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
         velocityContext.put("version", this.project.getVersion());
         velocityContext.put("basedir", this.project.getBasedir());
         velocityContext.put("sourceEncoding", this.charsetName);
+        velocityContext.put("resource", new ResourceLoader());
         Properties properties = this.project.getProperties();
         for (Entry entry : properties.entrySet())
         {

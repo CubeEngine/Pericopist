@@ -25,6 +25,9 @@ package de.cubeisland.messageextractor;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.log.SystemLogChute;
+import org.apache.velocity.tools.ToolManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -94,12 +97,12 @@ public class MessageCatalogFactory
         return this.getMessageCatalog(resource, charset, null, logger);
     }
 
-    public MessageCatalog getMessageCatalog(String resource, Charset charset, Context veloctiyContext) throws MessageCatalogException
+    public MessageCatalog getMessageCatalog(String resource, Charset charset, Context velocityContext) throws MessageCatalogException
     {
-        return this.getMessageCatalog(resource, charset, veloctiyContext, null);
+        return this.getMessageCatalog(resource, charset, velocityContext, null);
     }
 
-    public MessageCatalog getMessageCatalog(String resource, Charset charset, Context veloctiyContext, Logger logger) throws MessageCatalogException
+    public MessageCatalog getMessageCatalog(String resource, Charset charset, Context velocityContext, Logger logger) throws MessageCatalogException
     {
         URL configurationUrl = Misc.getResource(resource);
         if (configurationUrl == null)
@@ -107,24 +110,44 @@ public class MessageCatalogFactory
             throw new ConfigurationNotFoundException("The configuration resource '" + resource + "' was not found in file system or as URL.");
         }
 
-        VelocityEngine velocityEngine =  Misc.createVelocityEngine();
+        if(velocityContext == null)
+        {
+            velocityContext = new ToolManager(false).createContext();
+        }
+
+        VelocityEngine velocityEngine = new VelocityEngine();
+        velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, SystemLogChute.class.getName());
+        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_LEVEL_KEY, "info");
+        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_SYSTEM_ERR_LEVEL_KEY, "warn");
         velocityEngine.init();
 
-        StringWriter stringWriter = new StringWriter();
+        String configuration = null;
         try
         {
-            velocityEngine.evaluate(veloctiyContext, stringWriter, "configuration", Misc.getContent(configurationUrl, charset));
+            configuration = Misc.getContent(configurationUrl, charset);
         }
         catch (IOException e)
         {
             throw new ConfigurationException("The configuration file could not be read.", e);
         }
+        String oldConfiguration;
+        boolean success;
+        do
+        {
+            oldConfiguration = configuration;
+
+            StringWriter stringWriter = new StringWriter();
+            success = velocityEngine.evaluate(velocityContext, stringWriter, "catalog_header_comments", configuration);
+
+            configuration = stringWriter.toString();
+        }
+        while (!oldConfiguration.equals(configuration) && success);
 
         Charset defaultCharset = charset;
         Node sourceNode = null;
         Node catalogNode = null;
 
-        Node rootNode = this.getRootNode(stringWriter.toString());
+        Node rootNode = this.getRootNode(configuration);
         Node charsetNode = rootNode.getAttributes().getNamedItem("charset");
         if (charsetNode != null)
         {
@@ -176,7 +199,7 @@ public class MessageCatalogFactory
             throw new UnknownCatalogFormatException("Unknown catalog format " + catalogFormatNode.getTextContent());
         }
 
-        return this.createMessageCatalog(extractorConfigurationClass, sourceNode, catalogConfigurationClass, catalogNode, defaultCharset, veloctiyContext, logger);
+        return this.createMessageCatalog(extractorConfigurationClass, sourceNode, catalogConfigurationClass, catalogNode, defaultCharset, velocityContext, logger);
     }
 
     private MessageCatalog createMessageCatalog(Class<? extends ExtractorConfiguration> extractorConfigurationClass, Node sourceNode, Class<? extends CatalogConfiguration> catalogConfigurationClass, Node catalogNode, Charset charset, Context velocityContext, Logger logger) throws MessageCatalogException
@@ -198,10 +221,7 @@ public class MessageCatalogFactory
                 catalogConfiguration.setCharset(charset);
             }
 
-            MessageCatalog messageCatalog = new MessageCatalog(extractorConfiguration, catalogConfiguration, logger);
-            messageCatalog.setVelocityContext(velocityContext);
-
-            return messageCatalog;
+            return new MessageCatalog(extractorConfiguration, catalogConfiguration, logger);
         }
         catch (JAXBException e)
         {

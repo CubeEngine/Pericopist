@@ -23,8 +23,6 @@
  */
 package de.cubeisland.messageextractor.format;
 
-import org.apache.velocity.context.Context;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Logger;
@@ -46,14 +44,13 @@ public interface CatalogFormat
      *
      * @param config          config which shall be used to write the catalog
      * @param outputStream    the output stream which shall be used to create the catalog
-     * @param velocityContext a velocity context which can be used to update a string value
      * @param messageStore    the message store containing the messages for the catalog
      *
      * @return true if the catalog file was written
      *
      * @throws CatalogFormatException
      */
-    boolean write(CatalogConfiguration config, OutputStream outputStream, Context velocityContext, MessageStore messageStore) throws CatalogFormatException;
+    boolean write(CatalogConfiguration config, OutputStream outputStream, MessageStore messageStore) throws CatalogFormatException;
 
     /**
      * This method reads the catalog file and returns a message store containing the messages.

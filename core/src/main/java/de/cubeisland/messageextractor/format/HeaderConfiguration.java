@@ -23,13 +23,6 @@
  */
 package de.cubeisland.messageextractor.format;
 
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.context.Context;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.net.URL;
 import java.nio.charset.Charset;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -41,7 +34,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import de.cubeisland.messageextractor.configuration.Configuration;
 import de.cubeisland.messageextractor.exception.ConfigurationException;
-import de.cubeisland.messageextractor.util.Misc;
 import de.cubeisland.messageextractor.util.XmlCharsetAdapter;
 
 @XmlRootElement(name = "header")
@@ -49,7 +41,7 @@ public class HeaderConfiguration implements Configuration
 {
     private Charset charset;
 
-    private String comments;    // TODO add ResourceLoader which is able to load resource and make this a string comment not the resource file
+    private String comments;
     private MetadataEntry[] metadata;
 
     @XmlAttribute(name = "charset")
@@ -93,24 +85,6 @@ public class HeaderConfiguration implements Configuration
     public void validate() throws ConfigurationException
     {
         // this configuration doesn't have an obligation field
-    }
-
-    // TODO remove method due to a change of comments value
-    public String getComments(Charset charset, Context velocityContext) throws IOException
-    {
-        URL commentsUrl = Misc.getResource(this.getComments());
-        if (commentsUrl == null)
-        {
-            throw new FileNotFoundException("The header comments resource '" + this.getComments() + "' was not found in file system or as URL.");
-        }
-
-        VelocityEngine engine = Misc.createVelocityEngine();
-        engine.init();
-
-        StringWriter stringWriter = new StringWriter();
-        engine.evaluate(velocityContext, stringWriter, "catalog_header_comments", Misc.getContent(commentsUrl, charset));
-
-        return stringWriter.toString();
     }
 
     public static class MetadataEntry

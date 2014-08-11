@@ -82,7 +82,7 @@
         <pluralAmount>2</pluralAmount>
         <template>./src/test/resources/messages.pot</template>
         <header>
-            <comments>./src/test/resources/header.txt</comments>
+            <comments>${resource.load("./src/test/resources/header.txt")}</comments>
             <metadata>
                 <entry key="Project-Id-Version">PACKAGE VERSION</entry>
                 <entry key="POT-Creation-Date" variable="true">${date.get('yyyy-MM-dd HH:mm:ssZ')}</entry>

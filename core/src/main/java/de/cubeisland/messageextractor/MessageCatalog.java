@@ -23,9 +23,6 @@
  */
 package de.cubeisland.messageextractor;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.velocity.context.Context;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -56,8 +53,6 @@ public class MessageCatalog
 
     private final MessageExtractor messageExtractor;
     private final CatalogFormat catalogFormat;
-
-    private Context velocityContext;
 
     public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration) throws MessageCatalogException
     {
@@ -113,16 +108,6 @@ public class MessageCatalog
     public CatalogFormat getCatalogFormat()
     {
         return this.catalogFormat;
-    }
-
-    public Context getVelocityContext()
-    {
-        return this.velocityContext;
-    }
-
-    public void setVelocityContext(Context context)
-    {
-        this.velocityContext = context;
     }
 
     public void generateCatalog() throws MessageCatalogException
@@ -200,7 +185,7 @@ public class MessageCatalog
         {
             try (FileOutputStream outputStream = new FileOutputStream(tempPath.toFile()))
             {
-                wroteFile = this.catalogFormat.write(this.catalogConfiguration, outputStream, this.getVelocityContext(), messageStore);
+                wroteFile = this.catalogFormat.write(this.catalogConfiguration, outputStream, messageStore);
             }
         }
         catch (IOException e)
