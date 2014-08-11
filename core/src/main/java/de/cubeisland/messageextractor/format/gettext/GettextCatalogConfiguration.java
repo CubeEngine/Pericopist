@@ -34,8 +34,8 @@ import de.cubeisland.messageextractor.format.HeaderConfiguration;
 /**
  * This configuration is used for creating a gettext catalog which stores translatable messages.
  * <p/>
- * The configuration can be set up with an xml file. {@link de.cubeisland.messageextractor.MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset,
- * org.apache.velocity.context.Context)}
+ * The configuration can be set up with an xml file.
+ * {@link de.cubeisland.messageextractor.MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)}
  * TODO add configuration with explanation
  *
  * @see de.cubeisland.messageextractor.MessageCatalogFactory

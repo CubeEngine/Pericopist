@@ -60,6 +60,13 @@ import de.cubeisland.messageextractor.format.CatalogConfiguration;
 import de.cubeisland.messageextractor.format.gettext.GettextCatalogConfiguration;
 import de.cubeisland.messageextractor.util.Misc;
 
+/**
+ * This class is a little helper. It helps to create a MessageCatalog instance which is needed to
+ * create the catalog. With this class one can set the configuration up with an xml file.
+ *
+ * @see de.cubeisland.messageextractor.MessageCatalog
+ * @see #getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+ */
 public class MessageCatalogFactory
 {
     private Map<String, Class<? extends ExtractorConfiguration>> extractorConfigurationMap;
@@ -67,41 +74,109 @@ public class MessageCatalogFactory
 
     private final DocumentBuilderFactory documentBuilderFactory;
 
+    /**
+     * creates a new instance of this class.
+     */
     public MessageCatalogFactory()
     {
-        this.extractorConfigurationMap = new HashMap<String, Class<? extends ExtractorConfiguration>>();
-        this.catalogConfigurationMap = new HashMap<String, Class<? extends CatalogConfiguration>>();
+        this.extractorConfigurationMap = new HashMap<>();
+        this.catalogConfigurationMap = new HashMap<>();
 
         this.documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
         this.loadDefaultClasses();
     }
 
+    /**
+     * This method returns the ExtractorConfiguration of the specified language
+     *
+     * @param language the language of the ExtractorConfiguration
+     *
+     * @return ExtractorConfiguration instance
+     */
     private Class<? extends ExtractorConfiguration> getExtractorConfigurationClass(String language)
     {
         return this.extractorConfigurationMap.get(language);
     }
 
+    /**
+     * This method returns the CatalogConfiguration instance of the specified format
+     *
+     * @param format the format of the CatalogConfiguration
+     *
+     * @return CatalogConfiguration instance
+     */
     private Class<? extends CatalogConfiguration> getCatalogConfigurationClass(String format)
     {
         return this.catalogConfigurationMap.get(format);
     }
 
+    /**
+     * This method creates a MessageCatalog instance.
+     *
+     * @param resource the xml configuration resource
+     * @param charset  the default charset
+     *
+     * @return MessageCatalog instance
+     *
+     * @throws MessageCatalogException if an error occurs
+     * @see #getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+     */
     public MessageCatalog getMessageCatalog(String resource, Charset charset) throws MessageCatalogException
     {
         return this.getMessageCatalog(resource, charset, (Context) null);
     }
 
+    /**
+     * This method creates a MessageCatalog instance.
+     *
+     * @param resource the xml configuration resource
+     * @param charset  the default charset
+     * @param logger   a logger
+     *
+     * @return MessageCatalog instance
+     *
+     * @throws MessageCatalogException if an error occurs
+     * @see #getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+     */
     public MessageCatalog getMessageCatalog(String resource, Charset charset, Logger logger) throws MessageCatalogException
     {
         return this.getMessageCatalog(resource, charset, null, logger);
     }
 
+    /**
+     * This method creates a MessageCatalog instance.
+     *
+     * @param resource        the xml configuration resource
+     * @param charset         the default charset
+     * @param velocityContext a velocity context which is used to evaluate the configuration
+     *
+     * @return MessageCatalog instance
+     *
+     * @throws MessageCatalogException if an error occurs
+     * @see #getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+     */
     public MessageCatalog getMessageCatalog(String resource, Charset charset, Context velocityContext) throws MessageCatalogException
     {
         return this.getMessageCatalog(resource, charset, velocityContext, null);
     }
 
+    /**
+     * This method creates a MessageCatalog instance. The configurations is specified with the help of an
+     * xml file.
+     * <p/>
+     * Example:
+     * TODO add example
+     *
+     * @param resource        the xml configuration resource
+     * @param charset         the default charset
+     * @param velocityContext a velocity context which is used to evaluate the configuration
+     * @param logger          a logger
+     *
+     * @return MessageCatalog instance
+     *
+     * @throws MessageCatalogException if an error occurs
+     */
     public MessageCatalog getMessageCatalog(String resource, Charset charset, Context velocityContext, Logger logger) throws MessageCatalogException
     {
         URL configurationUrl = Misc.getResource(resource);
@@ -110,44 +185,16 @@ public class MessageCatalogFactory
             throw new ConfigurationNotFoundException("The configuration resource '" + resource + "' was not found in file system or as URL.");
         }
 
-        if(velocityContext == null)
+        if (velocityContext == null)
         {
             velocityContext = new ToolManager(false).createContext();
         }
-
-        VelocityEngine velocityEngine = new VelocityEngine();
-        velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, SystemLogChute.class.getName());
-        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_LEVEL_KEY, "info");
-        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_SYSTEM_ERR_LEVEL_KEY, "warn");
-        velocityEngine.init();
-
-        String configuration = null;
-        try
-        {
-            configuration = Misc.getContent(configurationUrl, charset);
-        }
-        catch (IOException e)
-        {
-            throw new ConfigurationException("The configuration file could not be read.", e);
-        }
-        String oldConfiguration;
-        boolean success;
-        do
-        {
-            oldConfiguration = configuration;
-
-            StringWriter stringWriter = new StringWriter();
-            success = velocityEngine.evaluate(velocityContext, stringWriter, "catalog_header_comments", configuration);
-
-            configuration = stringWriter.toString();
-        }
-        while (!oldConfiguration.equals(configuration) && success);
 
         Charset defaultCharset = charset;
         Node sourceNode = null;
         Node catalogNode = null;
 
-        Node rootNode = this.getRootNode(configuration);
+        Node rootNode = this.getRootNode(this.loadConfiguration(configurationUrl, velocityContext, charset));
         Node charsetNode = rootNode.getAttributes().getNamedItem("charset");
         if (charsetNode != null)
         {
@@ -199,10 +246,24 @@ public class MessageCatalogFactory
             throw new UnknownCatalogFormatException("Unknown catalog format " + catalogFormatNode.getTextContent());
         }
 
-        return this.createMessageCatalog(extractorConfigurationClass, sourceNode, catalogConfigurationClass, catalogNode, defaultCharset, velocityContext, logger);
+        return this.createMessageCatalog(extractorConfigurationClass, sourceNode, catalogConfigurationClass, catalogNode, defaultCharset, logger);
     }
 
-    private MessageCatalog createMessageCatalog(Class<? extends ExtractorConfiguration> extractorConfigurationClass, Node sourceNode, Class<? extends CatalogConfiguration> catalogConfigurationClass, Node catalogNode, Charset charset, Context velocityContext, Logger logger) throws MessageCatalogException
+    /**
+     * This method creates a MessageCatalog instance. It uses the JAXB XML serializer to deserialize the extractor and catalog nodes.
+     *
+     * @param extractorConfigurationClass the class of the ExtractorConfiguration
+     * @param sourceNode                  the node which describes the ExtractorConfiguration
+     * @param catalogConfigurationClass   the class of the CatalogFormat
+     * @param catalogNode                 the node which describes the CatalogFormat
+     * @param charset                     The charset which shall be used for the configurations
+     * @param logger                      the logger for the message catalog
+     *
+     * @return a message catalog instance
+     *
+     * @throws MessageCatalogException if a JAXB exception occurs or the message catalog can't be created
+     */
+    private MessageCatalog createMessageCatalog(Class<? extends ExtractorConfiguration> extractorConfigurationClass, Node sourceNode, Class<? extends CatalogConfiguration> catalogConfigurationClass, Node catalogNode, Charset charset, Logger logger) throws MessageCatalogException
     {
         try
         {
@@ -229,6 +290,64 @@ public class MessageCatalogFactory
         }
     }
 
+    /**
+     * This method loads the configuration and evaluates it with the specified context
+     *
+     * @param resource the resource of the configuration
+     * @param context  the velocity context
+     * @param charset  the charset of the configuration
+     *
+     * @return the configuration
+     *
+     * @throws ConfigurationException if the resource couldn't be read
+     */
+    private String loadConfiguration(URL resource, Context context, Charset charset) throws ConfigurationException
+    {
+        // creates velocity engine with log properties and initialises it
+        VelocityEngine velocityEngine = new VelocityEngine();
+        velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, SystemLogChute.class.getName());
+        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_LEVEL_KEY, "info");
+        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_SYSTEM_ERR_LEVEL_KEY, "warn");
+        velocityEngine.init();
+
+        // reads the configuration file
+        String configuration;
+        try
+        {
+            configuration = Misc.getContent(resource, charset);
+        }
+        catch (IOException e)
+        {
+            throw new ConfigurationException("The configuration file could not be read.", e);
+        }
+
+        // evaluates the configuration with the specified context as long as the new
+        // configuration is the same as before or an error occurs
+        String oldConfiguration;
+        boolean success;
+        do
+        {
+            oldConfiguration = configuration;
+
+            StringWriter stringWriter = new StringWriter();
+            success = velocityEngine.evaluate(context, stringWriter, "catalog_header_comments", configuration);
+
+            configuration = stringWriter.toString();
+        }
+        while (!oldConfiguration.equals(configuration) && success);
+
+        return configuration;
+    }
+
+    /**
+     * This method returns the extractor node of the specified xml string
+     *
+     * @param xml xml string
+     *
+     * @return extractor root node
+     *
+     * @throws ConfigurationException if an error occurs or the node doesn't exist exactly one time
+     */
     private Node getRootNode(String xml) throws ConfigurationException
     {
         Document document;
@@ -257,6 +376,10 @@ public class MessageCatalogFactory
         return list.item(0);
     }
 
+    /**
+     * This method fills the instance of this class with default classes for the message
+     * extractor and the catalog format
+     */
     private void loadDefaultClasses()
     {
         this.extractorConfigurationMap.put("java", JavaExtractorConfiguration.class);
