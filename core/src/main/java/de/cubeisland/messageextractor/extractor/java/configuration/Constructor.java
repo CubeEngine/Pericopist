@@ -57,6 +57,10 @@ public class Constructor extends CallableExpression
         }
 
         CtExecutableReference<?> executable = ((CtAbstractInvocation<?>) element).getExecutable();
+        if(executable == null)
+        {
+            return false;
+        }
 
         if (!executable.isConstructor())
         {
