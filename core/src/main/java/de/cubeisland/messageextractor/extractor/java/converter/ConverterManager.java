@@ -30,9 +30,12 @@ import java.util.Map.Entry;
 import de.cubeisland.messageextractor.extractor.java.exception.ConversionException;
 import de.cubeisland.messageextractor.extractor.java.exception.ConverterNotFoundException;
 import spoon.reflect.code.CtBinaryOperator;
+import spoon.reflect.code.CtConditional;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtFieldAccess;
+import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
+import spoon.reflect.code.CtNewArray;
 
 public class ConverterManager
 {
@@ -103,7 +106,9 @@ public class ConverterManager
     private void registerDefaultConverter()
     {
         this.registerConverter(CtBinaryOperator.class, new CtBinaryOperatorExpressionConverter());
+        this.registerConverter(CtConditional.class, new CtConditionalExpressionConverter());
         this.registerConverter(CtFieldAccess.class, new CtFieldAccessExpressionConverter());
         this.registerConverter(CtLiteral.class, new CtLiteralExpressionConverter());
+        this.registerConverter(CtNewArray.class, new CtNewArrayExpressionConverter());
     }
 }
