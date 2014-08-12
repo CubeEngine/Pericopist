@@ -59,6 +59,11 @@
                 <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation</description>
             </annotation>
 
+            <annotation>
+                <name>de.cubeisland.messageextractor.test.TranslatableArrayAnnotation</name>
+                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableArrayAnnotation annotation</description>
+            </annotation>
+
             <constructor>
                 <name>de.cubeisland.messageextractor.test.MessageExtractorTest</name>
                 <signature>

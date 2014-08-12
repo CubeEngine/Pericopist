@@ -97,8 +97,9 @@ public class TestCasesJavaGettextCatalog
         Assert.assertEquals("de.cubeisland.messageextractor.test.command.User#sendTranslatedN", config.getTranslatableExpressions()[3].getName());
         Assert.assertEquals("de.cubeisland.messageextractor.test.command.Command", config.getTranslatableExpressions()[4].getName());
         Assert.assertEquals("de.cubeisland.messageextractor.test.TranslatableAnnotation", config.getTranslatableExpressions()[5].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.MessageExtractorTest", config.getTranslatableExpressions()[6].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.exception.WrongUsageException", config.getTranslatableExpressions()[7].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.TranslatableArrayAnnotation", config.getTranslatableExpressions()[6].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.MessageExtractorTest", config.getTranslatableExpressions()[7].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.exception.WrongUsageException", config.getTranslatableExpressions()[8].getName());
     }
 
     @Test
