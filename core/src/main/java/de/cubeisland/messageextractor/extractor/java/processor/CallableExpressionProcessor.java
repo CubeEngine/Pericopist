@@ -56,7 +56,7 @@ public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvo
         if (arguments.size() > callableExpression.getSingularIndex())
         {
             singulars = this.getMessages(arguments.get(callableExpression.getSingularIndex()), callableExpression);
-            if(singulars == null || singulars.length == 0)
+            if (singulars == null || singulars.length == 0)
             {
                 return;
             }
@@ -64,7 +64,7 @@ public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvo
         if (callableExpression.hasPlural() && arguments.size() > callableExpression.getPluralIndex())
         {
             plurals = this.getMessages(arguments.get(callableExpression.getPluralIndex()), callableExpression);
-            if(plurals == null || plurals.length == 0)
+            if (plurals == null || plurals.length == 0)
             {
                 return;
             }

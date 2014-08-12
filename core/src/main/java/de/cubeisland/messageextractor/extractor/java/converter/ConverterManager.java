@@ -45,7 +45,7 @@ public class ConverterManager
     {
         this.converters = new HashMap<>();
 
-        if(registerDefaultConverter)
+        if (registerDefaultConverter)
         {
             this.registerDefaultConverter();
         }
@@ -53,7 +53,7 @@ public class ConverterManager
 
     public void registerConverter(Class<? extends CtExpression> clazz, Converter converter)
     {
-        if(clazz == null || converter == null)
+        if (clazz == null || converter == null)
         {
             return;
         }
@@ -69,7 +69,7 @@ public class ConverterManager
     {
         for (Entry<Class<? extends CtExpression>, Converter> entry : this.converters.entrySet())
         {
-            if(entry.getKey().isAssignableFrom(clazz))
+            if (entry.getKey().isAssignableFrom(clazz))
             {
                 Converter converter = entry.getValue();
                 this.registerConverter(clazz, converter);
@@ -83,20 +83,20 @@ public class ConverterManager
     public <T extends CtExpression> Converter<T> matchConverter(Class<? extends T> clazz) throws ConverterNotFoundException
     {
         Converter converter = this.getConverter(clazz);
-        if(converter == null)
+        if (converter == null)
         {
             converter = this.findConverter(clazz);
         }
-        if(converter != null)
+        if (converter != null)
         {
-           return converter;
+            return converter;
         }
         throw new ConverterNotFoundException("Converter not found for: " + clazz.getName());
     }
 
     public <T extends CtExpression<?>> String[] convert(T expression) throws ConversionException
     {
-        if(expression == null)
+        if (expression == null)
         {
             return null;
         }

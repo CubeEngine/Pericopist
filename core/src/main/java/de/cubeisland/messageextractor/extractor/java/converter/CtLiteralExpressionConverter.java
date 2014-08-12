@@ -32,10 +32,10 @@ public class CtLiteralExpressionConverter implements Converter<CtLiteral<?>>
     public String[] convert(CtLiteral<?> expression, ConverterManager manager) throws ConversionException
     {
         String value = (String) expression.getValue();
-        if(value == null)
+        if (value == null)
         {
             return null;
         }
-        return new String[] { value };
+        return new String[] {value};
     }
 }

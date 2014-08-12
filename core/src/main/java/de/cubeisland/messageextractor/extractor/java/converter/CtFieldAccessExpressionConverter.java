@@ -59,7 +59,7 @@ public class CtFieldAccessExpressionConverter implements Converter<CtFieldAccess
             Object o = field.get(null);
             if (o != null)
             {
-                return new String[] { o.toString() };
+                return new String[] {o.toString()};
             }
         }
         catch (SecurityException e)
