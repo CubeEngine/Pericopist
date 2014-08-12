@@ -23,6 +23,9 @@
  */
 package de.cubeisland.messageextractor.extractor.java.converter.exception;
 
+/**
+ * This Exception is thrown when there is no converter registered for an expression
+ */
 public class ConverterNotFoundException extends ConversionException
 {
     public ConverterNotFoundException(String msg)

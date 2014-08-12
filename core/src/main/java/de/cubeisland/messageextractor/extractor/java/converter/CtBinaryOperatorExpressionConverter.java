@@ -27,6 +27,10 @@ import de.cubeisland.messageextractor.extractor.java.converter.exception.Convers
 import spoon.reflect.code.BinaryOperatorKind;
 import spoon.reflect.code.CtBinaryOperator;
 
+/**
+ * This converter is responsible for the concatenation of strings like
+ * <code>translate("I'm concat" + "enated")</code>
+ */
 public class CtBinaryOperatorExpressionConverter implements Converter<CtBinaryOperator<?>>
 {
     @Override

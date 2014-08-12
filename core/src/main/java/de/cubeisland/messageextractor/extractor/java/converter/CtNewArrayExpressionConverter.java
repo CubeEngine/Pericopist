@@ -31,6 +31,10 @@ import de.cubeisland.messageextractor.extractor.java.converter.exception.Convers
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtNewArray;
 
+/**
+ * This converter is responsible for new array expressions like
+ * <code>@Annotation({"first", "second", "third"})</code>
+ */
 public class CtNewArrayExpressionConverter implements Converter<CtNewArray<?>>
 {
     @Override

@@ -36,6 +36,10 @@ import spoon.reflect.code.CtFieldAccess;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtNewArray;
 
+/**
+ * This class manages all converters which convert a <code>CtExpression</code> into
+ * a <code>String[]</code>
+ */
 public class ConverterManager
 {
     private Map<Class<? extends CtExpression>, Converter> converters;
@@ -50,6 +54,12 @@ public class ConverterManager
         }
     }
 
+    /**
+     * This method registers a converter for the specified class
+     *
+     * @param clazz     the class
+     * @param converter the converter
+     */
     public void registerConverter(Class<? extends CtExpression> clazz, Converter converter)
     {
         if (clazz == null || converter == null)
@@ -59,11 +69,25 @@ public class ConverterManager
         this.converters.put(clazz, converter);
     }
 
+    /**
+     * This method returns the converter which is related to the specified class
+     *
+     * @param clazz the class
+     *
+     * @return the converter
+     */
     public Converter getConverter(Class<? extends CtExpression> clazz)
     {
         return this.converters.get(clazz);
     }
 
+    /**
+     * This method returns the converter which is assignable from the specified class
+     *
+     * @param clazz the class
+     *
+     * @return the converter
+     */
     public Converter findConverter(Class<? extends CtExpression> clazz)
     {
         for (Entry<Class<? extends CtExpression>, Converter> entry : this.converters.entrySet())
@@ -78,6 +102,13 @@ public class ConverterManager
         return null;
     }
 
+    /**
+     * This method matches a registered converter
+     *
+     * @param clazz the class to match for
+     *
+     * @return a matching converter
+     */
     @SuppressWarnings("unchecked")
     public <T extends CtExpression> Converter<T> matchConverter(Class<? extends T> clazz) throws ConverterNotFoundException
     {
@@ -93,6 +124,13 @@ public class ConverterManager
         throw new ConverterNotFoundException("Converter not found for: " + clazz.getName());
     }
 
+    /**
+     * This method converts an expression into a string array
+     *
+     * @param expression the expression
+     *
+     * @return the string array
+     */
     public <T extends CtExpression<?>> String[] convert(T expression) throws ConversionException
     {
         if (expression == null)
@@ -107,7 +145,7 @@ public class ConverterManager
         this.registerConverter(CtBinaryOperator.class, new CtBinaryOperatorExpressionConverter());
         this.registerConverter(CtConditional.class, new CtConditionalExpressionConverter());
         this.registerConverter(CtFieldAccess.class, new CtFieldAccessExpressionConverter());
-//        this.registerConverter(CtInvocation.class, new CtInvocationExpressionConverter());
+        //        this.registerConverter(CtInvocation.class, new CtInvocationExpressionConverter());
         this.registerConverter(CtLiteral.class, new CtLiteralExpressionConverter());
         this.registerConverter(CtNewArray.class, new CtNewArrayExpressionConverter());
     }

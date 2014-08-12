@@ -30,6 +30,10 @@ import de.cubeisland.messageextractor.extractor.java.converter.exception.Convers
 import spoon.reflect.code.CtFieldAccess;
 import spoon.reflect.reference.CtFieldReference;
 
+/**
+ * This converter is responsible for constant expressions like
+ * <code>translate(CLASS.CONSTANT)</code>
+ */
 public class CtFieldAccessExpressionConverter implements Converter<CtFieldAccess<?>>
 {
     @Override

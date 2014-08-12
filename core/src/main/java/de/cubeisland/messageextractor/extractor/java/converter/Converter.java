@@ -26,7 +26,20 @@ package de.cubeisland.messageextractor.extractor.java.converter;
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import spoon.reflect.code.CtExpression;
 
+/**
+ * Provides a method to convert a <code>T</code> into a string array
+ */
 public interface Converter<T extends CtExpression>
 {
+    /**
+     * Converts the expression into a string array
+     *
+     * @param expression the expression to convert
+     * @param manager    the converter manager which helps to convert sub expressions
+     *
+     * @return the converted string array
+     *
+     * @throws ConversionException
+     */
     String[] convert(T expression, ConverterManager manager) throws ConversionException;
 }

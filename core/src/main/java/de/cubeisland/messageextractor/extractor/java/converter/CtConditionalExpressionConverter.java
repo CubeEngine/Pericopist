@@ -30,6 +30,10 @@ import java.util.Set;
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import spoon.reflect.code.CtConditional;
 
+/**
+ * This converter is responsible for conditions like
+ * <code>translate(really? "yes" : "no")</code>
+ */
 public class CtConditionalExpressionConverter implements Converter<CtConditional<?>>
 {
     @Override

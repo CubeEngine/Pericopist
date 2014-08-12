@@ -25,6 +25,9 @@ package de.cubeisland.messageextractor.extractor.java.converter.exception;
 
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 
+/**
+ * This exception is thrown when a conversion was not successful
+ */
 public class ConversionException extends MessageExtractionException
 {
     public ConversionException(String msg)

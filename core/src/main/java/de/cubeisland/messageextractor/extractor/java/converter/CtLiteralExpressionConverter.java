@@ -26,6 +26,10 @@ package de.cubeisland.messageextractor.extractor.java.converter;
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import spoon.reflect.code.CtLiteral;
 
+/**
+ * This converter is responsible for simple literal strings like
+ * <code>translate("I'm a translatable string")</code>
+ */
 public class CtLiteralExpressionConverter implements Converter<CtLiteral<?>>
 {
     @Override
