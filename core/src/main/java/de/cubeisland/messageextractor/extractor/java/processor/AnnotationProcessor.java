@@ -28,15 +28,16 @@ import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.extractor.java.configuration.Annotation;
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
+import de.cubeisland.messageextractor.extractor.java.converter.ConverterManager;
 import de.cubeisland.messageextractor.message.MessageStore;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.declaration.CtAnnotation;
 
 public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
 {
-    public AnnotationProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore, Logger logger)
+    public AnnotationProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore, ConverterManager converterManager, Logger logger)
     {
-        super(configuration, messageStore, logger);
+        super(configuration, messageStore, converterManager, logger);
     }
 
     @Override
@@ -57,7 +58,13 @@ public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
 
             if (fieldEntry.getValue() instanceof CtExpression<?>)
             {
-                this.addMessage(annotation, element, this.getString((CtExpression<?>) fieldEntry.getValue()), null);
+                String[] messages = this.getMessages((CtExpression<?>) fieldEntry.getValue(), annotation);
+                if(messages == null || messages.length == 0)
+                {
+                    return;
+                }
+
+                this.addMessage(annotation, element, messages, null);
             }
         }
     }

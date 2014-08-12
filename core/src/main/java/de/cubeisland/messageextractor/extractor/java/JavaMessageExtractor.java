@@ -37,6 +37,7 @@ import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingExcept
 import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
+import de.cubeisland.messageextractor.extractor.java.converter.ConverterManager;
 import de.cubeisland.messageextractor.extractor.java.processor.AnnotationProcessor;
 import de.cubeisland.messageextractor.extractor.java.processor.CallableExpressionProcessor;
 import de.cubeisland.messageextractor.message.MessageStore;
@@ -49,6 +50,12 @@ import spoon.support.QueueProcessingManager;
 public class JavaMessageExtractor implements MessageExtractor
 {
     private Logger logger;
+    private ConverterManager converterManager;
+
+    public JavaMessageExtractor()
+    {
+        this.converterManager = new ConverterManager(true);
+    }
 
     /**
      * {@inheritDoc}
@@ -105,8 +112,8 @@ public class JavaMessageExtractor implements MessageExtractor
 
             Factory spoonFactory = compiler.getFactory();
             ProcessingManager processManager = new QueueProcessingManager(spoonFactory);
-            processManager.addProcessor(new CallableExpressionProcessor((JavaExtractorConfiguration) config, messageStore, this.logger));
-            processManager.addProcessor(new AnnotationProcessor((JavaExtractorConfiguration) config, messageStore, this.logger));
+            processManager.addProcessor(new CallableExpressionProcessor((JavaExtractorConfiguration) config, messageStore, this.converterManager, this.logger));
+            processManager.addProcessor(new AnnotationProcessor((JavaExtractorConfiguration) config, messageStore, this.converterManager, this.logger));
 
             spoonFactory.getEnvironment().setManager(processManager);
             compiler.build();
