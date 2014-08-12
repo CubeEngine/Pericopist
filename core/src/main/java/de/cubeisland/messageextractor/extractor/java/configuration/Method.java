@@ -120,6 +120,10 @@ public class Method extends CallableExpression
             return false;
         }
         CtExecutableReference<?> executable = ((CtInvocation<?>) element).getExecutable();
+        if(executable == null)
+        {
+            return false;
+        }
 
         if (!executable.getSimpleName().equals(this.getMethodName()))
         {
