@@ -106,4 +106,11 @@ public abstract class TranslatableExpression
      * @see de.cubeisland.messageextractor.extractor.java.processor.MessageProcessor
      */
     public abstract boolean matches(CtElement element);
+
+    /**
+     * This method checks whether the translatable expression has a plural
+     *
+     * @return if a plural exists
+     */
+    public abstract boolean hasPlural();
 }

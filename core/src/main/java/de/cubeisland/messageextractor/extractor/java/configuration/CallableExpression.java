@@ -87,6 +87,7 @@ public abstract class CallableExpression extends TranslatableExpression
      *
      * @return if a plural parameter exists
      */
+    @Override
     public boolean hasPlural()
     {
         return this.getPluralIndex() > -1;
