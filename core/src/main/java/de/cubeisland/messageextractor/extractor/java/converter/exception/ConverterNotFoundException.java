@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.extractor.java.exception;
+package de.cubeisland.messageextractor.extractor.java.converter.exception;
 
 public class ConverterNotFoundException extends ConversionException
 {

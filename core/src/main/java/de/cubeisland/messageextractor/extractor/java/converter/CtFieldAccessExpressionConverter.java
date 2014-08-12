@@ -26,7 +26,7 @@ package de.cubeisland.messageextractor.extractor.java.converter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 
-import de.cubeisland.messageextractor.extractor.java.exception.ConversionException;
+import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import spoon.reflect.code.CtFieldAccess;
 import spoon.reflect.reference.CtFieldReference;
 

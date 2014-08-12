@@ -23,7 +23,7 @@
  */
 package de.cubeisland.messageextractor.extractor.java.converter;
 
-import de.cubeisland.messageextractor.extractor.java.exception.ConversionException;
+import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import spoon.reflect.code.CtExpression;
 
 public interface Converter<T extends CtExpression>

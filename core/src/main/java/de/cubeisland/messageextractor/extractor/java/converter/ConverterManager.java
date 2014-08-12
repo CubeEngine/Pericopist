@@ -27,13 +27,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import de.cubeisland.messageextractor.extractor.java.exception.ConversionException;
-import de.cubeisland.messageextractor.extractor.java.exception.ConverterNotFoundException;
+import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
+import de.cubeisland.messageextractor.extractor.java.converter.exception.ConverterNotFoundException;
 import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtConditional;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtFieldAccess;
-import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtNewArray;
 

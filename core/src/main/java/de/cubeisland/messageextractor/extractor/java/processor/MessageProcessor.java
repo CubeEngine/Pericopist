@@ -29,7 +29,7 @@ import de.cubeisland.messageextractor.exception.IllegalTranslatableMessageExcept
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.java.configuration.TranslatableExpression;
 import de.cubeisland.messageextractor.extractor.java.converter.ConverterManager;
-import de.cubeisland.messageextractor.extractor.java.exception.ConversionException;
+import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.Occurrence;
 import de.cubeisland.messageextractor.util.Misc;
