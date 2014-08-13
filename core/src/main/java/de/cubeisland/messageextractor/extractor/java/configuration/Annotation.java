@@ -34,15 +34,20 @@ import spoon.reflect.declaration.CtElement;
  * The annotation describes an annotation.
  * It can be specified with the xml used for the JavaExtractorConfiguration.
  * <p/>
- * Example: <br/>
- * &lt;annotation&gt; <br/>
- * &nbsp;&nbsp;&lt;name&gt;i.am.the.annotation&lt;/name&gt; <br/>
- * &nbsp;&nbsp;&lt;fields&gt; <br/>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;field&gt;translatable_field&lt;/field&gt; <br/>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;field&gt;second_translatable_field&lt;/field&gt; <br/>
- * &nbsp;&nbsp;&lt;/fields&gt; <br/>
- * &nbsp;&nbsp;&lt;description&gt;I am a default context&lt;/description&gt; <br/>
- * &lt;/annotation&gt;
+ * Example:
+ * <p/>
+ * <pre>
+ * {@code
+ * <annotation>
+ *     <name>I.am.the.annotation</name>
+ *     <fields> <!-- default field: value -->
+ *         <field>translatable_field</field>
+ *         <field>second_translatable_field</field>
+ *     </fields>
+ *     <description>I am a default context</description>
+ * </annotation>
+ * }
+ * </pre>
  */
 @XmlRootElement(name = "annotation")
 public class Annotation extends TranslatableExpression

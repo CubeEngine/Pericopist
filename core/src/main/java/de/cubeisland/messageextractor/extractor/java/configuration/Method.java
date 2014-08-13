@@ -39,17 +39,22 @@ import spoon.reflect.reference.CtTypeReference;
  * The Method class describes a method invocation.
  * It can be specified with the xml used for the JavaExtractorConfiguration.
  * <p/>
- * Example: <br/>
- * &lt;method static=&quot;false&quot;&gt; <br/>
- * &nbsp;&nbsp;&lt;name&gt;i.am.the.class#methodname&lt;/name&gt; <br/>
- * &nbsp;&nbsp;&lt;signature&gt; <br/>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;type&gt;int&lt;/type&gt; <br/>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;type use-as=&quot;singular&quot;&gt;java.lang.String&lt;/type&gt; <br/>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;type use-as=&quot;plural&quot;&gt;java.lang.String&lt;/type&gt; <br/>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;type&gt;java.lang.Object[]&lt;/type&gt; <br/>
- * &nbsp;&nbsp;&lt;/signature&gt; <br/>
- * &nbsp;&nbsp;&lt;description&gt;I am a default context&lt;/description&gt; <br/>
- * &lt;/method&gt;
+ * Example:
+ * <p/>
+ * <pre>
+ * {@code
+ * <method static="false"> <!-- default static: false -->
+ *     <name>I.am.the.class#methodname</name>
+ *     <signature>
+ *         <type>int</type>
+ *         <type use-as="singular">java.lang.String</type>
+ *         <type use-as="plural">java.lang.String</type>
+ *         <type>java.lang.Object[]</type>
+ *     </signature>
+ *     <description>I am a default context</description>
+ * </method>
+ * }
+ * </pre>
  *
  * @see de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration
  */

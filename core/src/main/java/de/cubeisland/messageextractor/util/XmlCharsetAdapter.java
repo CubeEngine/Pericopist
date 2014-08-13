@@ -48,7 +48,6 @@ public class XmlCharsetAdapter extends XmlAdapter<String, Charset>
 
     /**
      * This method converts the Charset to a XML-String.
-     * Thats not needed in this context!
      *
      * @param v charset
      *

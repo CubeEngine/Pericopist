@@ -88,6 +88,32 @@ public class MessageCatalogFactory
     }
 
     /**
+     * This method adds a new extractor configuration.
+     *
+     * @param language the language which is related to the ExtractorConfiguration
+     * @param config   the ExtractorConfiguration class
+     *
+     * @return the previous ExtractorConfiguration class related to the language
+     */
+    public Class<? extends ExtractorConfiguration> addExtractorConfiguration(String language, Class<? extends ExtractorConfiguration> config)
+    {
+        return this.extractorConfigurationMap.put(language, config);
+    }
+
+    /**
+     * This method adds a new catalog configuration.
+     *
+     * @param format the catalog name which is related to the CatalogConfiguration
+     * @param config the CatalogConfiguration class
+     *
+     * @return the previous CatalogConfiguration class related to the catalog name
+     */
+    public Class<? extends CatalogConfiguration> addCatalogConfiguration(String format, Class<? extends CatalogConfiguration> config)
+    {
+        return this.catalogConfigurationMap.put(format, config);
+    }
+
+    /**
      * This method returns the ExtractorConfiguration of the specified language
      *
      * @param language the language of the ExtractorConfiguration
@@ -166,7 +192,32 @@ public class MessageCatalogFactory
      * xml file.
      * <p/>
      * Example:
-     * TODO add example
+     * <p/>
+     * <pre>
+     * {@code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <extractor charset="utf-8">
+     *     <source language="LANGUAGE">
+     *         ...
+     *     </source>
+     *     <catalog format="FORMAT">
+     *          ...
+     *     </catalog>
+     * </extractor>
+     * }
+     * </pre>
+     * <p/>
+     * The inner source tags are related to the language name. The language name is the name
+     * specified with the method {@link #addExtractorConfiguration(String, Class)}.
+     * A default language name is 'java' which links to the
+     * {@link de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration}.
+     * Have a look at this class to get a deeper knowledge about the xml file.
+     * <p/>
+     * the inner catalog tags are related to the format name. The format name is the name
+     * specified with the method {@link #addCatalogConfiguration(String, Class)}.
+     * A default format name is 'gettext' which links to the
+     * {@link de.cubeisland.messageextractor.format.gettext.GettextCatalogConfiguration}.
+     * Have a look at this class to get a deeper knowledge about the xml file.
      *
      * @param resource        the xml configuration resource
      * @param charset         the default charset
@@ -382,7 +433,7 @@ public class MessageCatalogFactory
      */
     private void loadDefaultClasses()
     {
-        this.extractorConfigurationMap.put("java", JavaExtractorConfiguration.class);
-        this.catalogConfigurationMap.put("gettext", GettextCatalogConfiguration.class);
+        this.addExtractorConfiguration("java", JavaExtractorConfiguration.class);
+        this.addCatalogConfiguration("gettext", GettextCatalogConfiguration.class);
     }
 }

@@ -38,10 +38,33 @@ import spoon.reflect.declaration.CtElement;
  * This configuration is used for parsing the source tree of java projects and extracting its translatable messages.
  * <p/>
  * The configuration can be set up with an xml file.
- * {@link de.cubeisland.messageextractor.MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)}
- * TODO add configuration with explanation
+ * <p/>
+ * Example:
+ * <p/>
+ * <pre>
+ * {@code
+ * <source language="java" charset="utf-8"> <!-- default charset: charset set as extractor tag attribute -->
+ *     <directory>source file path</directory> <!-- default: ./src/main/java -->
+ *     <classpath>classpath</classpath> <!-- default: System.getProperty("java.class.path") -->
+ *     <translatables> <!-- register ways how to extract messages -->
+ *         <method>
+ *             ...
+ *         </method>
+ *         <constructor>
+ *             ...
+ *         </constructor>
+ *         <annotation>
+ *             ...
+ *         </annotation>
+ *     </translatables>
+ * </source>
+ * }
+ * </pre>
  *
- * @see de.cubeisland.messageextractor.MessageCatalogFactory
+ * The translatables tag has to be filled with information about the
+ * {@link de.cubeisland.messageextractor.extractor.java.configuration.TranslatableExpression} subclasses.
+ *
+ * @see de.cubeisland.messageextractor.MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
  * @see de.cubeisland.messageextractor.extractor.java.JavaMessageExtractor
  */
 @XmlRootElement(name = "source")

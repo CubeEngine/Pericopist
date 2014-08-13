@@ -57,31 +57,12 @@ public class JavaMessageExtractor implements MessageExtractor
         this.converterManager = new ConverterManager(true);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param config the config which shall be used to extract the messages
-     *
-     * @return
-     *
-     * @throws MessageExtractionException
-     */
     @Override
     public MessageStore extract(ExtractorConfiguration config) throws MessageExtractionException
     {
         return this.extract(config, null);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param config             the config which shall be used to extract the messages
-     * @param loadedMessageStore a messagestore containing the messages from the old catalog
-     *
-     * @return
-     *
-     * @throws MessageExtractionException
-     */
     @Override
     public MessageStore extract(ExtractorConfiguration config, MessageStore loadedMessageStore) throws MessageExtractionException
     {
