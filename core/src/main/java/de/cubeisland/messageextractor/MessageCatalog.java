@@ -152,7 +152,7 @@ public class MessageCatalog
 
                 messageStore = this.catalogFormat.read(this.catalogConfiguration, fileInputStream);
 
-                if(channel.isOpen())
+                if (channel.isOpen())
                 {
                     lock.release();
                 }

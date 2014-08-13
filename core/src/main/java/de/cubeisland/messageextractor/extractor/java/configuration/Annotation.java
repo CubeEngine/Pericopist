@@ -40,7 +40,7 @@ import spoon.reflect.declaration.CtElement;
  * {@code
  * <annotation>
  *     <name>I.am.the.annotation</name>
- *     <fields>
+ *     <fields> <!-- default field: value -->
  *         <field>translatable_field</field>
  *         <field>second_translatable_field</field>
  *     </fields>

@@ -35,10 +35,33 @@ import de.cubeisland.messageextractor.format.HeaderConfiguration;
  * This configuration is used for creating a gettext catalog which stores translatable messages.
  * <p/>
  * The configuration can be set up with an xml file.
- * {@link de.cubeisland.messageextractor.MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)}
- * TODO add configuration with explanation
+ * <p/>
+ * Example:
+ * <p/>
+ * <pre>
+ * {@code
+ * <catalog format="gettext" charset="utf-8"> <!-- default charset: charset set as extractor tag attribute -->
+ *     <removeUnusedMessages>true</removeUnusedMessages> <!-- default: true -->
+ *     <createEmptyTemplate>false</createEmptyTemplate> <!-- default: false -->
+ *     <pluralAmount>2</pluralAmount> <!-- plural amount of the source language. default: 2 -->
+ *     <template>TEMPLATE PATH</template> <!-- path of the template file -->
+ *     <header>
+ *         <comments>
+ *             header comments of the template file.
+ *             use ${resource.load("path")} to load an external file as comments
+ *         </comments>
+ *         <metadata>
+ *             <entry key="Project-Id-Version">PACKAGE VERSION</entry>
+ *             <entry key="POT-Creation-Date" variable="true">${date.get('yyyy-MM-dd HH:mm:ssZ')}</entry>
+ *             <entry key="Last-Translator">FULL NAME &lt;EMAIL@ADDRESS&gt;</entry>
+ *             ...
+ *         </metadata>
+ *     </header>
+ * </catalog>
+ * }
+ * </pre>
  *
- * @see de.cubeisland.messageextractor.MessageCatalogFactory
+ * @see de.cubeisland.messageextractor.MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
  * @see de.cubeisland.messageextractor.format.gettext.PlaintextGettextCatalogFormat
  */
 @XmlRootElement(name = "catalog")

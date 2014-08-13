@@ -43,7 +43,7 @@ import spoon.reflect.reference.CtTypeReference;
  * <p/>
  * <pre>
  * {@code
- * <method static="false">
+ * <method static="false"> <!-- default static: false -->
  *     <name>I.am.the.class#methodname</name>
  *     <signature>
  *         <type>int</type>
