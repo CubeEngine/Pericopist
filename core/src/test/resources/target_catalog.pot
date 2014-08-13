@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-08-12 16:23:37+0200\n"
+"POT-Creation-Date: 2014-08-13 08:11:28+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
@@ -61,6 +61,16 @@ msgid "a concatenated string"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:40
+msgid "a double: 1.04"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:39
+msgid "a float: 1.04"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
 #. this message was extracted with the de.cubeisland.messageextractor.test.command.User#sendTranslated method
 #: de/cubeisland/messageextractor/test/MultipleContextTest.java:30
@@ -69,6 +79,11 @@ msgstr ""
 #: de/cubeisland/messageextractor/test/MultipleContextTest.java:40
 #: de/cubeisland/messageextractor/test/StringTest.java:35
 msgid "a normal string"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:38
+msgid "an integer: 1"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method

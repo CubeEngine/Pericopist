@@ -34,6 +34,11 @@ public class StringTest
 
         i18n.translate("a normal string");
         i18n.translate("a concatenated " + "string");
-        i18n.translate(true ? "yes" : "no"); // this isn't supported yet! TODO implement it
+        i18n.translate(true ? "yes" : "no");
+        i18n.translate("an integer: " + 1);
+        i18n.translate("a float: " + 1.04f);
+        i18n.translate("a double: " + 1.04d);
+
+        i18n.translate("calculations are not supported: " + (4 - 3));
     }
 }
