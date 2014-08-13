@@ -42,13 +42,13 @@ public class CtFieldAccessExpressionConverter implements Converter<CtFieldAccess
         CtFieldReference<?> fieldReference = expression.getVariable();
         if (!fieldReference.isStatic())
         {
-            throw new ConversionException("'" + expression.getClass().getName() + "' expressions which aren't static aren't supported.");
+            throw new ConversionException(this, expression, "'" + expression.getClass().getName() + "' expressions which aren't static aren't supported.");
         }
 
         Member member = fieldReference.getActualField();
         if (member == null || !(member instanceof Field))
         {
-            throw new ConversionException("The member isn't a field value");
+            throw new ConversionException(this, expression, "The member isn't a field value");
         }
 
         Field field = (Field) member;
@@ -68,11 +68,11 @@ public class CtFieldAccessExpressionConverter implements Converter<CtFieldAccess
         }
         catch (SecurityException e)
         {
-            throw new ConversionException("The access level of the field '" + field.getName() + "' from class " + field.getDeclaringClass().getName() + "' couldn't be modified.", e);
+            throw new ConversionException(this, expression, "The access level of the field '" + field.getName() + "' from class " + field.getDeclaringClass().getName() + "' couldn't be modified.", e);
         }
         catch (IllegalAccessException e)
         {
-            throw new ConversionException("The expression '" + expression.getClass().getName() + "' couldn't be parsed. The field '" + field.getName() + "' of the class '" + field.getDeclaringClass().getName() + "' couldn't be accessed.", e);
+            throw new ConversionException(this, expression, "The expression '" + expression.getClass().getName() + "' couldn't be parsed. The field '" + field.getName() + "' of the class '" + field.getDeclaringClass().getName() + "' couldn't be accessed.", e);
         }
         return null;
     }

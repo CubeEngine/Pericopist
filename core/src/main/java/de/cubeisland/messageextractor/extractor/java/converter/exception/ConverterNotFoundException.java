@@ -23,13 +23,15 @@
  */
 package de.cubeisland.messageextractor.extractor.java.converter.exception;
 
+import spoon.reflect.code.CtExpression;
+
 /**
  * This Exception is thrown when there is no converter registered for an expression
  */
 public class ConverterNotFoundException extends ConversionException
 {
-    public ConverterNotFoundException(String msg)
+    public ConverterNotFoundException(CtExpression<?> expression)
     {
-        super(msg);
+        super(null, expression, "Converter not found");
     }
 }

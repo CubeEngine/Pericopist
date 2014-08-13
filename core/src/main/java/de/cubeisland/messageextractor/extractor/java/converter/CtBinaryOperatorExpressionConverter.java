@@ -38,7 +38,7 @@ public class CtBinaryOperatorExpressionConverter implements Converter<CtBinaryOp
     {
         if (!BinaryOperatorKind.PLUS.equals(expression.getKind()))
         {
-            throw new ConversionException("Just the '+' binary operator can be used for string operations. '" + expression.getKind().name() + "' isn't supported.");
+            throw new ConversionException(this, expression, "Just the '+' binary operator can be used for string operations. '" + expression.getKind().name() + "' isn't supported.");
         }
 
         String[] leftHandOperandStrings = manager.convert(expression.getLeftHandOperand());

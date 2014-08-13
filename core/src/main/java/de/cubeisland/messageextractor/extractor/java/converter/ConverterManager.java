@@ -105,23 +105,23 @@ public class ConverterManager
     /**
      * This method matches a registered converter
      *
-     * @param clazz the class to match for
+     * @param expression the expression to match for
      *
      * @return a matching converter
      */
     @SuppressWarnings("unchecked")
-    public <T extends CtExpression> Converter<T> matchConverter(Class<? extends T> clazz) throws ConverterNotFoundException
+    public <T extends CtExpression> Converter<T> matchConverter(CtExpression expression) throws ConverterNotFoundException
     {
-        Converter converter = this.getConverter(clazz);
+        Converter converter = this.getConverter(expression.getClass());
         if (converter == null)
         {
-            converter = this.findConverter(clazz);
+            converter = this.findConverter(expression.getClass());
         }
         if (converter != null)
         {
             return converter;
         }
-        throw new ConverterNotFoundException("Converter not found for: " + clazz.getName());
+        throw new ConverterNotFoundException(expression);
     }
 
     /**
@@ -137,7 +137,7 @@ public class ConverterManager
         {
             return null;
         }
-        return this.matchConverter(expression.getClass()).convert(expression, this);
+        return this.matchConverter(expression).convert(expression, this);
     }
 
     private void registerDefaultConverter()

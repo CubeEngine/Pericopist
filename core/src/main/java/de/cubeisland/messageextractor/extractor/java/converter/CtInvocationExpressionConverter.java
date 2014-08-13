@@ -27,7 +27,7 @@ import de.cubeisland.messageextractor.extractor.java.converter.exception.Convers
 import spoon.reflect.code.CtInvocation;
 import spoon.support.reflect.code.CtFieldAccessImpl;
 
-public class CtInvocationExpressionConverter implements Converter<CtInvocation>
+public class CtInvocationExpressionConverter implements Converter<CtInvocation> // TODO implement me
 {
     @Override
     public String[] convert(CtInvocation expression, ConverterManager manager) throws ConversionException
@@ -45,6 +45,6 @@ public class CtInvocationExpressionConverter implements Converter<CtInvocation>
         System.out.println("Actual Method: " + expression.getExecutable().getActualMethod());
         System.out.println();
 
-        throw new ConversionException(expression.getClass().getName() + " isn't supported yet.");
+        throw new ConversionException(this, expression, "The expression isn't supported yet.");
     }
 }

@@ -24,19 +24,55 @@
 package de.cubeisland.messageextractor.extractor.java.converter.exception;
 
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
+import de.cubeisland.messageextractor.extractor.java.converter.Converter;
+import spoon.reflect.code.CtExpression;
 
 /**
  * This exception is thrown when a conversion was not successful
  */
 public class ConversionException extends MessageExtractionException
 {
-    public ConversionException(String msg)
+    private Converter<?> converter;
+    private CtExpression<?> expression;
+
+    public ConversionException(Converter<?> converter, CtExpression<?> expression, String msg)
     {
-        super(msg);
+        super(buildMessage(converter, expression, msg));
+
+        this.converter = converter;
+        this.expression = expression;
     }
 
-    public ConversionException(String msg, Throwable t)
+    public ConversionException(Converter<?> converter, CtExpression<?> expression, String msg, Throwable t)
     {
-        super(msg, t);
+        super(buildMessage(converter, expression, msg), t);
+
+        this.converter = converter;
+        this.expression = expression;
+    }
+
+    public Converter<?> getConverter()
+    {
+        return converter;
+    }
+
+    public CtExpression<?> getExpression()
+    {
+        return expression;
+    }
+
+    private static String buildMessage(Converter<?> converter, CtExpression<?> expression, String message)
+    {
+        String msg = message;
+        if(converter != null)
+        {
+            msg += "\nConverter: " + converter.getClass().getName();
+        }
+        msg += "\nConverting: " + expression.toString();
+        msg += "\nConverting class: " + expression.getClass().getName();
+        msg += "\nFile: " + expression.getPosition().getFile().getPath();
+        msg += "\nLine: " + expression.getPosition().getLine();
+
+        return msg;
     }
 }

@@ -23,6 +23,7 @@
  */
 package de.cubeisland.messageextractor.extractor.java.processor;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.exception.IllegalTranslatableMessageException;
@@ -70,32 +71,18 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         }
         catch (ConversionException e)
         {
-            StringBuilder builder = new StringBuilder("A conversion exception occurred.");
-            builder.append("\n\tException: ");
-            builder.append("\n\t\tMessage: ");
+            StringBuilder builder = new StringBuilder("A conversion exception occurred.\n");
+            builder.append(e.getClass().getName());
+            builder.append('\n');
             builder.append(e.getMessage());
-            builder.append("\n\t\tFile: ");
-            builder.append(e.getStackTrace()[0].getFileName());
-            builder.append("\n\t\tClass: ");
-            builder.append(e.getStackTrace()[0].getClassName());
-            builder.append("\n\t\tMethod: ");
-            builder.append(e.getStackTrace()[0].getMethodName());
-            builder.append("\n\t\tLine: ");
-            builder.append(e.getStackTrace()[0].getLineNumber());
-            builder.append("\n\tType: ");
+            builder.append("\nExpression: ");
+            builder.append(expression.getParent().toString());
+            builder.append("\nTranslatable-Expression-Type: ");
             builder.append(translatableExpression.getClass().getSimpleName());
-            builder.append("\n\tName: ");
+            builder.append("\nTranslatable-Expression-Name: ");
             builder.append(translatableExpression.getName());
-            builder.append("\n\tExpression: ");
-            builder.append(expression);
-            builder.append("\n\tParent-Expression: ");
-            builder.append(expression.getParent());
-            builder.append("\n\tOccurrence: ");
-            builder.append(Misc.getRelativizedFile(this.getConfiguration().getDirectory(), expression.getPosition().getFile()).getPath());
-            builder.append(':');
-            builder.append(expression.getPosition().getLine());
 
-            this.getLogger().warning(builder.toString());
+            this.getLogger().log(Level.WARNING, builder.toString(), e.getCause());
         }
         return null;
     }
