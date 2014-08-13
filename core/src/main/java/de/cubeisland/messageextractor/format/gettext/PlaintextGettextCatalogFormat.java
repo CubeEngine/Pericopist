@@ -259,15 +259,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return oldMessages.get(0); // TODO compare current with old messages and return the best one.
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param config config which shall be used to read the catalog
-     *
-     * @return
-     *
-     * @throws CatalogFormatException
-     */
     @Override
     public MessageStore read(CatalogConfiguration config, InputStream inputStream) throws CatalogFormatException
     {

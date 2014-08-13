@@ -38,10 +38,9 @@ import spoon.reflect.declaration.CtElement;
  * This configuration is used for parsing the source tree of java projects and extracting its translatable messages.
  * <p/>
  * The configuration can be set up with an xml file.
- * {@link de.cubeisland.messageextractor.MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)}
  * TODO add configuration with explanation
  *
- * @see de.cubeisland.messageextractor.MessageCatalogFactory
+ * @see de.cubeisland.messageextractor.MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
  * @see de.cubeisland.messageextractor.extractor.java.JavaMessageExtractor
  */
 @XmlRootElement(name = "source")

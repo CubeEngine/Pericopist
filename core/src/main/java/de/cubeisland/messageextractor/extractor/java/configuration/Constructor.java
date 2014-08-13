@@ -33,15 +33,20 @@ import spoon.reflect.reference.CtExecutableReference;
  * The constructor describes a new object generation.
  * It can be specified with the xml used for the JavaExtractorConfiguration.
  * <p/>
- * Example: <br/>
- * &lt;constructor&gt; <br/>
- * &nbsp;&nbsp;&lt;name&gt;i.am.the.class&lt;/name&gt; <br/>
- * &nbsp;&nbsp;&lt;signature&gt; <br/>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;type use-as=&quot;singular&quot;&gt;java.lang.String&lt;/type&gt; <br/>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;type&gt;java.lang.Object[]&lt;/type&gt; <br/>
- * &nbsp;&nbsp;&lt;/signature&gt; <br/>
- * &nbsp;&nbsp;&lt;description&gt;I am a default context&lt;/description&gt; <br/>
- * &lt;/constructor&gt;
+ * Example:
+ * <p/>
+ * <pre>
+ * {@code
+ * <constructor>
+ *     <name>I.am.the.class</name>
+ *     <signature>
+ *         <type use-as="singular">java.lang.String</type>
+ *         <type>java.lang.Object[]</type>
+ *     </signature>
+ *     <description>I am a default context</description>
+ * </constructor>
+ * }
+ * </pre>
  *
  * @see de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration
  */
