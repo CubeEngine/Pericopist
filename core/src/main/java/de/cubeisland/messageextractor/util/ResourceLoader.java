@@ -28,13 +28,35 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
+/**
+ * The resource loader which helps to load resources within a velocity template.
+ */
 public class ResourceLoader
 {
+    /**
+     * This method loads a resource.
+     *
+     * @param path the path of the resource
+     *
+     * @return the content of the resource
+     *
+     * @throws IOException if the resource couldn't be loaded
+     */
     public static String load(String path) throws IOException
     {
         return load(path, "UTF-8");
     }
 
+    /**
+     * This method loads a resource
+     *
+     * @param path        the path of the resource
+     * @param charsetName the charset of the resource
+     *
+     * @return the content of the resource
+     *
+     * @throws IOException if the resource couldn't be loaded
+     */
     public static String load(String path, String charsetName) throws IOException
     {
         URL url = Misc.getResource(path);
