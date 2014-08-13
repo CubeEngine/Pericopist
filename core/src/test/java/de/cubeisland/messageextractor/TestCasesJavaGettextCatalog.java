@@ -75,7 +75,6 @@ public class TestCasesJavaGettextCatalog
         Assert.assertEquals(false, config.getCreateEmptyTemplate());
         Assert.assertEquals(true, config.getRemoveUnusedMessages());
         Assert.assertEquals(this.catalogFile.getAbsolutePath(), config.getTemplateFile().getAbsolutePath());
-        Assert.assertEquals("UTF-8", config.getHeaderConfiguration().getCharset().displayName());
         Assert.assertEquals("Hey this are test header comments.\nyou can use the velocity context in your comments.\nfor example: 8\n", config.getHeaderConfiguration().getComments());
         Assert.assertEquals("Project-Id-Version", config.getHeaderConfiguration().getMetadata()[0].getKey());
         Assert.assertEquals("POT-Creation-Date", config.getHeaderConfiguration().getMetadata()[1].getKey());

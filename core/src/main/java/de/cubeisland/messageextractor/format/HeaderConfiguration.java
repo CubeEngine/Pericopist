@@ -37,26 +37,12 @@ import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.util.XmlCharsetAdapter;
 
 @XmlRootElement(name = "header")
-public class HeaderConfiguration implements Configuration
+public class HeaderConfiguration
 {
     private Charset charset;
 
     private String comments;
     private MetadataEntry[] metadata;
-
-    @XmlAttribute(name = "charset")
-    @XmlJavaTypeAdapter(XmlCharsetAdapter.class)
-    @Override
-    public void setCharset(Charset charset)
-    {
-        this.charset = charset;
-    }
-
-    @Override
-    public Charset getCharset()
-    {
-        return this.charset;
-    }
 
     public String getComments()
     {
@@ -79,12 +65,6 @@ public class HeaderConfiguration implements Configuration
     public void setMetadata(MetadataEntry[] metadata)
     {
         this.metadata = metadata;
-    }
-
-    @Override
-    public void validate() throws ConfigurationException
-    {
-        // this configuration doesn't have an obligation field
     }
 
     public static class MetadataEntry

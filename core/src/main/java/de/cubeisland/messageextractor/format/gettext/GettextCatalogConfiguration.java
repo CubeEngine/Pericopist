@@ -125,14 +125,5 @@ public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
         {
             throw new ConfigurationException("You must specify the path which contains the location of the template");
         }
-
-        if (this.getHeaderConfiguration() != null)
-        {
-            if (this.getHeaderConfiguration().getCharset() == null)
-            {
-                this.getHeaderConfiguration().setCharset(this.getCharset());
-            }
-            this.getHeaderConfiguration().validate();
-        }
     }
 }
