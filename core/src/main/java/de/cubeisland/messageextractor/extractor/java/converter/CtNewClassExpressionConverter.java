@@ -23,59 +23,37 @@
  */
 package de.cubeisland.messageextractor.extractor.java.converter;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
-import spoon.reflect.code.CtInvocation;
+import spoon.reflect.code.CtNewClass;
 import spoon.reflect.reference.CtExecutableReference;
 
-/**
- * This converter is responsible for method invocations like
- * <code>translate("string".toUpperCase(Locale.ENGLISH)</code>
- */
-public class CtInvocationExpressionConverter extends CtAbstractInvocationExpressionConverter<CtInvocation>
+public class CtNewClassExpressionConverter extends CtAbstractInvocationExpressionConverter<CtNewClass<?>>
 {
     @Override
-    public Object[] convert(CtInvocation expression, ConverterManager manager) throws ConversionException
+    public Object[] convert(CtNewClass<?> expression, ConverterManager manager) throws ConversionException
     {
         CtExecutableReference<?> executable = expression.getExecutable();
 
-        // 1. load target if executable isn't static
-        Object target = null;
-        if(!executable.isStatic())
-        {
-            Object[] targets = manager.convert(expression.getTarget());
-
-            if(targets == null || targets.length != 1)
-            {
-                throw new ConversionException(this, expression.getTarget(), "Couldn't load the target expression.");
-            }
-
-            target = targets[0];
-        }
-
-        // 2. load arguments
+        // 1. load arguments
         Object[] arguments = this.loadArguments(expression, manager);
 
-        // 3. load method and check whether it has a return type
-        Method method = executable.getActualMethod();
-        if(method.getReturnType() == null)
-        {
-            throw new ConversionException(this, expression, "The method doesn't have a return type");
-        }
+        // 2. load constructor
+        Constructor<?> constructor = executable.getActualConstructor();
 
-        // 4. set accessible
-        this.setAccessible(method);
+        // 3. set accessible
+        this.setAccessible(constructor);
 
-        // 5. invoke method
+        // 4. create new instance
         try
         {
-            return new Object[] {method.invoke(target, arguments)};
+            return new Object[] {constructor.newInstance(arguments)};
         }
-        catch (IllegalAccessException | InvocationTargetException e)
+        catch (IllegalAccessException | InvocationTargetException | InstantiationException e)
         {
-            throw new ConversionException(this, expression, "The method couldn't be invoked.", e);
+            throw new ConversionException(this, expression, "A new instance couldn't be created.", e);
         }
     }
 }

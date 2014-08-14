@@ -44,6 +44,8 @@ public class StringTest
         i18n.translate("a double: " + 1.04d);
         i18n.translate("method invocation: " + "invocation".toUpperCase(Locale.ENGLISH).replaceFirst("I", "method i"));
         i18n.translate("a static method invocation: " + String.valueOf("hello"));
+        i18n.translate("new class invocation: " + new Occurrence(new File("testFile.tmp"), 42));
+        i18n.translate("new class + method invocation: " + new StringBuilder().append("this").append(' ').append("is ").append('a').append(" test").toString());
 
         i18n.translate("calculations are not supported: " + (4 - 3));
     }

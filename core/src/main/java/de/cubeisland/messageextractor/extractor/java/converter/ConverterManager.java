@@ -36,6 +36,7 @@ import spoon.reflect.code.CtFieldAccess;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtNewArray;
+import spoon.reflect.code.CtNewClass;
 
 /**
  * This class manages all converters which convert a <code>CtExpression</code> into
@@ -173,5 +174,6 @@ public class ConverterManager
         this.registerConverter(CtInvocation.class, new CtInvocationExpressionConverter());
         this.registerConverter(CtLiteral.class, new CtLiteralExpressionConverter());
         this.registerConverter(CtNewArray.class, new CtNewArrayExpressionConverter());
+        this.registerConverter(CtNewClass.class, new CtNewClassExpressionConverter());
     }
 }
