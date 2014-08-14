@@ -38,22 +38,22 @@ import spoon.reflect.code.CtNewArray;
 public class CtNewArrayExpressionConverter implements Converter<CtNewArray<?>>
 {
     @Override
-    public String[] convert(CtNewArray<?> expression, ConverterManager manager) throws ConversionException
+    public Object[] convert(CtNewArray<?> expression, ConverterManager manager) throws ConversionException
     {
-        Set<String> messages = new HashSet<>(expression.getElements().size());
+        Set<Object> objects = new HashSet<>(expression.getElements().size());
 
         for (CtExpression<?> subExpression : expression.getElements())
         {
-            String[] values = manager.convert(subExpression);
+            Object[] values = manager.convert(subExpression);
 
             if (values == null)
             {
                 continue;
             }
 
-            Collections.addAll(messages, values);
+            Collections.addAll(objects, values);
         }
 
-        return messages.toArray(new String[messages.size()]);
+        return objects.toArray(new Object[objects.size()]);
     }
 }

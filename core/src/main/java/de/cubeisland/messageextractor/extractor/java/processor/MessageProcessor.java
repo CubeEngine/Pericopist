@@ -67,7 +67,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
     {
         try
         {
-            return this.converterManager.convert(expression);
+            return this.converterManager.convertToStrings(expression);
         }
         catch (ConversionException e)
         {

@@ -37,7 +37,7 @@ import spoon.reflect.reference.CtFieldReference;
 public class CtFieldAccessExpressionConverter implements Converter<CtFieldAccess<?>>
 {
     @Override
-    public String[] convert(CtFieldAccess<?> expression, ConverterManager manager) throws ConversionException
+    public Object[] convert(CtFieldAccess<?> expression, ConverterManager manager) throws ConversionException
     {
         CtFieldReference<?> fieldReference = expression.getVariable();
         if (!fieldReference.isStatic())
@@ -63,7 +63,7 @@ public class CtFieldAccessExpressionConverter implements Converter<CtFieldAccess
             Object o = field.get(null);
             if (o != null)
             {
-                return new String[] {o.toString()};
+                return new Object[] {o};
             }
         }
         catch (SecurityException e)

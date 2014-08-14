@@ -38,7 +38,7 @@ import spoon.reflect.code.CtNewArray;
 
 /**
  * This class manages all converters which convert a <code>CtExpression</code> into
- * a <code>String[]</code>
+ * an <code>Object[]</code>.
  */
 public class ConverterManager
 {
@@ -131,7 +131,31 @@ public class ConverterManager
      *
      * @return the string array
      */
-    public <T extends CtExpression<?>> String[] convert(T expression) throws ConversionException
+    public <T extends CtExpression<?>> String[] convertToStrings(T expression) throws ConversionException
+    {
+        Object[] objects = this.convert(expression);
+
+        if(objects == null)
+        {
+            return null;
+        }
+
+        String[] strings = new String[objects.length];
+        for(int i = 0; i < objects.length; i++)
+        {
+            strings[i] = objects[i].toString();
+        }
+        return strings;
+    }
+
+    /**
+     * This method converts an expression into an Object array
+     *
+     * @param expression the expression
+     *
+     * @return the Object array
+     */
+    public <T extends CtExpression<?>> Object[] convert(T expression) throws ConversionException
     {
         if (expression == null)
         {

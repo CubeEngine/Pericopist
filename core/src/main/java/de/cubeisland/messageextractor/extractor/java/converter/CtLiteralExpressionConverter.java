@@ -33,13 +33,13 @@ import spoon.reflect.code.CtLiteral;
 public class CtLiteralExpressionConverter implements Converter<CtLiteral<?>>
 {
     @Override
-    public String[] convert(CtLiteral<?> expression, ConverterManager manager) throws ConversionException
+    public Object[] convert(CtLiteral<?> expression, ConverterManager manager) throws ConversionException
     {
         Object value = expression.getValue();
         if (value == null)
         {
             return null;
         }
-        return new String[] {value.toString()};
+        return new Object[] {value};
     }
 }

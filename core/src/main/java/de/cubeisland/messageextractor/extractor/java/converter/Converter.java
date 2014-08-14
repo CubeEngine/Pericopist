@@ -27,19 +27,19 @@ import de.cubeisland.messageextractor.extractor.java.converter.exception.Convers
 import spoon.reflect.code.CtExpression;
 
 /**
- * Provides a method to convert a <code>T</code> into a string array
+ * Provides a method to convert a <code>T</code> into an Object array
  */
 public interface Converter<T extends CtExpression>
 {
     /**
-     * Converts the expression into a string array
+     * Converts the expression into an Object array
      *
      * @param expression the expression to convert
      * @param manager    the converter manager which helps to convert sub expressions
      *
-     * @return the converted string array
+     * @return the converted Object array
      *
      * @throws ConversionException
      */
-    String[] convert(T expression, ConverterManager manager) throws ConversionException;
+    Object[] convert(T expression, ConverterManager manager) throws ConversionException;
 }

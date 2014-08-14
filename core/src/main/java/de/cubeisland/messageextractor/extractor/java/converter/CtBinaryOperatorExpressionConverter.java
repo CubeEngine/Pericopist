@@ -34,35 +34,47 @@ import spoon.reflect.code.CtBinaryOperator;
 public class CtBinaryOperatorExpressionConverter implements Converter<CtBinaryOperator<?>>
 {
     @Override
-    public String[] convert(CtBinaryOperator<?> expression, ConverterManager manager) throws ConversionException
+    public Object[] convert(CtBinaryOperator<?> expression, ConverterManager manager) throws ConversionException
     {
-        if (!BinaryOperatorKind.PLUS.equals(expression.getKind()))
-        {
-            throw new ConversionException(this, expression, "Just the '+' binary operator can be used for string operations. '" + expression.getKind().name() + "' isn't supported.");
-        }
-
-        String[] leftHandOperandStrings = manager.convert(expression.getLeftHandOperand());
-        if (leftHandOperandStrings == null || leftHandOperandStrings.length == 0)
+        Object[] leftHandOperandObjects = manager.convert(expression.getLeftHandOperand());
+        if (leftHandOperandObjects == null || leftHandOperandObjects.length == 0)
         {
             return null;
         }
 
-        String[] rightHandOperandStrings = manager.convert(expression.getRightHandOperand());
-        if (rightHandOperandStrings == null || rightHandOperandStrings.length == 0)
+        Object[] rightHandOperandObjects = manager.convert(expression.getRightHandOperand());
+        if (rightHandOperandObjects == null || rightHandOperandObjects.length == 0)
         {
             return null;
         }
 
-        String[] strings = new String[leftHandOperandStrings.length * rightHandOperandStrings.length];
+        Object[] objects = new Object[leftHandOperandObjects.length * rightHandOperandObjects.length];
 
-        for (int i = 0; i < leftHandOperandStrings.length; i++)
+        for (int i = 0; i < leftHandOperandObjects.length; i++)
         {
-            for (int j = 0; j < rightHandOperandStrings.length; j++)
+            for (int j = 0; j < rightHandOperandObjects.length; j++)
             {
-                strings[i * rightHandOperandStrings.length + j] = leftHandOperandStrings[i] + rightHandOperandStrings[j];
+                objects[i * rightHandOperandObjects.length + j] = this.binaryOperation(expression, leftHandOperandObjects[i], rightHandOperandObjects[j]);
             }
         }
 
-        return strings;
+        return objects;
+    }
+
+    private Object binaryOperation(CtBinaryOperator<?> expression, Object leftHandOperand, Object rightHandOperand) throws ConversionException
+    {
+        if (leftHandOperand instanceof String || rightHandOperand instanceof String)
+        {
+            if (!BinaryOperatorKind.PLUS.equals(expression.getKind()))
+            {
+                throw new ConversionException(this, expression, "Just the '+' binary operator can be used for string operations. '" + expression.getKind().name() + "' isn't supported.");
+            }
+
+            return leftHandOperand.toString() + rightHandOperand.toString();
+        }
+        else
+        {
+            throw new ConversionException(this, expression, "A binary expression between " + leftHandOperand.getClass().getName() + " and " + rightHandOperand.getClass().getName() + " isn't supported yet.");
+        }
     }
 }

@@ -30,7 +30,7 @@ import spoon.support.reflect.code.CtFieldAccessImpl;
 public class CtInvocationExpressionConverter implements Converter<CtInvocation> // TODO implement me
 {
     @Override
-    public String[] convert(CtInvocation expression, ConverterManager manager) throws ConversionException
+    public Object[] convert(CtInvocation expression, ConverterManager manager) throws ConversionException
     {
         System.out.println("Executable: " + expression.getExecutable());
         System.out.println("Parent: " + expression.getParent());
