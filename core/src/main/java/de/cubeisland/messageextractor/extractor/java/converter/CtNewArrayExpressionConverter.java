@@ -21,29 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.test;
+package de.cubeisland.messageextractor.extractor.java.converter;
 
-import java.io.File;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
-import de.cubeisland.messageextractor.test.i18n.DefaultI18n;
-import de.cubeisland.messageextractor.test.i18n.I18n;
+import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
+import spoon.reflect.code.CtExpression;
+import spoon.reflect.code.CtNewArray;
 
-public class ConstantTest
+/**
+ * This converter is responsible for new array expressions like
+ * <code>@Annotation({"first", "second", "third"})</code>
+ */
+public class CtNewArrayExpressionConverter implements Converter<CtNewArray<?>>
 {
-    private static final int ANSWER_OF_EVERYTHING = 42;
-    public static final File WORKING_DIR = new File("./");
-
-    public void method()
+    @Override
+    public Object[] convert(CtNewArray<?> expression, ConverterManager manager) throws ConversionException
     {
-        I18n i18n = new DefaultI18n();
+        Set<Object> objects = new HashSet<>(expression.getElements().size());
 
-        i18n.translate("extracted with a constant from MessageExtractorTest class: " + MessageExtractorTest.TEST_CONST);
-        i18n.translate("extracted with a method invocation on a constant from MessageExtractorTest class " + MessageExtractorTest.TEST_CONST.toString());
+        for (CtExpression<?> subExpression : expression.getElements())
+        {
+            Object[] values = manager.convert(subExpression);
 
-        i18n.translate("extracted with a private int constant: " + ANSWER_OF_EVERYTHING);
+            if (values == null)
+            {
+                continue;
+            }
 
-        i18n.translate("extracted with an enum constant: " + TranslatableEnum.FIRST);
+            Collections.addAll(objects, values);
+        }
 
-        i18n.translate("extracted with a file constant: " + WORKING_DIR);
+        return objects.toArray(new Object[objects.size()]);
     }
 }

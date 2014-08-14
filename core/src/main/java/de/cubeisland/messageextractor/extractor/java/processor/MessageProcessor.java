@@ -23,35 +23,33 @@
  */
 package de.cubeisland.messageextractor.extractor.java.processor;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Member;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.cubeisland.messageextractor.exception.IllegalTranslatableMessageException;
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.java.configuration.TranslatableExpression;
+import de.cubeisland.messageextractor.extractor.java.converter.ConverterManager;
+import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.Occurrence;
 import de.cubeisland.messageextractor.util.Misc;
 import spoon.processing.AbstractProcessor;
-import spoon.reflect.code.BinaryOperatorKind;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.declaration.CtElement;
-import spoon.reflect.reference.CtFieldReference;
-import spoon.support.reflect.code.CtBinaryOperatorImpl;
-import spoon.support.reflect.code.CtFieldAccessImpl;
-import spoon.support.reflect.code.CtLiteralImpl;
 
 public abstract class MessageProcessor<E extends CtElement> extends AbstractProcessor<E>
 {
     private final JavaExtractorConfiguration configuration;
     private final MessageStore messageStore;
+    private final ConverterManager converterManager;
     private final Logger logger;
 
-    public MessageProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore, Logger logger)
+    public MessageProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore, ConverterManager converterManager, Logger logger)
     {
         this.configuration = configuration;
         this.messageStore = messageStore;
+        this.converterManager = converterManager;
         this.logger = logger;
     }
 
@@ -65,120 +63,67 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         return messageStore;
     }
 
-    public void addMessage(TranslatableExpression translatableExpression, E element, String singular, String plural)
+    protected String[] getMessages(CtExpression<?> expression, TranslatableExpression translatableExpression)
+    {
+        try
+        {
+            return this.converterManager.convertToStrings(expression);
+        }
+        catch (ConversionException e)
+        {
+            StringBuilder builder = new StringBuilder("A conversion exception occurred.\n");
+            builder.append(e.getClass().getName());
+            builder.append('\n');
+            builder.append(e.getMessage());
+            builder.append("\nExpression: ");
+            builder.append(expression.getParent().toString());
+            builder.append("\nTranslatable-Expression-Type: ");
+            builder.append(translatableExpression.getClass().getSimpleName());
+            builder.append("\nTranslatable-Expression-Name: ");
+            builder.append(translatableExpression.getName());
+
+            this.getLogger().log(Level.WARNING, builder.toString(), e.getCause());
+        }
+        return null;
+    }
+
+    protected void addMessage(TranslatableExpression translatableExpression, E element, String[] singulars, String[] plurals)
     {
         Occurrence occurrence = new Occurrence(Misc.getRelativizedFile(this.getConfiguration().getDirectory(), element.getPosition().getFile()), element.getPosition().getLine());
 
-        if (singular == null)
+        if (translatableExpression.hasPlural())
         {
-            StringBuilder builder = new StringBuilder("A translatable message couldn't be extracted.");
-            builder.append("\n\tType: ");
-            builder.append(translatableExpression.getClass().getSimpleName());
-            builder.append("\n\tName: ");
-            builder.append(translatableExpression.getName());
-            builder.append("\n\tExpression: ");
-            builder.append(element);
-            builder.append("\n\tOccurrence: ");
-            builder.append(occurrence);
-
-            this.getLogger().warning(builder.toString());
-            return;
-        }
-
-        if(singular.isEmpty())
-        {
-            this.getLogger().info("The singular message can't be an empty string. Occurrence: " + occurrence);
-            return;
-        }
-
-        this.getMessageStore().addMessage(singular, plural, occurrence, translatableExpression.getDescription());
-    }
-
-    protected String getString(CtExpression<?> expression)
-    {
-        if (expression instanceof CtLiteralImpl<?>)
-        {
-            return (String) ((CtLiteralImpl<?>) expression).getValue();
-        }
-        else if (expression instanceof CtBinaryOperatorImpl<?>)
-        {
-            return this.getString((CtBinaryOperatorImpl<?>) expression);
-        }
-        else if (expression instanceof CtFieldAccessImpl<?>)
-        {
-            return this.getString((CtFieldAccessImpl<?>) expression);
-        }
-
-        this.getLogger().info("The expression '" + expression.getClass().getName() + "' isn't supported yet.");
-        return null;
-    }
-
-    private String getString(CtBinaryOperatorImpl<?> expression)
-    {
-        StringBuilder value = new StringBuilder(2);
-
-        if (!BinaryOperatorKind.PLUS.equals(expression.getKind()))
-        {
-            this.getLogger().warning("Just the '+' binary operator can be used for string operations. '" + expression.getKind().name() + "' isn't supported.");
-            return null;
-        }
-
-        String string = this.getString(expression.getLeftHandOperand());
-        if (string == null)
-        {
-            return null;
-        }
-        value.append(string);
-
-        string = this.getString(expression.getRightHandOperand());
-        if (string == null)
-        {
-            return null;
-        }
-        value.append(string);
-
-        return value.toString();
-    }
-
-    private String getString(CtFieldAccessImpl<?> expression)
-    {
-        CtFieldReference<?> fieldReference = expression.getVariable();
-        if (!fieldReference.isStatic())
-        {
-            this.getLogger().info("'" + expression.getClass().getName() + "' expressions which aren't static aren't supported.");
-            return null;
-        }
-
-        Member member = fieldReference.getActualField();
-        if (member == null || !(member instanceof Field))
-        {
-            return null;
-        }
-
-        Field field = (Field) member;
-
-        try
-        {
-            if (!field.isAccessible())
+            if (plurals.length > 1)
             {
-                field.setAccessible(true);
+                throw new IllegalTranslatableMessageException("A message can't have more than one plurals.");
             }
 
-            Object o = field.get(null);
-            if(o != null)
+            if (singulars.length > 1)
             {
-                return o.toString();
+                throw new IllegalTranslatableMessageException("A message with a plural can't have more than one singular.");
+            }
+
+            if (singulars[0].isEmpty())
+            {
+                this.getLogger().info("The singular message can't be an empty string. Occurrence: " + occurrence);
+                return;
+            }
+
+            this.getMessageStore().addMessage(singulars[0], plurals[0], occurrence, translatableExpression.getDescription());
+        }
+        else
+        {
+            for (String message : singulars)
+            {
+                if (message.isEmpty())
+                {
+                    this.getLogger().info("The singular message can't be an empty string. Occurrence: " + occurrence);
+                    continue;
+                }
+
+                this.getMessageStore().addMessage(message, null, occurrence, translatableExpression.getDescription());
             }
         }
-        catch (SecurityException e)
-        {
-            this.logger.log(Level.SEVERE, "The access level of the field '" + field.getName() + "' from class " + field.getDeclaringClass().getName() + "' couldn't be modified.", e);
-        }
-        catch (IllegalAccessException e)
-        {
-            this.logger.log(Level.SEVERE, "The expression '" + expression.getClass().getName() + "' couldn't be parsed. The field '" + field.getName() + "' of the class '" + field.getDeclaringClass().getName() + "' couldn't be accessed.", e);
-        }
-        return null;
     }
 
     public Logger getLogger()

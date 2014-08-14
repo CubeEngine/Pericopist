@@ -28,15 +28,16 @@ import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.extractor.java.configuration.CallableExpression;
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
+import de.cubeisland.messageextractor.extractor.java.converter.ConverterManager;
 import de.cubeisland.messageextractor.message.MessageStore;
 import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtExpression;
 
 public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvocation<?>>
 {
-    public CallableExpressionProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore, Logger logger)
+    public CallableExpressionProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore, ConverterManager converterManager, Logger logger)
     {
-        super(configuration, messageStore, logger);
+        super(configuration, messageStore, converterManager, logger);
     }
 
     @Override
@@ -48,19 +49,27 @@ public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvo
             return;
         }
 
-        String singular = null;
-        String plural = null;
+        String[] singulars = null;
+        String[] plurals = null;
 
         List<CtExpression<?>> arguments = element.getArguments();
         if (arguments.size() > callableExpression.getSingularIndex())
         {
-            singular = this.getString(arguments.get(callableExpression.getSingularIndex()));
+            singulars = this.getMessages(arguments.get(callableExpression.getSingularIndex()), callableExpression);
+            if (singulars == null || singulars.length == 0)
+            {
+                return;
+            }
         }
         if (callableExpression.hasPlural() && arguments.size() > callableExpression.getPluralIndex())
         {
-            plural = this.getString(arguments.get(callableExpression.getPluralIndex()));
+            plurals = this.getMessages(arguments.get(callableExpression.getPluralIndex()), callableExpression);
+            if (plurals == null || plurals.length == 0)
+            {
+                return;
+            }
         }
 
-        this.addMessage(callableExpression, element, singular, plural);
+        this.addMessage(callableExpression, element, singulars, plurals);
     }
 }

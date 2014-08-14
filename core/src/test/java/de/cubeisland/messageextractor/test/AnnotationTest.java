@@ -35,6 +35,7 @@ public class AnnotationTest
     @TranslatableAnnotation("extracted from an annotation with a field target")
     private String value;
 
+    @TranslatableArrayAnnotation({"extracted from an annotation with an array field", "extracted from an annotation with an array field"})
     @TranslatableAnnotation("extracted from an annotation with a constructor target")
     public AnnotationTest()
     {

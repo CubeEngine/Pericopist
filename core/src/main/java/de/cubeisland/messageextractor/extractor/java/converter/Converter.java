@@ -21,29 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.test;
+package de.cubeisland.messageextractor.extractor.java.converter;
 
-import java.io.File;
+import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
+import spoon.reflect.code.CtExpression;
 
-import de.cubeisland.messageextractor.test.i18n.DefaultI18n;
-import de.cubeisland.messageextractor.test.i18n.I18n;
-
-public class ConstantTest
+/**
+ * Provides a method to convert a <code>T</code> into an Object array
+ */
+public interface Converter<T extends CtExpression>
 {
-    private static final int ANSWER_OF_EVERYTHING = 42;
-    public static final File WORKING_DIR = new File("./");
-
-    public void method()
-    {
-        I18n i18n = new DefaultI18n();
-
-        i18n.translate("extracted with a constant from MessageExtractorTest class: " + MessageExtractorTest.TEST_CONST);
-        i18n.translate("extracted with a method invocation on a constant from MessageExtractorTest class " + MessageExtractorTest.TEST_CONST.toString());
-
-        i18n.translate("extracted with a private int constant: " + ANSWER_OF_EVERYTHING);
-
-        i18n.translate("extracted with an enum constant: " + TranslatableEnum.FIRST);
-
-        i18n.translate("extracted with a file constant: " + WORKING_DIR);
-    }
+    /**
+     * Converts the expression into an Object array
+     *
+     * @param expression the expression to convert
+     * @param manager    the converter manager which helps to convert sub expressions
+     *
+     * @return the converted Object array
+     *
+     * @throws ConversionException
+     */
+    Object[] convert(T expression, ConverterManager manager) throws ConversionException;
 }

@@ -21,29 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.test;
+package de.cubeisland.messageextractor.extractor.java.converter.exception;
 
-import java.io.File;
+import spoon.reflect.code.CtExpression;
 
-import de.cubeisland.messageextractor.test.i18n.DefaultI18n;
-import de.cubeisland.messageextractor.test.i18n.I18n;
-
-public class ConstantTest
+/**
+ * This Exception is thrown when there is no converter registered for an expression
+ */
+public class ConverterNotFoundException extends ConversionException
 {
-    private static final int ANSWER_OF_EVERYTHING = 42;
-    public static final File WORKING_DIR = new File("./");
-
-    public void method()
+    public ConverterNotFoundException(CtExpression<?> expression)
     {
-        I18n i18n = new DefaultI18n();
-
-        i18n.translate("extracted with a constant from MessageExtractorTest class: " + MessageExtractorTest.TEST_CONST);
-        i18n.translate("extracted with a method invocation on a constant from MessageExtractorTest class " + MessageExtractorTest.TEST_CONST.toString());
-
-        i18n.translate("extracted with a private int constant: " + ANSWER_OF_EVERYTHING);
-
-        i18n.translate("extracted with an enum constant: " + TranslatableEnum.FIRST);
-
-        i18n.translate("extracted with a file constant: " + WORKING_DIR);
+        super(null, expression, "Converter not found");
     }
 }

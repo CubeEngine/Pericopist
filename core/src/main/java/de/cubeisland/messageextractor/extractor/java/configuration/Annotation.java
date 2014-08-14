@@ -135,4 +135,10 @@ public class Annotation extends TranslatableExpression
         String qfn = ((CtAnnotation<?>) element).getAnnotationType().getQualifiedName();
         return this.getName().equals(qfn);
     }
+
+    @Override
+    public boolean hasPlural()
+    {
+        return false;
+    }
 }

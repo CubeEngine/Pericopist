@@ -21,29 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.test;
+package de.cubeisland.messageextractor.extractor.java.converter;
 
-import java.io.File;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
-import de.cubeisland.messageextractor.test.i18n.DefaultI18n;
-import de.cubeisland.messageextractor.test.i18n.I18n;
+import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
+import spoon.reflect.code.CtConditional;
 
-public class ConstantTest
+/**
+ * This converter is responsible for conditions like
+ * <code>translate(really? "yes" : "no")</code>
+ */
+public class CtConditionalExpressionConverter implements Converter<CtConditional<?>>
 {
-    private static final int ANSWER_OF_EVERYTHING = 42;
-    public static final File WORKING_DIR = new File("./");
-
-    public void method()
+    @Override
+    public Object[] convert(CtConditional<?> expression, ConverterManager manager) throws ConversionException
     {
-        I18n i18n = new DefaultI18n();
+        Set<Object> objects = new HashSet<>();
 
-        i18n.translate("extracted with a constant from MessageExtractorTest class: " + MessageExtractorTest.TEST_CONST);
-        i18n.translate("extracted with a method invocation on a constant from MessageExtractorTest class " + MessageExtractorTest.TEST_CONST.toString());
+        Object[] conditionObjects = manager.convert(expression.getThenExpression());
+        if (conditionObjects != null)
+        {
+            Collections.addAll(objects, conditionObjects);
+        }
 
-        i18n.translate("extracted with a private int constant: " + ANSWER_OF_EVERYTHING);
+        conditionObjects = manager.convert(expression.getElseExpression());
+        if (conditionObjects != null)
+        {
+            Collections.addAll(objects, conditionObjects);
+        }
 
-        i18n.translate("extracted with an enum constant: " + TranslatableEnum.FIRST);
-
-        i18n.translate("extracted with a file constant: " + WORKING_DIR);
+        return objects.toArray(new Object[objects.size()]);
     }
 }
