@@ -23,28 +23,93 @@
  */
 package de.cubeisland.messageextractor.extractor.java.converter;
 
-import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
-import spoon.reflect.code.CtInvocation;
-import spoon.support.reflect.code.CtFieldAccessImpl;
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
-public class CtInvocationExpressionConverter implements Converter<CtInvocation> // TODO implement me
+import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
+import spoon.reflect.code.CtExpression;
+import spoon.reflect.code.CtInvocation;
+import spoon.reflect.reference.CtExecutableReference;
+
+/**
+ * This converter is responsible for method invocations like
+ * <code>translate("string".toUpperCase(Locale.ENGLISH)</code>
+ */
+public class CtInvocationExpressionConverter implements Converter<CtInvocation>
 {
     @Override
     public Object[] convert(CtInvocation expression, ConverterManager manager) throws ConversionException
     {
-        System.out.println("Executable: " + expression.getExecutable());
-        System.out.println("Parent: " + expression.getParent());
-        System.out.println("arguments: " + expression.getArguments());
-        System.out.println("label: " + expression.getLabel());
-        System.out.println("signature: " + expression.getSignature());
-        System.out.println("generic types: " + expression.getGenericTypes());
-        System.out.println("parent field access: " + expression.getParent(CtFieldAccessImpl.class));
-        System.out.println("type: " + expression.getType());
-        System.out.println("target: " + expression.getTarget());
-        System.out.println("target class: " + expression.getTarget().getClass());
-        System.out.println("Actual Method: " + expression.getExecutable().getActualMethod());
-        System.out.println();
+        CtExecutableReference<?> exectuable = expression.getExecutable();
 
-        throw new ConversionException(this, expression, "The expression isn't supported yet.");
+        Object target = null;
+        Object[] arguments = new Object[expression.getArguments().size()];
+
+        if(!exectuable.isStatic())
+        {
+            Object[] targets = manager.convert(expression.getTarget());
+
+            if(targets == null || targets.length != 1)
+            {
+                throw new ConversionException(this, expression.getTarget(), "Couldn't load the target expression.");
+            }
+
+            target = targets[0];
+        }
+        for(int i = 0; i < arguments.length; i++)
+        {
+            Object[] argumentValues =  manager.convert((CtExpression) expression.getArguments().get(i));
+
+            if(argumentValues == null || argumentValues.length != 1)
+            {
+                throw new ConversionException(this, (CtExpression) expression.getArguments().get(i), "Couldn't load the " + i + ". argument expression.");
+            }
+
+            arguments[i] = argumentValues[0];
+        }
+
+        AccessibleObject accessibleObject;
+        if(exectuable.isConstructor())
+        {
+            accessibleObject = exectuable.getActualConstructor();
+        }
+        else
+        {
+            accessibleObject = exectuable.getActualMethod();
+            if(((Method)accessibleObject).getReturnType() == null)
+            {
+                throw new ConversionException(this, expression, "The method doesn't have a return type");
+            }
+        }
+
+        if(!accessibleObject.isAccessible())
+        {
+            accessibleObject.setAccessible(true);
+        }
+
+        if (accessibleObject instanceof Constructor<?>)
+        {
+            try
+            {
+                return new Object[] {((Constructor<?>)accessibleObject).newInstance(arguments)};
+            }
+            catch (InstantiationException | InvocationTargetException | IllegalAccessException e)
+            {
+                throw new ConversionException(this, expression, "", e);
+            }
+        }
+        else
+        {
+            try
+            {
+                return new Object[] {((Method)accessibleObject).invoke(target, arguments)};
+            }
+            catch (IllegalAccessException | InvocationTargetException e)
+            {
+                throw new ConversionException(this, expression, "", e);
+            }
+        }
     }
 }

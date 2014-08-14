@@ -33,6 +33,7 @@ import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtConditional;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtFieldAccess;
+import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtNewArray;
 
@@ -169,7 +170,7 @@ public class ConverterManager
         this.registerConverter(CtBinaryOperator.class, new CtBinaryOperatorExpressionConverter());
         this.registerConverter(CtConditional.class, new CtConditionalExpressionConverter());
         this.registerConverter(CtFieldAccess.class, new CtFieldAccessExpressionConverter());
-        //        this.registerConverter(CtInvocation.class, new CtInvocationExpressionConverter());
+        this.registerConverter(CtInvocation.class, new CtInvocationExpressionConverter());
         this.registerConverter(CtLiteral.class, new CtLiteralExpressionConverter());
         this.registerConverter(CtNewArray.class, new CtNewArrayExpressionConverter());
     }

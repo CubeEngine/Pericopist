@@ -23,6 +23,10 @@
  */
 package de.cubeisland.messageextractor.test;
 
+import java.io.File;
+import java.util.Locale;
+
+import de.cubeisland.messageextractor.message.Occurrence;
 import de.cubeisland.messageextractor.test.i18n.DefaultI18n;
 import de.cubeisland.messageextractor.test.i18n.I18n;
 
@@ -38,6 +42,8 @@ public class StringTest
         i18n.translate("an integer: " + 1);
         i18n.translate("a float: " + 1.04f);
         i18n.translate("a double: " + 1.04d);
+        i18n.translate("method invocation: " + "invocation".toUpperCase(Locale.ENGLISH).replaceFirst("I", "method i"));
+        i18n.translate("a static method invocation: " + String.valueOf("hello"));
 
         i18n.translate("calculations are not supported: " + (4 - 3));
     }

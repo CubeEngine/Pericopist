@@ -38,7 +38,7 @@ public class ConstantTest
         I18n i18n = new DefaultI18n();
 
         i18n.translate("extracted with a constant from MessageExtractorTest class: " + MessageExtractorTest.TEST_CONST);
-        i18n.translate("this won't be extracted! " + MessageExtractorTest.TEST_CONST.toString());
+        i18n.translate("extracted with a method invocation on a constant from MessageExtractorTest class " + MessageExtractorTest.TEST_CONST.toString());
 
         i18n.translate("extracted with a private int constant: " + ANSWER_OF_EVERYTHING);
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-08-13 08:11:28+0200\n"
+"POT-Creation-Date: 2014-08-14 15:14:08+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
@@ -56,17 +56,17 @@ msgstr ""
 #. this message was extracted with the de.cubeisland.messageextractor.test.command.User#sendTranslated method
 #: de/cubeisland/messageextractor/test/MultipleContextTest.java:36
 #: de/cubeisland/messageextractor/test/MultipleContextTest.java:41
-#: de/cubeisland/messageextractor/test/StringTest.java:36
+#: de/cubeisland/messageextractor/test/StringTest.java:40
 msgid "a concatenated string"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:40
+#: de/cubeisland/messageextractor/test/StringTest.java:44
 msgid "a double: 1.04"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:39
+#: de/cubeisland/messageextractor/test/StringTest.java:43
 msgid "a float: 1.04"
 msgstr ""
 
@@ -77,12 +77,17 @@ msgstr ""
 #: de/cubeisland/messageextractor/test/MultipleContextTest.java:33
 #: de/cubeisland/messageextractor/test/MultipleContextTest.java:39
 #: de/cubeisland/messageextractor/test/MultipleContextTest.java:40
-#: de/cubeisland/messageextractor/test/StringTest.java:35
+#: de/cubeisland/messageextractor/test/StringTest.java:39
 msgid "a normal string"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:38
+#: de/cubeisland/messageextractor/test/StringTest.java:46
+msgid "a static method invocation: hello"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:42
 msgid "an integer: 1"
 msgstr ""
 
@@ -175,6 +180,13 @@ msgid "extracted with a file constant: ."
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/ConstantTest.java:41
+msgid ""
+"extracted with a method invocation on a constant from MessageExtractorTest "
+"class I'm a test const for another test class."
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/ConstantTest.java:43
 msgid "extracted with a private int constant: 42"
 msgstr ""
@@ -187,7 +199,12 @@ msgid ""
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:37
+#: de/cubeisland/messageextractor/test/StringTest.java:45
+msgid "method invocation: method iNVOCATION"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:41
 msgid "no"
 msgstr ""
 
@@ -235,6 +252,6 @@ msgid "welcome %s to the messageextractor test."
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:37
+#: de/cubeisland/messageextractor/test/StringTest.java:41
 msgid "yes"
 msgstr ""
