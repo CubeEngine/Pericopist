@@ -64,6 +64,8 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
      */
     private String charsetName = null;
 
+    private String classpath = System.getProperty("java.class.path");
+
     /**
      * {@inheritDoc}
      */
@@ -84,6 +86,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
             throw new MojoFailureException("An extractor configuration is not specified.");
         }
 
+        // load the classpath of the maven project
         this.loadClasspath();
 
         MessageCatalog catalog = this.getMessageCatalog(new MessageCatalogFactory());
@@ -105,6 +108,9 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
         {
             throw new MojoFailureException(e.getMessage(), e);
         }
+
+        // revert the classpath
+        System.setProperty("java.class.path", this.classpath);
     }
 
     /**
@@ -200,7 +206,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
             elements.addAll(this.project.getSystemClasspathElements());
             elements.addAll(this.project.getTestClasspathElements());
 
-            StringBuilder classpath = new StringBuilder(System.getProperty("java.class.path"));
+            StringBuilder classpath = new StringBuilder(this.classpath);
             for (Object element : elements)
             {
                 classpath.append(File.pathSeparator);
