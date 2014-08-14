@@ -42,12 +42,13 @@ public class CtInvocationExpressionConverter implements Converter<CtInvocation>
     @Override
     public Object[] convert(CtInvocation expression, ConverterManager manager) throws ConversionException
     {
-        CtExecutableReference<?> exectuable = expression.getExecutable();
+        CtExecutableReference<?> executable = expression.getExecutable();
 
         Object target = null;
         Object[] arguments = new Object[expression.getArguments().size()];
 
-        if(!exectuable.isStatic())
+        // 1. load target if executable isn't static
+        if(!executable.isStatic())
         {
             Object[] targets = manager.convert(expression.getTarget());
 
@@ -58,6 +59,8 @@ public class CtInvocationExpressionConverter implements Converter<CtInvocation>
 
             target = targets[0];
         }
+
+        // 2. load arguments
         for(int i = 0; i < arguments.length; i++)
         {
             Object[] argumentValues =  manager.convert((CtExpression) expression.getArguments().get(i));
@@ -70,25 +73,28 @@ public class CtInvocationExpressionConverter implements Converter<CtInvocation>
             arguments[i] = argumentValues[0];
         }
 
+        // 3. load method or constructor instance
         AccessibleObject accessibleObject;
-        if(exectuable.isConstructor())
+        if(executable.isConstructor())
         {
-            accessibleObject = exectuable.getActualConstructor();
+            accessibleObject = executable.getActualConstructor();
         }
         else
         {
-            accessibleObject = exectuable.getActualMethod();
+            accessibleObject = executable.getActualMethod();
             if(((Method)accessibleObject).getReturnType() == null)
             {
                 throw new ConversionException(this, expression, "The method doesn't have a return type");
             }
         }
 
+        // 4. set accessible object accessible
         if(!accessibleObject.isAccessible())
         {
             accessibleObject.setAccessible(true);
         }
 
+        // 5. create or get object
         if (accessibleObject instanceof Constructor<?>)
         {
             try
@@ -97,7 +103,7 @@ public class CtInvocationExpressionConverter implements Converter<CtInvocation>
             }
             catch (InstantiationException | InvocationTargetException | IllegalAccessException e)
             {
-                throw new ConversionException(this, expression, "", e);
+                throw new ConversionException(this, expression, "A new instance couldn't be created.", e);
             }
         }
         else
@@ -108,7 +114,7 @@ public class CtInvocationExpressionConverter implements Converter<CtInvocation>
             }
             catch (IllegalAccessException | InvocationTargetException e)
             {
-                throw new ConversionException(this, expression, "", e);
+                throw new ConversionException(this, expression, "The method couldn't be invoked.", e);
             }
         }
     }
