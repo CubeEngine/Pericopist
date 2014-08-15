@@ -73,7 +73,7 @@ public class CtInvocationExpressionConverter extends CtAbstractInvocationExpress
         {
             return new Object[] {method.invoke(target, arguments)};
         }
-        catch (IllegalAccessException | InvocationTargetException e)
+        catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e)
         {
             throw new ConversionException(this, expression, "The method couldn't be invoked.", e);
         }
