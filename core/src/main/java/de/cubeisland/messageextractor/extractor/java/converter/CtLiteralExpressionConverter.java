@@ -35,11 +35,6 @@ public class CtLiteralExpressionConverter implements Converter<CtLiteral<?>>
     @Override
     public Object[] convert(CtLiteral<?> expression, ConverterManager manager) throws ConversionException
     {
-        Object value = expression.getValue();
-        if (value == null)
-        {
-            return null;
-        }
-        return new Object[] {value};
+        return new Object[] {expression.getValue()};
     }
 }
