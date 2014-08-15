@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-08-14 22:38:15+0200\n"
+"POT-Creation-Date: 2014-08-15 20:03:12+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
@@ -61,12 +61,12 @@ msgid "a concatenated string"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:44
+#: de/cubeisland/messageextractor/test/StringTest.java:45
 msgid "a double: 1.04"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:43
+#: de/cubeisland/messageextractor/test/StringTest.java:44
 msgid "a float: 1.04"
 msgstr ""
 
@@ -82,12 +82,17 @@ msgid "a normal string"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:46
+#: de/cubeisland/messageextractor/test/StringTest.java:56
+msgid "a null test test"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:48
 msgid "a static method invocation: hello"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:42
+#: de/cubeisland/messageextractor/test/StringTest.java:43
 msgid "an integer: 1"
 msgstr ""
 
@@ -199,17 +204,33 @@ msgid ""
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:45
-msgid "method invocation: method iNVOCATION"
+#: de/cubeisland/messageextractor/test/StringTest.java:53
+msgid "method invocation with array parameters: test"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:48
-msgid "new class + method invocation: this is a test"
+#: de/cubeisland/messageextractor/test/StringTest.java:52
+msgid "method invocation with more arguments than parameter: it's a test"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:54
+#: de/cubeisland/messageextractor/test/StringTest.java:55
+msgid "method invocation without last parameter: it's a test"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:47
+msgid "method invocation: method iNVOCATION"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:50
+msgid "new class + method invocation: this is a test"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:49
 msgid "new class invocation: testFile.tmp:42"
 msgstr ""
 

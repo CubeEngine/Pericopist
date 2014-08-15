@@ -75,7 +75,7 @@ public class ConversionException extends MessageExtractionException
             msg += "\nFile: " + expression.getPosition().getFile().getPath();
             msg += "\nLine: " + expression.getPosition().getLine();
         }
-        
+
         return msg;
     }
 }

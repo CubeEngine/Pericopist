@@ -39,16 +39,27 @@ public class StringTest
         i18n.translate("a normal string");
         i18n.translate("a concatenated " + "string");
         i18n.translate(true ? "yes" : "no");
+
         i18n.translate("an integer: " + 1);
         i18n.translate("a float: " + 1.04f);
         i18n.translate("a double: " + 1.04d);
+
         i18n.translate("method invocation: " + "invocation".toUpperCase(Locale.ENGLISH).replaceFirst("I", "method i"));
         i18n.translate("a static method invocation: " + String.valueOf("hello"));
         i18n.translate("new class invocation: " + new Occurrence(new File("testFile.tmp"), 42));
         i18n.translate("new class + method invocation: " + new StringBuilder().append("this").append(' ').append("is ").append('a').append(" test").toString());
-        i18n.translate(String.format("A %s with an %s parameter. How's that? %s", new Object[] { "test", "array", false }));
-        i18n.translate(String.format("A %s with an %s parameter. How's that? %s", "test", "array", false));
+
+        i18n.translate("method invocation with more arguments than parameter: " + String.format("%s %s %s", "it's", "a", "test"));
+        i18n.translate("method invocation with array parameters: " + String.valueOf(new char[] {'t', 'e', 's', 't'}));
+        i18n.translate("method invocation without last parameter: " + String.format("it's a test"));
+        i18n.translate("method invocation without last parameter: " + String.format("it's a %s", "test"));
+        i18n.translate("a null test " + testNullMethod(null));
 
         i18n.translate("calculations are not supported: " + (4 - 3));
+    }
+
+    private static String testNullMethod(String test)
+    {
+        return "test";
     }
 }
