@@ -46,6 +46,8 @@ public class StringTest
         i18n.translate("a static method invocation: " + String.valueOf("hello"));
         i18n.translate("new class invocation: " + new Occurrence(new File("testFile.tmp"), 42));
         i18n.translate("new class + method invocation: " + new StringBuilder().append("this").append(' ').append("is ").append('a').append(" test").toString());
+        i18n.translate(String.format("A %s with an %s parameter. How's that? %s", new Object[] { "test", "array", false }));
+        i18n.translate(String.format("A %s with an %s parameter. How's that? %s", "test", "array", false));
 
         i18n.translate("calculations are not supported: " + (4 - 3));
     }
