@@ -23,8 +23,10 @@
  */
 package de.cubeisland.messageextractor.extractor.java.converter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
@@ -40,7 +42,7 @@ public class CtNewArrayExpressionConverter implements Converter<CtNewArray<?>>
     @Override
     public Object[] convert(CtNewArray<?> expression, ConverterManager manager) throws ConversionException
     {
-        Set<Object> objects = new HashSet<>(expression.getElements().size());
+        List<Object> objects = new ArrayList<>(expression.getElements().size());
 
         for (CtExpression<?> subExpression : expression.getElements())
         {
