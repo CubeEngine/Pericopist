@@ -68,11 +68,14 @@ public class ConversionException extends MessageExtractionException
         {
             msg += "\nConverter: " + converter.getClass().getName();
         }
-        msg += "\nConverting: " + expression.toString();
-        msg += "\nConverting class: " + expression.getClass().getName();
-        msg += "\nFile: " + expression.getPosition().getFile().getPath();
-        msg += "\nLine: " + expression.getPosition().getLine();
-
+        msg += "\nConverting: " + String.valueOf(expression);
+        if(expression != null)
+        {
+            msg += "\nConverting class: " + expression.getClass().getName();
+            msg += "\nFile: " + expression.getPosition().getFile().getPath();
+            msg += "\nLine: " + expression.getPosition().getLine();
+        }
+        
         return msg;
     }
 }
