@@ -62,7 +62,7 @@ public class HeaderConfiguration
 
     @XmlElementWrapper(name = "metadata")
     @XmlElement(name = "entry")
-    public void setMetadata(MetadataEntry[] metadata)
+    public void setMetadata(MetadataEntry... metadata)
     {
         this.metadata = metadata;
     }

@@ -57,7 +57,7 @@ public abstract class CallableExpression extends TranslatableExpression
      */
     @XmlElementWrapper(name = "signature")
     @XmlElement(name = "type")
-    public void setSignature(CallableSignatureType[] signature)
+    public void setSignature(CallableSignatureType... signature)
     {
         this.signature = signature;
     }

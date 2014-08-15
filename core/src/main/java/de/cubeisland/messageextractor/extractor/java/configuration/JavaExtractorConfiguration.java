@@ -97,7 +97,7 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
     @XmlElements({
             @XmlElement(name = "method", type = Method.class), @XmlElement(name = "annotation", type = Annotation.class), @XmlElement(name = "constructor", type = Constructor.class)
     })
-    public void setTranslatableExpressions(TranslatableExpression[] translatableExpressions)
+    public void setTranslatableExpressions(TranslatableExpression... translatableExpressions)
     {
         this.translatableExpressions = translatableExpressions;
     }

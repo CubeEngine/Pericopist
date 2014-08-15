@@ -79,7 +79,7 @@ public class Annotation extends TranslatableExpression
      */
     @XmlElementWrapper(name = "fields")
     @XmlElement(name = "field")
-    public void setFields(String[] fields)
+    public void setFields(String... fields)
     {
         this.fields = fields;
     }
