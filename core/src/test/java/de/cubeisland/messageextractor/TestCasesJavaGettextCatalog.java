@@ -88,7 +88,7 @@ public class TestCasesJavaGettextCatalog
         Assert.assertNotNull("The configuration isn't a JavaExtractorConfiguration instance.", config);
 
         Assert.assertEquals("UTF-8", config.getCharset().displayName());
-        Assert.assertEquals(System.getProperty("java.class.path"), config.getClasspath());
+        Assert.assertArrayEquals(System.getProperty("java.class.path").split(File.pathSeparator), config.getClasspathEntries());
         Assert.assertEquals(new File("./src/test/java").getAbsolutePath(), config.getDirectory().getAbsolutePath());
         Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translate", config.getTranslatableExpressions()[0].getName());
         Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translateN", config.getTranslatableExpressions()[1].getName());

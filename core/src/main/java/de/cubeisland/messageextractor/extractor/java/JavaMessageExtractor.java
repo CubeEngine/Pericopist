@@ -24,12 +24,16 @@
 package de.cubeisland.messageextractor.extractor.java;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
@@ -41,6 +45,7 @@ import de.cubeisland.messageextractor.extractor.java.converter.ConverterManager;
 import de.cubeisland.messageextractor.extractor.java.processor.AnnotationProcessor;
 import de.cubeisland.messageextractor.extractor.java.processor.CallableExpressionProcessor;
 import de.cubeisland.messageextractor.message.MessageStore;
+import de.cubeisland.messageextractor.util.Misc;
 import spoon.Launcher;
 import spoon.compiler.SpoonCompiler;
 import spoon.processing.ProcessingManager;
@@ -51,6 +56,15 @@ public class JavaMessageExtractor implements MessageExtractor
 {
     private Logger logger;
     private ConverterManager converterManager;
+
+    private FileFilter javaFileFilter = new FileFilter()
+    {
+        @Override
+        public boolean accept(File pathname)
+        {
+            return pathname.getName().endsWith(".java");
+        }
+    };
 
     public JavaMessageExtractor()
     {
@@ -84,10 +98,11 @@ public class JavaMessageExtractor implements MessageExtractor
         {
             Launcher launcher = new Launcher();
             SpoonCompiler compiler = launcher.createCompiler();
-
             compiler.addInputSource(extractorConfig.getDirectory());
-            compiler.setSourceClasspath(extractorConfig.getClasspath());
-            this.loadClassLoader(extractorConfig.getClasspath());
+
+            String classpath = this.loadClasspath(extractorConfig.getClasspathEntries());
+            compiler.setSourceClasspath(classpath);
+            this.loadClassLoader(classpath);
 
             compiler.setEncoding(config.getCharset().name());
 
@@ -122,6 +137,60 @@ public class JavaMessageExtractor implements MessageExtractor
     }
 
     /**
+     * This method creates a classpath from the specified classpath entries. It also removes non existing entries
+     * and directories which contains java files.
+     *
+     * @param classpathEntries classpath entries
+     *
+     * @return the classpath
+     */
+    private String loadClasspath(String... classpathEntries)
+    {
+        StringBuilder cp = new StringBuilder();
+        for (String entry : classpathEntries)
+        {
+            File file = new File(entry);
+
+            if (!file.exists())
+            {
+                this.logger.warning("The classpath entry '" + entry + "' was removed. It doesn't exist.");
+                continue;
+            }
+
+            if (file.isDirectory())
+            {
+                List<File> fileList;
+                try
+                {
+                    fileList = Misc.scanFilesRecursive(file, this.javaFileFilter);
+                }
+                catch (IOException e)
+                {
+                    this.logger.log(Level.SEVERE, "The classpath entry '" + entry + "' couldn't be scanned for java files. It was removed from the classpath.", e);
+                    continue;
+                }
+
+                if (fileList.size() > 0)
+                {
+                    this.logger.warning("The classpath entry '" + entry + "' was removed. The directory contains java files.");
+                    continue;
+                }
+            }
+
+            cp.append(entry);
+            cp.append(File.pathSeparator);
+        }
+
+        if (cp.length() == 0)
+        {
+            this.logger.warning("The classpath is empty.");
+            return null;
+        }
+
+        return cp.substring(0, cp.length() - 1);
+    }
+
+    /**
      * This method creates a new ClassLoader instance which
      * contains the specified classpath and the current one.
      *
@@ -131,6 +200,11 @@ public class JavaMessageExtractor implements MessageExtractor
      */
     private void loadClassLoader(String classpath) throws MalformedURLException
     {
+        if(classpath == null)
+        {
+            return;
+        }
+
         Set<URL> urls = new HashSet<URL>();
         for (String element : classpath.split(File.pathSeparator))
         {

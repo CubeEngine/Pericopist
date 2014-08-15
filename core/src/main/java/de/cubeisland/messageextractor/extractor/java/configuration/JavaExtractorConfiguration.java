@@ -23,6 +23,8 @@
  */
 package de.cubeisland.messageextractor.extractor.java.configuration;
 
+import java.io.File;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
@@ -45,7 +47,10 @@ import spoon.reflect.declaration.CtElement;
  * {@code
  * <source language="java" charset="utf-8"> <!-- default charset: charset set as extractor tag attribute -->
  *     <directory>source file path</directory> <!-- default: ./src/main/java -->
- *     <classpath>classpath</classpath> <!-- default: System.getProperty("java.class.path") -->
+ *     <classpath> <!-- default: System.getProperty("java.class.path").split(File.pathSeparator) -->
+ *         <entry>entry</entry>
+ *         <entry>another_entry</entry>
+ *     </classpath>
  *     <translatables> <!-- register ways how to extract messages -->
  *         <method>
  *             ...
@@ -71,7 +76,7 @@ import spoon.reflect.declaration.CtElement;
 public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 {
     private TranslatableExpression[] translatableExpressions = new TranslatableExpression[0];
-    private String classpath = System.getProperty("java.class.path");
+    private String[] classpathEntries = System.getProperty("java.class.path").split(File.pathSeparator);
 
     /**
      * This method returns the TranslatableExpression instances describing where the messages shall be extracted.
@@ -98,24 +103,25 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
     }
 
     /**
-     * This method returns the classpath of the java project
+     * This method returns the classpath entries of the java project
      *
-     * @return classpath of the project
+     * @return classpath entries of the project
      */
-    public String getClasspath()
+    public String[] getClasspathEntries()
     {
-        return this.classpath;
+        return this.classpathEntries;
     }
 
     /**
-     * This method sets the classpath of the java project
+     * This method sets the classpath entries of the java project
      *
-     * @param classpath classpath of the project
+     * @param classpathEntries classpath entries of the project
      */
-    @XmlElement(name = "classpath")
-    public void setClasspath(String classpath)
+    @XmlElementWrapper(name = "classpath")
+    @XmlElement(name = "entry")
+    public void setClasspathEntries(String... classpathEntries)
     {
-        this.classpath = classpath;
+        this.classpathEntries = classpathEntries;
     }
 
     /**
