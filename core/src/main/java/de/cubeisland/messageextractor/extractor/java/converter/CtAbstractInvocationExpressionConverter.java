@@ -24,31 +24,82 @@
 package de.cubeisland.messageextractor.extractor.java.converter;
 
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Array;
+import java.util.List;
 
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtExpression;
+import spoon.reflect.reference.CtArrayTypeReference;
+import spoon.reflect.reference.CtExecutableReference;
+import spoon.reflect.reference.CtTypeReference;
 
 public abstract class CtAbstractInvocationExpressionConverter<T extends CtExpression> implements Converter<T>
 {
     protected Object[] loadArguments(T expression, ConverterManager manager) throws ConversionException
     {
         CtAbstractInvocation<?> abstractInvocation = (CtAbstractInvocation<?>) expression;
-        Object[] arguments = new Object[abstractInvocation.getArguments().size()];
+        List<CtTypeReference<?>> parameterTypes = abstractInvocation.getExecutable().getParameterTypes();
 
-        for(int i = 0; i < arguments.length; i++)
+        if(parameterTypes.size() == 0)
         {
-            Object[] argumentValues =  manager.convert((CtExpression) abstractInvocation.getArguments().get(i));
-
-            if(argumentValues == null || argumentValues.length != 1)
-            {
-                throw new ConversionException(this, (CtExpression) abstractInvocation.getArguments().get(i), "Couldn't load the " + i + ". argument expression.");
-            }
-
-            arguments[i] = argumentValues[0];
+            return new Object[0];
         }
 
-        return arguments;
+        Object[] arguments = new Object[abstractInvocation.getArguments().size()];
+        for(int i = 0; i < arguments.length; i++)
+        {
+            CtExpression<?> argument = abstractInvocation.getArguments().get(i);
+            CtTypeReference<?> argumentType = argument.getType();
+
+            Object[] argumentValues =  manager.convert(argument);
+            if(argumentValues == null)
+            {
+                throw new ConversionException(this, (CtExpression) abstractInvocation.getArguments().get(i), "Couldn't load the " + i + ". argument expression. Converter returned null");
+            }
+
+            if(argument.getType() instanceof CtArrayTypeReference<?>)
+            {
+                arguments[i] = this.createArray(((CtArrayTypeReference) argumentType).getComponentType().getActualClass(), argumentValues);
+            }
+            else
+            {
+                if (argumentValues.length != 1)
+                {
+                    throw new ConversionException(this, (CtExpression) abstractInvocation.getArguments().get(i), "Couldn't load the " + i + ". argument expression.");
+                }
+
+                arguments[i] = argumentValues[0];
+            }
+        }
+
+        CtTypeReference<?> lastParameterType = parameterTypes.get(parameterTypes.size() - 1);
+        // argument amount == param amount && ( last parameter type != array || argument(lastParamIndex) type == array )
+        if(arguments.length == parameterTypes.size() && (!(lastParameterType instanceof CtArrayTypeReference) || abstractInvocation.getArguments().get(parameterTypes.size() - 1).getType() instanceof CtArrayTypeReference))
+        {
+            return arguments;
+        }
+
+        Object[] parameterValues = new Object[parameterTypes.size()];
+        System.arraycopy(arguments, 0, parameterValues, 0, parameterValues.length - 1);
+
+        // contains every entry from the arguments which has the index index param.length - 1
+        Object[] lastValues = new Object[arguments.length - parameterTypes.size() + 1];
+        System.arraycopy(arguments, parameterTypes.size() - 1, lastValues, 0, lastValues.length);
+
+        parameterValues[parameterValues.length - 1] = this.createArray(((CtArrayTypeReference) lastParameterType).getComponentType().getActualClass(), lastValues);
+
+        return parameterValues;
+    }
+
+    private Object createArray(Class<?> componentType, Object[] oldArray)
+    {
+        Object array = Array.newInstance(componentType, oldArray.length);
+        for(int i = 0; i < oldArray.length; i++)
+        {
+            Array.set(array, i, oldArray[i]);
+        }
+        return array;
     }
 
     protected void setAccessible(AccessibleObject accessibleObject)
