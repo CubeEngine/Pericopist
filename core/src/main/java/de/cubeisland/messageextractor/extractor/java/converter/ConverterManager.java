@@ -23,12 +23,15 @@
  */
 package de.cubeisland.messageextractor.extractor.java.converter;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConverterNotFoundException;
+import de.cubeisland.messageextractor.util.Misc;
 import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtConditional;
 import spoon.reflect.code.CtExpression;
@@ -40,7 +43,7 @@ import spoon.reflect.code.CtNewClass;
 
 /**
  * This class manages all converters which convert a <code>CtExpression</code> into
- * an <code>Object[]</code>.
+ * an <code>Object</code>.
  */
 public class ConverterManager
 {
@@ -133,21 +136,37 @@ public class ConverterManager
      *
      * @return the string array
      */
-    public <T extends CtExpression<?>> String[] convertToStrings(T expression) throws ConversionException
+    public <T extends CtExpression<?>> String[] convertToStringArray(T expression) throws ConversionException
     {
-        Object[] objects = this.convert(expression);
+        Object[] objects = this.convertToObjectArray(expression);
 
-        if(objects == null)
+        if (objects == null)
         {
             return null;
         }
 
         String[] strings = new String[objects.length];
-        for(int i = 0; i < objects.length; i++)
+        for (int i = 0; i < objects.length; i++)
         {
             strings[i] = objects[i].toString();
         }
         return strings;
+    }
+
+    /**
+     * This method converts an expression into a object
+     *
+     * @param expression the expression
+     *
+     * @return the object
+     */
+    public <T extends CtExpression<?>> Object convert(T expression) throws ConversionException
+    {
+        if (expression == null)
+        {
+            return null;
+        }
+        return this.matchConverter(expression).convert(expression, this);
     }
 
     /**
@@ -157,13 +176,22 @@ public class ConverterManager
      *
      * @return the Object array
      */
-    public <T extends CtExpression<?>> Object[] convert(T expression) throws ConversionException
+    public <T extends CtExpression<?>> Object[] convertToObjectArray(T expression) throws ConversionException
     {
-        if (expression == null)
+        Object o = this.convert(expression);
+
+        if (o == null)
         {
-            return null;
+            return (Object[]) Array.newInstance(Object.class, 1);
         }
-        return this.matchConverter(expression).convert(expression, this);
+        if (o.getClass().isArray())
+        {
+            return this.toObjectArray(o);
+        }
+
+        Object array = Array.newInstance(o.getClass(), 1);
+        Array.set(array, 0, o);
+        return (Object[]) array;
     }
 
     private void registerDefaultConverter()
@@ -175,5 +203,18 @@ public class ConverterManager
         this.registerConverter(CtLiteral.class, new CtLiteralExpressionConverter());
         this.registerConverter(CtNewArray.class, new CtNewArrayExpressionConverter());
         this.registerConverter(CtNewClass.class, new CtNewClassExpressionConverter());
+    }
+
+    private Object[] toObjectArray(Object array)
+    {
+        int length = Array.getLength(array);
+        Object[] objects = new Object[length];
+
+        for(int i = 0; i < length; i++)
+        {
+            objects[i] = Array.get(array, i);
+        }
+
+        return objects;
     }
 }

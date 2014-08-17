@@ -48,31 +48,9 @@ public abstract class CtAbstractInvocationExpressionConverter<T extends CtExpres
         Object[] arguments = new Object[abstractInvocation.getArguments().size()];
         for(int i = 0; i < arguments.length; i++)
         {
-            CtExpression<?> argument = abstractInvocation.getArguments().get(i);
-            CtTypeReference<?> argumentType = argument.getType();
-
-            Object[] argumentValues =  manager.convert(argument);
-            if(argumentValues == null)
-            {
-                throw new ConversionException(this, (CtExpression) abstractInvocation.getArguments().get(i), "Couldn't load the " + i + ". argument expression. Converter returned null");
-            }
-
-            if(argument.getType() instanceof CtArrayTypeReference<?>)
-            {
-                arguments[i] = this.createArray(((CtArrayTypeReference) argumentType).getComponentType().getActualClass(), argumentValues);
-            }
-            else
-            {
-                if (argumentValues.length != 1)
-                {
-                    throw new ConversionException(this, (CtExpression) abstractInvocation.getArguments().get(i), "Couldn't load the " + i + ". argument expression.");
-                }
-
-                arguments[i] = argumentValues[0];
-            }
+            arguments[i] =  manager.convert(abstractInvocation.getArguments().get(i));
         }
 
-        CtTypeReference<?> lastParameterType = parameterTypes.get(parameterTypes.size() - 1);
         if(matchesParameter(abstractInvocation.getArguments(), parameterTypes))
         {
             return arguments;
@@ -85,7 +63,7 @@ public abstract class CtAbstractInvocationExpressionConverter<T extends CtExpres
         Object[] lastValues = new Object[arguments.length - parameterTypes.size() + 1];
         System.arraycopy(arguments, parameterTypes.size() - 1, lastValues, 0, lastValues.length);
 
-        parameterValues[parameterValues.length - 1] = this.createArray(((CtArrayTypeReference) lastParameterType).getComponentType().getActualClass(), lastValues);
+        parameterValues[parameterValues.length - 1] = this.createArray(((CtArrayTypeReference) parameterTypes.get(parameterTypes.size() - 1)).getComponentType().getActualClass(), lastValues);
 
         return parameterValues;
     }

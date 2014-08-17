@@ -37,17 +37,17 @@ import spoon.reflect.code.CtConditional;
 public class CtConditionalExpressionConverter implements Converter<CtConditional<?>>
 {
     @Override
-    public Object[] convert(CtConditional<?> expression, ConverterManager manager) throws ConversionException
+    public Object convert(CtConditional<?> expression, ConverterManager manager) throws ConversionException
     {
         Set<Object> objects = new HashSet<>();
 
-        Object[] conditionObjects = manager.convert(expression.getThenExpression());
+        Object[] conditionObjects = manager.convertToObjectArray(expression.getThenExpression());
         if (conditionObjects != null)
         {
             Collections.addAll(objects, conditionObjects);
         }
 
-        conditionObjects = manager.convert(expression.getElseExpression());
+        conditionObjects = manager.convertToObjectArray(expression.getElseExpression());
         if (conditionObjects != null)
         {
             Collections.addAll(objects, conditionObjects);

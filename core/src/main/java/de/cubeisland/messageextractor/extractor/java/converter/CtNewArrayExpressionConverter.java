@@ -23,13 +23,14 @@
  */
 package de.cubeisland.messageextractor.extractor.java.converter;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.lang.reflect.Array;
 import java.util.List;
 
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtNewArray;
+import spoon.reflect.reference.CtArrayTypeReference;
+import spoon.reflect.reference.CtTypeReference;
 
 /**
  * This converter is responsible for new array expressions like
@@ -38,22 +39,18 @@ import spoon.reflect.code.CtNewArray;
 public class CtNewArrayExpressionConverter implements Converter<CtNewArray<?>>
 {
     @Override
-    public Object[] convert(CtNewArray<?> expression, ConverterManager manager) throws ConversionException
+    public Object convert(CtNewArray<?> expression, ConverterManager manager) throws ConversionException
     {
-        List<Object> objects = new ArrayList<>(expression.getElements().size());
+        List<CtExpression<?>> elements = expression.getElements();
+        CtTypeReference<?> type = ((CtArrayTypeReference)expression.getType()).getComponentType();
 
-        for (CtExpression<?> subExpression : expression.getElements())
+        Object array = Array.newInstance(type.getActualClass(), elements.size());
+
+        for(int i = 0; i < elements.size(); i++)
         {
-            Object[] values = manager.convert(subExpression);
-
-            if (values == null)
-            {
-                continue;
-            }
-
-            Collections.addAll(objects, values);
+            Array.set(array, i, manager.convert(elements.get(i)));
         }
 
-        return objects.toArray(new Object[objects.size()]);
+        return array;
     }
 }

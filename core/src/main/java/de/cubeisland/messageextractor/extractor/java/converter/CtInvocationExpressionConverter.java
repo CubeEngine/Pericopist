@@ -37,7 +37,7 @@ import spoon.reflect.reference.CtExecutableReference;
 public class CtInvocationExpressionConverter extends CtAbstractInvocationExpressionConverter<CtInvocation>
 {
     @Override
-    public Object[] convert(CtInvocation expression, ConverterManager manager) throws ConversionException
+    public Object convert(CtInvocation expression, ConverterManager manager) throws ConversionException
     {
         CtExecutableReference<?> executable = expression.getExecutable();
 
@@ -45,14 +45,12 @@ public class CtInvocationExpressionConverter extends CtAbstractInvocationExpress
         Object target = null;
         if(!executable.isStatic())
         {
-            Object[] targets = manager.convert(expression.getTarget());
+            target = manager.convert(expression.getTarget());
 
-            if(targets == null || targets.length != 1)
+            if(target == null || target.getClass().isArray())
             {
                 throw new ConversionException(this, expression.getTarget(), "Couldn't load the target expression.");
             }
-
-            target = targets[0];
         }
 
         // 2. load arguments
@@ -71,7 +69,7 @@ public class CtInvocationExpressionConverter extends CtAbstractInvocationExpress
         // 5. invoke method
         try
         {
-            return new Object[] {method.invoke(target, arguments)};
+            return method.invoke(target, arguments);
         }
         catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e)
         {

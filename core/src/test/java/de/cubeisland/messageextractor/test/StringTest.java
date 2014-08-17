@@ -54,12 +54,11 @@ public class StringTest
         i18n.translate("method invocation without last parameter: " + String.format("it's a test"));
         i18n.translate("method invocation without last parameter: " + String.format("it's a %s", "test"));
         i18n.translate("a null test " + testNullMethod(null));
+        i18n.translate(testArrayParam("method invocation with array test", new Object[][] {new Object[] {1, 2, 3}, new Object[] {2, 3, 4}}));
         i18n.translate(testArrayParam("method invocation with array test", new Object[] {1, 2, 3}, new Object[] {2, 3, 4}));
         i18n.translate(testArrayParam("method invocation with array test", new Object[] {2, 3, 4}));
 
         i18n.translate("calculations are not supported: " + (4 - 3));
-
-
     }
 
     private static String testNullMethod(String test)

@@ -34,15 +34,15 @@ import spoon.reflect.code.CtBinaryOperator;
 public class CtBinaryOperatorExpressionConverter implements Converter<CtBinaryOperator<?>>
 {
     @Override
-    public Object[] convert(CtBinaryOperator<?> expression, ConverterManager manager) throws ConversionException
+    public Object convert(CtBinaryOperator<?> expression, ConverterManager manager) throws ConversionException
     {
-        Object[] leftHandOperandObjects = manager.convert(expression.getLeftHandOperand());
+        Object[] leftHandOperandObjects = manager.convertToObjectArray(expression.getLeftHandOperand());
         if (leftHandOperandObjects == null || leftHandOperandObjects.length == 0)
         {
             return null;
         }
 
-        Object[] rightHandOperandObjects = manager.convert(expression.getRightHandOperand());
+        Object[] rightHandOperandObjects = manager.convertToObjectArray(expression.getRightHandOperand());
         if (rightHandOperandObjects == null || rightHandOperandObjects.length == 0)
         {
             return null;

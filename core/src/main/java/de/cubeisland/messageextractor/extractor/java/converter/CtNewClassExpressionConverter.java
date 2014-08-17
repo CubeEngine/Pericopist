@@ -33,7 +33,7 @@ import spoon.reflect.reference.CtExecutableReference;
 public class CtNewClassExpressionConverter extends CtAbstractInvocationExpressionConverter<CtNewClass<?>>
 {
     @Override
-    public Object[] convert(CtNewClass<?> expression, ConverterManager manager) throws ConversionException
+    public Object convert(CtNewClass<?> expression, ConverterManager manager) throws ConversionException
     {
         CtExecutableReference<?> executable = expression.getExecutable();
 
@@ -49,7 +49,7 @@ public class CtNewClassExpressionConverter extends CtAbstractInvocationExpressio
         // 4. create new instance
         try
         {
-            return new Object[] {constructor.newInstance(arguments)};
+            return constructor.newInstance(arguments);
         }
         catch (IllegalAccessException | InvocationTargetException | InstantiationException e)
         {
