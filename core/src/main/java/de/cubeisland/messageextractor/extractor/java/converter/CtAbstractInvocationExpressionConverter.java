@@ -31,7 +31,6 @@ import de.cubeisland.messageextractor.extractor.java.converter.exception.Convers
 import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.reference.CtArrayTypeReference;
-import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtTypeReference;
 
 public abstract class CtAbstractInvocationExpressionConverter<T extends CtExpression> implements Converter<T>
@@ -74,8 +73,7 @@ public abstract class CtAbstractInvocationExpressionConverter<T extends CtExpres
         }
 
         CtTypeReference<?> lastParameterType = parameterTypes.get(parameterTypes.size() - 1);
-        // argument amount == param amount && ( last parameter type != array || argument(lastParamIndex) type == array )
-        if(arguments.length == parameterTypes.size() && (!(lastParameterType instanceof CtArrayTypeReference) || abstractInvocation.getArguments().get(parameterTypes.size() - 1).getType() instanceof CtArrayTypeReference))
+        if(matchesParameter(abstractInvocation.getArguments(), parameterTypes))
         {
             return arguments;
         }
@@ -90,6 +88,32 @@ public abstract class CtAbstractInvocationExpressionConverter<T extends CtExpres
         parameterValues[parameterValues.length - 1] = this.createArray(((CtArrayTypeReference) lastParameterType).getComponentType().getActualClass(), lastValues);
 
         return parameterValues;
+    }
+
+    private boolean matchesParameter(List<CtExpression<?>> arguments, List<CtTypeReference<?>> parameterTypes)
+    {
+        if(arguments.size() != parameterTypes.size())
+        {
+            return false;
+        }
+
+        CtTypeReference<?> lastParameterType = parameterTypes.get(parameterTypes.size() - 1);
+        CtTypeReference<?> lastArgumentType = arguments.get(arguments.size() - 1).getType();
+        do
+        {
+            if (!(lastParameterType instanceof CtArrayTypeReference))
+            {
+                return true;
+            }
+            if (!(lastArgumentType instanceof CtArrayTypeReference))
+            {
+                return false;
+            }
+
+            lastParameterType = ((CtArrayTypeReference) lastParameterType).getComponentType();
+            lastArgumentType = ((CtArrayTypeReference) lastArgumentType).getComponentType();
+        }
+        while (true);
     }
 
     private Object createArray(Class<?> componentType, Object[] oldArray)
