@@ -63,7 +63,18 @@ public class StringTest
         i18n.translate(testArrayParam("method invocation with array test", new Object[] {1, 2, 3}, new Object[] {2, 3, 4}));
         i18n.translate(testArrayParam("method invocation with array test", new Object[] {2, 3, 4}));
 
-        i18n.translate("calculations are not supported: " + (4 - 3));
+        i18n.translate("binary operator test (4 - 3): " + (4 - 3));
+        i18n.translate("binary operator test (4 + 3.323f): " + (4 + 3.323f));
+        i18n.translate("binary operator test (4 ^ 3): " + (4 ^ 3));
+        i18n.translate("binary operator test (4 == 3): " + (4 == 3));
+        i18n.translate("binary operator test (4 == 4): " + (4 == 4));
+        i18n.translate("binary operator test (4 % 3): " + (4 % 3));
+        i18n.translate("binary operator test (4321 << 3): " + (4321 << 3));
+        i18n.translate("binary operator test (4321 >> 3): " + (4321 >> 3));
+        i18n.translate("binary operator test (4321 >>> 3): " + (4321 >>> 3));
+        i18n.translate("binary operator test (4 % 3.3d): " + (4 % 3.3d));
+        i18n.translate("binary operator test (Integer.valueOf(2) instanceof Number): " + (Integer.valueOf(2) instanceof Number));
+        i18n.translate("binary operator test ((Object)Integer.valueOf(2) instanceof String): " + ((Object)Integer.valueOf(2) instanceof String));
     }
 
     private static String testNullMethod(String test)

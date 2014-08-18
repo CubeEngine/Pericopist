@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-08-18 11:51:17+0200\n"
+"POT-Creation-Date: 2014-08-18 13:34:20+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
@@ -94,6 +94,67 @@ msgstr ""
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:43
 msgid "an integer: 1"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:77
+msgid ""
+"binary operator test ((Object)Integer.valueOf(2) instanceof String): false"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:71
+msgid "binary operator test (4 % 3): 1"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:75
+msgid "binary operator test (4 % 3.3d): 0.7000000000000002"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:67
+msgid "binary operator test (4 + 3.323f): 7.323"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:66
+msgid "binary operator test (4 - 3): 1"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:69
+msgid "binary operator test (4 == 3): false"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:70
+msgid "binary operator test (4 == 4): true"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:68
+msgid "binary operator test (4 ^ 3): 7"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:72
+msgid "binary operator test (4321 << 3): 34568"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:73
+msgid "binary operator test (4321 >> 3): 540"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:74
+msgid "binary operator test (4321 >>> 3): 540"
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:76
+msgid "binary operator test (Integer.valueOf(2) instanceof Number): true"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
