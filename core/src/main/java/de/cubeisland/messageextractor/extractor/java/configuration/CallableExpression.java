@@ -173,4 +173,21 @@ public abstract class CallableExpression extends TranslatableExpression
         }
         return true;
     }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder builder = new StringBuilder(this.getName());
+
+        builder.append('(');
+        for (CallableSignatureType signatureType : this.getSignature())
+        {
+            builder.append(signatureType.getType());
+            builder.append(", ");
+        }
+        builder.delete(builder.length() - 2, builder.length());
+        builder.append(')');
+
+        return builder.toString();
+    }
 }

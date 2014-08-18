@@ -112,12 +112,6 @@ public class Method extends CallableExpression
     }
 
     @Override
-    public String toString()
-    {
-        return this.getName() + ":" + this.getSingularIndex() + (this.hasPlural() ? "," + this.getPluralIndex() : "");
-    }
-
-    @Override
     public boolean matches(CtElement element)
     {
         if (!(element instanceof CtInvocation<?>))

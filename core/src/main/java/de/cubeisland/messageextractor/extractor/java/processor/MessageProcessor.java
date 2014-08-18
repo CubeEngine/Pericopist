@@ -80,7 +80,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             builder.append("\nTranslatable-Expression-Type: ");
             builder.append(translatableExpression.getClass().getSimpleName());
             builder.append("\nTranslatable-Expression-Name: ");
-            builder.append(translatableExpression.getName());
+            builder.append(translatableExpression);
 
             this.getLogger().log(Level.WARNING, builder.toString(), e.getCause());
         }
