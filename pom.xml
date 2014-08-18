@@ -18,4 +18,11 @@
         <module>core</module>
         <module>maven-plugin</module>
     </modules>
+
+    <scm>
+        <url>scm:git:https://github.com/CubeEngineDev/messageextractor</url>
+        <connection>scm:git:https://github.com/CubeEngineDev/messageextractor</connection>
+        <developerConnection>scm:git:https://github.com/CubeEngineDev/messageextractor</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 </project>
