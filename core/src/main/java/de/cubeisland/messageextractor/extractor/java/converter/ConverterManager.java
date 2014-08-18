@@ -25,13 +25,11 @@ package de.cubeisland.messageextractor.extractor.java.converter;
 
 import java.lang.reflect.Array;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConverterNotFoundException;
-import de.cubeisland.messageextractor.util.Misc;
 import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtConditional;
 import spoon.reflect.code.CtExpression;
@@ -205,16 +203,147 @@ public class ConverterManager
         this.registerConverter(CtNewClass.class, new CtNewClassExpressionConverter());
     }
 
+    /**
+     * This method converts the specified array into an object array.
+     *
+     * @param array array object
+     *
+     * @return the object array
+     */
     private Object[] toObjectArray(Object array)
     {
-        int length = Array.getLength(array);
-        Object[] objects = new Object[length];
-
-        for(int i = 0; i < length; i++)
+        Class<?> componentType = this.getLastComponentType(array);
+        if (!componentType.isPrimitive())
         {
-            objects[i] = Array.get(array, i);
+            // Array doesn't have to be converted
+            return (Object[]) array;
         }
 
-        return objects;
+        // primitive arrays must be converted to object arrays
+        componentType = this.toComponentType(componentType, this.getDimensionCount(array));
+        Object convertedArray = Array.newInstance(componentType, Array.getLength(array));
+
+        for (int i = 0; i < Array.getLength(array); i++)
+        {
+            Object element = Array.get(array, i);
+            if (!element.getClass().isArray())
+            {
+                Array.set(convertedArray, i, element);
+            }
+            else
+            {
+                Array.set(convertedArray, i, this.toObjectArray(element));
+            }
+        }
+
+        return (Object[]) convertedArray;
+    }
+
+    /**
+     * This method returns the component type of the array.
+     *
+     * @param clazz     the component class
+     * @param dimension the dimension of the array
+     *
+     * @return the component type of the array
+     */
+    private Class<?> toComponentType(Class<?> clazz, int dimension)
+    {
+        Class<?> objectClass = this.getRelatedClass(clazz);
+        for (int i = 1; i < dimension; i++)
+        {
+            Object array = Array.newInstance(objectClass, 0);
+            objectClass = array.getClass();
+        }
+        return objectClass;
+    }
+
+    /**
+     * This method converts the specified primitive class into a related object class
+     *
+     * @param clazz the primitive class
+     *
+     * @return related object class
+     */
+    private Class<?> getRelatedClass(Class<?> clazz)
+    {
+        if (!clazz.isPrimitive())
+        {
+            return clazz;
+        }
+
+        if (boolean.class.equals(clazz))
+        {
+            return Boolean.class;
+        }
+        if (byte.class.equals(clazz))
+        {
+            return Byte.class;
+        }
+        if (char.class.equals(clazz))
+        {
+            return Character.class;
+        }
+        if (double.class.equals(clazz))
+        {
+            return Double.class;
+        }
+        if (float.class.equals(clazz))
+        {
+            return Float.class;
+        }
+        if (int.class.equals(clazz))
+        {
+            return Integer.class;
+        }
+        if (long.class.equals(clazz))
+        {
+            return Long.class;
+        }
+        if (short.class.equals(clazz))
+        {
+            return Short.class;
+        }
+        if (void.class.equals(clazz))
+        {
+            return Void.class;
+        }
+        return null;
+    }
+
+    /**
+     * This method returns the last component type of the array hierarchy
+     *
+     * @param array array object
+     *
+     * @return last component type
+     */
+    private Class<?> getLastComponentType(Object array)
+    {
+        Class<?> clazz = array.getClass();
+        while (clazz.isArray())
+        {
+            clazz = clazz.getComponentType();
+        }
+        return clazz;
+    }
+
+    /**
+     * This method returns the dimension of an array
+     *
+     * @param array array object
+     *
+     * @return dimension
+     */
+    private int getDimensionCount(Object array)
+    {
+        int dimension = 0;
+        Class<?> clazz = array.getClass();
+        while (clazz.isArray())
+        {
+            dimension++;
+            clazz = clazz.getComponentType();
+        }
+        return dimension;
     }
 }
