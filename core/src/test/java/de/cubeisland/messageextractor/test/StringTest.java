@@ -44,6 +44,11 @@ public class StringTest
         i18n.translate("a float: " + 1.04f);
         i18n.translate("a double: " + 1.04d);
 
+        // unary operator expression test
+        i18n.translate("unary operator test +1: " + +1);
+        i18n.translate("unary operator test -1: " + -1); // TODO it doesn't work yet
+        i18n.translate("unary operator test ~1: " + ~1); // TODO it doesn't work yet
+
         i18n.translate("method invocation: " + "invocation".toUpperCase(Locale.ENGLISH).replaceFirst("I", "method i"));
         i18n.translate("a static method invocation: " + String.valueOf("hello"));
         i18n.translate("new class invocation: " + new Occurrence(new File("testFile.tmp"), 42));

@@ -38,6 +38,7 @@ import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtNewArray;
 import spoon.reflect.code.CtNewClass;
+import spoon.reflect.code.CtUnaryOperator;
 
 /**
  * This class manages all converters which convert a <code>CtExpression</code> into
@@ -201,6 +202,7 @@ public class ConverterManager
         this.registerConverter(CtLiteral.class, new CtLiteralExpressionConverter());
         this.registerConverter(CtNewArray.class, new CtNewArrayExpressionConverter());
         this.registerConverter(CtNewClass.class, new CtNewClassExpressionConverter());
+        this.registerConverter(CtUnaryOperator.class, new CtUnaryOperatorExpressionConverter());
     }
 
     /**

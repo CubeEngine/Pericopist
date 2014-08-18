@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-08-17 17:19:18+0200\n"
+"POT-Creation-Date: 2014-08-18 11:02:14+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
@@ -82,12 +82,12 @@ msgid "a normal string"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:56
+#: de/cubeisland/messageextractor/test/StringTest.java:61
 msgid "a null test test"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:48
+#: de/cubeisland/messageextractor/test/StringTest.java:53
 msgid "a static method invocation: hello"
 msgstr ""
 
@@ -204,44 +204,44 @@ msgid ""
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:53
+#: de/cubeisland/messageextractor/test/StringTest.java:58
 msgid "method invocation with array parameters: test"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:59
+#: de/cubeisland/messageextractor/test/StringTest.java:64
 msgid "method invocation with array test length: 1"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:57
-#: de/cubeisland/messageextractor/test/StringTest.java:58
+#: de/cubeisland/messageextractor/test/StringTest.java:62
+#: de/cubeisland/messageextractor/test/StringTest.java:63
 msgid "method invocation with array test length: 2"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:52
+#: de/cubeisland/messageextractor/test/StringTest.java:57
 msgid "method invocation with more arguments than parameter: it's a test"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:54
-#: de/cubeisland/messageextractor/test/StringTest.java:55
+#: de/cubeisland/messageextractor/test/StringTest.java:59
+#: de/cubeisland/messageextractor/test/StringTest.java:60
 msgid "method invocation without last parameter: it's a test"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:47
+#: de/cubeisland/messageextractor/test/StringTest.java:52
 msgid "method invocation: method iNVOCATION"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:50
+#: de/cubeisland/messageextractor/test/StringTest.java:55
 msgid "new class + method invocation: this is a test"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#: de/cubeisland/messageextractor/test/StringTest.java:49
+#: de/cubeisland/messageextractor/test/StringTest.java:54
 msgid "new class invocation: testFile.tmp:42"
 msgstr ""
 
@@ -286,6 +286,11 @@ msgstr ""
 #. this message was extracted with a de.cubeisland.messageextractor.test.exception.WrongUsageException constructor
 #: de/cubeisland/messageextractor/test/ConstructorTest.java:37
 msgid "this message was extracted from the WrongUsageException constructor."
+msgstr ""
+
+#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/StringTest.java:48
+msgid "unary operator test +1: 1"
 msgstr ""
 
 #. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
