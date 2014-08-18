@@ -46,8 +46,8 @@ public class StringTest
 
         // unary operator expression test
         i18n.translate("unary operator test +1: " + +1);
-        i18n.translate("unary operator test -1: " + -1); // TODO it doesn't work yet
-        i18n.translate("unary operator test ~1: " + ~1); // TODO it doesn't work yet
+        i18n.translate("unary operator test -1: " + -1);
+        i18n.translate("unary operator test ~1: " + ~1);
 
         i18n.translate("method invocation: " + "invocation".toUpperCase(Locale.ENGLISH).replaceFirst("I", "method i"));
         i18n.translate("a static method invocation: " + String.valueOf("hello"));

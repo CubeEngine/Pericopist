@@ -34,28 +34,148 @@ public class CtUnaryOperatorExpressionConverter implements Converter<CtUnaryOper
     {
         UnaryOperatorKind kind = expression.getKind();
         Object object = manager.convert(expression.getOperand());
-
-        if (!(object instanceof Number))
+        if (object == null)
         {
-            throw new ConversionException(this, expression.getOperand(), "That kind of expression isn't supported for a unary operator expression.");
+            throw new ConversionException(this, expression, "The operand of the expression is null.");
         }
 
-        if (UnaryOperatorKind.POS.equals(kind))
+        switch (kind)
         {
-            // this unary operator kind doesn't change the object
-            return object;
-        }
-        if (UnaryOperatorKind.POSTDEC.equals(kind))
-        {
-            // this unary operator kind doesn't change the object at this point
-            return object;
-        }
-        if (UnaryOperatorKind.POSTINC.equals(kind))
-        {
-            // this unary operator kind doesn't change the object at this point
-            return object;
-        }
+            case POS :
+                if (object instanceof Number)
+                {
+                    // this unary operator kind doesn't change the object
+                    return object;
+                }
+                break;
 
-        throw new ConversionException(this, expression, "unary kind " + expression.getKind() + " isn't supported yet.");
+            case NEG :
+                if (object instanceof Byte)
+                {
+                    return -(Byte)object;
+                }
+                if (object instanceof Integer)
+                {
+                    return -(Integer)object;
+                }
+                if (object instanceof Float)
+                {
+                    return -(Float)object;
+                }
+                if (object instanceof Double)
+                {
+                    return -(Double)object;
+                }
+                if (object instanceof Short)
+                {
+                    return -(Short)object;
+                }
+                if (object instanceof Long)
+                {
+                    return -(Long)object;
+                }
+                break;
+
+            case NOT :
+                if (object instanceof Boolean)
+                {
+                    return !(Boolean)object;
+                }
+                break;
+
+            case COMPL :
+                if (object instanceof Byte)
+                {
+                    return ~(Byte)object;
+                }
+                if (object instanceof Integer)
+                {
+                    return ~(Integer)object;
+                }
+                if (object instanceof Short)
+                {
+                    return ~(Short)object;
+                }
+                if (object instanceof Long)
+                {
+                    return ~(Long)object;
+                }
+                break;
+
+            case PREINC :
+                if (object instanceof Byte)
+                {
+                    return (Byte)object + 1;
+                }
+                if (object instanceof Integer)
+                {
+                    return (Integer)object + 1;
+                }
+                if (object instanceof Float)
+                {
+                    return (Float)object + 1;
+                }
+                if (object instanceof Double)
+                {
+                    return (Double)object + 1;
+                }
+                if (object instanceof Short)
+                {
+                    return (Short)object + 1;
+                }
+                if (object instanceof Long)
+                {
+                    return (Long)object + 1;
+                }
+                break;
+
+            case PREDEC :
+                if (object instanceof Byte)
+                {
+                    return (Byte)object - 1;
+                }
+                if (object instanceof Integer)
+                {
+                    return (Integer)object - 1;
+                }
+                if (object instanceof Float)
+                {
+                    return (Float)object - 1;
+                }
+                if (object instanceof Double)
+                {
+                    return (Double)object - 1;
+                }
+                if (object instanceof Short)
+                {
+                    return (Short)object - 1;
+                }
+                if (object instanceof Long)
+                {
+                    return (Long)object - 1;
+                }
+                break;
+
+            case POSTINC :
+                if (object instanceof Number)
+                {
+                    // this unary operator kind doesn't change the object at this point
+                    return object;
+                }
+                break;
+
+            case POSTDEC :
+                if (object instanceof Number)
+                {
+                    // this unary operator kind doesn't change the object at this point
+                    return object;
+                }
+                break;
+
+            default :
+                throw new ConversionException(this, expression, "Unknown unary operator kind " + kind.name());
+
+        }
+        throw new ConversionException(this, expression, "A " + object.getClass().getName() + " isn't supported for a " + kind.name() + " unary operator expression.");
     }
 }
