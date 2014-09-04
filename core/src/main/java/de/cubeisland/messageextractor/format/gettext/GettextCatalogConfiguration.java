@@ -68,7 +68,7 @@ import de.cubeisland.messageextractor.format.HeaderConfiguration;
 public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
 {
     private HeaderConfiguration headerConfiguration;
-    private int pluralAmount = 2;
+    private Integer pluralAmount;
 
     /**
      * This method returns the header configuration of the gettext catalog
@@ -98,6 +98,10 @@ public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
      */
     public int getPluralAmount()
     {
+        if (this.pluralAmount == null)
+        {
+            return 2;
+        }
         return pluralAmount;
     }
 

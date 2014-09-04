@@ -75,8 +75,8 @@ import spoon.reflect.declaration.CtElement;
 @XmlRootElement(name = "source")
 public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 {
-    private TranslatableExpression[] translatableExpressions = new TranslatableExpression[0];
-    private String[] classpathEntries = System.getProperty("java.class.path").split(File.pathSeparator);
+    private TranslatableExpression[] translatableExpressions;
+    private String[] classpathEntries;
 
     /**
      * This method returns the TranslatableExpression instances describing where the messages shall be extracted.
@@ -85,7 +85,11 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
      */
     public TranslatableExpression[] getTranslatableExpressions()
     {
-        return translatableExpressions;
+        if (this.translatableExpressions == null)
+        {
+            return new TranslatableExpression[0];
+        }
+        return this.translatableExpressions;
     }
 
     /**
@@ -109,6 +113,10 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
      */
     public String[] getClasspathEntries()
     {
+        if (this.classpathEntries == null)
+        {
+            return System.getProperty("java.class.path").split(File.pathSeparator); // default value
+        }
         return this.classpathEntries;
     }
 

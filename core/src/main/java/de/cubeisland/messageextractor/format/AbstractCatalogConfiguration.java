@@ -38,8 +38,8 @@ import de.cubeisland.messageextractor.util.XmlCharsetAdapter;
 public abstract class AbstractCatalogConfiguration implements CatalogConfiguration
 {
     private File templateFile;
-    private boolean removeUnusedMessages = true;
-    private boolean createEmptyTemplate = false;
+    private Boolean removeUnusedMessages;
+    private Boolean createEmptyTemplate;
     private Charset charset;
 
     @XmlElement(name = "template")
@@ -73,6 +73,10 @@ public abstract class AbstractCatalogConfiguration implements CatalogConfigurati
      */
     public final boolean getRemoveUnusedMessages()
     {
+        if (this.removeUnusedMessages == null)
+        {
+            return true;
+        }
         return this.removeUnusedMessages;
     }
 
@@ -94,6 +98,10 @@ public abstract class AbstractCatalogConfiguration implements CatalogConfigurati
      */
     public final boolean getCreateEmptyTemplate()
     {
+        if (this.createEmptyTemplate == null)
+        {
+            return false;
+        }
         return this.createEmptyTemplate;
     }
 

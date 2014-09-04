@@ -23,24 +23,15 @@
  */
 package de.cubeisland.messageextractor.format;
 
-import java.nio.charset.Charset;
-
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import de.cubeisland.messageextractor.configuration.Configuration;
-import de.cubeisland.messageextractor.exception.ConfigurationException;
-import de.cubeisland.messageextractor.util.XmlCharsetAdapter;
 
 @XmlRootElement(name = "header")
 public class HeaderConfiguration
 {
-    private Charset charset;
-
     private String comments;
     private MetadataEntry[] metadata;
 

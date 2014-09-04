@@ -37,7 +37,7 @@ import de.cubeisland.messageextractor.util.XmlCharsetAdapter;
  */
 public abstract class AbstractExtractorConfiguration implements ExtractorConfiguration
 {
-    private File directory = new File("./src/main/java");
+    private File directory;
     private Charset charset;
 
     /**
@@ -59,6 +59,10 @@ public abstract class AbstractExtractorConfiguration implements ExtractorConfigu
      */
     public final File getDirectory()
     {
+        if (this.directory == null)
+        {
+            return new File("./src/main/java"); // default value
+        }
         return this.directory;
     }
 
