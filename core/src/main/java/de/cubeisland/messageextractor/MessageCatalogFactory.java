@@ -251,13 +251,17 @@ public class MessageCatalogFactory
 
         MessageExtractorConfiguration extractorConfiguration = this.loadMessageExtractorConfiguration(resource, charset, velocityEngine, velocityContext);
 
+        if (extractorConfiguration == null)
+        {
+            throw new ConfigurationException("The configuration neither has a source tag nor a catalog tag.");
+        }
         if (extractorConfiguration.extractorConfiguration == null)
         {
-            throw new ConfigurationException("The configuration does not have a source tag");
+            throw new ConfigurationException("The configuration does not have a source tag.");
         }
         if (extractorConfiguration.catalogConfiguration == null)
         {
-            throw new ConfigurationException("The configuration does not have a catalog tag");
+            throw new ConfigurationException("The configuration does not have a catalog tag.");
         }
 
         return new MessageCatalog(extractorConfiguration.extractorConfiguration, extractorConfiguration.catalogConfiguration, logger);
@@ -330,6 +334,8 @@ public class MessageCatalogFactory
             }
         }
 
+        List<Class<?>> jaxbClasses = new ArrayList<>();
+
         Class<? extends ExtractorConfiguration> extractorConfigurationClass = null;
         if (sourceNode != null)
         {
@@ -343,6 +349,8 @@ public class MessageCatalogFactory
             {
                 throw new UnknownSourceLanguageException("Unknown source language " + sourceLanguageNode.getTextContent());
             }
+
+            jaxbClasses.add(extractorConfigurationClass);
         }
 
         Class<? extends CatalogConfiguration> catalogConfigurationClass = null;
@@ -358,11 +366,18 @@ public class MessageCatalogFactory
             {
                 throw new UnknownCatalogFormatException("Unknown catalog format " + catalogFormatNode.getTextContent());
             }
+
+            jaxbClasses.add(catalogConfigurationClass);
+        }
+
+        if (jaxbClasses.size() == 0)
+        {
+            return parent;
         }
 
         try
         {
-            JAXBContext jaxbContext = JAXBContext.newInstance(extractorConfigurationClass, catalogConfigurationClass);
+            JAXBContext jaxbContext = JAXBContext.newInstance(jaxbClasses.toArray(new Class[jaxbClasses.size()]));
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
             ExtractorConfiguration extractorConfiguration = null;
@@ -380,6 +395,10 @@ public class MessageCatalogFactory
                     extractorConfiguration.setCharset(defaultCharset);
                 }
             }
+            else if (parent != null)
+            {
+                extractorConfiguration = parent.extractorConfiguration;
+            }
 
             CatalogConfiguration catalogConfiguration = null;
             if (catalogNode != null)
@@ -395,6 +414,10 @@ public class MessageCatalogFactory
                 {
                     catalogConfiguration.setCharset(defaultCharset);
                 }
+            }
+            else if (parent != null)
+            {
+                catalogConfiguration = parent.catalogConfiguration;
             }
 
             return new MessageExtractorConfiguration(extractorConfiguration, catalogConfiguration);
