@@ -38,6 +38,7 @@ import java.util.Iterator;
 
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
+import de.cubeisland.messageextractor.format.HeaderConfiguration.MetadataEntry;
 import de.cubeisland.messageextractor.format.gettext.GettextCatalogConfiguration;
 import de.cubeisland.messageextractor.format.gettext.PlaintextGettextCatalogFormat;
 import de.cubeisland.messageextractor.message.MessageStore;
@@ -58,7 +59,7 @@ public class TestCasesJavaGettextCatalog
         toolContext.put("resource", new ResourceLoader());
 
         MessageCatalogFactory factory = new MessageCatalogFactory();
-        this.messageCatalog = factory.getMessageCatalog("./src/test/resources/example.xml", Charset.forName("UTF-8"), toolContext);
+        this.messageCatalog = factory.getMessageCatalog("./src/test/resources/configuration.xml", Charset.forName("UTF-8"), toolContext);
 
         this.targetCatalogFile = new File("./src/test/resources/target_catalog.pot");
         this.catalogFile = new File("./src/test/resources/messages.pot");
@@ -76,9 +77,14 @@ public class TestCasesJavaGettextCatalog
         Assert.assertEquals(true, config.getRemoveUnusedMessages());
         Assert.assertEquals(this.catalogFile.getAbsolutePath(), config.getTemplateFile().getAbsolutePath());
         Assert.assertEquals("Hey this are test header comments.\nyou can use the velocity context in your comments.\nfor example: 8\n", config.getHeaderConfiguration().getComments());
-        Assert.assertEquals("Project-Id-Version", config.getHeaderConfiguration().getMetadata()[0].getKey());
-        Assert.assertEquals("POT-Creation-Date", config.getHeaderConfiguration().getMetadata()[1].getKey());
-        Assert.assertEquals("Last-Translator", config.getHeaderConfiguration().getMetadata()[2].getKey());
+
+        MetadataEntry[] metadataEntries = config.getHeaderConfiguration().getMetadata();
+        Assert.assertEquals(3, metadataEntries.length);
+        Assert.assertEquals("Project-Id-Version", metadataEntries[0].getKey());
+        Assert.assertEquals("PACKAGE VERSION", metadataEntries[0].getValue());
+        Assert.assertEquals("POT-Creation-Date", metadataEntries[1].getKey());
+        Assert.assertEquals("Last-Translator", metadataEntries[2].getKey());
+        Assert.assertEquals("FULL NAME <EMAIL@ADDRESS>", metadataEntries[2].getValue());
     }
 
     @Test
@@ -90,15 +96,15 @@ public class TestCasesJavaGettextCatalog
         Assert.assertEquals("UTF-8", config.getCharset().displayName());
         Assert.assertArrayEquals(System.getProperty("java.class.path").split(File.pathSeparator), config.getClasspathEntries());
         Assert.assertEquals(new File("./src/test/java").getAbsolutePath(), config.getDirectory().getAbsolutePath());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translate", config.getTranslatableExpressions()[0].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translateN", config.getTranslatableExpressions()[1].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.command.User#sendTranslated", config.getTranslatableExpressions()[2].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.command.User#sendTranslatedN", config.getTranslatableExpressions()[3].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.command.Command", config.getTranslatableExpressions()[4].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.TranslatableAnnotation", config.getTranslatableExpressions()[5].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.TranslatableArrayAnnotation", config.getTranslatableExpressions()[6].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.MessageExtractorTest", config.getTranslatableExpressions()[7].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.exception.WrongUsageException", config.getTranslatableExpressions()[8].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.command.User#sendTranslated", config.getTranslatableExpressions()[0].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.command.User#sendTranslatedN", config.getTranslatableExpressions()[1].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.command.Command", config.getTranslatableExpressions()[2].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.TranslatableAnnotation", config.getTranslatableExpressions()[3].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.TranslatableArrayAnnotation", config.getTranslatableExpressions()[4].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.MessageExtractorTest", config.getTranslatableExpressions()[5].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.exception.WrongUsageException", config.getTranslatableExpressions()[6].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translate", config.getTranslatableExpressions()[7].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translateN", config.getTranslatableExpressions()[8].getName());
     }
 
     @Test

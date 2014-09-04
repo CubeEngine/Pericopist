@@ -1,29 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extractor charset="utf-8">
+<extractor charset="utf-8" parent="parentConfiguration.xml">
     <source language="java">
 
-        <directory>./src/test/java</directory>
-
         <translatables>
-            <method>
-                <name>de.cubeisland.messageextractor.test.i18n.I18n#translate</name>
-                <signature>
-                    <type use-as="singular">java.lang.String</type>
-                    <type>java.lang.Object[]</type>
-                </signature>
-                <description>this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method</description>
-            </method>
-
-            <method>
-                <name>de.cubeisland.messageextractor.test.i18n.I18n#translateN</name>
-                <signature>
-                    <type>int</type>
-                    <type use-as="singular">java.lang.String</type>
-                    <type use-as="plural">java.lang.String</type>
-                    <type>java.lang.Object[]</type>
-                </signature>
-                <description>this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translateN method</description>
-            </method>
 
             <method>
                 <name>de.cubeisland.messageextractor.test.command.User#sendTranslated</name>
@@ -90,7 +69,6 @@
             <comments>${resource.load("./src/test/resources/header.txt")}</comments>
             <metadata>
                 <entry key="Project-Id-Version">PACKAGE VERSION</entry>
-                <entry key="POT-Creation-Date" variable="true">${date.get('yyyy-MM-dd HH:mm:ssZ')}</entry>
                 <entry key="Last-Translator">FULL NAME &lt;EMAIL@ADDRESS&gt;</entry>
             </metadata>
         </header>
