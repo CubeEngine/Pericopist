@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extractor charset="utf-8">
+
+    <catalog format="gettext">
+        <header>
+            <metadata>
+                <entry key="Project-Id-Version">package version</entry>
+                <entry key="POT-Creation-Date" variable="true">${date.get('yyyy-MM-dd HH:mm:ssZ')}</entry>
+            </metadata>
+        </header>
+    </catalog>
+
+</extractor>
