@@ -30,6 +30,8 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.cubeisland.messageextractor.configuration.MergeableArray;
+import de.cubeisland.messageextractor.configuration.MergeableArrayMode;
 import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.extractor.AbstractExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
@@ -75,7 +77,9 @@ import spoon.reflect.declaration.CtElement;
 @XmlRootElement(name = "source")
 public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 {
+    @MergeableArray(MergeableArrayMode.APPEND_BEFORE)
     private TranslatableExpression[] translatableExpressions;
+    @MergeableArray
     private String[] classpathEntries;
 
     /**

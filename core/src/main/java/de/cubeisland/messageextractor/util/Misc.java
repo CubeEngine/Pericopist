@@ -229,4 +229,57 @@ public class Misc
         reader.close();
         return content.toString();
     }
+
+    /**
+     * This method converts the specified primitive class into a related object class
+     *
+     * @param clazz the primitive class
+     *
+     * @return related object class
+     */
+    public static Class<?> getRelatedClass(Class<?> clazz)
+    {
+        if (!clazz.isPrimitive())
+        {
+            return clazz;
+        }
+
+        if (boolean.class.equals(clazz))
+        {
+            return Boolean.class;
+        }
+        if (byte.class.equals(clazz))
+        {
+            return Byte.class;
+        }
+        if (char.class.equals(clazz))
+        {
+            return Character.class;
+        }
+        if (double.class.equals(clazz))
+        {
+            return Double.class;
+        }
+        if (float.class.equals(clazz))
+        {
+            return Float.class;
+        }
+        if (int.class.equals(clazz))
+        {
+            return Integer.class;
+        }
+        if (long.class.equals(clazz))
+        {
+            return Long.class;
+        }
+        if (short.class.equals(clazz))
+        {
+            return Short.class;
+        }
+        if (void.class.equals(clazz))
+        {
+            return Void.class;
+        }
+        return null;
+    }
 }

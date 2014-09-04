@@ -38,9 +38,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -50,6 +54,8 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import de.cubeisland.messageextractor.configuration.Mergeable;
+import de.cubeisland.messageextractor.configuration.MergeableArray;
 import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.exception.ConfigurationNotFoundException;
 import de.cubeisland.messageextractor.exception.MessageCatalogException;
@@ -489,9 +495,155 @@ public class MessageCatalogFactory
         this.addCatalogConfiguration("gettext", GettextCatalogConfiguration.class);
     }
 
-    private void mergeObjects(Object child, Object parent)
+    private void mergeObjects(Object child, Object parent) throws ConfigurationException
     {
-        // TODO implement me
+        if (!parent.getClass().isAssignableFrom(child.getClass()))
+        {
+            return;
+        }
+
+        Class<?> clazz = parent.getClass();
+        while (clazz != null)
+        {
+            for (Field field : clazz.getDeclaredFields())
+            {
+                if (!field.isAccessible())
+                {
+                    field.setAccessible(true);
+                }
+
+                try
+                {
+                    Object childFieldObject = field.get(child);
+                    Object parentFieldObject = field.get(parent);
+
+                    if (parentFieldObject == null) // parent value does not exist, skip
+                    {
+                        continue;
+                    }
+
+                    if (childFieldObject == null) // child value does not exist, take parent
+                    {
+                        field.set(child, parentFieldObject);
+                        continue;
+                    }
+
+                    // parent and child value exists
+                    if (field.getType().isArray()) // field is array
+                    {
+                        this.mergeArray(field, child, childFieldObject, parentFieldObject);
+                    }
+                    else
+                    {
+                        if (this.isMergeable(field, childFieldObject)) // field is a mergeable field
+                        {
+                            this.mergeObjects(childFieldObject, parentFieldObject);
+                        }
+                    }
+                }
+                catch (IllegalAccessException e)
+                {
+                    throw new ConfigurationException("Couldn't merge the current configuration with the parent.", e);
+                }
+            }
+
+            clazz = clazz.getSuperclass();
+        }
+    }
+
+    private boolean isMergeable(Field field, Object value)
+    {
+        Class<?> valueClass = value.getClass();
+        if (valueClass.isPrimitive())
+        {
+            return false;
+        }
+
+        Mergeable mergeable = field.getAnnotation(Mergeable.class);
+        if (mergeable != null)
+        {
+            return mergeable.value();
+        }
+
+        mergeable = valueClass.getAnnotation(Mergeable.class);
+        return mergeable != null && mergeable.value();
+    }
+
+    private void mergeArray(Field field, Object instance, Object child, Object parent) throws IllegalAccessException
+    {
+        MergeableArray mergeableArray = field.getAnnotation(MergeableArray.class);
+        if (mergeableArray == null) // don't merge the array
+        {
+            return;
+        }
+
+        int childLength = Array.getLength(child);
+        int parentLength = Array.getLength(parent);
+
+        List<Object> list = new ArrayList<>(childLength + parentLength);
+
+        switch (mergeableArray.value()) // switch merge mode
+        {
+            case APPEND_BEHIND:
+                for (int i = 0; i < parentLength; i++)
+                {
+                    list.add(Array.get(parent, i));
+                }
+                for (int i = 0; i < childLength; i++)
+                {
+                    list.add(Array.get(child, i));
+                }
+                break;
+
+            case REPLACE_EXISTING_VALUES:
+                for (int i = 0; i < parentLength; i++)
+                {
+                    list.add(Array.get(parent, i));
+                }
+                for (int i = 0; i < childLength; i++)
+                {
+                    Object element = Array.get(child, i);
+
+                    int index = list.indexOf(element);
+                    if (index < 0)
+                    {
+                        list.add(element);
+                    }
+                    else
+                    {
+                        list.set(index, element);
+                    }
+                }
+                break;
+
+            case APPEND_BEFORE:
+                for (int i = 0; i < childLength; i++)
+                {
+                    list.add(Array.get(child, i));
+                }
+                for (int i = 0; i < parentLength; i++)
+                {
+                    list.add(Array.get(parent, i));
+                }
+                break;
+        }
+
+        Class<?> componentType = field.getType().getComponentType();
+        Object array = list.toArray((Object[]) Array.newInstance(Misc.getRelatedClass(componentType), list.size()));
+
+        if (componentType.isPrimitive()) // convert object array to primitive array
+        {
+            Object primitiveArray = Array.newInstance(componentType, Array.getLength(array));
+
+            for (int i = 0; i < Array.getLength(primitiveArray); i++)
+            {
+                Array.set(primitiveArray, i, Array.get(array, i));
+            }
+
+            array = primitiveArray;
+        }
+
+        field.set(instance, array);
     }
 
     /**

@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConverterNotFoundException;
+import de.cubeisland.messageextractor.util.Misc;
 import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtConditional;
 import spoon.reflect.code.CtExpression;
@@ -251,66 +252,13 @@ public class ConverterManager
      */
     private Class<?> toComponentType(Class<?> clazz, int dimension)
     {
-        Class<?> objectClass = this.getRelatedClass(clazz);
+        Class<?> objectClass = Misc.getRelatedClass(clazz);
         for (int i = 1; i < dimension; i++)
         {
             Object array = Array.newInstance(objectClass, 0);
             objectClass = array.getClass();
         }
         return objectClass;
-    }
-
-    /**
-     * This method converts the specified primitive class into a related object class
-     *
-     * @param clazz the primitive class
-     *
-     * @return related object class
-     */
-    private Class<?> getRelatedClass(Class<?> clazz)
-    {
-        if (!clazz.isPrimitive())
-        {
-            return clazz;
-        }
-
-        if (boolean.class.equals(clazz))
-        {
-            return Boolean.class;
-        }
-        if (byte.class.equals(clazz))
-        {
-            return Byte.class;
-        }
-        if (char.class.equals(clazz))
-        {
-            return Character.class;
-        }
-        if (double.class.equals(clazz))
-        {
-            return Double.class;
-        }
-        if (float.class.equals(clazz))
-        {
-            return Float.class;
-        }
-        if (int.class.equals(clazz))
-        {
-            return Integer.class;
-        }
-        if (long.class.equals(clazz))
-        {
-            return Long.class;
-        }
-        if (short.class.equals(clazz))
-        {
-            return Short.class;
-        }
-        if (void.class.equals(clazz))
-        {
-            return Void.class;
-        }
-        return null;
     }
 
     /**

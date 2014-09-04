@@ -29,10 +29,17 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 
+import de.cubeisland.messageextractor.configuration.Mergeable;
+import de.cubeisland.messageextractor.configuration.MergeableArray;
+import de.cubeisland.messageextractor.configuration.MergeableArrayMode;
+
+@Mergeable(true)
 @XmlRootElement(name = "header")
 public class HeaderConfiguration
 {
     private String comments;
+
+    @MergeableArray(MergeableArrayMode.REPLACE_EXISTING_VALUES)
     private MetadataEntry[] metadata;
 
     public String getComments()
@@ -95,6 +102,34 @@ public class HeaderConfiguration
         public boolean isVariable()
         {
             return this.variable;
+        }
+
+        @Override
+        public boolean equals(Object o)
+        {
+            if (this == o)
+            {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass())
+            {
+                return false;
+            }
+
+            MetadataEntry that = (MetadataEntry) o;
+
+            if (key != null ? !key.equals(that.key) : that.key != null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return key != null ? key.hashCode() : 0;
         }
     }
 }
