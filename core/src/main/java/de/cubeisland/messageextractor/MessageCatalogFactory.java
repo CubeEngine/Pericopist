@@ -34,6 +34,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -196,7 +197,7 @@ public class MessageCatalogFactory
      * <pre>
      * {@code
      * <?xml version="1.0" encoding="UTF-8"?>
-     * <extractor charset="utf-8">
+     * <extractor charset="utf-8" parent="path">
      *     <source language="LANGUAGE">
      *         ...
      *     </source>
@@ -230,26 +231,83 @@ public class MessageCatalogFactory
      */
     public MessageCatalog getMessageCatalog(String resource, Charset charset, Context velocityContext, Logger logger) throws MessageCatalogException
     {
+        if (velocityContext == null)
+        {
+            velocityContext = new ToolManager(false).createContext();
+        }
+
+        // creates velocity engine with log properties and initialises it
+        VelocityEngine velocityEngine = new VelocityEngine();
+        velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, SystemLogChute.class.getName());
+        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_LEVEL_KEY, "info");
+        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_SYSTEM_ERR_LEVEL_KEY, "warn");
+        velocityEngine.init();
+
+        MessageExtractorConfiguration extractorConfiguration = this.loadMessageExtractorConfiguration(resource, charset, velocityEngine, velocityContext);
+
+        if (extractorConfiguration.extractorConfiguration == null)
+        {
+            throw new ConfigurationException("The configuration does not have a source tag");
+        }
+        if (extractorConfiguration.catalogConfiguration == null)
+        {
+            throw new ConfigurationException("The configuration does not have a catalog tag");
+        }
+
+        return new MessageCatalog(extractorConfiguration.extractorConfiguration, extractorConfiguration.catalogConfiguration, logger);
+    }
+
+    /**
+     * This method loads the specified extractor configuration resource
+     *
+     * @param resource        the xml configuration resource
+     * @param charset         the charset of the configuration
+     * @param velocityEngine  used velocity engine
+     * @param velocityContext a velocity context which is used to evaluate the configuration
+     *
+     * @return MessageExtractorConfiguration which stores the parsed configurations
+     *
+     * @throws ConfigurationException
+     */
+    private MessageExtractorConfiguration loadMessageExtractorConfiguration(String resource, Charset charset, VelocityEngine velocityEngine, Context velocityContext) throws ConfigurationException
+    {
         URL configurationUrl = Misc.getResource(resource);
         if (configurationUrl == null)
         {
             throw new ConfigurationNotFoundException("The configuration resource '" + resource + "' was not found in file system or as URL.");
         }
 
-        if (velocityContext == null)
-        {
-            velocityContext = new ToolManager(false).createContext();
-        }
-
+        MessageExtractorConfiguration parent = null;
         Charset defaultCharset = charset;
         Node sourceNode = null;
         Node catalogNode = null;
 
-        Node rootNode = this.getRootNode(this.loadConfiguration(configurationUrl, velocityContext, charset));
+        Node rootNode = this.getRootNode(this.loadConfiguration(configurationUrl, velocityEngine, velocityContext, charset));
         Node charsetNode = rootNode.getAttributes().getNamedItem("charset");
         if (charsetNode != null)
         {
             defaultCharset = Charset.forName(charsetNode.getTextContent());
+        }
+
+        Node parentNode = rootNode.getAttributes().getNamedItem("parent");
+        if (parentNode != null)
+        {
+            String parentResource = parentNode.getTextContent();
+
+            // relative parent resource from current resource
+            try
+            {
+                if (!new File(parentResource).isAbsolute())
+                {
+                    File resourceFile = new File(resource).getCanonicalFile();
+                    parentResource = new File(resourceFile.getParent(), parentResource).getCanonicalPath();
+                }
+            }
+            catch (IOException ignored)
+            {
+            }
+
+            parent = this.loadMessageExtractorConfiguration(parentResource, charset, velocityEngine, velocityContext);
         }
 
         NodeList list = rootNode.getChildNodes();
@@ -266,74 +324,74 @@ public class MessageCatalogFactory
             }
         }
 
-        if (sourceNode == null)
+        Class<? extends ExtractorConfiguration> extractorConfigurationClass = null;
+        if (sourceNode != null)
         {
-            throw new ConfigurationException("The configuration does not have a source tag");
-        }
-        if (catalogNode == null)
-        {
-            throw new ConfigurationException("The configuration does not have a catalog tag");
-        }
-
-        Node sourceLanguageNode = sourceNode.getAttributes().getNamedItem("language");
-        if (sourceLanguageNode == null)
-        {
-            throw new UnknownSourceLanguageException("You must specify a language attribute to the source tag");
-        }
-        Class<? extends ExtractorConfiguration> extractorConfigurationClass = this.getExtractorConfigurationClass(sourceLanguageNode.getTextContent());
-        if (extractorConfigurationClass == null)
-        {
-            throw new UnknownSourceLanguageException("Unknown source language " + sourceLanguageNode.getTextContent());
+            Node sourceLanguageNode = sourceNode.getAttributes().getNamedItem("language");
+            if (sourceLanguageNode == null)
+            {
+                throw new UnknownSourceLanguageException("You must specify a language attribute to the source tag");
+            }
+            extractorConfigurationClass = this.getExtractorConfigurationClass(sourceLanguageNode.getTextContent());
+            if (extractorConfigurationClass == null)
+            {
+                throw new UnknownSourceLanguageException("Unknown source language " + sourceLanguageNode.getTextContent());
+            }
         }
 
-        Node catalogFormatNode = catalogNode.getAttributes().getNamedItem("format");
-        if (catalogFormatNode == null)
+        Class<? extends CatalogConfiguration> catalogConfigurationClass = null;
+        if (catalogNode != null)
         {
-            throw new UnknownCatalogFormatException("You must specify a format attribute to the catalog tag");
-        }
-        Class<? extends CatalogConfiguration> catalogConfigurationClass = this.getCatalogConfigurationClass(catalogFormatNode.getTextContent());
-        if (catalogConfigurationClass == null)
-        {
-            throw new UnknownCatalogFormatException("Unknown catalog format " + catalogFormatNode.getTextContent());
+            Node catalogFormatNode = catalogNode.getAttributes().getNamedItem("format");
+            if (catalogFormatNode == null)
+            {
+                throw new UnknownCatalogFormatException("You must specify a format attribute to the catalog tag");
+            }
+            catalogConfigurationClass = this.getCatalogConfigurationClass(catalogFormatNode.getTextContent());
+            if (catalogConfigurationClass == null)
+            {
+                throw new UnknownCatalogFormatException("Unknown catalog format " + catalogFormatNode.getTextContent());
+            }
         }
 
-        return this.createMessageCatalog(extractorConfigurationClass, sourceNode, catalogConfigurationClass, catalogNode, defaultCharset, logger);
-    }
-
-    /**
-     * This method creates a MessageCatalog instance. It uses the JAXB XML serializer to deserialize the extractor and catalog nodes.
-     *
-     * @param extractorConfigurationClass the class of the ExtractorConfiguration
-     * @param sourceNode                  the node which describes the ExtractorConfiguration
-     * @param catalogConfigurationClass   the class of the CatalogFormat
-     * @param catalogNode                 the node which describes the CatalogFormat
-     * @param charset                     The charset which shall be used for the configurations
-     * @param logger                      the logger for the message catalog
-     *
-     * @return a message catalog instance
-     *
-     * @throws MessageCatalogException if a JAXB exception occurs or the message catalog can't be created
-     */
-    private MessageCatalog createMessageCatalog(Class<? extends ExtractorConfiguration> extractorConfigurationClass, Node sourceNode, Class<? extends CatalogConfiguration> catalogConfigurationClass, Node catalogNode, Charset charset, Logger logger) throws MessageCatalogException
-    {
         try
         {
             JAXBContext jaxbContext = JAXBContext.newInstance(extractorConfigurationClass, catalogConfigurationClass);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-            ExtractorConfiguration extractorConfiguration = extractorConfigurationClass.cast(unmarshaller.unmarshal(sourceNode));
-            CatalogConfiguration catalogConfiguration = catalogConfigurationClass.cast(unmarshaller.unmarshal(catalogNode));
-
-            if (extractorConfiguration.getCharset() == null)
+            ExtractorConfiguration extractorConfiguration = null;
+            if (sourceNode != null)
             {
-                extractorConfiguration.setCharset(charset);
-            }
-            if (catalogConfiguration.getCharset() == null)
-            {
-                catalogConfiguration.setCharset(charset);
+                extractorConfiguration = extractorConfigurationClass.cast(unmarshaller.unmarshal(sourceNode));
+
+                if (parent != null && parent.extractorConfiguration != null)
+                {
+                    this.mergeObjects(extractorConfiguration, parent.extractorConfiguration);
+                }
+
+                if (extractorConfiguration.getCharset() == null)
+                {
+                    extractorConfiguration.setCharset(defaultCharset);
+                }
             }
 
-            return new MessageCatalog(extractorConfiguration, catalogConfiguration, logger);
+            CatalogConfiguration catalogConfiguration = null;
+            if (catalogNode != null)
+            {
+                catalogConfiguration = catalogConfigurationClass.cast(unmarshaller.unmarshal(catalogNode));
+
+                if (parent != null && parent.catalogConfiguration != null)
+                {
+                    this.mergeObjects(catalogConfiguration, parent.catalogConfiguration);
+                }
+
+                if (catalogConfiguration.getCharset() == null)
+                {
+                    catalogConfiguration.setCharset(defaultCharset);
+                }
+            }
+
+            return new MessageExtractorConfiguration(extractorConfiguration, catalogConfiguration);
         }
         catch (JAXBException e)
         {
@@ -344,23 +402,17 @@ public class MessageCatalogFactory
     /**
      * This method loads the configuration and evaluates it with the specified context
      *
-     * @param resource the resource of the configuration
-     * @param context  the velocity context
-     * @param charset  the charset of the configuration
+     * @param resource       the resource of the configuration
+     * @param velocityEngine used velocity engine
+     * @param context        the velocity context
+     * @param charset        the charset of the configuration
      *
      * @return the configuration
      *
      * @throws ConfigurationException if the resource couldn't be read
      */
-    private String loadConfiguration(URL resource, Context context, Charset charset) throws ConfigurationException
+    private String loadConfiguration(URL resource, VelocityEngine velocityEngine, Context context, Charset charset) throws ConfigurationException
     {
-        // creates velocity engine with log properties and initialises it
-        VelocityEngine velocityEngine = new VelocityEngine();
-        velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, SystemLogChute.class.getName());
-        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_LEVEL_KEY, "info");
-        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_SYSTEM_ERR_LEVEL_KEY, "warn");
-        velocityEngine.init();
-
         // reads the configuration file
         String configuration;
         try
@@ -435,5 +487,25 @@ public class MessageCatalogFactory
     {
         this.addExtractorConfiguration("java", JavaExtractorConfiguration.class);
         this.addCatalogConfiguration("gettext", GettextCatalogConfiguration.class);
+    }
+
+    private void mergeObjects(Object child, Object parent)
+    {
+        // TODO implement me
+    }
+
+    /**
+     * This is a helper class which stores the extractor configuration and catalog configuration
+     */
+    private class MessageExtractorConfiguration
+    {
+        public final ExtractorConfiguration extractorConfiguration;
+        public final CatalogConfiguration catalogConfiguration;
+
+        public MessageExtractorConfiguration(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration)
+        {
+            this.extractorConfiguration = extractorConfiguration;
+            this.catalogConfiguration = catalogConfiguration;
+        }
     }
 }
