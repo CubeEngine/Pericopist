@@ -28,6 +28,8 @@ import org.fedorahosted.tennera.jgettext.Message;
 import java.util.Collection;
 import java.util.List;
 
+import de.cubeisland.messageextractor.message.SourceReference;
+
 class TranslatableGettextMessage extends GettextMessage
 {
     private final String domain;
@@ -153,6 +155,10 @@ class TranslatableGettextMessage extends GettextMessage
         for (String extractedComment : this.getExtractedComments())
         {
             message.addExtractedComment(extractedComment);
+        }
+        for (SourceReference sourceReference : this.getSourceReferences())
+        {
+            message.addSourceReference(sourceReference.getPath(), sourceReference.getLine());
         }
 
         for (String format : this.getFormats())
