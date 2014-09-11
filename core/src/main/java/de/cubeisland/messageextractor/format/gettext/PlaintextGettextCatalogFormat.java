@@ -81,7 +81,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             try
             {
                 catalog.addMessage(this.getHeaderMessage(catalogConfig.getHeaderConfiguration()));
-                messageCount--;
             }
             catch (IOException e)
             {
@@ -267,7 +266,51 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      */
     private TranslatableGettextMessage getPreviousMessage(Message current, List<TranslatableGettextMessage> oldMessages)
     {
-        return oldMessages.get(0); // TODO compare current with old messages and return the best one.
+        boolean hasPlural = current.getMsgidPlural() != null;
+
+        // check whether a message has the same msgid
+        for (TranslatableGettextMessage message : oldMessages)
+        {
+            boolean samePluralState = (hasPlural && message.hasPlural()) || (!hasPlural && !message.hasPlural());
+            if (current.getMsgid().equals(message.getSingular()) && samePluralState)
+            {
+                return message;
+            }
+        }
+
+        // if message is a plural message, check whether a message has the same plural msgid
+        if (hasPlural)
+        {
+            for (TranslatableGettextMessage message : oldMessages)
+            {
+                if (!message.hasPlural())
+                {
+                    continue;
+                }
+
+                if (current.getMsgidPlural().equals(message.getPlural()))
+                {
+                    return message;
+                }
+            }
+        }
+
+        // take the first message with the same context
+        for (TranslatableGettextMessage message : oldMessages)
+        {
+            boolean hasContext = current.getMsgctxt() != null;
+            if (message.hasContext() && hasContext)
+            {
+                return message;
+            }
+            else if (!message.hasContext() && !hasContext)
+            {
+                return message;
+            }
+        }
+
+        // take the first message
+        return oldMessages.get(0);
     }
 
     @Override
