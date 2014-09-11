@@ -93,6 +93,16 @@ public abstract class CallableExpression extends JavaExpression
         return this.getPluralIndex() > -1;
     }
 
+    public int getContextIndex()
+    {
+        return this.getFirstIndexOf(CallableSignatureTypeUsage.CONTEXT);
+    }
+
+    public boolean hasContext()
+    {
+        return this.getContextIndex() > -1;
+    }
+
     /**
      * {@inheritDoc}
      *

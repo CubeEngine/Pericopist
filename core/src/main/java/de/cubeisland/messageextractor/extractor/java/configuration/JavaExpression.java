@@ -36,6 +36,7 @@ public abstract class JavaExpression implements TranslatableExpression
 {
     private String name;
     private String description;
+    private String defaultContext;
 
     /**
      * This method returns the name of the translatable expression
@@ -82,6 +83,27 @@ public abstract class JavaExpression implements TranslatableExpression
     public void setDescription(String description)
     {
         this.description = description;
+    }
+
+    /**
+     * This method returns the default context which shall be added to every message extracted because of this expression
+     *
+     * @return default context
+     */
+    public String getDefaultContext()
+    {
+        return defaultContext;
+    }
+
+    /**
+     * This method sets a default context to every message which was extracted because of this expression
+     *
+     * @param defaultContext default context
+     */
+    @XmlElement(name = "context")
+    public void setDefaultContext(String defaultContext)
+    {
+        this.defaultContext = defaultContext;
     }
 
     /**

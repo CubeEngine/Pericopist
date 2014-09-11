@@ -49,6 +49,20 @@ public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
             return;
         }
 
+        String context = null;
+        if (annotation.getContextField() != null)
+        {
+            Object contextValue = element.getElementValue(annotation.getContextField());
+            if (contextValue != null)
+            {
+                context = contextValue.toString();
+                if (context.isEmpty())
+                {
+                    context = null;
+                }
+            }
+        }
+
         for (Entry<String, Object> fieldEntry : element.getElementValues().entrySet())
         {
             if (!annotation.hasField(fieldEntry.getKey()))
@@ -64,7 +78,7 @@ public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
                     continue;
                 }
 
-                this.addMessage(annotation, element, null, messages, null); // TODO add content
+                this.addMessage(annotation, element, context, messages, null);
             }
         }
     }

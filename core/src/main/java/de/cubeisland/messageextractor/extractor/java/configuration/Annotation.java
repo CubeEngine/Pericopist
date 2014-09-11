@@ -52,6 +52,7 @@ import spoon.reflect.declaration.CtElement;
 @XmlRootElement(name = "annotation")
 public class Annotation extends JavaExpression
 {
+    private String contextField;
     private String[] fields;
 
     /**
@@ -101,6 +102,27 @@ public class Annotation extends JavaExpression
             }
         }
         return false;
+    }
+
+    /**
+     * This method returns the context field name of the annotation
+     *
+     * @return context field name
+     */
+    public String getContextField()
+    {
+        return contextField;
+    }
+
+    /**
+     * This method sets the context field name of the annotation
+     *
+     * @param contextField context field name
+     */
+    @XmlElement(name = "contextField")
+    public void setContextField(String contextField)
+    {
+        this.contextField = contextField;
     }
 
     @Override

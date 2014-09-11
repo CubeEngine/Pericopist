@@ -26,4 +26,5 @@ package de.cubeisland.messageextractor.test;
 public @interface TranslatableAnnotation
 {
     String value();
+    String context() default "";
 }

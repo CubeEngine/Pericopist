@@ -111,6 +111,13 @@ public class CallableSignatureType
          * from that signature type
          */
         @XmlEnumValue("plural")
-        PLURAL
+        PLURAL,
+
+        /**
+         * This value means that the messageextractor tries to extract the context
+         * from that signature type
+         */
+        @XmlEnumValue("context") // implement context
+        CONTEXT
     }
 }

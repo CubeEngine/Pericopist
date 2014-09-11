@@ -46,7 +46,7 @@ import de.cubeisland.messageextractor.message.TranslatableMessage;
 import de.cubeisland.messageextractor.util.ResourceLoader;
 
 @RunWith(JUnit4.class)
-public class TestCasesJavaGettextCatalog
+public class TestCasesJavaGettextCatalog // TODO add update catalog and context tests
 {
     private File targetCatalogFile;
     private File catalogFile;

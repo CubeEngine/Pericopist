@@ -23,6 +23,7 @@
  */
 package de.cubeisland.messageextractor.extractor.java.processor;
 
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -90,8 +91,13 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
 
     protected void addMessage(JavaExpression javaExpression, E element, String context, String[] singulars, String[] plurals)
     {
-        SourceReference sourceReference = new SourceReference(Misc.getRelativizedFile(this.getConfiguration().getDirectory(), element.getPosition().getFile()), element.getPosition()
-                                                                                                                                                                       .getLine(), javaExpression);
+        File file = Misc.getRelativizedFile(this.getConfiguration().getDirectory(), element.getPosition().getFile());
+        SourceReference sourceReference = new SourceReference(file, element.getPosition().getLine(), javaExpression);
+
+        if (context == null)
+        {
+            context = javaExpression.getDefaultContext();
+        }
 
         if (javaExpression.hasPlural())
         {
