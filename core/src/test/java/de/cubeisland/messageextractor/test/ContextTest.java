@@ -23,7 +23,18 @@
  */
 package de.cubeisland.messageextractor.test;
 
-public @interface TranslatableAnnotation
+import de.cubeisland.messageextractor.test.i18n.DefaultI18n;
+import de.cubeisland.messageextractor.test.i18n.I18n;
+
+public class ContextTest
 {
-    String value();
+    @TranslatableContextAnnotation("A message with the default context extracted from annotation.")
+    public void method()
+    {
+        @TranslatableContextAnnotation(value = "A message with a specific context extracted from annotation.", context = "annotation context")
+        I18n i18n = new DefaultI18n();
+
+        i18n.translateC("method context", "A message with a specific context extracted from method.");
+        i18n.translateC(null, "A message with the default context extracted from method.");
+    }
 }

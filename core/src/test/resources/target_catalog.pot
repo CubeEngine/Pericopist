@@ -5,74 +5,59 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-08-18 13:34:20+0200\n"
+"POT-Creation-Date: 2014-09-11 21:45:26+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/MessageExtractorTest.java:46
 msgid ""
 "One can extract messages from special methods, constructors and annotation "
 "fields"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translateN method
 #: de/cubeisland/messageextractor/test/MessageExtractorTest.java:49
 msgid "One monkey is better than sheep"
 msgid_plural "We've %d monkeys"
 msgstr[0] ""
 msgstr[1] ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/MessageExtractorTest.java:44
 msgid ""
 "The main task of the project is to generate a message catalog containing all "
 "the string literals of a project by parsing its source tree."
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/MessageExtractorTest.java:47
 msgid "The test is an example of how it works and shows examples."
 msgstr ""
 
-#. This message was extracted with the de.cubeisland.messageextractor.test.command.Command annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:54
 msgid ""
 "This annotation tries to write the private constant 'this is a private test "
 "constant.' into the catalog."
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/MessageExtractorTest.java:45
 msgid "This is the core module of the messageextractor."
 msgstr ""
 
-#. this message was extracted with a de.cubeisland.messageextractor.test.MessageExtractorTest constructor
 #: de/cubeisland/messageextractor/test/MessageExtractorTest.java:35
 msgid "This is the start of the messageextractor test"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
-#. this message was extracted with the de.cubeisland.messageextractor.test.command.User#sendTranslated method
 #: de/cubeisland/messageextractor/test/MultipleContextTest.java:36
 #: de/cubeisland/messageextractor/test/MultipleContextTest.java:41
 #: de/cubeisland/messageextractor/test/StringTest.java:40
 msgid "a concatenated string"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:45
 msgid "a double: 1.04"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:44
 msgid "a float: 1.04"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
-#. this message was extracted with the de.cubeisland.messageextractor.test.command.User#sendTranslated method
 #: de/cubeisland/messageextractor/test/MultipleContextTest.java:30
 #: de/cubeisland/messageextractor/test/MultipleContextTest.java:33
 #: de/cubeisland/messageextractor/test/MultipleContextTest.java:39
@@ -81,295 +66,260 @@ msgstr ""
 msgid "a normal string"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:61
 msgid "a null test test"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:53
 msgid "a static method invocation: hello"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:43
 msgid "an integer: 1"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:77
 msgid ""
 "binary operator test ((Object)Integer.valueOf(2) instanceof String): false"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:71
 msgid "binary operator test (4 % 3): 1"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:75
 msgid "binary operator test (4 % 3.3d): 0.7000000000000002"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:67
 msgid "binary operator test (4 + 3.323f): 7.323"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:66
 msgid "binary operator test (4 - 3): 1"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:69
 msgid "binary operator test (4 == 3): false"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:70
 msgid "binary operator test (4 == 4): true"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:68
 msgid "binary operator test (4 ^ 3): 7"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:72
 msgid "binary operator test (4321 << 3): 34568"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:73
 msgid "binary operator test (4321 >> 3): 540"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:74
 msgid "binary operator test (4321 >>> 3): 540"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:76
 msgid "binary operator test (Integer.valueOf(2) instanceof Number): true"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/MethodI18nTest.java:52
 msgid "extracted from DefaultI18n class"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/MethodI18nTest.java:44
 msgid "extracted from ExtendedI18n class"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/MethodI18nTest.java:36
 msgid ""
 "extracted from I18n interface with polymorphism. uses ExtendedI18n class"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.command.User#sendTranslated method
 #: de/cubeisland/messageextractor/test/MethodCommandSenderTest.java:36
 msgid "extracted from User class"
 msgstr ""
 
-#. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:53
 msgid "extracted from an annotation as a field of another annotation"
 msgstr ""
 
-#. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:29
 msgid "extracted from an annotation with a class target"
 msgstr ""
 
-#. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:32
 msgid "extracted from an annotation with a constant field target"
 msgstr ""
 
-#. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:39
 msgid "extracted from an annotation with a constructor target"
 msgstr ""
 
-#. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:35
 msgid "extracted from an annotation with a field target"
 msgstr ""
 
-#. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:57
 msgid "extracted from an annotation with a local parameter target"
 msgstr ""
 
-#. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:45
 msgid "extracted from an annotation with a method target"
 msgstr ""
 
-#. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:55
 msgid "extracted from an annotation with a parameter target"
 msgstr ""
 
-#. This message was extracted with the de.cubeisland.messageextractor.test.TranslatableArrayAnnotation annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:38
 msgid "extracted from an annotation with an array field"
 msgstr ""
 
-#. This message was extracted with the de.cubeisland.messageextractor.test.command.Command annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:46
 msgid "extracted from the desc field of the command annotation"
 msgstr ""
 
-#. This message was extracted with the de.cubeisland.messageextractor.test.command.Command annotation
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:46
 msgid "extracted from the usage field of the command annotation"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/ConstantTest.java:40
 msgid ""
 "extracted with a constant from MessageExtractorTest class: I'm a test const "
 "for another test class."
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/ConstantTest.java:47
 msgid "extracted with a file constant: ."
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/ConstantTest.java:41
 msgid ""
 "extracted with a method invocation on a constant from MessageExtractorTest "
 "class I'm a test const for another test class."
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/ConstantTest.java:43
 msgid "extracted with a private int constant: 42"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/ConstantTest.java:45
 msgid ""
 "extracted with an enum constant: TranslatableEnum{text='This is the 1st enum "
 "instance.'}"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:58
 msgid "method invocation with array parameters: test"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:64
 msgid "method invocation with array test length: 1"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:62
 #: de/cubeisland/messageextractor/test/StringTest.java:63
 msgid "method invocation with array test length: 2"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:57
 msgid "method invocation with more arguments than parameter: it's a test"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:59
 #: de/cubeisland/messageextractor/test/StringTest.java:60
 msgid "method invocation without last parameter: it's a test"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:52
 msgid "method invocation: method iNVOCATION"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:55
 msgid "new class + method invocation: this is a test"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:54
 msgid "new class invocation: testFile.tmp:42"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:41
 msgid "no"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translateN method
 #: de/cubeisland/messageextractor/test/MethodI18nTest.java:53
 msgid "singular of a plural message from DefaultI18n class"
 msgid_plural "plural of the plural message from DefaultI18n class"
 msgstr[0] ""
 msgstr[1] ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translateN method
 #: de/cubeisland/messageextractor/test/MethodI18nTest.java:45
 msgid "singular of a plural message from ExtendedI18n class"
 msgid_plural "plural of the plural message from ExtendedI18n class"
 msgstr[0] ""
 msgstr[1] ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.command.User#sendTranslatedN method
 #: de/cubeisland/messageextractor/test/MethodCommandSenderTest.java:37
 msgid "singular of a plural message from User class"
 msgid_plural "plural of the plural message from User class"
 msgstr[0] ""
 msgstr[1] ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translateN method
 #: de/cubeisland/messageextractor/test/MethodI18nTest.java:37
 msgid "singular of a plural message from polymorphism I18n test"
 msgid_plural "plural of the plural message from polymorphism I18n test"
 msgstr[0] ""
 msgstr[1] ""
 
-#. this message was extracted with a de.cubeisland.messageextractor.test.MessageExtractorTest constructor
 #: de/cubeisland/messageextractor/test/ConstructorTest.java:33
 msgid "this message was extracted from the MessageExtractorTest constructor."
 msgstr ""
 
-#. this message was extracted with a de.cubeisland.messageextractor.test.exception.WrongUsageException constructor
 #: de/cubeisland/messageextractor/test/ConstructorTest.java:37
 msgid "this message was extracted from the WrongUsageException constructor."
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:48
 msgid "unary operator test +1: 1"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:49
 msgid "unary operator test -1: -1"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:50
 msgid "unary operator test ~1: -2"
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/MessageExtractorTest.java:42
 msgid "welcome %s to the messageextractor test."
 msgstr ""
 
-#. this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:41
 msgid "yes"
+msgstr ""
+
+#: de/cubeisland/messageextractor/test/ContextTest.java:31
+msgctxt "This is a default context"
+msgid "A message with the default context extracted from annotation."
+msgstr ""
+
+#: de/cubeisland/messageextractor/test/ContextTest.java:38
+msgctxt "This is a default context"
+msgid "A message with the default context extracted from method."
+msgstr ""
+
+#: de/cubeisland/messageextractor/test/ContextTest.java:34
+msgctxt "annotation context"
+msgid "A message with a specific context extracted from annotation."
+msgstr ""
+
+#: de/cubeisland/messageextractor/test/ContextTest.java:37
+msgctxt "method context"
+msgid "A message with a specific context extracted from method."
 msgstr ""

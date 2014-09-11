@@ -27,5 +27,7 @@ public interface I18n
 {
     String translate(String msg, Object... args);
 
+    String translateC(String context, String msg, Object... args);
+
     String translateN(int count, String singular, String plural, Object... args);
 }

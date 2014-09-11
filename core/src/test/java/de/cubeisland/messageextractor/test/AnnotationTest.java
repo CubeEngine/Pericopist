@@ -29,7 +29,7 @@ import de.cubeisland.messageextractor.test.command.CommandParameter;
 @TranslatableAnnotation("extracted from an annotation with a class target")
 public class AnnotationTest
 {
-    @TranslatableAnnotation(value = "extracted from an annotation with a constant field target", context = "context")
+    @TranslatableAnnotation("extracted from an annotation with a constant field target")
     private static final String TEST_CONST = "this is a private test constant.";
 
     @TranslatableAnnotation("extracted from an annotation with a field target")

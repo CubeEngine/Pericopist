@@ -36,4 +36,10 @@ public class DefaultI18n implements I18n
     {
         return null;
     }
+
+    @Override
+    public String translateC(String context, String msg, Object... args)
+    {
+        return null;
+    }
 }

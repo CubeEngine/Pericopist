@@ -148,7 +148,14 @@ public class ConverterManager
         String[] strings = new String[objects.length];
         for (int i = 0; i < objects.length; i++)
         {
-            strings[i] = objects[i].toString();
+            if (objects[i] == null)
+            {
+                strings[i] = null;
+            }
+            else
+            {
+                strings[i] = objects[i].toString();
+            }
         }
         return strings;
     }

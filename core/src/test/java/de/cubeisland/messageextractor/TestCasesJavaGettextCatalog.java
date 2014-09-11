@@ -46,7 +46,7 @@ import de.cubeisland.messageextractor.message.TranslatableMessage;
 import de.cubeisland.messageextractor.util.ResourceLoader;
 
 @RunWith(JUnit4.class)
-public class TestCasesJavaGettextCatalog // TODO add update catalog and context tests
+public class TestCasesJavaGettextCatalog // TODO add update catalog tests
 {
     private File targetCatalogFile;
     private File catalogFile;
@@ -104,7 +104,9 @@ public class TestCasesJavaGettextCatalog // TODO add update catalog and context 
         Assert.assertEquals("de.cubeisland.messageextractor.test.MessageExtractorTest", config.getJavaExpressions()[5].getName());
         Assert.assertEquals("de.cubeisland.messageextractor.test.exception.WrongUsageException", config.getJavaExpressions()[6].getName());
         Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translate", config.getJavaExpressions()[7].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translateN", config.getJavaExpressions()[8].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translateC", config.getJavaExpressions()[8].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translateN", config.getJavaExpressions()[9].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.TranslatableContextAnnotation", config.getJavaExpressions()[10].getName());
     }
 
     @Test
