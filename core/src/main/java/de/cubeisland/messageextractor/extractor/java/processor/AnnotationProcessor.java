@@ -64,7 +64,7 @@ public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
                     continue;
                 }
 
-                this.addMessage(annotation, element, messages, null);
+                this.addMessage(annotation, element, null, messages, null); // TODO add content
             }
         }
     }

@@ -26,12 +26,13 @@ package de.cubeisland.messageextractor.extractor.java.configuration;
 import javax.xml.bind.annotation.XmlElement;
 
 import de.cubeisland.messageextractor.exception.ConfigurationException;
+import de.cubeisland.messageextractor.message.TranslatableExpression;
 import spoon.reflect.declaration.CtElement;
 
 /**
  * The TranslatableExpression classes describe where the messages shall be extracted.
  */
-public abstract class TranslatableExpression
+public abstract class JavaExpression implements TranslatableExpression
 {
     private String name;
     private String description;
@@ -64,6 +65,7 @@ public abstract class TranslatableExpression
      *
      * @return a description of the translatable expression
      */
+    @Override
     public String getDescription()
     {
         return this.description;

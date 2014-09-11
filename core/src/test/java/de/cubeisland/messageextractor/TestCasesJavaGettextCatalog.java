@@ -96,15 +96,15 @@ public class TestCasesJavaGettextCatalog
         Assert.assertEquals("UTF-8", config.getCharset().displayName());
         Assert.assertArrayEquals(System.getProperty("java.class.path").split(File.pathSeparator), config.getClasspathEntries());
         Assert.assertEquals(new File("./src/test/java").getAbsolutePath(), config.getDirectory().getAbsolutePath());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.command.User#sendTranslated", config.getTranslatableExpressions()[0].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.command.User#sendTranslatedN", config.getTranslatableExpressions()[1].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.command.Command", config.getTranslatableExpressions()[2].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.TranslatableAnnotation", config.getTranslatableExpressions()[3].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.TranslatableArrayAnnotation", config.getTranslatableExpressions()[4].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.MessageExtractorTest", config.getTranslatableExpressions()[5].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.exception.WrongUsageException", config.getTranslatableExpressions()[6].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translate", config.getTranslatableExpressions()[7].getName());
-        Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translateN", config.getTranslatableExpressions()[8].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.command.User#sendTranslated", config.getJavaExpressions()[0].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.command.User#sendTranslatedN", config.getJavaExpressions()[1].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.command.Command", config.getJavaExpressions()[2].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.TranslatableAnnotation", config.getJavaExpressions()[3].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.TranslatableArrayAnnotation", config.getJavaExpressions()[4].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.MessageExtractorTest", config.getJavaExpressions()[5].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.exception.WrongUsageException", config.getJavaExpressions()[6].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translate", config.getJavaExpressions()[7].getName());
+        Assert.assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translateN", config.getJavaExpressions()[8].getName());
     }
 
     @Test

@@ -50,7 +50,7 @@ import spoon.reflect.declaration.CtElement;
  * </pre>
  */
 @XmlRootElement(name = "annotation")
-public class Annotation extends TranslatableExpression
+public class Annotation extends JavaExpression
 {
     private String[] fields;
 

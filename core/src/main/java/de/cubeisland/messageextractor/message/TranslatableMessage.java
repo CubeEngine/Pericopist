@@ -71,7 +71,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         return this.plural;
     }
 
-    public void addOccurrence(SourceReference sourceReference)
+    public void addSourceReference(SourceReference sourceReference)
     {
         this.sourceReferences.add(sourceReference);
     }

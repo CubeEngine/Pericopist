@@ -69,7 +69,7 @@ import spoon.reflect.declaration.CtElement;
  * </pre>
  *
  * The translatables tag has to be filled with information about the
- * {@link de.cubeisland.messageextractor.extractor.java.configuration.TranslatableExpression} subclasses.
+ * {@link JavaExpression} subclasses.
  *
  * @see de.cubeisland.messageextractor.MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
  * @see de.cubeisland.messageextractor.extractor.java.JavaMessageExtractor
@@ -78,7 +78,7 @@ import spoon.reflect.declaration.CtElement;
 public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 {
     @MergeableArray(MergeableArrayMode.APPEND_BEFORE)
-    private TranslatableExpression[] translatableExpressions;
+    private JavaExpression[] javaExpressions;
     @MergeableArray
     private String[] classpathEntries;
 
@@ -87,27 +87,27 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
      *
      * @return TranslatableExpression instances
      */
-    public TranslatableExpression[] getTranslatableExpressions()
+    public JavaExpression[] getJavaExpressions()
     {
-        if (this.translatableExpressions == null)
+        if (this.javaExpressions == null)
         {
-            return new TranslatableExpression[0];
+            return new JavaExpression[0];
         }
-        return this.translatableExpressions;
+        return this.javaExpressions;
     }
 
     /**
      * This method sets the TranslatableExpression instances describing where the messages shall be extracted.
      *
-     * @param translatableExpressions TranslatableExpression instances
+     * @param javaExpressions TranslatableExpression instances
      */
     @XmlElementWrapper(name = "translatables")
     @XmlElements({
             @XmlElement(name = "method", type = Method.class), @XmlElement(name = "annotation", type = Annotation.class), @XmlElement(name = "constructor", type = Constructor.class)
     })
-    public void setTranslatableExpressions(TranslatableExpression... translatableExpressions)
+    public void setJavaExpressions(JavaExpression... javaExpressions)
     {
-        this.translatableExpressions = translatableExpressions;
+        this.javaExpressions = javaExpressions;
     }
 
     /**
@@ -148,7 +148,7 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
     @SuppressWarnings("unchecked")
     public <T> T getTranslatable(Class<T> clazz, CtElement element)
     {
-        for (TranslatableExpression expression : this.getTranslatableExpressions())
+        for (JavaExpression expression : this.getJavaExpressions())
         {
             // checks whether expression is a subclass of the specified class
             if (!clazz.isAssignableFrom(expression.getClass()))
@@ -174,12 +174,12 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
     @Override
     public void validate() throws ConfigurationException
     {
-        if (this.getTranslatableExpressions().length == 0)
+        if (this.getJavaExpressions().length == 0)
         {
             throw new ConfigurationException("No translatable expression given!");
         }
 
-        for (TranslatableExpression expression : this.getTranslatableExpressions())
+        for (JavaExpression expression : this.getJavaExpressions())
         {
             expression.validate();
         }

@@ -70,6 +70,6 @@ public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvo
             }
         }
 
-        this.addMessage(callableExpression, element, singulars, plurals);
+        this.addMessage(callableExpression, element, null, singulars, plurals); // TODO add content
     }
 }

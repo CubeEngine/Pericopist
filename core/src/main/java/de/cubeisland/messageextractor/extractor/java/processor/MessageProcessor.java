@@ -27,12 +27,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.cubeisland.messageextractor.exception.IllegalTranslatableMessageException;
+import de.cubeisland.messageextractor.extractor.java.configuration.JavaExpression;
 import de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration;
-import de.cubeisland.messageextractor.extractor.java.configuration.TranslatableExpression;
 import de.cubeisland.messageextractor.extractor.java.converter.ConverterManager;
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.SourceReference;
+import de.cubeisland.messageextractor.message.TranslatableMessage;
 import de.cubeisland.messageextractor.util.Misc;
 import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtExpression;
@@ -63,7 +64,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         return messageStore;
     }
 
-    protected String[] getMessages(CtExpression<?> expression, TranslatableExpression translatableExpression)
+    protected String[] getMessages(CtExpression<?> expression, JavaExpression javaExpression)
     {
         try
         {
@@ -78,20 +79,21 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             builder.append("\nExpression: ");
             builder.append(expression.getParent().toString());
             builder.append("\nTranslatable-Expression-Type: ");
-            builder.append(translatableExpression.getClass().getSimpleName());
+            builder.append(javaExpression.getClass().getSimpleName());
             builder.append("\nTranslatable-Expression-Name: ");
-            builder.append(translatableExpression);
+            builder.append(javaExpression);
 
             this.getLogger().log(Level.WARNING, builder.toString(), e.getCause());
         }
         return null;
     }
 
-    protected void addMessage(TranslatableExpression translatableExpression, E element, String[] singulars, String[] plurals)
+    protected void addMessage(JavaExpression javaExpression, E element, String context, String[] singulars, String[] plurals)
     {
-        SourceReference sourceReference = new SourceReference(Misc.getRelativizedFile(this.getConfiguration().getDirectory(), element.getPosition().getFile()), element.getPosition().getLine());
+        SourceReference sourceReference = new SourceReference(Misc.getRelativizedFile(this.getConfiguration().getDirectory(), element.getPosition().getFile()), element.getPosition()
+                                                                                                                                                                       .getLine(), javaExpression);
 
-        if (translatableExpression.hasPlural())
+        if (javaExpression.hasPlural())
         {
             if (plurals.length > 1)
             {
@@ -109,20 +111,44 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
                 return;
             }
 
-            this.getMessageStore().addMessage(singulars[0], plurals[0], sourceReference, translatableExpression.getDescription());
-        }
-        else
-        {
-            for (String message : singulars)
+            TranslatableMessage pluralMessage = this.getMessageStore().getMessage(context, singulars[0]);
+            if (pluralMessage != null && (!pluralMessage.hasPlural() || !pluralMessage.getPlural().equals(plurals[0])))
             {
-                if (message.isEmpty())
-                {
-                    this.getLogger().info("The singular message can't be an empty string. Occurrence: " + sourceReference);
-                    continue;
-                }
-
-                this.getMessageStore().addMessage(message, null, sourceReference, translatableExpression.getDescription());
+                throw new IllegalArgumentException(); // TODO modify exception
             }
+            else if (pluralMessage == null)
+            {
+                pluralMessage = new TranslatableMessage(context, singulars[0], plurals[0]);
+                this.getMessageStore().addMessage(pluralMessage);
+            }
+
+            pluralMessage.addSourceReference(sourceReference);
+            // TODO add extractedComments! write method to load it (source reference and element.getPosition is needed)
+
+            return;
+        }
+
+        for (String singular : singulars)
+        {
+            if (singular.isEmpty())
+            {
+                this.getLogger().info("The singular message can't be an empty string. Occurrence: " + sourceReference);
+                continue;
+            }
+
+            TranslatableMessage singularMessage = this.getMessageStore().getMessage(context, singular);
+            if (singularMessage != null && singularMessage.hasPlural())
+            {
+                throw new IllegalArgumentException(); // TODO modify exception
+            }
+            if (singularMessage == null)
+            {
+                singularMessage = new TranslatableMessage(context, singular, null);
+                this.getMessageStore().addMessage(singularMessage);
+            }
+
+            singularMessage.addSourceReference(sourceReference);
+            // TODO add extractedComments! write method to load it (source reference and element.getPosition is needed)
         }
     }
 

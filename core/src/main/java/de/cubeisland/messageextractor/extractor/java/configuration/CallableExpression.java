@@ -36,7 +36,7 @@ import spoon.reflect.reference.CtTypeReference;
 /**
  * This TranslatableExpression describes callable expressions
  */
-public abstract class CallableExpression extends TranslatableExpression
+public abstract class CallableExpression extends JavaExpression
 {
     private CallableSignatureType[] signature;
 
