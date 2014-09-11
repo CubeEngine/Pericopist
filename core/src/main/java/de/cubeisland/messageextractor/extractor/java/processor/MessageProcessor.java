@@ -32,7 +32,7 @@ import de.cubeisland.messageextractor.extractor.java.configuration.TranslatableE
 import de.cubeisland.messageextractor.extractor.java.converter.ConverterManager;
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import de.cubeisland.messageextractor.message.MessageStore;
-import de.cubeisland.messageextractor.message.Occurrence;
+import de.cubeisland.messageextractor.message.SourceReference;
 import de.cubeisland.messageextractor.util.Misc;
 import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtExpression;
@@ -89,7 +89,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
 
     protected void addMessage(TranslatableExpression translatableExpression, E element, String[] singulars, String[] plurals)
     {
-        Occurrence occurrence = new Occurrence(Misc.getRelativizedFile(this.getConfiguration().getDirectory(), element.getPosition().getFile()), element.getPosition().getLine());
+        SourceReference sourceReference = new SourceReference(Misc.getRelativizedFile(this.getConfiguration().getDirectory(), element.getPosition().getFile()), element.getPosition().getLine());
 
         if (translatableExpression.hasPlural())
         {
@@ -105,11 +105,11 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
 
             if (singulars[0].isEmpty())
             {
-                this.getLogger().info("The singular message can't be an empty string. Occurrence: " + occurrence);
+                this.getLogger().info("The singular message can't be an empty string. Occurrence: " + sourceReference);
                 return;
             }
 
-            this.getMessageStore().addMessage(singulars[0], plurals[0], occurrence, translatableExpression.getDescription());
+            this.getMessageStore().addMessage(singulars[0], plurals[0], sourceReference, translatableExpression.getDescription());
         }
         else
         {
@@ -117,11 +117,11 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             {
                 if (message.isEmpty())
                 {
-                    this.getLogger().info("The singular message can't be an empty string. Occurrence: " + occurrence);
+                    this.getLogger().info("The singular message can't be an empty string. Occurrence: " + sourceReference);
                     continue;
                 }
 
-                this.getMessageStore().addMessage(message, null, occurrence, translatableExpression.getDescription());
+                this.getMessageStore().addMessage(message, null, sourceReference, translatableExpression.getDescription());
             }
         }
     }

@@ -77,7 +77,7 @@ public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
      */
     public HeaderConfiguration getHeaderConfiguration()
     {
-        return headerConfiguration;
+        return this.headerConfiguration;
     }
 
     /**

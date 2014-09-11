@@ -29,47 +29,31 @@ import java.util.TreeSet;
 
 public class TranslatableMessage implements Comparable<TranslatableMessage>
 {
+    private final String context;
     private final String singular;
     private final String plural;
-    private final Set<Occurrence> occurrences;
-    private final Set<String> context;
 
-    private final Integer position;
+    private final Set<SourceReference> sourceReferences;
+    private final Set<String> extractedComments;
 
-    public TranslatableMessage(String singular, String plural, Integer position)
+    public TranslatableMessage(String context, String singular, String plural)
     {
-        this(singular, plural, position, null);
-    }
-
-    public TranslatableMessage(String singular, String plural, Occurrence firstOccurrence)
-    {
-        this(singular, plural, null, firstOccurrence);
-    }
-
-    private TranslatableMessage(String singular, String plural, Integer position, Occurrence firstOccurrence)
-    {
-        this.position = position;
-
+        this.context = context;
         this.singular = singular;
         this.plural = plural;
 
-        this.context = new HashSet<String>();
-
-        this.occurrences = new TreeSet<Occurrence>();
-        if (firstOccurrence != null)
-        {
-            this.occurrences.add(firstOccurrence);
-        }
+        this.sourceReferences = new TreeSet<>();
+        this.extractedComments = new HashSet<>();
     }
 
-    public void addOccurrence(Occurrence occurrence)
+    public boolean hasContext()
     {
-        this.occurrences.add(occurrence);
+        return this.context != null;
     }
 
-    public void addContextEntry(String description)
+    public String getContext()
     {
-        this.context.add(description);
+        return this.context;
     }
 
     public String getSingular()
@@ -87,48 +71,84 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         return this.plural;
     }
 
-    public Set<Occurrence> getOccurrences()
+    public void addOccurrence(SourceReference sourceReference)
     {
-        return occurrences;
+        this.sourceReferences.add(sourceReference);
     }
 
-    public Set<String> getContext()
+    public Set<SourceReference> getSourceReferences()
     {
-        return this.context;
+        return this.sourceReferences;
+    }
+
+    public void addExtractedComment(String comment)
+    {
+        this.extractedComments.add(comment);
+    }
+
+    public Set<String> getExtractedComments()
+    {
+        return this.extractedComments;
+    }
+
+    protected boolean overridesCompareToMethod()
+    {
+        return false;
     }
 
     @Override
     public int compareTo(TranslatableMessage o)
     {
-        if (this.position == null)
+        if (o.overridesCompareToMethod())
         {
-            if (o.position == null)
-            {
-                int comp = this.singular.compareTo(o.singular);
-                if (comp == 0)
-                {
-                    if (this.hasPlural())
-                    {
-                        if (o.hasPlural())
-                        {
-                            return this.plural.compareTo(o.plural);
-                        }
-                        return 1;
-                    }
-                    else if (o.hasPlural())
-                    {
-                        return -1;
-                    }
-                }
-                return comp;
-            }
-            return 1;
+            return -o.compareTo(this);
         }
-        else if (o.position == null)
+
+        // compare context
+        int comp = 0;
+        if (this.hasContext())
+        {
+            if (o.hasContext())
+            {
+                comp = this.getContext().compareTo(o.getContext());
+            }
+            else
+            {
+                return 1;
+            }
+        }
+        else if (o.hasContext())
         {
             return -1;
         }
-        return this.position.compareTo(o.position);
+
+        if (comp != 0)
+        {
+            return comp;
+        }
+
+        // compare singular
+        comp = this.singular.compareTo(o.singular);
+        if (comp != 0)
+        {
+            return comp;
+        }
+
+        // compare plural
+        if (this.hasPlural())
+        {
+            if (o.hasPlural())
+            {
+                return this.plural.compareTo(o.plural);
+            }
+            return 1;
+        }
+        else if (o.hasPlural())
+        {
+            return -1;
+        }
+
+        return 0;
     }
 
     @Override
@@ -145,43 +165,34 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
 
         TranslatableMessage that = (TranslatableMessage) o;
 
-        if (!this.singular.equals(that.singular))
+        // compare context
+        if (!this.hasContext())
         {
-            return false;
-        }
-
-        if (this.plural == null)
-        {
-            if(that.plural != null)
+            if (that.hasContext())
             {
                 return false;
             }
         }
-        else if (!this.plural.equals(that.plural))
+        else if (!this.getContext().equals(that.getContext()))
         {
             return false;
         }
 
-        if (this.occurrences != null)
-        {
-            if (!this.occurrences.equals(that.occurrences))
-            {
-                return false;
-            }
-        }
-        else if (that.occurrences != null)
+        // compare singular
+        if (!this.getSingular().equals(that.getSingular()))
         {
             return false;
         }
 
-        if (this.context != null)
+        // compare plural
+        if (!this.hasPlural())
         {
-            if (!this.context.equals(that.context))
+            if (that.hasPlural())
             {
                 return false;
             }
         }
-        else if (that.context != null)
+        else if (!this.getPlural().equals(that.getPlural()))
         {
             return false;
         }
@@ -192,10 +203,13 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     @Override
     public int hashCode()
     {
-        int result = this.singular.hashCode();
-        result = 31 * result + (this.plural != null ? this.plural.hashCode() : 0);
-        result = 31 * result + (this.occurrences != null ? this.occurrences.hashCode() : 0);
-        result = 31 * result + (this.context != null ? this.context.hashCode() : 0);
+        int result = this.getSingular().hashCode();
+        result = 31 * result + (this.getContext() != null ? this.getContext().hashCode() : 0);
+        result = 31 * result + (this.hasPlural() ? this.getPlural().hashCode() : 0);
+
+        result = 31 * result + this.getSourceReferences().hashCode();
+        result = 31 * result + this.getExtractedComments().hashCode();
+
         return result;
     }
 }

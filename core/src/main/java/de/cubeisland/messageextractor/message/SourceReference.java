@@ -26,15 +26,17 @@ package de.cubeisland.messageextractor.message;
 import java.io.File;
 import java.util.Locale;
 
-public class Occurrence implements Comparable<Occurrence>
+public class SourceReference implements Comparable<SourceReference>
 {
     private final File file;
     private final int line;
+    private final TranslatableExpression expression;
 
-    public Occurrence(File file, int line)
+    public SourceReference(File file, int line, TranslatableExpression expression)
     {
         this.file = file;
         this.line = line;
+        this.expression = expression;
     }
 
     public File getFile()
@@ -52,8 +54,15 @@ public class Occurrence implements Comparable<Occurrence>
         return line;
     }
 
+    public TranslatableExpression getExpression()
+    {
+        return this.expression;
+    }
+
+    // TODO everthing below
+
     @Override
-    public int compareTo(Occurrence o)
+    public int compareTo(SourceReference o)
     {
         int cmp = this.getFile().getPath().toLowerCase(Locale.ENGLISH).compareTo(o.getFile().getPath().toLowerCase(Locale.ENGLISH));
         if (cmp == 0)
@@ -75,7 +84,7 @@ public class Occurrence implements Comparable<Occurrence>
             return false;
         }
 
-        Occurrence that = (Occurrence) o;
+        SourceReference that = (SourceReference) o;
 
         if (line != that.line)
         {

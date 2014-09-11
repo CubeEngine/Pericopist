@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -43,7 +42,7 @@ import de.cubeisland.messageextractor.format.CatalogFormat;
 import de.cubeisland.messageextractor.format.HeaderConfiguration;
 import de.cubeisland.messageextractor.format.HeaderConfiguration.MetadataEntry;
 import de.cubeisland.messageextractor.message.MessageStore;
-import de.cubeisland.messageextractor.message.Occurrence;
+import de.cubeisland.messageextractor.message.SourceReference;
 import de.cubeisland.messageextractor.message.TranslatableMessage;
 
 /**
@@ -53,14 +52,13 @@ import de.cubeisland.messageextractor.message.TranslatableMessage;
  */
 public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
-    private Catalog oldCatalog;
     private Logger logger;
 
     /**
      * {@inheritDoc}
      *
-     * @param config          config which shall be used to write the catalog
-     * @param messageStore    the message store containing the messages for the catalog
+     * @param config       config which shall be used to write the catalog
+     * @param messageStore the message store containing the messages for the catalog
      *
      * @throws CatalogFormatException
      */
@@ -69,13 +67,21 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
 
+        if (!this.hasChanges(messageStore, catalogConfig))
+        {
+            this.logger.info("Did not create a new catalog, because it's the same like the old one.");
+            return false;
+        }
+
         Catalog catalog = this.getCatalog(catalogConfig, messageStore);
+        int messageCount = catalog.size();
 
         if (catalogConfig.getHeaderConfiguration() != null)
         {
             try
             {
                 catalog.addMessage(this.getHeaderMessage(catalogConfig.getHeaderConfiguration()));
+                messageCount--;
             }
             catch (IOException e)
             {
@@ -83,17 +89,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             }
         }
 
-        if (this.compareCatalogs(this.oldCatalog, catalog, catalogConfig.getHeaderConfiguration()))
-        {
-            this.logger.info("Did not create a new catalog, because it's the same like the old one.");
-            return false;
-        }
-
-        int messageCount = catalog.size();
-        if (catalogConfig.getHeaderConfiguration() != null)
-        {
-            messageCount--;
-        }
         if (messageCount == 0 && !catalogConfig.getCreateEmptyTemplate())
         {
             this.logger.info("The project does not contain any translatable message. The template was not created.");
@@ -141,22 +136,32 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         for (TranslatableMessage translatableMessage : messageStore)
         {
-            if (translatableMessage.getOccurrences().isEmpty())
+            if (translatableMessage instanceof GettextHeader)
             {
-                if (configuration.getRemoveUnusedMessages())
+                continue;
+            }
+
+            if (translatableMessage instanceof TranslatableGettextMessage)
+            {
+                Message message = ((TranslatableGettextMessage) translatableMessage).toMessage();
+
+                if (message.getSourceReferences().isEmpty())
                 {
-                    continue;
-                }
-                else
-                {
+                    if (configuration.getRemoveUnusedMessages())
+                    {
+                        continue;
+                    }
+                    message.setObsolete(true);
                     this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
                 }
+
+                catalog.addMessage(message);
+                continue;
             }
+
             Message message = new Message();
-            for (Occurrence occurrence : translatableMessage.getOccurrences())
-            {
-                message.addSourceReference(occurrence.getPath(), occurrence.getLine());
-            }
+
+            message.setMsgctxt(translatableMessage.getContext());
             message.setMsgid(translatableMessage.getSingular());
             if (translatableMessage.hasPlural())
             {
@@ -167,12 +172,16 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 }
             }
 
-            for (String description : translatableMessage.getContext())
-            {
-                message.addExtractedComment(description);
-            }
+            this.setPreviousMessageIds(message, messageStore);
 
-            this.setPreviousMessageIds(message);
+            for (SourceReference sourceReference : translatableMessage.getSourceReferences())
+            {
+                message.addSourceReference(sourceReference.getPath(), sourceReference.getLine());
+            }
+            for (String extractedComment : translatableMessage.getExtractedComments())
+            {
+                message.addExtractedComment(extractedComment);
+            }
 
             catalog.addMessage(message);
         }
@@ -185,39 +194,24 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      *
      * @param message message
      */
-    private void setPreviousMessageIds(Message message)
+    private void setPreviousMessageIds(Message message, MessageStore messageStore)
     {
-        if (this.oldCatalog == null)
-        {
-            return;
-        }
-
-        Message obsoleteMessage = this.oldCatalog.locateMessage(message.getMsgctxt(), message.getMsgid());
-        if (obsoleteMessage != null) // adds the old previous id's to the message if old message is the same like the current one
-        {
-            message.setPrevMsgctx(obsoleteMessage.getPrevMsgctx());
-            message.setPrevMsgid(obsoleteMessage.getPrevMsgid());
-            message.setPrevMsgidPlural(obsoleteMessage.getPrevMsgidPlural());
-
-            if (message.isPlural() && !message.getMsgidPlural().equals(obsoleteMessage.getMsgidPlural()))
-            {
-                message.setPrevMsgidPlural(obsoleteMessage.getMsgidPlural());
-            }
-
-            return;
-        }
-
         // adds every message to the list which has the same reference
-        List<Message> messageList = new ArrayList<Message>(1);
+        List<TranslatableGettextMessage> messageList = new ArrayList<>(1);
         for (String reference : message.getSourceReferences())
         {
-            for (Message oldMessage : this.oldCatalog)
+            for (TranslatableMessage oldMessage : messageStore)
             {
-                for (String oldReference : oldMessage.getSourceReferences())
+                if (!(oldMessage instanceof TranslatableGettextMessage))
                 {
-                    if (reference.equals(oldReference))
+                    continue; // delete every message which wasn't in the old catalog
+                }
+
+                for (SourceReference oldReference : oldMessage.getSourceReferences())
+                {
+                    if (reference.equals(oldReference.toString())) // TODO is the method right?
                     {
-                        messageList.add(oldMessage);
+                        messageList.add((TranslatableGettextMessage) oldMessage);
                         break;
                     }
                 }
@@ -230,19 +224,36 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             return;
         }
 
-        Message oldMessage = this.getPreviousMessage(message, messageList);
+        TranslatableGettextMessage oldMessage = this.getPreviousMessage(message, messageList);
 
-        if (oldMessage.getMsgctxt() != null && !oldMessage.getMsgctxt().equals(message.getMsgctxt()))
+        // prev msgctxt
+        if (oldMessage.hasContext() && !oldMessage.getContext().equals(message.getMsgctxt()))
         {
-            message.setPrevMsgctx(oldMessage.getMsgctxt());
+            message.setPrevMsgctx(oldMessage.getContext());
         }
-        if (!message.getMsgid().equals(oldMessage.getMsgid()))
+        else
         {
-            message.setPrevMsgid(oldMessage.getMsgid());
+            message.setPrevMsgctx(oldMessage.getPrevMsgctx());
         }
-        if (oldMessage.getMsgidPlural() != null && !oldMessage.getMsgidPlural().equals(message.getMsgidPlural()))
+
+        //prev msgid
+        if (!oldMessage.getSingular().equals(message.getMsgid()))
         {
-            message.setPrevMsgidPlural(oldMessage.getMsgidPlural());
+            message.setPrevMsgid(oldMessage.getSingular());
+        }
+        else
+        {
+            message.setPrevMsgid(oldMessage.getPrevMsgid());
+        }
+
+        // prev msgid_plural
+        if (oldMessage.hasPlural() && !oldMessage.getPlural().equals(message.getMsgidPlural()))
+        {
+            message.setPrevMsgidPlural(oldMessage.getPlural());
+        }
+        else
+        {
+            message.setPrevMsgidPlural(oldMessage.getPrevMsgidPlural());
         }
     }
 
@@ -254,7 +265,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      *
      * @return a previous message of the current message
      */
-    private Message getPreviousMessage(Message current, List<Message> oldMessages)
+    private TranslatableGettextMessage getPreviousMessage(Message current, List<TranslatableGettextMessage> oldMessages)
     {
         return oldMessages.get(0); // TODO compare current with old messages and return the best one.
     }
@@ -269,22 +280,23 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         PoParser poParser = new PoParser(catalog);
         catalog = poParser.parseCatalog(inputStream, catalogConfig.getCharset(), true);
 
-        this.oldCatalog = catalog;
-
-        int i = 0;
-        for (Message catalogMessage : catalog)
+        Message header = catalog.locateHeader();
+        if (header != null)
         {
-            if (!catalogMessage.isHeader())
-            {
-                TranslatableMessage message = messageStore.addMessage(catalogMessage.getMsgid(), catalogMessage.getMsgidPlural(), i++);
-                for (String extractedComment : catalogMessage.getExtractedComments())
-                {
-                    message.addContextEntry(extractedComment);
-                }
-            }
+            messageStore.addMessage(new GettextHeader(header));
         }
 
-        this.logger.info("The " + this.getClass().getSimpleName() + " read " + messageStore.size() + " messages from the old catalog.");
+        int i = 1;
+        for (Message catalogMessage : catalog)
+        {
+            if (catalogMessage.isHeader())
+            {
+                continue;
+            }
+            messageStore.addMessage(new TranslatableGettextMessage(catalogMessage, i++));
+        }
+
+        this.logger.info("The " + this.getClass().getSimpleName() + " read " + messageStore.size() + " messages (including the header) from the old catalog.");
 
         return messageStore;
     }
@@ -292,7 +304,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     /**
      * This method returns the header message which fits the specified parameters.
      *
-     * @param config          the configuration of the header
+     * @param config the configuration of the header
      *
      * @return header message
      *
@@ -323,133 +335,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     }
 
     /**
-     * This method compares the messages of the current catalog with the messages from the new one
-     *
-     * @param old        the current catalog
-     * @param newCatalog the new catalog
-     *
-     * @return returns whether the new catalog contains the same messages at the same place as the old one
-     */
-    private boolean compareCatalogMessages(Catalog old, Catalog newCatalog)
-    {
-        for (Message firstMessage : old)
-        {
-            if (firstMessage.isHeader())
-            {
-                continue;
-            }
-
-            Message secondMessage = newCatalog.locateMessage(firstMessage.getMsgctxt(), firstMessage.getMsgid());
-
-            if (secondMessage == null)
-            {
-                return false;
-            }
-
-            if (!this.comparePluralMsgstr(firstMessage.getMsgstrPlural(), secondMessage.getMsgstrPlural()))
-            {
-                return false;
-            }
-
-            if (firstMessage.isPlural() != secondMessage.isPlural() || (firstMessage.isPlural() && !firstMessage.getMsgidPlural().equals(secondMessage.getMsgidPlural())))
-            {
-                return false;
-            }
-
-            List<String> firstSourceReferences = firstMessage.getSourceReferences();
-            List<String> secondSourceReferences = secondMessage.getSourceReferences();
-
-            if (firstSourceReferences != null)
-            {
-                if (!firstSourceReferences.equals(secondSourceReferences))
-                {
-                    return false;
-                }
-            }
-            else if (secondSourceReferences != null)
-            {
-                return false;
-            }
-
-            Collection<String> firstExtractedComments = firstMessage.getExtractedComments();
-            Collection<String> secondExtractedComments = secondMessage.getExtractedComments();
-
-            if (firstExtractedComments != null)
-            {
-                if (!firstExtractedComments.equals(secondExtractedComments))
-                {
-                    return false;
-                }
-            }
-            else if (secondExtractedComments != null)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * This methods compares two different lists of plural messages and returns whether they are equals
-     *
-     * @param first  the first list of plural messages
-     * @param second the second list of plural messages
-     *
-     * @return whether the lists has the same content
-     */
-    private boolean comparePluralMsgstr(List<String> first, List<String> second)
-    {
-        if (first.size() != second.size())
-        {
-            return false;
-        }
-
-        for (int i = 0; i < first.size(); i++)
-        {
-            if (!first.get(i).equals(second.get(i)))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * This method compares the header of the old catalog with the header of the new one.
-     *
-     * @param old                 the old catalog
-     * @param newHeader           the new catalog
-     * @param headerConfiguration the header configuration
-     *
-     * @return returns whether the new header of the catalog is the same as the old one
-     */
-    private boolean compareCatalogHeader(Message old, Message newHeader, HeaderConfiguration headerConfiguration)
-    {
-        if (old == null || newHeader == null)
-        {
-            return false;
-        }
-        if (old.getComments().size() != newHeader.getComments().size())
-        {
-            return false;
-        }
-
-        String[] firstComments = old.getComments().toArray(new String[old.getComments().size()]);
-        String[] secondComments = newHeader.getComments().toArray(new String[firstComments.length]);
-
-        for (int i = 0; i < firstComments.length; i++)
-        {
-            if (!firstComments[i].equals(secondComments[i]))
-            {
-                return false;
-            }
-        }
-
-        return this.compareHeaderFields(old.getMsgstr().split("\n"), headerConfiguration);
-    }
-
-    /**
      * This method compares the fields of a header with the fields which are specified within the
      * header configuration
      *
@@ -458,7 +343,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      *
      * @return whether the fields fits with the configuration
      */
-    public boolean compareHeaderFields(String[] fields, HeaderConfiguration headerConfiguration)
+    public boolean compareHeaderFields(String[] fields, HeaderConfiguration headerConfiguration) // TODO is it still needed?
     {
         if (fields.length != headerConfiguration.getMetadata().length)
         {
@@ -495,31 +380,109 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return true;
     }
 
-    /**
-     * This method compares the current catalog with a new one
-     *
-     * @param old                 the current catalog
-     * @param newCatalog          the new catalog
-     * @param headerConfiguration the header configuration of the new catalog
-     *
-     * @return returns whether the new catalog is the same as the old one
-     */
-    private boolean compareCatalogs(Catalog old, Catalog newCatalog, HeaderConfiguration headerConfiguration)
+    private boolean hasChanges(MessageStore messageStore, GettextCatalogConfiguration catalogConfig)
     {
-        if (old == null || newCatalog == null)
+        GettextHeader header = null;
+        for (TranslatableMessage message : messageStore)
         {
-            return false;
-        }
-        if (old.size() != newCatalog.size())
-        {
-            return false;
-        }
-        if (!this.compareCatalogMessages(old, newCatalog))
-        {
-            return false;
+            if (message instanceof GettextHeader)
+            {
+                header = (GettextHeader) message;
+                continue;
+            }
+            if (!(message instanceof TranslatableGettextMessage))
+            {
+                return true;
+            }
+
+            if (this.hasChanges((TranslatableGettextMessage) message))
+            {
+                return true;
+            }
         }
 
-        return this.compareCatalogHeader(old.locateHeader(), newCatalog.locateHeader(), headerConfiguration);
+        return this.hasChanges(header, catalogConfig);
+    }
+
+    private boolean hasChanges(TranslatableGettextMessage message)
+    {
+        // 1. compare source references
+        if (message.getSourceReferences().size() != message.getGettextReferences().size())
+        {
+            return true;
+        }
+
+        int i = 0;
+        for (SourceReference reference : message.getSourceReferences())
+        {
+            if (!reference.toString().equals(message.getGettextReferences().get(i++)))
+            {
+                return true;
+            }
+        }
+
+        // 2. compare extracted comments
+        if (message.getExtractedComments().size() != message.getExtractedCommentsFromGettext().size())
+        {
+            return true;
+        }
+
+        i = 0;
+        for (String extractedComment : message.getExtractedComments())
+        {
+            int j = 0;
+            for (String extractedCommentFromGettext : message.getExtractedCommentsFromGettext())
+            {
+                if (j <= i)
+                {
+                    j++;
+                }
+                else
+                {
+                    if (!extractedComment.equals(extractedCommentFromGettext))
+                    {
+                        return true;
+                    }
+                    break;
+                }
+            }
+            i++;
+        }
+
+        return false;
+    }
+
+    private boolean hasChanges(GettextHeader header, GettextCatalogConfiguration configuration) // TODO compare header!
+    {
+        HeaderConfiguration headerConfiguration = configuration.getHeaderConfiguration();
+
+        if (header == null && headerConfiguration == null)
+        {
+            return false;
+        }
+        else if (headerConfiguration == null || header == null)
+        {
+            return true;
+        }
+
+        String[] comments = headerConfiguration.getComments().split("\n");
+        if (header.getComments().size() != comments.length)
+        {
+            return true;
+        }
+        return false;
+        //        String[] firstComments = old.getComments().toArray(new String[old.getComments().size()]);
+        //        String[] secondComments = newHeader.getComments().toArray(new String[firstComments.length]);
+        //
+        //        for (int i = 0; i < firstComments.length; i++)
+        //        {
+        //            if (!firstComments[i].equals(secondComments[i]))
+        //            {
+        //                return false;
+        //            }
+        //        }
+        //
+        //        return this.compareHeaderFields(old.getMsgstr().split("\n"), headerConfiguration);
     }
 
     @Override

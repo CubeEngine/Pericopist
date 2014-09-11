@@ -33,56 +33,39 @@ public class MessageStore implements Iterable<TranslatableMessage>
 
     public MessageStore()
     {
-        this.messages = new TreeSet<TranslatableMessage>();
+        this.messages = new TreeSet<>();
     }
 
-    public TranslatableMessage addMessage(String singular, String plural, Occurrence occurrence, String description)
+    public void addMessage(TranslatableMessage message)
     {
-        return this.addMessage(singular, plural, null, occurrence, description);
-    }
-
-    public TranslatableMessage addMessage(String singular, String plural, Integer position)
-    {
-        return this.addMessage(singular, plural, position, null, null);
-    }
-
-    private TranslatableMessage addMessage(String singular, String plural, Integer position, Occurrence occurrence, String description)
-    {
-        TranslatableMessage message = this.getMessage(singular, plural);
-        if (message != null)
+        if (this.messages.contains(message))
         {
-            message.addOccurrence(occurrence);
-        }
-        else
-        {
-            if (position != null)
-            {
-                message = new TranslatableMessage(singular, plural, position);
-            }
-            else
-            {
-                message = new TranslatableMessage(singular, plural, occurrence);
-            }
-            this.messages.add(message);
-        }
-        if(description != null)
-        {
-            message.addContextEntry(description.trim());
+            throw new IllegalArgumentException("The message exists already"); // TODO change throwing
         }
 
-        return message;
+        this.messages.add(message);
     }
 
-    public TranslatableMessage getMessage(String singular, String plural)
+    public TranslatableMessage getMessage(String context, String singular)
     {
         for (TranslatableMessage message : this.messages)
         {
+            if (message.hasContext() && context == null)
+            {
+                continue;
+            }
+            else if (!message.hasContext() && context != null)
+            {
+                continue;
+            }
+            else if (message.hasContext() && !message.getContext().equals(context))
+            {
+                continue;
+            }
+
             if (message.getSingular().equals(singular))
             {
-                if (plural == null && !message.hasPlural() || message.hasPlural() && message.getPlural().equals(plural))
-                {
-                    return message;
-                }
+                return message;
             }
         }
         return null;
@@ -90,7 +73,7 @@ public class MessageStore implements Iterable<TranslatableMessage>
 
     public Set<TranslatableMessage> getMessages()
     {
-        return messages;
+        return this.messages;
     }
 
     public int size()

@@ -26,7 +26,7 @@ package de.cubeisland.messageextractor.test;
 import java.io.File;
 import java.util.Locale;
 
-import de.cubeisland.messageextractor.message.Occurrence;
+import de.cubeisland.messageextractor.message.SourceReference;
 import de.cubeisland.messageextractor.test.i18n.DefaultI18n;
 import de.cubeisland.messageextractor.test.i18n.I18n;
 
@@ -51,7 +51,7 @@ public class StringTest
 
         i18n.translate("method invocation: " + "invocation".toUpperCase(Locale.ENGLISH).replaceFirst("I", "method i"));
         i18n.translate("a static method invocation: " + String.valueOf("hello"));
-        i18n.translate("new class invocation: " + new Occurrence(new File("testFile.tmp"), 42));
+        i18n.translate("new class invocation: " + new SourceReference(new File("testFile.tmp"), 42));
         i18n.translate("new class + method invocation: " + new StringBuilder().append("this").append(' ').append("is ").append('a').append(" test").toString());
 
         i18n.translate("method invocation with more arguments than parameter: " + String.format("%s %s %s", "it's", "a", "test"));
