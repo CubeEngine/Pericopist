@@ -54,6 +54,12 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 {
     private Logger logger;
 
+    @Override
+    public void setLogger(Logger logger)
+    {
+        this.logger = logger;
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -377,52 +383,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return headerMessage;
     }
 
-    /**
-     * This method compares the fields of a header with the fields which are specified within the
-     * header configuration
-     *
-     * @param fields              the fields of the header
-     * @param headerConfiguration the header configuration
-     *
-     * @return whether the fields fits with the configuration
-     */
-    public boolean compareHeaderFields(String[] fields, HeaderConfiguration headerConfiguration) // TODO is it still needed?
-    {
-        if (fields.length != headerConfiguration.getMetadata().length)
-        {
-            return false;
-        }
-
-        for (int i = 0; i < fields.length; i++)
-        {
-            String[] parts = fields[i].split(":");
-            MetadataEntry entry = headerConfiguration.getMetadata()[i];
-
-            if (!parts[0].equals(entry.getKey()))
-            {
-                return false;
-            }
-
-            if (!entry.isVariable())
-            {
-                StringBuilder value = new StringBuilder(parts[1].substring(1));
-
-                for (int j = 2; j < parts.length; j++)
-                {
-                    value.append(":");
-                    value.append(parts[j]);
-                }
-
-                if (!value.toString().equals(entry.getValue()))
-                {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     private boolean hasChanges(MessageStore messageStore, GettextCatalogConfiguration catalogConfig)
     {
         GettextHeader header = null;
@@ -508,29 +468,45 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             return true;
         }
 
-        String[] comments = headerConfiguration.getComments().split("\n");
-        if (header.getComments().size() != comments.length)
+        // compare header comments
+        String[] newComments = headerConfiguration.getComments().split("\n");
+        String[] oldComments = header.getComments().toArray(new String[header.getComments().size()]);
+        if (oldComments.length != newComments.length)
         {
             return true;
         }
-        return false;
-        //        String[] firstComments = old.getComments().toArray(new String[old.getComments().size()]);
-        //        String[] secondComments = newHeader.getComments().toArray(new String[firstComments.length]);
-        //
-        //        for (int i = 0; i < firstComments.length; i++)
-        //        {
-        //            if (!firstComments[i].equals(secondComments[i]))
-        //            {
-        //                return false;
-        //            }
-        //        }
-        //
-        //        return this.compareHeaderFields(old.getMsgstr().split("\n"), headerConfiguration);
-    }
 
-    @Override
-    public void setLogger(Logger logger)
-    {
-        this.logger = logger;
+        for (int i = 0; i < oldComments.length; i++)
+        {
+            if (!oldComments[i].equals(newComments[i]))
+            {
+                return true;
+            }
+        }
+
+        // compare header fields
+        if (header.getEntrySize() != headerConfiguration.getMetadata().length)
+        {
+            return true;
+        }
+
+        for (MetadataEntry metadataEntry : headerConfiguration.getMetadata())
+        {
+            if (!header.hasEntry(metadataEntry.getKey()))
+            {
+                return true;
+            }
+
+            if (metadataEntry.isVariable())
+            {
+                continue;
+            }
+
+            if (!header.getValue(metadataEntry.getKey()).equals(metadataEntry.getValue()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

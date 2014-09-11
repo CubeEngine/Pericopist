@@ -26,11 +26,14 @@ package de.cubeisland.messageextractor.format.gettext;
 import org.fedorahosted.tennera.jgettext.Message;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 class GettextHeader extends GettextMessage
 {
     private final static String HEADER_ID = "HEADER_MESSAGE";
 
+    private final Map<String, String> entries;
     private final Collection<String> comments;
 
     public GettextHeader(Message header)
@@ -38,11 +41,39 @@ class GettextHeader extends GettextMessage
         super(null, HEADER_ID, null, 0);
 
         this.comments = header.getComments();
-        // TODO load entries
+
+        String[] entries = header.getMsgstr().split("\n");
+
+        this.entries = new HashMap<>(entries.length);
+        for (String entry : entries)
+        {
+            String[] parts = entry.split(":", 2);
+            if (parts.length != 2)
+            {
+                throw new IllegalArgumentException(); // TODO modify exception
+            }
+
+            this.entries.put(parts[0], parts[1]);
+        }
     }
 
     public Collection<String> getComments()
     {
-        return comments;
+        return this.comments;
+    }
+
+    public boolean hasEntry(String name)
+    {
+        return this.entries.containsKey(name);
+    }
+
+    public String getValue(String entry)
+    {
+        return this.entries.get(entry);
+    }
+
+    public int getEntrySize()
+    {
+        return this.entries.size();
     }
 }
