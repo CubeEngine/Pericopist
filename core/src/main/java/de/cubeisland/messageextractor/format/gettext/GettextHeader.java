@@ -53,7 +53,7 @@ class GettextHeader extends GettextMessage
                 throw new IllegalArgumentException(); // TODO modify exception
             }
 
-            this.entries.put(parts[0], parts[1]);
+            this.entries.put(parts[0].trim(), parts[1].trim());
         }
     }
 

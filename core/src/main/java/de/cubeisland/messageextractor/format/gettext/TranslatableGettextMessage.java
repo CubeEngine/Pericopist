@@ -148,6 +148,10 @@ class TranslatableGettextMessage extends GettextMessage
             message.addMsgstrPlural(this.getMsgstrPlural().get(i), i);
         }
 
+        message.setPrevMsgctx(this.getPrevMsgctx());
+        message.setPrevMsgid(this.getPrevMsgid());
+        message.setPrevMsgidPlural(this.getPrevMsgidPlural());
+
         for (String comment : this.getComments())
         {
             message.addComment(comment);

@@ -425,7 +425,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         }
 
         // 2. compare extracted comments
-        if (message.getExtractedComments().size() != message.getExtractedCommentsFromGettext().size())
+        if (message.getExtractedComments().size() != message.getExtractedCommentsFromGettext().size()) // TODO check me!
         {
             return true;
         }
@@ -455,7 +455,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return false;
     }
 
-    private boolean hasChanges(GettextHeader header, GettextCatalogConfiguration configuration) // TODO compare header!
+    private boolean hasChanges(GettextHeader header, GettextCatalogConfiguration configuration)
     {
         HeaderConfiguration headerConfiguration = configuration.getHeaderConfiguration();
 

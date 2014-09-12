@@ -104,6 +104,6 @@ public class SourceReference implements Comparable<SourceReference>
     @Override
     public String toString()
     {
-        return this.file.getPath() + ":" + this.line;
+        return this.getPath() + ":" + this.line;
     }
 }
