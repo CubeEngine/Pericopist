@@ -23,6 +23,8 @@
  */
 package de.cubeisland.messageextractor.format.gettext;
 
+import org.fedorahosted.tennera.jgettext.Message;
+
 import de.cubeisland.messageextractor.message.TranslatableMessage;
 
 abstract class GettextMessage extends TranslatableMessage
@@ -51,4 +53,6 @@ abstract class GettextMessage extends TranslatableMessage
         }
         return -1;
     }
+
+    public abstract Message toMessage();
 }

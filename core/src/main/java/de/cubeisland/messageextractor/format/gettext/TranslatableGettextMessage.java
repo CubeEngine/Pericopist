@@ -134,6 +134,7 @@ class TranslatableGettextMessage extends GettextMessage
         return allowWrap;
     }
 
+    @Override
     public Message toMessage()
     {
         Message message = new Message();

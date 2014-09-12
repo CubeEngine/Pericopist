@@ -24,7 +24,6 @@
 package de.cubeisland.messageextractor.format.gettext;
 
 import org.fedorahosted.tennera.jgettext.Catalog;
-import org.fedorahosted.tennera.jgettext.HeaderFields;
 import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.PoParser;
 import org.fedorahosted.tennera.jgettext.PoWriter;
@@ -39,7 +38,6 @@ import java.util.logging.Logger;
 import de.cubeisland.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.messageextractor.format.CatalogConfiguration;
 import de.cubeisland.messageextractor.format.CatalogFormat;
-import de.cubeisland.messageextractor.format.HeaderConfiguration;
 import de.cubeisland.messageextractor.format.HeaderConfiguration.MetadataEntry;
 import de.cubeisland.messageextractor.message.MessageStore;
 import de.cubeisland.messageextractor.message.SourceReference;
@@ -73,35 +71,26 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     {
         GettextCatalogConfiguration catalogConfig = (GettextCatalogConfiguration) config;
 
-        if (!this.hasChanges(messageStore, catalogConfig))
+        GettextHeader header = new GettextHeader(catalogConfig);
+
+        if (!this.hasChanges(messageStore, header))
         {
             this.logger.info("Did not create a new catalog, because it's the same like the old one.");
             return false;
         }
 
         Catalog catalog = this.getCatalog(catalogConfig, messageStore);
+        catalog.addMessage(header.toMessage());
         int messageCount = catalog.size();
 
-        if (catalogConfig.getHeaderConfiguration() != null)
-        {
-            try
-            {
-                catalog.addMessage(this.getHeaderMessage(catalogConfig.getHeaderConfiguration()));
-            }
-            catch (IOException e)
-            {
-                throw new CatalogFormatException("The header could not be created.", e);
-            }
-        }
-
-        if (messageCount == 0 && !catalogConfig.getCreateEmptyTemplate())
+        if (messageCount == 1 && !catalogConfig.getCreateEmptyTemplate())
         {
             this.logger.info("The project does not contain any translatable message. The template was not created.");
             return false;
         }
 
         this.writeCatalog(catalog, catalogConfig, outputStream);
-        this.logger.info("The " + this.getClass().getSimpleName() + " created a new template with " + messageCount + " messages.");
+        this.logger.info("The " + this.getClass().getSimpleName() + " created a new template with " + messageCount + " messages (including the header).");
         return true;
     }
 
@@ -350,47 +339,14 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return messageStore;
     }
 
-    /**
-     * This method returns the header message which fits the specified parameters.
-     *
-     * @param config the configuration of the header
-     *
-     * @return header message
-     *
-     * @throws IOException if the comments resource couldn't be found
-     */
-    private Message getHeaderMessage(HeaderConfiguration config) throws IOException
+    private boolean hasChanges(MessageStore messageStore, GettextHeader header)
     {
-        HeaderFields headerFields = new HeaderFields();
-        if (config.getMetadata() != null)
-        {
-            for (MetadataEntry entry : config.getMetadata())
-            {
-                headerFields.setValue(entry.getKey(), entry.getValue());
-            }
-        }
-
-        Message headerMessage = headerFields.unwrap();
-
-        if (config.getComments() != null)
-        {
-            for (String comment : config.getComments().split("\n"))
-            {
-                headerMessage.addComment(comment);
-            }
-        }
-
-        return headerMessage;
-    }
-
-    private boolean hasChanges(MessageStore messageStore, GettextCatalogConfiguration catalogConfig)
-    {
-        GettextHeader header = null;
+        GettextHeader oldHeader = null;
         for (TranslatableMessage message : messageStore)
         {
             if (message instanceof GettextHeader)
             {
-                header = (GettextHeader) message;
+                oldHeader = (GettextHeader) message;
                 continue;
             }
             if (!(message instanceof TranslatableGettextMessage))
@@ -404,7 +360,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             }
         }
 
-        return this.hasChanges(header, catalogConfig);
+        return this.hasChanges(oldHeader, header);
     }
 
     private boolean hasChanges(TranslatableGettextMessage message)
@@ -455,22 +411,16 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         return false;
     }
 
-    private boolean hasChanges(GettextHeader header, GettextCatalogConfiguration configuration)
+    private boolean hasChanges(GettextHeader oldHeader, GettextHeader newHeader)
     {
-        HeaderConfiguration headerConfiguration = configuration.getHeaderConfiguration();
-
-        if (header == null && headerConfiguration == null)
-        {
-            return false;
-        }
-        else if (headerConfiguration == null || header == null)
+        if (oldHeader == null)
         {
             return true;
         }
 
         // compare header comments
-        String[] newComments = headerConfiguration.getComments().split("\n");
-        String[] oldComments = header.getComments().toArray(new String[header.getComments().size()]);
+        String[] newComments = newHeader.getComments().toArray(new String[oldHeader.getComments().size()]);
+        String[] oldComments = oldHeader.getComments().toArray(new String[oldHeader.getComments().size()]);
         if (oldComments.length != newComments.length)
         {
             return true;
@@ -485,24 +435,27 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         }
 
         // compare header fields
-        if (header.getEntrySize() != headerConfiguration.getMetadata().length)
+        if (oldHeader.getEntrySize() != newHeader.getEntrySize())
         {
             return true;
         }
 
-        for (MetadataEntry metadataEntry : headerConfiguration.getMetadata())
+        for (int i = 0; i < oldHeader.getEntrySize(); i++)
         {
-            if (!header.hasEntry(metadataEntry.getKey()))
+            MetadataEntry oldEntry = oldHeader.getEntry(i);
+            MetadataEntry newEntry = newHeader.getEntry(i);
+
+            if (!oldEntry.equals(newEntry))
             {
                 return true;
             }
 
-            if (metadataEntry.isVariable())
+            if (newEntry.isVariable())
             {
                 continue;
             }
 
-            if (!header.getValue(metadataEntry.getKey()).equals(metadataEntry.getValue()))
+            if (!oldEntry.getValue().equals(newEntry.getValue()))
             {
                 return true;
             }

@@ -23,17 +23,22 @@
  */
 package de.cubeisland.messageextractor.format.gettext;
 
+import org.fedorahosted.tennera.jgettext.HeaderFields;
 import org.fedorahosted.tennera.jgettext.Message;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
+import java.util.List;
+
+import de.cubeisland.messageextractor.format.HeaderConfiguration;
+import de.cubeisland.messageextractor.format.HeaderConfiguration.MetadataEntry;
 
 class GettextHeader extends GettextMessage
 {
     private final static String HEADER_ID = "HEADER_MESSAGE";
 
-    private final Map<String, String> entries;
+    private final List<MetadataEntry> entries;
     private final Collection<String> comments;
 
     public GettextHeader(Message header)
@@ -44,7 +49,7 @@ class GettextHeader extends GettextMessage
 
         String[] entries = header.getMsgstr().split("\n");
 
-        this.entries = new HashMap<>(entries.length);
+        this.entries = new ArrayList<>(entries.length);
         for (String entry : entries)
         {
             String[] parts = entry.split(":", 2);
@@ -53,8 +58,25 @@ class GettextHeader extends GettextMessage
                 throw new IllegalArgumentException(); // TODO modify exception
             }
 
-            this.entries.put(parts[0].trim(), parts[1].trim());
+            this.entries.add(this.createMetadataEntry(parts[0].trim(), parts[1].trim(), false));
         }
+    }
+
+    public GettextHeader(GettextCatalogConfiguration configuration)
+    {
+        super(null, HEADER_ID, null, 0);
+
+        this.comments = new ArrayList<>();
+        this.entries = new ArrayList<>(6);
+
+        HeaderConfiguration headerConfiguration = configuration.getHeaderConfiguration();
+        if (headerConfiguration == null)
+        {
+            return;
+        }
+
+        Collections.addAll(this.comments, headerConfiguration.getComments().split("\n"));
+        Collections.addAll(this.entries, headerConfiguration.getMetadata());
     }
 
     public Collection<String> getComments()
@@ -62,18 +84,42 @@ class GettextHeader extends GettextMessage
         return this.comments;
     }
 
-    public boolean hasEntry(String name)
+    public MetadataEntry getEntry(int index)
     {
-        return this.entries.containsKey(name);
-    }
-
-    public String getValue(String entry)
-    {
-        return this.entries.get(entry);
+        return this.entries.get(index);
     }
 
     public int getEntrySize()
     {
         return this.entries.size();
+    }
+
+    @Override
+    public Message toMessage()
+    {
+        HeaderFields headerFields = new HeaderFields();
+        for (MetadataEntry entry : this.entries)
+        {
+            headerFields.setValue(entry.getKey(), entry.getValue());
+        }
+
+        Message headerMessage = headerFields.unwrap();
+        for (String comment : this.getComments())
+        {
+            headerMessage.addComment(comment);
+        }
+
+        return headerMessage;
+    }
+
+    private MetadataEntry createMetadataEntry(String key, String value, boolean variable)
+    {
+        MetadataEntry metadataEntry = new MetadataEntry();
+
+        metadataEntry.setKey(key);
+        metadataEntry.setValue(value);
+        metadataEntry.setVariable(variable);
+
+        return metadataEntry;
     }
 }
