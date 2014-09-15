@@ -36,22 +36,16 @@ import de.cubeisland.messageextractor.configuration.Configuration;
 public interface CatalogConfiguration extends Configuration
 {
     /**
-     * This method returns template file of the catalog
-     *
-     * @return template file
-     */
-    File getTemplateFile();
-
-    /**
-     * This method sets the template file of the catalog
-     * @param file template file
-     */
-    void setTemplateFile(File file);
-
-    /**
      * This method returns the related CatalogFormat class.
      *
      * @return related CatalogFormat instance
      */
     Class<? extends CatalogFormat> getCatalogFormatClass();
+
+    /**
+     * This method returns template file of the catalog
+     *
+     * @return template file
+     */
+    File getTemplateFile();
 }

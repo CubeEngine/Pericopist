@@ -23,7 +23,24 @@
  */
 package de.cubeisland.messageextractor.message;
 
+/**
+ * The TranslatableExpression class describes how messages were extracted from the source code.
+ * <p/>
+ * It can be used within the CatalogFormat as a default context.
+ */
 public interface TranslatableExpression
 {
+    /**
+     * This method returns the name of the translatable expression
+     *
+     * @return name
+     */
+    String getName();
+
+    /**
+     * This method returns a description of the translatable expression.
+     *
+     * @return a description
+     */
     String getDescription();
 }

@@ -72,13 +72,7 @@ public class JavaMessageExtractor implements MessageExtractor
     }
 
     @Override
-    public MessageStore extract(ExtractorConfiguration config) throws MessageExtractionException
-    {
-        return this.extract(config, null);
-    }
-
-    @Override
-    public MessageStore extract(ExtractorConfiguration config, MessageStore loadedMessageStore) throws MessageExtractionException
+    public MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractionException
     {
         JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration) config;
 
@@ -87,11 +81,6 @@ public class JavaMessageExtractor implements MessageExtractor
             throw new SourceDirectoryNotExistingException();
         }
 
-        MessageStore messageStore = loadedMessageStore;
-        if (messageStore == null)
-        {
-            messageStore = new MessageStore();
-        }
         int messageAmount = messageStore.size();
 
         try
@@ -200,7 +189,7 @@ public class JavaMessageExtractor implements MessageExtractor
      */
     private void loadClassLoader(String classpath) throws MalformedURLException
     {
-        if(classpath == null)
+        if (classpath == null)
         {
             return;
         }

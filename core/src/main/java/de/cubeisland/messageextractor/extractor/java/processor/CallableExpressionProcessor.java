@@ -59,7 +59,7 @@ public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvo
             String[] contexts = this.getMessages(arguments.get(callableExpression.getContextIndex()), callableExpression);
             if (contexts == null || contexts.length != 1)
             {
-                return; // TODO really return without exception?
+                return;
             }
             context = contexts[0];
         }
@@ -68,7 +68,7 @@ public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvo
             singulars = this.getMessages(arguments.get(callableExpression.getSingularIndex()), callableExpression);
             if (singulars == null || singulars.length == 0)
             {
-                return; // TODO really return without exception?
+                return;
             }
         }
         if (callableExpression.hasPlural() && arguments.size() > callableExpression.getPluralIndex())
@@ -76,7 +76,7 @@ public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvo
             plurals = this.getMessages(arguments.get(callableExpression.getPluralIndex()), callableExpression);
             if (plurals == null || plurals.length == 0)
             {
-                return; // TODO really return without exception?
+                return;
             }
         }
 

@@ -112,7 +112,7 @@ public class MessageCatalog
 
     public void generateCatalog() throws MessageCatalogException
     {
-        this.createCatalog(this.parseSourceCode());
+        this.generateCatalog(new MessageStore());
     }
 
     private void generateCatalog(final MessageStore messageStore) throws MessageCatalogException
@@ -127,12 +127,11 @@ public class MessageCatalog
         {
             messageStore = this.readCatalog();
         }
+        if (messageStore == null)
+        {
+            messageStore = new MessageStore();
+        }
         this.generateCatalog(messageStore);
-    }
-
-    private MessageStore parseSourceCode() throws MessageExtractionException
-    {
-        return this.messageExtractor.extract(this.extractorConfiguration);
     }
 
     private MessageStore parseSourceCode(MessageStore messageStore) throws MessageExtractionException

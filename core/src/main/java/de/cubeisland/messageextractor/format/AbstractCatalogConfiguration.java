@@ -42,17 +42,20 @@ public abstract class AbstractCatalogConfiguration implements CatalogConfigurati
     private Boolean createEmptyTemplate;
     private Charset charset;
 
-    @XmlElement(name = "template")
-    @Override
-    public final void setTemplateFile(File file)
-    {
-        this.templateFile = file;
-    }
-
     @Override
     public final File getTemplateFile()
     {
         return this.templateFile;
+    }
+
+    /**
+     * This method sets the template file of the catalog
+     * @param file template file
+     */
+    @XmlElement(name = "template")
+    public final void setTemplateFile(File file)
+    {
+        this.templateFile = file;
     }
 
     /**

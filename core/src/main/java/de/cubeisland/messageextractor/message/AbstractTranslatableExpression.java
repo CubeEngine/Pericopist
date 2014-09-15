@@ -21,37 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.cubeisland.messageextractor.extractor;
+package de.cubeisland.messageextractor.message;
 
-import java.util.logging.Logger;
+import javax.xml.bind.annotation.XmlElement;
 
-import de.cubeisland.messageextractor.exception.MessageExtractionException;
-import de.cubeisland.messageextractor.message.MessageStore;
-
-/**
- * This class is used to extract all the messages which shall be translated from a complete project.
- * The messages will be stored in a message store which can be processed with a catalog format.
- *
- * @see de.cubeisland.messageextractor.format.CatalogFormat
- */
-public interface MessageExtractor
+public abstract class AbstractTranslatableExpression implements TranslatableExpression
 {
-    /**
-     * This method scans the source directory and extracts the translatable messages of the source files.
-     *
-     * @param config       the config which shall be used to extract the messages
-     * @param messageStore a message store containing the messages from the old catalog
-     *
-     * @return a message store containing all the messages
-     *
-     * @throws MessageExtractionException
-     */
-    MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractionException;
+    private String name;
+    private String description;
+
+    @Override
+    public String getName()
+    {
+        return this.name;
+    }
+
+    @Override
+    public String getDescription()
+    {
+        return this.description;
+    }
 
     /**
-     * This method sets the logger which is used by the MessageExtractor
+     * This method sets the name of the translatable expression
      *
-     * @param logger the logger
+     * @param name name
      */
-    void setLogger(Logger logger);
+    @XmlElement(name = "name")
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    /**
+     * This method sets a description of the translatable expression.
+     *
+     * @param description a description
+     */
+    @XmlElement(name = "description")
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
 }

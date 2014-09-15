@@ -58,14 +58,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         this.logger = logger;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param config       config which shall be used to write the catalog
-     * @param messageStore the message store containing the messages for the catalog
-     *
-     * @throws CatalogFormatException
-     */
     @Override
     public boolean write(CatalogConfiguration config, OutputStream outputStream, MessageStore messageStore) throws CatalogFormatException
     {
@@ -249,6 +241,8 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         {
             message.setPrevMsgidPlural(oldMessage.getPrevMsgidPlural());
         }
+
+        // TODO how about adding comments etc. from the old message?
     }
 
     /**
@@ -291,9 +285,9 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         }
 
         // take the first message with the same context
+        boolean hasContext = current.getMsgctxt() != null;
         for (TranslatableGettextMessage message : oldMessages)
         {
-            boolean hasContext = current.getMsgctxt() != null;
             if (message.hasContext() && hasContext)
             {
                 return message;

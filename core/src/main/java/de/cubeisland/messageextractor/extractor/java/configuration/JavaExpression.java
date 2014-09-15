@@ -26,64 +26,15 @@ package de.cubeisland.messageextractor.extractor.java.configuration;
 import javax.xml.bind.annotation.XmlElement;
 
 import de.cubeisland.messageextractor.exception.ConfigurationException;
-import de.cubeisland.messageextractor.message.TranslatableExpression;
+import de.cubeisland.messageextractor.message.AbstractTranslatableExpression;
 import spoon.reflect.declaration.CtElement;
 
 /**
  * The TranslatableExpression classes describe where the messages shall be extracted.
  */
-public abstract class JavaExpression implements TranslatableExpression
+public abstract class JavaExpression extends AbstractTranslatableExpression
 {
-    private String name;
-    private String description;
     private String defaultContext;
-
-    /**
-     * This method returns the name of the translatable expression
-     *
-     * @return name
-     */
-    public String getName()
-    {
-        return this.name;
-    }
-
-    /**
-     * This method sets the name of the translatable expression
-     *
-     * @param name name
-     */
-    @XmlElement(name = "name")
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    /**
-     * This method returns a description of the translatable expression.
-     * The description will be used for a default translator context if the message was extracted
-     * from this translatable expression.
-     *
-     * @return a description of the translatable expression
-     */
-    @Override
-    public String getDescription()
-    {
-        return this.description;
-    }
-
-    /**
-     * This method sets a description of the translatable expression.
-     * The description will be used for a default translator context if the message was extracted
-     * from this translatable expression.
-     *
-     * @param description a description of the translatable expression
-     */
-    @XmlElement(name = "description")
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
 
     /**
      * This method returns the default context which shall be added to every message extracted because of this expression
