@@ -522,7 +522,7 @@ public class MessageCatalogFactory
     {
         if (!parent.getClass().isAssignableFrom(child.getClass()))
         {
-            return;
+            throw new ConfigurationException("The type '" + parent.getClass().getName() + "' isn't assignable from the type '" + parent.getClass().getName() + "'.");
         }
 
         Class<?> clazz = parent.getClass();
@@ -558,7 +558,7 @@ public class MessageCatalogFactory
                     }
                     else
                     {
-                        if (this.isMergeable(field, childFieldObject)) // field is a mergeable field
+                        if (this.isMergeable(field)) // field is a mergeable field
                         {
                             this.mergeObjects(childFieldObject, parentFieldObject);
                         }
@@ -574,10 +574,10 @@ public class MessageCatalogFactory
         }
     }
 
-    private boolean isMergeable(Field field, Object value)
+    private boolean isMergeable(Field field)
     {
-        Class<?> valueClass = value.getClass();
-        if (valueClass.isPrimitive())
+        Class<?> fieldType = field.getType();
+        if (fieldType.isPrimitive())
         {
             return false;
         }
@@ -588,7 +588,7 @@ public class MessageCatalogFactory
             return mergeable.value();
         }
 
-        mergeable = valueClass.getAnnotation(Mergeable.class);
+        mergeable = fieldType.getAnnotation(Mergeable.class);
         return mergeable != null && mergeable.value();
     }
 
