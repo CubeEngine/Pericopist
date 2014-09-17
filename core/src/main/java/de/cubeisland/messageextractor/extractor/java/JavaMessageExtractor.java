@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -89,7 +90,7 @@ public class JavaMessageExtractor implements MessageExtractor
             SpoonCompiler compiler = launcher.createCompiler();
             compiler.addInputSource(extractorConfig.getDirectory());
 
-            String classpath = this.loadClasspath(extractorConfig.getClasspathEntries());
+            String[] classpath = this.loadClasspath(extractorConfig.getClasspathEntries());
             compiler.setSourceClasspath(classpath);
             this.loadClassLoader(classpath);
 
@@ -133,9 +134,9 @@ public class JavaMessageExtractor implements MessageExtractor
      *
      * @return the classpath
      */
-    private String loadClasspath(String... classpathEntries)
+    private String[] loadClasspath(String[] classpathEntries)
     {
-        StringBuilder cp = new StringBuilder();
+        List<String> classpath = new ArrayList<>(classpathEntries.length);
         for (String entry : classpathEntries)
         {
             File file = new File(entry);
@@ -166,36 +167,34 @@ public class JavaMessageExtractor implements MessageExtractor
                 }
             }
 
-            cp.append(entry);
-            cp.append(File.pathSeparator);
+            classpath.add(entry);
         }
 
-        if (cp.length() == 0)
+        if (classpath.size() == 0)
         {
             this.logger.warning("The classpath is empty.");
-            return null;
         }
 
-        return cp.substring(0, cp.length() - 1);
+        return classpath.toArray(new String[classpath.size()]);
     }
 
     /**
      * This method creates a new ClassLoader instance which
      * contains the specified classpath and the current one.
      *
-     * @param classpath the new classpath
+     * @param classpath the new classpath entries
      *
      * @throws MalformedURLException
      */
-    private void loadClassLoader(String classpath) throws MalformedURLException
+    private void loadClassLoader(String[] classpath) throws MalformedURLException
     {
         if (classpath == null)
         {
             return;
         }
 
-        Set<URL> urls = new HashSet<URL>();
-        for (String element : classpath.split(File.pathSeparator))
+        Set<URL> urls = new HashSet<>();
+        for (String element : classpath)
         {
             urls.add(new File(element).toURI().toURL());
         }
