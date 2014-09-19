@@ -59,17 +59,38 @@ public class SourceReference implements Comparable<SourceReference>
         return this.expression;
     }
 
-    // TODO everthing below
-
     @Override
     public int compareTo(SourceReference o)
     {
         int cmp = this.getFile().getPath().toLowerCase(Locale.ENGLISH).compareTo(o.getFile().getPath().toLowerCase(Locale.ENGLISH));
         if (cmp == 0)
         {
-            return Integer.valueOf(this.line).compareTo(o.line);
+            cmp = Integer.valueOf(this.line).compareTo(o.line);
+
+            if (cmp == 0)
+            {
+                return this.compareExpressions(o.getExpression());
+            }
         }
         return cmp;
+    }
+
+    private int compareExpressions(TranslatableExpression o)
+    {
+        TranslatableExpression t = this.getExpression();
+        if (t != null)
+        {
+            if (o != null)
+            {
+                return t.getName().compareTo(o.getName());
+            }
+            return 1;
+        }
+        else if (o != null)
+        {
+            return -1;
+        }
+        return 0;
     }
 
     @Override
@@ -86,18 +107,28 @@ public class SourceReference implements Comparable<SourceReference>
 
         SourceReference that = (SourceReference) o;
 
-        if (line != that.line)
+        if (this.line != that.line)
         {
             return false;
         }
-        return file.equals(that.file);
+        if (!this.file.equals(that.file))
+        {
+            return false;
+        }
+
+        if (this.getExpression() == null)
+        {
+            return that.getExpression() == null;
+        }
+        return this.getExpression().equals(that.getExpression());
     }
 
     @Override
     public int hashCode()
     {
-        int result = file.hashCode();
-        result = 31 * result + line;
+        int result = this.file.hashCode();
+        result = 31 * result + this.line;
+        result = 31 * result + (this.getExpression() != null ? this.getExpression().hashCode() : 0);
         return result;
     }
 
