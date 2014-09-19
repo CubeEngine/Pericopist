@@ -116,63 +116,87 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      *
      * @return catalog containing the specified information
      */
-    private Catalog getCatalog(GettextCatalogConfiguration configuration, MessageStore messageStore)
+    private Catalog getCatalog(GettextCatalogConfiguration configuration, MessageStore messageStore) throws CatalogFormatException
     {
         Catalog catalog = new Catalog(true);
 
         for (TranslatableMessage translatableMessage : messageStore)
         {
-            if (translatableMessage instanceof GettextHeader)
+            Message message = this.createMessage(configuration, messageStore, translatableMessage);
+            if (message == null)
             {
                 continue;
             }
 
-            if (translatableMessage instanceof TranslatableGettextMessage)
+            Message availableMessage = catalog.locateMessage(message.getMsgctxt(), message.getMsgid());
+            if (availableMessage == null)
             {
-                Message message = ((TranslatableGettextMessage) translatableMessage).toMessage();
-
-                if (message.getSourceReferences().isEmpty())
-                {
-                    if (configuration.getRemoveUnusedMessages())
-                    {
-                        continue;
-                    }
-                    message.setObsolete(true);
-                    this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
-                }
-
-                catalog.addMessage(message);
+                catalog.addMessage(message); // it's a completely new entry
                 continue;
             }
 
-            Message message = new Message();
-
-            message.setMsgctxt(translatableMessage.getContext());
-            message.setMsgid(translatableMessage.getSingular());
-            if (translatableMessage.hasPlural())
-            {
-                message.setMsgidPlural(translatableMessage.getPlural());
-                for (int i = 0; i < configuration.getPluralAmount(); i++)
-                {
-                    message.addMsgstrPlural("", i);
-                }
-            }
-
-            this.loadEntriesFromPreviousMessage(message, messageStore);
-
-            for (SourceReference sourceReference : translatableMessage.getSourceReferences())
-            {
-                message.addSourceReference(sourceReference.getPath(), sourceReference.getLine());
-            }
-            for (String extractedComment : translatableMessage.getExtractedComments())
-            {
-                message.addExtractedComment(extractedComment);
-            }
-
-            catalog.addMessage(message);
+            // TODO check whether available entry has to be replaced with the new one and replace it.
+            throw new CatalogFormatException("the entry exists already");
         }
 
         return catalog;
+    }
+
+    private Message createMessage(GettextCatalogConfiguration configuration, MessageStore messageStore, TranslatableMessage translatableMessage)
+    {
+        if (translatableMessage instanceof GettextHeader)
+        {
+            return null;
+        }
+
+        if (translatableMessage instanceof TranslatableGettextMessage)
+        {
+            Message message = ((TranslatableGettextMessage) translatableMessage).toMessage();
+
+            if (message.getSourceReferences().isEmpty())
+            {
+                if (configuration.getRemoveUnusedMessages())
+                {
+                    return null;
+                }
+                message.setObsolete(true);
+                this.logger.info("message with msgid '" + translatableMessage.getSingular() + "' does not occur!");
+            }
+
+            return message;
+        }
+
+        Message message = new Message();
+
+        // add entries of the message
+        message.setMsgctxt(translatableMessage.getContext());
+        message.setMsgid(translatableMessage.getSingular());
+        if (translatableMessage.hasPlural())
+        {
+            message.setMsgidPlural(translatableMessage.getPlural());
+        }
+
+        for (SourceReference sourceReference : translatableMessage.getSourceReferences())
+        {
+            message.addSourceReference(sourceReference.getPath(), sourceReference.getLine());
+        }
+        for (String extractedComment : translatableMessage.getExtractedComments())
+        {
+            message.addExtractedComment(extractedComment);
+        }
+
+        this.loadEntriesFromPreviousMessage(message, messageStore);
+
+        // fill msgstr plural entries up
+        if (message.isPlural())
+        {
+            for (int i = message.getMsgstrPlural().size(); i < configuration.getPluralAmount(); i++)
+            {
+                message.addMsgstrPlural("", i);
+            }
+        }
+
+        return message;
     }
 
     /**
@@ -193,9 +217,15 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                     continue; // delete every message which wasn't in the old catalog
                 }
 
-                for (SourceReference oldReference : oldMessage.getSourceReferences())
+                TranslatableGettextMessage translatableGettextMessage = (TranslatableGettextMessage) oldMessage;
+                /*
+                 * TODO translatableGettextMessage.getSourceReferences() isn't allowed to contain the reference!
+                 * and translatableGettextMessage.getGettextReferences() must contain it
+                 */
+                for (String oldReference : translatableGettextMessage.getGettextReferences())
                 {
-                    if (reference.equals(oldReference.toString())) // TODO is the method right?
+
+                    if (reference.equals(oldReference))
                     {
                         messageList.add((TranslatableGettextMessage) oldMessage);
                         break;
@@ -209,7 +239,6 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         {
             return;
         }
-
         TranslatableGettextMessage oldMessage = this.selectPreviousMessage(message, messageList);
 
         // prev msgctxt
@@ -233,9 +262,16 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         }
 
         // prev msgid_plural
-        if (oldMessage.hasPlural() && !oldMessage.getPlural().equals(message.getMsgidPlural()))
+        if (message.isPlural() && !message.getMsgidPlural().equals(oldMessage.getPlural()))
         {
-            message.setPrevMsgidPlural(oldMessage.getPlural());
+            if (oldMessage.hasPlural())
+            {
+                message.setPrevMsgidPlural(oldMessage.getPlural());
+            }
+            else
+            {
+                message.setPrevMsgidPlural(""); // the old message wasn't a plural message
+            }
         }
         else
         {
@@ -244,13 +280,18 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         message.setDomain(oldMessage.getDomain());
         // sets the msgstr entries
-        message.setMsgstr(oldMessage.getMsgstr());
+        System.out.println("message.isPlural = " + message.isPlural());
         if (message.isPlural())
         {
             for (int i = 0; i < oldMessage.getMsgstrPlural().size(); i++)
             {
+                System.out.println("msgstr[" + i + "] = " + oldMessage.getMsgstrPlural().get(i));
                 message.addMsgstrPlural(oldMessage.getMsgstrPlural().get(i), i);
             }
+        }
+        else if (!oldMessage.hasPlural())
+        {
+            message.setMsgstr(oldMessage.getMsgstr());
         }
         // sets the translator comments to the new message
         for (String comment : oldMessage.getComments())
@@ -268,16 +309,16 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     }
 
     /**
-     * This method returns a previous message from the specified list
+     * This method selects a potential previous message from the specified list
      *
      * @param current     the current message
-     * @param oldMessages every old message which has a same reference
+     * @param oldMessages every message which has a same reference
      *
      * @return a previous message of the current message
      */
     private TranslatableGettextMessage selectPreviousMessage(Message current, List<TranslatableGettextMessage> oldMessages)
     {
-        boolean hasPlural = current.getMsgidPlural() != null;
+        boolean hasPlural = current.isPlural();
 
         // check whether a message has the same msgid
         for (TranslatableGettextMessage message : oldMessages)

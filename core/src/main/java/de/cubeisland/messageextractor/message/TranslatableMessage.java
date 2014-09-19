@@ -204,7 +204,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     public int hashCode()
     {
         int result = this.getSingular().hashCode();
-        result = 31 * result + (this.getContext() != null ? this.getContext().hashCode() : 0);
+        result = 31 * result + (this.hasContext() ? this.getContext().hashCode() : 0);
         result = 31 * result + (this.hasPlural() ? this.getPlural().hashCode() : 0);
 
         result = 31 * result + this.getSourceReferences().hashCode();

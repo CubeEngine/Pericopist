@@ -46,7 +46,7 @@ public class MessageStore implements Iterable<TranslatableMessage>
         this.messages.add(message);
     }
 
-    public TranslatableMessage getMessage(String context, String singular)
+    public TranslatableMessage getMessage(String context, String singular, String plural)
     {
         for (TranslatableMessage message : this.messages)
         {
@@ -63,7 +63,19 @@ public class MessageStore implements Iterable<TranslatableMessage>
                 continue;
             }
 
-            if (message.getSingular().equals(singular))
+            if (!message.getSingular().equals(singular))
+            {
+                continue;
+            }
+
+            if (message.hasPlural())
+            {
+                if (message.getPlural().equals(plural))
+                {
+                    return message;
+                }
+            }
+            else if (plural == null)
             {
                 return message;
             }

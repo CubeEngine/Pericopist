@@ -67,11 +67,6 @@ class TranslatableGettextMessage extends GettextMessage
 
         this.obsolete = message.isObsolete();
         this.allowWrap = message.getAllowWrap();
-
-        for (String extractedComment : this.getExtractedCommentsFromGettext())
-        {
-            this.addExtractedComment(extractedComment);
-        }
     }
 
     public String getDomain()

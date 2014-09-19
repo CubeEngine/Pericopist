@@ -117,12 +117,8 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
                 return;
             }
 
-            TranslatableMessage pluralMessage = this.getMessageStore().getMessage(context, singulars[0]);
-            if (pluralMessage != null && (!pluralMessage.hasPlural() || !pluralMessage.getPlural().equals(plurals[0])))
-            {
-                throw new IllegalTranslatableMessageException("A message with the same singular and a different plural message exists already.");
-            }
-            else if (pluralMessage == null)
+            TranslatableMessage pluralMessage = this.getMessageStore().getMessage(context, singulars[0], plurals[0]);
+            if (pluralMessage == null)
             {
                 pluralMessage = new TranslatableMessage(context, singulars[0], plurals[0]);
                 this.getMessageStore().addMessage(pluralMessage);
@@ -142,11 +138,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
                 continue;
             }
 
-            TranslatableMessage singularMessage = this.getMessageStore().getMessage(context, singular);
-            if (singularMessage != null && singularMessage.hasPlural())
-            {
-                throw new IllegalTranslatableMessageException("This message exists with a plural already. You can't use it without the plural.");
-            }
+            TranslatableMessage singularMessage = this.getMessageStore().getMessage(context, singular, null);
             if (singularMessage == null)
             {
                 singularMessage = new TranslatableMessage(context, singular, null);
