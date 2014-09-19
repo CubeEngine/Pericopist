@@ -158,7 +158,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 }
             }
 
-            this.setPreviousMessageIds(message, messageStore);
+            this.loadEntriesFromPreviousMessage(message, messageStore);
 
             for (SourceReference sourceReference : translatableMessage.getSourceReferences())
             {
@@ -180,7 +180,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      *
      * @param message message
      */
-    private void setPreviousMessageIds(Message message, MessageStore messageStore)
+    private void loadEntriesFromPreviousMessage(Message message, MessageStore messageStore)
     {
         // adds every message to the list which has the same reference
         List<TranslatableGettextMessage> messageList = new ArrayList<>(1);
@@ -210,7 +210,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             return;
         }
 
-        TranslatableGettextMessage oldMessage = this.getPreviousMessage(message, messageList);
+        TranslatableGettextMessage oldMessage = this.selectPreviousMessage(message, messageList);
 
         // prev msgctxt
         if (oldMessage.hasContext() && !oldMessage.getContext().equals(message.getMsgctxt()))
@@ -242,7 +242,29 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             message.setPrevMsgidPlural(oldMessage.getPrevMsgidPlural());
         }
 
-        // TODO how about adding comments etc. from the old message? translator comments and flags (formats)
+        message.setDomain(oldMessage.getDomain());
+        // sets the msgstr entries
+        message.setMsgstr(oldMessage.getMsgstr());
+        if (message.isPlural())
+        {
+            for (int i = 0; i < oldMessage.getMsgstrPlural().size(); i++)
+            {
+                message.addMsgstrPlural(oldMessage.getMsgstrPlural().get(i), i);
+            }
+        }
+        // sets the translator comments to the new message
+        for (String comment : oldMessage.getComments())
+        {
+            message.addComment(comment);
+        }
+        // sets the formats (flags) to the new message
+        for (String format : oldMessage.getFormats())
+        {
+            message.addFormat(format);
+        }
+        message.setAllowWrap(oldMessage.getAllowWrap());
+        // set fuzzy true because one should check the entries because it's not sure whether it really was the old message
+        message.setFuzzy(true);
     }
 
     /**
@@ -253,7 +275,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
      *
      * @return a previous message of the current message
      */
-    private TranslatableGettextMessage getPreviousMessage(Message current, List<TranslatableGettextMessage> oldMessages)
+    private TranslatableGettextMessage selectPreviousMessage(Message current, List<TranslatableGettextMessage> oldMessages)
     {
         boolean hasPlural = current.getMsgidPlural() != null;
 
