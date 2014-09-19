@@ -23,6 +23,7 @@
  */
 package de.cubeisland.messageextractor.extractor.java.processor;
 
+import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
@@ -55,7 +56,15 @@ public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
             Object contextValue = element.getElementValue(annotation.getContextField());
             if (contextValue != null)
             {
-                context = contextValue.toString();
+                if (contextValue.getClass().isArray() && !contextValue.getClass().getComponentType().isPrimitive())
+                {
+                    context = Arrays.toString((Object[]) contextValue);
+                }
+                else
+                {
+                    context = contextValue.toString();
+                }
+
                 if (context.isEmpty())
                 {
                     context = null;
