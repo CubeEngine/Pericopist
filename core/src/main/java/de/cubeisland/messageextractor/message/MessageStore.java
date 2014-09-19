@@ -40,7 +40,7 @@ public class MessageStore implements Iterable<TranslatableMessage>
     {
         if (this.messages.contains(message))
         {
-            throw new IllegalArgumentException("The message exists already"); // TODO change throwing
+            throw new IllegalArgumentException("The specified message exists already and can't be added to the message store.");
         }
 
         this.messages.add(message);

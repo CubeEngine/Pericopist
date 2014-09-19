@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import de.cubeisland.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.messageextractor.format.HeaderConfiguration;
 import de.cubeisland.messageextractor.format.HeaderConfiguration.MetadataEntry;
 
@@ -41,7 +42,7 @@ class GettextHeader extends GettextMessage
     private final List<MetadataEntry> entries;
     private final Collection<String> comments;
 
-    public GettextHeader(Message header)
+    public GettextHeader(Message header) throws CatalogFormatException
     {
         super(null, HEADER_ID, null, 0);
 
@@ -55,7 +56,7 @@ class GettextHeader extends GettextMessage
             String[] parts = entry.split(":", 2);
             if (parts.length != 2)
             {
-                throw new IllegalArgumentException(); // TODO modify exception
+                throw new CatalogFormatException("The formatting of the header entry '" + entry + "' is wrong. It has to be 'key: value'.");
             }
 
             this.entries.add(this.createMetadataEntry(parts[0].trim(), parts[1].trim(), false));
