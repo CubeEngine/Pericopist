@@ -175,4 +175,52 @@ class TranslatableGettextMessage extends GettextMessage
 
         return message;
     }
+
+    public boolean hasChanges()
+    {
+        // 1. compare source references
+        if (this.getSourceReferences().size() != this.getGettextReferences().size())
+        {
+            return true;
+        }
+
+        int i = 0;
+        for (SourceReference reference : this.getSourceReferences())
+        {
+            if (!reference.toString().equals(this.getGettextReferences().get(i++)))
+            {
+                return true;
+            }
+        }
+
+        // 2. compare extracted comments
+        if (this.getExtractedComments().size() != this.getExtractedCommentsFromGettext().size()) // TODO check me!
+        {
+            return true;
+        }
+
+        i = 0;
+        for (String extractedComment : this.getExtractedComments())
+        {
+            int j = 0;
+            for (String extractedCommentFromGettext : this.getExtractedCommentsFromGettext())
+            {
+                if (j <= i)
+                {
+                    j++;
+                }
+                else
+                {
+                    if (!extractedComment.equals(extractedCommentFromGettext))
+                    {
+                        return true;
+                    }
+                    break;
+                }
+            }
+            i++;
+        }
+
+        return false;
+    }
 }

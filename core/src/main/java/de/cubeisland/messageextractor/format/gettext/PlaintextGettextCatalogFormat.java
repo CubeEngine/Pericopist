@@ -242,7 +242,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             message.setPrevMsgidPlural(oldMessage.getPrevMsgidPlural());
         }
 
-        // TODO how about adding comments etc. from the old message?
+        // TODO how about adding comments etc. from the old message? translator comments and flags (formats)
     }
 
     /**
@@ -348,61 +348,13 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 return true;
             }
 
-            if (this.hasChanges((TranslatableGettextMessage) message))
+            if (((TranslatableGettextMessage) message).hasChanges())
             {
                 return true;
             }
         }
 
-        return this.hasChanges(oldHeader, header);
-    }
-
-    private boolean hasChanges(TranslatableGettextMessage message)
-    {
-        // 1. compare source references
-        if (message.getSourceReferences().size() != message.getGettextReferences().size())
-        {
-            return true;
-        }
-
-        int i = 0;
-        for (SourceReference reference : message.getSourceReferences())
-        {
-            if (!reference.toString().equals(message.getGettextReferences().get(i++)))
-            {
-                return true;
-            }
-        }
-
-        // 2. compare extracted comments
-        if (message.getExtractedComments().size() != message.getExtractedCommentsFromGettext().size()) // TODO check me!
-        {
-            return true;
-        }
-
-        i = 0;
-        for (String extractedComment : message.getExtractedComments())
-        {
-            int j = 0;
-            for (String extractedCommentFromGettext : message.getExtractedCommentsFromGettext())
-            {
-                if (j <= i)
-                {
-                    j++;
-                }
-                else
-                {
-                    if (!extractedComment.equals(extractedCommentFromGettext))
-                    {
-                        return true;
-                    }
-                    break;
-                }
-            }
-            i++;
-        }
-
-        return false;
+        return hasChanges(oldHeader, header);
     }
 
     private boolean hasChanges(GettextHeader oldHeader, GettextHeader newHeader)
