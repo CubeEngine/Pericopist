@@ -143,10 +143,16 @@ class TranslatableGettextMessage extends GettextMessage
         message.setMsgctxt(this.getContext());
         message.setMsgid(this.getSingular());
         message.setMsgidPlural(this.getPlural());
-        message.setMsgstr(this.getMsgstr());
-        for (int i = 0; i < this.getMsgstrPlural().size(); i++)
+        if (this.hasPlural())
         {
-            message.addMsgstrPlural(this.getMsgstrPlural().get(i), i);
+            for (int i = 0; i < this.getMsgstrPlural().size(); i++)
+            {
+                message.addMsgstrPlural(this.getMsgstrPlural().get(i), i);
+            }
+        }
+        else
+        {
+            message.setMsgstr(this.getMsgstr());
         }
 
         message.setPrevMsgctx(this.getPrevMsgctx());
