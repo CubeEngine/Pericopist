@@ -280,12 +280,10 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         message.setDomain(oldMessage.getDomain());
         // sets the msgstr entries
-        System.out.println("message.isPlural = " + message.isPlural());
         if (message.isPlural())
         {
             for (int i = 0; i < oldMessage.getMsgstrPlural().size(); i++)
             {
-                System.out.println("msgstr[" + i + "] = " + oldMessage.getMsgstrPlural().get(i));
                 message.addMsgstrPlural(oldMessage.getMsgstrPlural().get(i), i);
             }
         }
