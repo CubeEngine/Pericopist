@@ -180,7 +180,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
         {
             message.addSourceReference(sourceReference.getPath(), sourceReference.getLine());
         }
-        for (String extractedComment : translatableMessage.getExtractedComments())
+        for (String extractedComment : GettextUtils.createExtractedComments(translatableMessage))
         {
             message.addExtractedComment(extractedComment);
         }

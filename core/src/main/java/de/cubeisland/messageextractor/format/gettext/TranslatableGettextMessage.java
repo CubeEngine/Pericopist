@@ -158,7 +158,7 @@ class TranslatableGettextMessage extends GettextMessage
         {
             message.addComment(comment);
         }
-        for (String extractedComment : this.getExtractedComments())
+        for (String extractedComment : GettextUtils.createExtractedComments(this))
         {
             message.addExtractedComment(extractedComment);
         }
@@ -195,33 +195,17 @@ class TranslatableGettextMessage extends GettextMessage
         }
 
         // 2. compare extracted comments
-        if (this.getExtractedComments().size() != this.getExtractedCommentsFromGettext().size()) // TODO check me!
+        StringBuilder extractedCommentsGettext = new StringBuilder();
+        StringBuilder extractedCommentsSource = new StringBuilder();
+        for (String extractedComment : this.getExtractedCommentsFromGettext())
         {
-            return true;
+            extractedCommentsGettext.append(extractedComment);
+        }
+        for (String extractedComment : GettextUtils.createExtractedComments(this))
+        {
+            extractedCommentsSource.append(extractedComment);
         }
 
-        i = 0;
-        for (String extractedComment : this.getExtractedComments())
-        {
-            int j = 0;
-            for (String extractedCommentFromGettext : this.getExtractedCommentsFromGettext())
-            {
-                if (j <= i)
-                {
-                    j++;
-                }
-                else
-                {
-                    if (!extractedComment.equals(extractedCommentFromGettext))
-                    {
-                        return true;
-                    }
-                    break;
-                }
-            }
-            i++;
-        }
-
-        return false;
+        return !extractedCommentsGettext.toString().equals(extractedCommentsSource.toString());
     }
 }

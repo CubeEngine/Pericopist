@@ -26,16 +26,16 @@ package de.cubeisland.messageextractor.message;
 /**
  * The TranslatableExpression class describes how messages were extracted from the source code.
  * <p/>
- * It can be used within the CatalogFormat as a default context.
+ * It can be used within the {@link de.cubeisland.messageextractor.format.CatalogFormat} as a default context.
  */
 public interface TranslatableExpression
 {
     /**
-     * This method returns the name of the translatable expression
+     * This method returns the fully qualified name of the translatable expression
      *
-     * @return name
+     * @return the fqn
      */
-    String getName();
+    String getFQN();
 
     /**
      * This method returns a description of the translatable expression.

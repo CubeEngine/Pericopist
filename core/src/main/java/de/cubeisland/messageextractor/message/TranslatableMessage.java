@@ -23,7 +23,6 @@
  */
 package de.cubeisland.messageextractor.message;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -34,7 +33,6 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     private final String plural;
 
     private final Set<SourceReference> sourceReferences;
-    private final Set<String> extractedComments;
 
     public TranslatableMessage(String context, String singular, String plural)
     {
@@ -43,7 +41,6 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         this.plural = plural;
 
         this.sourceReferences = new TreeSet<>();
-        this.extractedComments = new HashSet<>();
     }
 
     public boolean hasContext()
@@ -79,16 +76,6 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     public Set<SourceReference> getSourceReferences()
     {
         return this.sourceReferences;
-    }
-
-    public void addExtractedComment(String comment)
-    {
-        this.extractedComments.add(comment);
-    }
-
-    public Set<String> getExtractedComments()
-    {
-        return this.extractedComments;
     }
 
     protected boolean overridesCompareToMethod()
@@ -208,7 +195,6 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         result = 31 * result + (this.hasPlural() ? this.getPlural().hashCode() : 0);
 
         result = 31 * result + this.getSourceReferences().hashCode();
-        result = 31 * result + this.getExtractedComments().hashCode();
 
         return result;
     }

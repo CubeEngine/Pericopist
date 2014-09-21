@@ -30,7 +30,11 @@ public abstract class AbstractTranslatableExpression implements TranslatableExpr
     private String name;
     private String description;
 
-    @Override
+    /**
+     * This method returns the name of the translatable expression
+     *
+     * @return name
+     */
     public String getName()
     {
         return this.name;
@@ -62,5 +66,11 @@ public abstract class AbstractTranslatableExpression implements TranslatableExpr
     public void setDescription(String description)
     {
         this.description = description;
+    }
+
+    @Override
+    public String getFQN()
+    {
+        return this.toString();
     }
 }

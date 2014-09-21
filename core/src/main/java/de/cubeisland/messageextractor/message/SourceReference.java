@@ -24,6 +24,8 @@
 package de.cubeisland.messageextractor.message;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class SourceReference implements Comparable<SourceReference>
@@ -32,11 +34,15 @@ public class SourceReference implements Comparable<SourceReference>
     private final int line;
     private final TranslatableExpression expression;
 
+    private final List<String> extractedComments;
+
     public SourceReference(File file, int line, TranslatableExpression expression)
     {
         this.file = file;
         this.line = line;
         this.expression = expression;
+
+        this.extractedComments = new ArrayList<>();
     }
 
     public File getFile()
@@ -57,6 +63,16 @@ public class SourceReference implements Comparable<SourceReference>
     public TranslatableExpression getExpression()
     {
         return this.expression;
+    }
+
+    public void addExtractedComment(String comment)
+    {
+        this.extractedComments.add(comment);
+    }
+
+    public List<String> getExtractedComments()
+    {
+        return this.extractedComments;
     }
 
     @Override
@@ -82,7 +98,7 @@ public class SourceReference implements Comparable<SourceReference>
         {
             if (o != null)
             {
-                return t.getName().compareTo(o.getName());
+                return t.getFQN().compareTo(o.getFQN());
             }
             return 1;
         }
@@ -115,6 +131,10 @@ public class SourceReference implements Comparable<SourceReference>
         {
             return false;
         }
+        if (!this.extractedComments.equals(that.extractedComments))
+        {
+            return false;
+        }
 
         if (this.getExpression() == null)
         {
@@ -128,6 +148,7 @@ public class SourceReference implements Comparable<SourceReference>
     {
         int result = this.file.hashCode();
         result = 31 * result + this.line;
+        result = 31 * result + this.extractedComments.hashCode();
         result = 31 * result + (this.getExpression() != null ? this.getExpression().hashCode() : 0);
         return result;
     }
