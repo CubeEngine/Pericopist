@@ -28,9 +28,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * This annotation is for fields within a {@link de.cubeisland.messageextractor.configuration.Configuration}.
+ * It is needed during the {@link de.cubeisland.messageextractor.MessageCatalogFactory#mergeObjects(Object, Object)} method to merge two configurations.
+ * This annotation specifies whether a field of a configuration can be merged. This annotation can have a field or a type as the annotated element type. A field has a higher priority.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE})
 public @interface Mergeable
 {
+    /**
+     * specifies whether an instance of the annotated class/field can be merged.
+     *
+     * @return whether an instance of the annotated class/field can be merged.
+     */
     boolean value();
 }

@@ -518,6 +518,14 @@ public class MessageCatalogFactory
         this.addCatalogConfiguration("gettext", GettextCatalogConfiguration.class);
     }
 
+    /**
+     * This method merges the parent object into the child object.
+     *
+     * @param child  child which gets values from the parent
+     * @param parent the parent object
+     *
+     * @throws ConfigurationException if the parent class isn't assignable from the child class
+     */
     private void mergeObjects(Object child, Object parent) throws ConfigurationException
     {
         if (!parent.getClass().isAssignableFrom(child.getClass()))
@@ -574,6 +582,13 @@ public class MessageCatalogFactory
         }
     }
 
+    /**
+     * This method returns whether the specified field is mergeable
+     *
+     * @param field field which shall be checked for mergeable
+     *
+     * @return whether the field is mergeable
+     */
     private boolean isMergeable(Field field)
     {
         Class<?> fieldType = field.getType();
@@ -592,6 +607,16 @@ public class MessageCatalogFactory
         return mergeable != null && mergeable.value();
     }
 
+    /**
+     * This method merges two arrays. It merges the parent into the child array
+     *
+     * @param field    field of the arrays
+     * @param instance instance which contains the child array
+     * @param child    child array
+     * @param parent   parent array
+     *
+     * @throws IllegalAccessException
+     */
     private void mergeArray(Field field, Object instance, Object child, Object parent) throws IllegalAccessException
     {
         MergeableArray mergeableArray = field.getAnnotation(MergeableArray.class);

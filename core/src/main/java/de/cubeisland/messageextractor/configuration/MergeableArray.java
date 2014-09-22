@@ -28,9 +28,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * This annotation is for fields which store an array within a {@link de.cubeisland.messageextractor.configuration.Configuration}.
+ * It is needed during the {@link de.cubeisland.messageextractor.MessageCatalogFactory#mergeObjects(Object, Object)} method to merge two arrays.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface MergeableArray
 {
+    /**
+     * The mode specifies how to merge the arrays.
+     *
+     * @return {@link de.cubeisland.messageextractor.configuration.MergeableArrayMode}
+     */
     MergeableArrayMode value() default MergeableArrayMode.APPEND_BEHIND;
 }

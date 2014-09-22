@@ -44,6 +44,11 @@ import spoon.reflect.cu.CompilationUnit;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.CtElement;
 
+/**
+ * A MessageProcessor is a {@link spoon.processing.Processor} which extracts translatable messages from java source code
+ *
+ * @param <E> the {@link spoon.reflect.declaration.CtElement} which shall be processed.
+ */
 public abstract class MessageProcessor<E extends CtElement> extends AbstractProcessor<E>
 {
     private final JavaExtractorConfiguration configuration;
@@ -51,6 +56,14 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
     private final ConverterManager converterManager;
     private final Logger logger;
 
+    /**
+     * The constructor "creates" a new MessageProcessor.
+     *
+     * @param configuration    the {@link de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration}
+     * @param messageStore     the {@link de.cubeisland.messageextractor.message.MessageStore} to which the messages shall be added
+     * @param converterManager a {@link de.cubeisland.messageextractor.extractor.java.converter.ConverterManager} which helps to convert CtElements
+     * @param logger           the {@link java.util.logging.Logger} which logs messages
+     */
     public MessageProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore, ConverterManager converterManager, Logger logger)
     {
         this.configuration = configuration;
@@ -59,16 +72,34 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         this.logger = logger;
     }
 
+    /**
+     * This method returns the {@link de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration}
+     *
+     * @return the java extractor configuration
+     */
     public JavaExtractorConfiguration getConfiguration()
     {
         return configuration;
     }
 
+    /**
+     * This method returns the message store to which the messages shall be added
+     *
+     * @return {@link de.cubeisland.messageextractor.message.MessageStore}
+     */
     public MessageStore getMessageStore()
     {
         return messageStore;
     }
 
+    /**
+     * This method converts the specified expression with the {@link de.cubeisland.messageextractor.extractor.java.converter.ConverterManager}
+     *
+     * @param expression     the expression which shall be converted
+     * @param javaExpression the java expression from which the expression is converted.
+     *
+     * @return the converter messages or null if a conversion exception occurred
+     */
     protected String[] getMessages(CtExpression<?> expression, JavaExpression javaExpression)
     {
         try
@@ -86,13 +117,22 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             builder.append("\nTranslatable-Expression-Type: ");
             builder.append(javaExpression.getClass().getSimpleName());
             builder.append("\nTranslatable-Expression-Name: ");
-            builder.append(javaExpression);
+            builder.append(javaExpression.getFQN());
 
             this.getLogger().log(Level.WARNING, builder.toString(), e.getCause());
         }
         return null;
     }
 
+    /**
+     * This method adds a {@link de.cubeisland.messageextractor.message.TranslatableMessage} to the {@link de.cubeisland.messageextractor.message.MessageStore}.
+     *
+     * @param javaExpression the java expression from which the message was extraced
+     * @param element        the element which occurs within the code
+     * @param context        the message context
+     * @param singulars      the message singulars
+     * @param plurals        the message plurals
+     */
     protected void addMessage(JavaExpression javaExpression, E element, String context, String[] singulars, String[] plurals)
     {
         File file = Misc.getRelativizedFile(this.getConfiguration().getDirectory(), element.getPosition().getFile());
@@ -157,6 +197,14 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         }
     }
 
+    /**
+     * This method extracts comments from the element, which start with '/// '.
+     * A comment can be behind or above the element. The comment behind has a higher priority.
+     *
+     * @param element the element from which comments shall be extracted
+     *
+     * @return extracted comments
+     */
     private String[] extractComments(E element)
     {
         SourcePosition position = element.getPosition();
@@ -193,6 +241,13 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         return extractedComments.toArray(new String[extractedComments.size()]);
     }
 
+    /**
+     * This method extracts a comments from the given line which start with '/// '.
+     *
+     * @param line the line
+     *
+     * @return the extracted comment or null
+     */
     private String getExtractedComment(String line)
     {
         line = line.trim();
@@ -205,8 +260,13 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         return line.substring(index + 4);
     }
 
+    /**
+     * This method returns the used {@link java.util.logging.Logger}
+     *
+     * @return the logger
+     */
     public Logger getLogger()
     {
-        return logger;
+        return this.logger;
     }
 }

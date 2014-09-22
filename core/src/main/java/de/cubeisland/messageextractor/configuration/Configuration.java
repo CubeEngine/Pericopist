@@ -28,7 +28,7 @@ import java.nio.charset.Charset;
 import de.cubeisland.messageextractor.exception.ConfigurationException;
 
 /**
- * This interface is used by every configuration of the messageextractor.
+ * This interface is used by every configuration of this project.
  */
 public interface Configuration
 {

@@ -23,6 +23,11 @@
  */
 package de.cubeisland.messageextractor.configuration;
 
+/**
+ * This method specifies a mode for the merging of arrays.
+ *
+ * @see de.cubeisland.messageextractor.configuration.MergeableArray
+ */
 public enum MergeableArrayMode
 {
     /**
