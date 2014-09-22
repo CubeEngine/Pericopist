@@ -28,6 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * This SourceReference class is used for instances of {@link de.cubeisland.messageextractor.message.TranslatableMessage}.
+ * An object of this class describes how and where a message was extracted from the source code.
+ *
+ * @see de.cubeisland.messageextractor.message.TranslatableMessage
+ */
 public class SourceReference implements Comparable<SourceReference>
 {
     private final File file;
@@ -36,6 +42,13 @@ public class SourceReference implements Comparable<SourceReference>
 
     private final List<String> extractedComments;
 
+    /**
+     * The constructor creates a new source reference
+     *
+     * @param file       the file where the message was extracted.
+     * @param line       the line of the file
+     * @param expression the {@link de.cubeisland.messageextractor.message.TranslatableExpression} instance which extracted the message
+     */
     public SourceReference(File file, int line, TranslatableExpression expression)
     {
         this.file = file;
@@ -45,31 +58,65 @@ public class SourceReference implements Comparable<SourceReference>
         this.extractedComments = new ArrayList<>();
     }
 
+    /**
+     * This method returns the file from which the message was read.
+     *
+     * @return the file
+     */
     public File getFile()
     {
         return file;
     }
 
+    /**
+     * This method returns the path of the file from which the message was read.
+     *
+     * @return the path of the file
+     */
     public String getPath()
     {
         return this.getFile().getPath().replaceAll("\\\\", "/");
     }
 
+    /**
+     * This method returns the line which contains the message
+     *
+     * @return line
+     */
     public int getLine()
     {
         return line;
     }
 
+    /**
+     * This method returns the {@link de.cubeisland.messageextractor.message.TranslatableExpression} which was
+     * used to extract the message.
+     *
+     * @return {@link de.cubeisland.messageextractor.message.TranslatableExpression} which was used to extract the message
+     */
     public TranslatableExpression getExpression()
     {
         return this.expression;
     }
 
+    /**
+     * This method adds an extracted comment to the source reference.
+     * That are hints for the translators, which shall help to create the translations easier.
+     *
+     * @param comment extracted comment
+     */
     public void addExtractedComment(String comment)
     {
         this.extractedComments.add(comment);
     }
 
+    /**
+     * This method returns a list containing every extracted comment.
+     *
+     * @return list containing every extracted comment
+     *
+     * @see #addExtractedComment(String)
+     */
     public List<String> getExtractedComments()
     {
         return this.extractedComments;

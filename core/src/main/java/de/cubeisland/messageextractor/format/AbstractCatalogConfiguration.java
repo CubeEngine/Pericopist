@@ -50,6 +50,7 @@ public abstract class AbstractCatalogConfiguration implements CatalogConfigurati
 
     /**
      * This method sets the template file of the catalog
+     *
      * @param file template file
      */
     @XmlElement(name = "template")

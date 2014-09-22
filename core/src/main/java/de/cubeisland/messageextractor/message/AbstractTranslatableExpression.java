@@ -25,6 +25,10 @@ package de.cubeisland.messageextractor.message;
 
 import javax.xml.bind.annotation.XmlElement;
 
+/**
+ * This class is an abstract implementation of {@link de.cubeisland.messageextractor.message.TranslatableExpression}.
+ * It implements basic methods which should be used by every {@link de.cubeisland.messageextractor.message.TranslatableExpression} implementation
+ */
 public abstract class AbstractTranslatableExpression implements TranslatableExpression
 {
     private String name;

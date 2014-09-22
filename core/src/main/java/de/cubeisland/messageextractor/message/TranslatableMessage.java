@@ -26,6 +26,16 @@ package de.cubeisland.messageextractor.message;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * The TranslatableMessage class represents a translatable message.
+ * They're stored within a {@link de.cubeisland.messageextractor.message.MessageStore} instance.
+ * <p/>
+ * The TranslatableMessage-instances will be created withing
+ * {@link de.cubeisland.messageextractor.format.CatalogFormat#read(de.cubeisland.messageextractor.format.CatalogConfiguration, java.io.InputStream)}
+ * and {@link de.cubeisland.messageextractor.extractor.MessageExtractor#extract(de.cubeisland.messageextractor.extractor.ExtractorConfiguration, MessageStore)}
+ *
+ * @see de.cubeisland.messageextractor.message.MessageStore
+ */
 public class TranslatableMessage implements Comparable<TranslatableMessage>
 {
     private final String context;
@@ -34,6 +44,13 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
 
     private final Set<SourceReference> sourceReferences;
 
+    /**
+     * The constructor creates a new translatable message
+     *
+     * @param context  context of the message, or null if the message doesn't have a special context
+     * @param singular singular of the message
+     * @param plural   plural of the message, or null if the message doesn't have a plural
+     */
     public TranslatableMessage(String context, String singular, String plural)
     {
         this.context = context;
@@ -43,41 +60,86 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
         this.sourceReferences = new TreeSet<>();
     }
 
+    /**
+     * This method returns whether this message has a special context.
+     * A context is needed to provide different translations for the same method.
+     *
+     * @return whether this message has a special context
+     */
     public boolean hasContext()
     {
         return this.context != null;
     }
 
+    /**
+     * This method returns the special context of the message.
+     *
+     * @return context of the message
+     *
+     * @see #hasContext()
+     */
     public String getContext()
     {
         return this.context;
     }
 
+    /**
+     * This method returns the singular of the message.
+     *
+     * @return singular of the message
+     */
     public String getSingular()
     {
         return this.singular;
     }
 
+    /**
+     * This method returns whether this message has a plural.
+     *
+     * @return whether this message has a plural
+     */
     public boolean hasPlural()
     {
         return this.plural != null;
     }
 
+    /**
+     * This method returns the plural of the message.
+     *
+     * @return plural of the message
+     */
     public String getPlural()
     {
         return this.plural;
     }
 
+    /**
+     * This method adds a new source reference to the message
+     *
+     * @param sourceReference SourceReference instance which describes how the message was extracted
+     */
     public void addSourceReference(SourceReference sourceReference)
     {
         this.sourceReferences.add(sourceReference);
     }
 
+    /**
+     * This method returns a Set containing every SourceReference instances for this message.
+     * A source reference describes how the message was extracted.
+     *
+     * @return Set containing every source reference of the message
+     */
     public Set<SourceReference> getSourceReferences()
     {
         return this.sourceReferences;
     }
 
+    /**
+     * This method is used internal. It has to be overwritten if a subclass
+     * overrides the {@link #compareTo(TranslatableMessage)} method.
+     *
+     * @return whether this class overrides the {@link #compareTo(TranslatableMessage)} method.
+     */
     protected boolean overridesCompareToMethod()
     {
         return false;

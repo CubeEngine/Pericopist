@@ -27,15 +27,34 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * The MessageStore class is a helper class which is used to store {@link de.cubeisland.messageextractor.message.TranslatableMessage} instances.
+ * The {@link de.cubeisland.messageextractor.format.CatalogFormat} and the {@link de.cubeisland.messageextractor.extractor.MessageExtractor}
+ * use this class to communicate among each other.
+ *
+ * @see de.cubeisland.messageextractor.format.CatalogFormat
+ * @see de.cubeisland.messageextractor.extractor.MessageExtractor
+ * @see de.cubeisland.messageextractor.message.TranslatableMessage
+ */
 public class MessageStore implements Iterable<TranslatableMessage>
 {
     private Set<TranslatableMessage> messages;
 
+    /**
+     * The constructor creates a new message store
+     */
     public MessageStore()
     {
         this.messages = new TreeSet<>();
     }
 
+    /**
+     * This method adds a {@link de.cubeisland.messageextractor.message.TranslatableMessage} to the message store
+     *
+     * @param message message which shall be add
+     *
+     * @throws java.lang.IllegalArgumentException if the message exists already.
+     */
     public void addMessage(TranslatableMessage message)
     {
         if (this.messages.contains(message))
@@ -46,6 +65,15 @@ public class MessageStore implements Iterable<TranslatableMessage>
         this.messages.add(message);
     }
 
+    /**
+     * This method returns the {@link de.cubeisland.messageextractor.message.TranslatableMessage} with the specified data.
+     *
+     * @param context  context of the message
+     * @param singular singular of the message
+     * @param plural   plural of the message
+     *
+     * @return the {@link de.cubeisland.messageextractor.message.TranslatableMessage} which has the specified data or null
+     */
     public TranslatableMessage getMessage(String context, String singular, String plural)
     {
         for (TranslatableMessage message : this.messages)
@@ -83,11 +111,21 @@ public class MessageStore implements Iterable<TranslatableMessage>
         return null;
     }
 
+    /**
+     * This method returns a Set containing every {@link de.cubeisland.messageextractor.message.TranslatableMessage} instance
+     *
+     * @return Set containing every message
+     */
     public Set<TranslatableMessage> getMessages()
     {
         return this.messages;
     }
 
+    /**
+     * This method returns the amount of message which are stored by this instance
+     *
+     * @return amount of messages
+     */
     public int size()
     {
         return this.getMessages().size();
