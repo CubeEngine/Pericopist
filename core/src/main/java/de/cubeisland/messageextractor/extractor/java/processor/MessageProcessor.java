@@ -24,6 +24,8 @@
 package de.cubeisland.messageextractor.extractor.java.processor;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +40,8 @@ import de.cubeisland.messageextractor.message.TranslatableMessage;
 import de.cubeisland.messageextractor.util.Misc;
 import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtExpression;
+import spoon.reflect.cu.CompilationUnit;
+import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.CtElement;
 
 public abstract class MessageProcessor<E extends CtElement> extends AbstractProcessor<E>
@@ -99,6 +103,11 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             context = javaExpression.getDefaultContext();
         }
 
+        for (String extractedComment : this.extractComments(element))
+        {
+            sourceReference.addExtractedComment(extractedComment);
+        }
+
         if (javaExpression.hasPlural())
         {
             if (plurals.length > 1)
@@ -125,7 +134,6 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             }
 
             pluralMessage.addSourceReference(sourceReference);
-            // TODO add extractedComments! write method to load it (source reference and element.getPosition is needed)
 
             return;
         }
@@ -146,8 +154,55 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             }
 
             singularMessage.addSourceReference(sourceReference);
-            // TODO add extractedComments! write method to load it (source reference and element.getPosition is needed)
         }
+    }
+
+    private String[] extractComments(E element)
+    {
+        SourcePosition position = element.getPosition();
+        CompilationUnit compilationUnit = position.getCompilationUnit();
+        String sourceCode = compilationUnit.getOriginalSourceCode();
+
+        // load comment after element
+        String comment = this.getExtractedComment(sourceCode.substring(position.getSourceEnd(), compilationUnit.nextLineIndex(position.getSourceEnd())));
+        if (comment != null)
+        {
+            return new String[] {comment};
+        }
+
+        // load more line comments before element
+        List<String> extractedComments = new ArrayList<>(1);
+
+        int currentLineIndex;
+        int lastLineIndex = compilationUnit.beginOfLineIndex(position.getSourceStart());
+
+        do
+        {
+            currentLineIndex = lastLineIndex;
+            lastLineIndex = compilationUnit.beginOfLineIndex(currentLineIndex - 2);
+
+            comment = this.getExtractedComment(sourceCode.substring(lastLineIndex, currentLineIndex));
+
+            if (comment != null)
+            {
+                extractedComments.add(0, comment);
+            }
+        }
+        while (comment != null);
+
+        return extractedComments.toArray(new String[extractedComments.size()]);
+    }
+
+    private String getExtractedComment(String line)
+    {
+        line = line.trim();
+
+        int index = line.indexOf("/// ");
+        if (index < 0)
+        {
+            return null;
+        }
+        return line.substring(index + 4);
     }
 
     public Logger getLogger()
