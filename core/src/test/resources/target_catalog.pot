@@ -5,8 +5,51 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-09-22 14:46:08+0200\n"
+"POT-Creation-Date: 2014-09-22 15:08:10+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+
+#. Extracted by:
+#. 1. Method
+#. 	Name: de.cubeisland.messageextractor.test.i18n.I18n#translate(java.lang.String, java.lang.Object[])
+#. 	Description: this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#. 	Comments: 
+#. 	- I'll be extracted
+#: de/cubeisland/messageextractor/test/ExtractCommentsTest.java:51
+msgid "A message with an extracted comment above and at the right"
+msgstr ""
+
+#. Extracted by:
+#. 1. Method
+#. 	Name: de.cubeisland.messageextractor.test.i18n.I18n#translate(java.lang.String, java.lang.Object[])
+#. 	Description: this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#. 	Comments: 
+#. 	- multi line
+#. 	- comment that
+#. 	- will be
+#. 	- extracted
+#: de/cubeisland/messageextractor/test/ExtractCommentsTest.java:45
+msgid "A message with an extracted comment above."
+msgstr ""
+
+#. Extracted by:
+#. 1. Method
+#. 	Name: de.cubeisland.messageextractor.test.i18n.I18n#translate(java.lang.String, java.lang.Object[])
+#. 	Description: this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#. 	Comments: 
+#. 	- extract me
+#: de/cubeisland/messageextractor/test/ExtractCommentsTest.java:47
+msgid "A message with an extracted comment at the right."
+msgstr ""
+
+#. Extracted by:
+#. 1. Annotation
+#. 	Name: de.cubeisland.messageextractor.test.TranslatableAnnotation:value
+#. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation
+#. 	Comments: 
+#. 	- extract me
+#: de/cubeisland/messageextractor/test/ExtractCommentsTest.java:38
+msgid "An annotation with an extracted comment"
+msgstr ""
 
 #. Extracted by:
 #. 1. Method
@@ -27,6 +70,18 @@ msgid "One monkey is better than sheep"
 msgid_plural "We've %d monkeys"
 msgstr[0] ""
 msgstr[1] ""
+
+#. Extracted by:
+#. 1. Annotation
+#. 	Name: de.cubeisland.messageextractor.test.command.Command:desc,usage
+#. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.command.Command annotation
+#. 	Comments: 
+#. 	- This multi line comment will be
+#. 	- extracted and added at the desc and
+#. 	- the usage method.
+#: de/cubeisland/messageextractor/test/ExtractCommentsTest.java:35
+msgid "The desc of a command with extracted comments"
+msgstr ""
 
 #. Extracted by:
 #. 1. Method
@@ -535,6 +590,18 @@ msgid "singular of a plural message from polymorphism I18n test"
 msgid_plural "plural of the plural message from polymorphism I18n test"
 msgstr[0] ""
 msgstr[1] ""
+
+#. Extracted by:
+#. 1. Annotation
+#. 	Name: de.cubeisland.messageextractor.test.command.Command:desc,usage
+#. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.command.Command annotation
+#. 	Comments: 
+#. 	- This multi line comment will be
+#. 	- extracted and added at the desc and
+#. 	- the usage method.
+#: de/cubeisland/messageextractor/test/ExtractCommentsTest.java:35
+msgid "the usage of a command with extracted comments"
+msgstr ""
 
 #. Extracted by:
 #. 1. Constructor
