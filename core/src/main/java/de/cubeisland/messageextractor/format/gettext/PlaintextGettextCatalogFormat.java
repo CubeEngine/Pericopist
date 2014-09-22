@@ -129,14 +129,19 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             }
 
             Message availableMessage = catalog.locateMessage(message.getMsgctxt(), message.getMsgid());
-            if (availableMessage == null)
+            if (availableMessage == null) // it's a completely new entry
             {
-                catalog.addMessage(message); // it's a completely new entry
+                catalog.addMessage(message);
                 continue;
             }
 
-            // TODO check whether available entry has to be replaced with the new one and replace it.
-            throw new CatalogFormatException("the entry exists already");
+            if (availableMessage.getSourceReferences().isEmpty()) // the old entry isn't used anymore
+            {
+                catalog.addMessage(message);
+                continue;
+            }
+
+            throw new CatalogFormatException(String.format("The message with the context '%s' and the msgid '%s' exists already.", message.getMsgctxt(), message.getMsgid()));
         }
 
         return catalog;
