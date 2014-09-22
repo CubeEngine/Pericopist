@@ -213,9 +213,10 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
     {
         // adds every message to the list which has the same reference
         List<TranslatableGettextMessage> messageList = new ArrayList<>(1);
+
         for (String reference : message.getSourceReferences())
         {
-            for (TranslatableMessage oldMessage : messageStore)
+            messageLoop: for (TranslatableMessage oldMessage : messageStore)
             {
                 if (!(oldMessage instanceof TranslatableGettextMessage))
                 {
@@ -223,13 +224,18 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
                 }
 
                 TranslatableGettextMessage translatableGettextMessage = (TranslatableGettextMessage) oldMessage;
-                /*
-                 * TODO translatableGettextMessage.getSourceReferences() isn't allowed to contain the reference!
-                 * and translatableGettextMessage.getGettextReferences() must contain it
-                 */
+                for (SourceReference newReference : translatableGettextMessage.getSourceReferences())
+                {
+                    // continue with the next message if the reference still exists in that message
+                    if (reference.equals(newReference.toString()))
+                    {
+                        continue messageLoop;
+                    }
+                }
+
                 for (String oldReference : translatableGettextMessage.getGettextReferences())
                 {
-
+                    // if the reference was a message in the old catalog, add it to the message list
                     if (reference.equals(oldReference))
                     {
                         messageList.add((TranslatableGettextMessage) oldMessage);
