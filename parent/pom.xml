@@ -18,6 +18,7 @@
     <name>${project.artifactId}</name>
     <description>This is the parent for all message extractor projects.</description>
     <url>https://engine.cubeisland.de</url>
+    <inceptionYear>2013</inceptionYear>
 
     <scm>
         <url>scm:git:https://github.com/CubeEngine/messageextractor</url>
@@ -117,15 +118,19 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.mycila.maven-license-plugin</groupId>
-                <artifactId>maven-license-plugin</artifactId>
-                <version>1.10.b1</version>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.6</version>
                 <configuration>
-                    <header>/LICENSE.txt</header>
+                    <strictCheck>true</strictCheck>
+                    <header>com/mycila/maven/plugin/license/templates/MIT.txt</header>
                     <strictCheck>true</strictCheck>
                     <includes>
                         <include>**/*.java</include>
                     </includes>
+                    <properties>
+                        <owner>Cube Island</owner>
+                    </properties>
                 </configuration>
                 <executions>
                     <execution>
