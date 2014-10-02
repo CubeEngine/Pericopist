@@ -4,9 +4,9 @@
 
     <parent>
         <groupId>de.cubeisland</groupId>
-        <artifactId>messageextractor-parent</artifactId>
-        <version>5</version>
-        <relativePath>../parent/pom.xml</relativePath>
+        <artifactId>messageextractor</artifactId>
+        <version>2.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>de.cubeisland.maven.plugins</groupId>
@@ -20,11 +20,6 @@
         <mavenVersion>2.2.1</mavenVersion>
     </properties>
 
-    <scm>
-        <developerConnection>scm:git:https://github.com/CubeEngineDev/messageextractor</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
-
     <licenses>
         <license>
             <name>GNU General Public License Version 3</name>
@@ -34,9 +29,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>de.cubeisland</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>messageextractor-core</artifactId>
-            <version>2.0.1-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -61,7 +56,7 @@
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
                 <configuration>
-                    <header>com/mycila/maven/plugin/license/templates/MIT.txt</header>
+                    <header>com/mycila/maven/plugin/license/templates/GPL-3.txt</header>
                 </configuration>
             </plugin>
         </plugins>
