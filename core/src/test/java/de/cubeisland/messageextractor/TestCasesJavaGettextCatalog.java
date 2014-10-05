@@ -202,15 +202,17 @@ public class TestCasesJavaGettextCatalog
         Method hasChanges = translatableGettextMessageClass.getMethod("hasChanges");
         hasChanges.setAccessible(true);
 
+        int messages = 0;
         int notTranslatableGettextMessageCount = 0;
 
         for (TranslatableMessage message : messageStore)
         {
-            assertTrue(gettextMessageClass.isAssignableFrom(message.getClass()));
+            messages++;
+            assertTrue(messages + ". message isn't an instance of GettextMessage.", gettextMessageClass.isAssignableFrom(message.getClass()));
 
             if (translatableGettextMessageClass.isInstance(message))
             {
-                assertFalse((boolean) hasChanges.invoke(message));
+                assertFalse(messages + ". message has changes.", (boolean) hasChanges.invoke(message));
             }
             else
             {
