@@ -4,21 +4,15 @@
 
     <parent>
         <groupId>de.cubeisland</groupId>
-        <artifactId>messageextractor-parent</artifactId>
-        <version>5</version>
-        <relativePath>../parent/pom.xml</relativePath>
+        <artifactId>messageextractor</artifactId>
+        <version>2.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>messageextractor-core</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <description>A library to extract messages from source code and generate message catalogs.</description>
-
-    <scm>
-        <developerConnection>scm:git:https://github.com/CubeEngineDev/messageextractor</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
 
     <licenses>
         <license>
@@ -32,26 +26,35 @@
             <groupId>de.cubeisland.spoon</groupId>
             <artifactId>spoon-core</artifactId>
             <version>2.2-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.fedorahosted.tennera</groupId>
             <artifactId>jgettext</artifactId>
             <version>0.13</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>2.2.11</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax.xml.stream</groupId>
             <artifactId>stax-api</artifactId>
             <version>1.0-2</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
+            <type>jar</type>
             <scope>test</scope>
         </dependency>
     </dependencies>

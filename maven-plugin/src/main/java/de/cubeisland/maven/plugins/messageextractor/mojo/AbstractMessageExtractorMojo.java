@@ -1,6 +1,5 @@
 /**
  * This file is part of messageextractor-maven-plugin.
- * messageextractor-maven-plugin is licensed under the GNU General Public License Version 3.
  *
  * messageextractor-maven-plugin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
