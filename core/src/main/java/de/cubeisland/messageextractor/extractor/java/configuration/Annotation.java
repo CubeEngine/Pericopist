@@ -65,8 +65,8 @@ import spoon.reflect.declaration.CtElement;
  * <li>local_variable</li>
  * <li>annotation_type</li>
  * <li>package</li>
- * <li>type_parameter</li> <!-- not supported by spoon yet -->
- * <li>type_use</li> <!-- not supported by spoon yet -->
+ * <li>type_parameter (not supported by spoon yet)</li>
+ * <li>type_use (not supported by spoon yet)</li>
  * </ul>
  */
 @XmlRootElement(name = "annotation")
