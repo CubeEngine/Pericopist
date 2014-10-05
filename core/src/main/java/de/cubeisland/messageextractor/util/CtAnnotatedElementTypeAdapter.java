@@ -20,5 +20,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-@TranslatableAnnotation("I was extracted from a package annotation.")
-package de.cubeisland.messageextractor.test;
+package de.cubeisland.messageextractor.util;
+
+import java.util.Locale;
+
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+
+import spoon.reflect.declaration.CtAnnotatedElementType;
+
+public class CtAnnotatedElementTypeAdapter extends XmlAdapter<String, CtAnnotatedElementType>
+{
+    @Override
+    public CtAnnotatedElementType unmarshal(String v) throws Exception
+    {
+        return CtAnnotatedElementType.valueOf(v.toUpperCase(Locale.US));
+    }
+
+    @Override
+    public String marshal(CtAnnotatedElementType v) throws Exception
+    {
+        return v.name().toLowerCase(Locale.US);
+    }
+}

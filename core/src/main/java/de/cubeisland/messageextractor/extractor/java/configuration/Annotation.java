@@ -25,7 +25,10 @@ package de.cubeisland.messageextractor.extractor.java.configuration;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import de.cubeisland.messageextractor.util.CtAnnotatedElementTypeAdapter;
+import spoon.reflect.declaration.CtAnnotatedElementType;
 import spoon.reflect.declaration.CtAnnotation;
 import spoon.reflect.declaration.CtElement;
 
@@ -44,15 +47,35 @@ import spoon.reflect.declaration.CtElement;
  *         <field>second_translatable_field</field>
  *     </fields>
  *     <description>I am a default context</description>
+ *     <targets>
+ *         <target>method</target> <!-- defines target element types of the annotation -->
+ *         <target>type</target>
+ *     </targets>
  * </annotation>
  * }
  * </pre>
+ * <p/>
+ * target element types:
+ * <ul>
+ * <li>type</li>
+ * <li>field</li>
+ * <li>method</li>
+ * <li>parameter</li>
+ * <li>constructor</li>
+ * <li>local_variable</li>
+ * <li>annotation_type</li>
+ * <li>package</li>
+ * <li>type_parameter</li> <!-- not supported by spoon yet -->
+ * <li>type_use</li> <!-- not supported by spoon yet -->
+ * </ul>
  */
 @XmlRootElement(name = "annotation")
 public class Annotation extends JavaExpression
 {
     private String contextField;
     private String[] fields;
+
+    private CtAnnotatedElementType[] targets;
 
     /**
      * The constructor adds the value field as the default one
@@ -124,6 +147,32 @@ public class Annotation extends JavaExpression
         this.contextField = contextField;
     }
 
+    /**
+     * This method returns the targets of the annotation. A target is related to {@link java.lang.annotation.ElementType}
+     * and specifies the annotated element type.
+     *
+     * @return target of the annotation
+     */
+    public CtAnnotatedElementType[] getTargets()
+    {
+        return targets;
+    }
+
+    /**
+     * This method sets the targets of the annotation.
+     *
+     * @param targets targets of the annotation
+     *
+     * @see #getTargets()
+     */
+    @XmlElementWrapper(name = "targets")
+    @XmlElement(name = "target")
+    @XmlJavaTypeAdapter(CtAnnotatedElementTypeAdapter.class)
+    public void setTargets(CtAnnotatedElementType[] targets)
+    {
+        this.targets = targets;
+    }
+
     @Override
     public String toString()
     {
@@ -153,8 +202,39 @@ public class Annotation extends JavaExpression
             return false;
         }
 
-        String qfn = ((CtAnnotation<?>) element).getAnnotationType().getQualifiedName();
-        return this.getName().equals(qfn);
+        CtAnnotation<?> annotation = (CtAnnotation<?>) element;
+
+        if (!this.getName().equals(annotation.getAnnotationType().getQualifiedName()))
+        {
+            return false;
+        }
+
+        return this.getTargets() == null || this.containsTarget(annotation.getAnnotatedElementType());
+    }
+
+    /**
+     * This method checks whether the occurred annotated element type is supported by this annotation.
+     *
+     * @param type occurred {@link CtAnnotatedElementType}
+     *
+     * @return whether specified type is supported by this configuration
+     */
+    private boolean containsTarget(CtAnnotatedElementType type)
+    {
+        if (type == null)
+        {
+            return false;
+        }
+
+        for (CtAnnotatedElementType elementType : this.getTargets())
+        {
+            if (type.equals(elementType))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

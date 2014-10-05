@@ -35,7 +35,45 @@
 
             <annotation>
                 <name>de.cubeisland.messageextractor.test.TranslatableAnnotation</name>
-                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation</description>
+                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a type or a package</description>
+                <targets>
+                    <target>package</target>
+                    <target>type</target>
+                </targets>
+            </annotation>
+
+            <annotation>
+                <name>de.cubeisland.messageextractor.test.TranslatableAnnotation</name>
+                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a field or a local variable</description>
+                <targets>
+                    <target>field</target>
+                    <target>local_variable</target>
+                </targets>
+            </annotation>
+
+            <annotation>
+                <name>de.cubeisland.messageextractor.test.TranslatableAnnotation</name>
+                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a parameter</description>
+                <targets>
+                    <target>parameter</target>
+                </targets>
+            </annotation>
+
+            <annotation>
+                <name>de.cubeisland.messageextractor.test.TranslatableAnnotation</name>
+                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from an annotation type</description>
+                <targets>
+                    <target>annotation_type</target>
+                </targets>
+            </annotation>
+
+            <annotation>
+                <name>de.cubeisland.messageextractor.test.TranslatableAnnotation</name>
+                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a method or a constructor</description>
+                <targets>
+                    <target>method</target>
+                    <target>constructor</target>
+                </targets>
             </annotation>
 
             <annotation>

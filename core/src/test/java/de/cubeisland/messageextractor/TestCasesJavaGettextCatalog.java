@@ -106,13 +106,17 @@ public class TestCasesJavaGettextCatalog
         assertEquals("de.cubeisland.messageextractor.test.command.User#sendTranslatedN", config.getJavaExpressions()[1].getName());
         assertEquals("de.cubeisland.messageextractor.test.command.Command", config.getJavaExpressions()[2].getName());
         assertEquals("de.cubeisland.messageextractor.test.TranslatableAnnotation", config.getJavaExpressions()[3].getName());
-        assertEquals("de.cubeisland.messageextractor.test.TranslatableArrayAnnotation", config.getJavaExpressions()[4].getName());
-        assertEquals("de.cubeisland.messageextractor.test.MessageExtractorTest", config.getJavaExpressions()[5].getName());
-        assertEquals("de.cubeisland.messageextractor.test.exception.WrongUsageException", config.getJavaExpressions()[6].getName());
-        assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translate", config.getJavaExpressions()[7].getName());
-        assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translateC", config.getJavaExpressions()[8].getName());
-        assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translateN", config.getJavaExpressions()[9].getName());
-        assertEquals("de.cubeisland.messageextractor.test.TranslatableContextAnnotation", config.getJavaExpressions()[10].getName());
+        assertEquals("de.cubeisland.messageextractor.test.TranslatableAnnotation", config.getJavaExpressions()[4].getName());
+        assertEquals("de.cubeisland.messageextractor.test.TranslatableAnnotation", config.getJavaExpressions()[5].getName());
+        assertEquals("de.cubeisland.messageextractor.test.TranslatableAnnotation", config.getJavaExpressions()[6].getName());
+        assertEquals("de.cubeisland.messageextractor.test.TranslatableAnnotation", config.getJavaExpressions()[7].getName());
+        assertEquals("de.cubeisland.messageextractor.test.TranslatableArrayAnnotation", config.getJavaExpressions()[8].getName());
+        assertEquals("de.cubeisland.messageextractor.test.MessageExtractorTest", config.getJavaExpressions()[9].getName());
+        assertEquals("de.cubeisland.messageextractor.test.exception.WrongUsageException", config.getJavaExpressions()[10].getName());
+        assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translate", config.getJavaExpressions()[11].getName());
+        assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translateC", config.getJavaExpressions()[12].getName());
+        assertEquals("de.cubeisland.messageextractor.test.i18n.I18n#translateN", config.getJavaExpressions()[13].getName());
+        assertEquals("de.cubeisland.messageextractor.test.TranslatableContextAnnotation", config.getJavaExpressions()[14].getName());
     }
 
     @Test
