@@ -11,7 +11,6 @@
 
     <groupId>de.cubeisland.maven.plugins</groupId>
     <artifactId>messageextractor-maven-plugin</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <description>A maven plugin to extract messages from your source code and generate message catalogs.</description>
