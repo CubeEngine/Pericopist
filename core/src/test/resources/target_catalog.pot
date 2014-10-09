@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-10-09 14:49:00+0200\n"
+"POT-Creation-Date: 2014-10-09 15:26:28+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #. Extracted by:
@@ -135,7 +135,7 @@ msgstr ""
 #. 1. Annotation
 #. 	Name: de.cubeisland.messageextractor.test.command.Command:desc,usage
 #. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.command.Command annotation
-#: de/cubeisland/messageextractor/test/AnnotationTest.java:53
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:58
 msgid ""
 "This annotation tries to write the private constant 'this is a private test "
 "constant.' into the catalog."
@@ -368,7 +368,7 @@ msgstr ""
 #. 1. Annotation
 #. 	Name: de.cubeisland.messageextractor.test.TranslatableAnnotation:value
 #. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from an annotation type
-#: de/cubeisland/messageextractor/test/AnnotationTest.java:52
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:57
 msgid "extracted from an annotation as a field of another annotation"
 msgstr ""
 
@@ -392,7 +392,7 @@ msgstr ""
 #. 1. Annotation
 #. 	Name: de.cubeisland.messageextractor.test.TranslatableAnnotation:value
 #. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a method or a constructor
-#: de/cubeisland/messageextractor/test/AnnotationTest.java:38
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:39
 msgid "extracted from an annotation with a constructor target"
 msgstr ""
 
@@ -408,7 +408,7 @@ msgstr ""
 #. 1. Annotation
 #. 	Name: de.cubeisland.messageextractor.test.TranslatableAnnotation:value
 #. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a field or a local variable
-#: de/cubeisland/messageextractor/test/AnnotationTest.java:56
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:61
 msgid "extracted from an annotation with a local parameter target"
 msgstr ""
 
@@ -416,7 +416,7 @@ msgstr ""
 #. 1. Annotation
 #. 	Name: de.cubeisland.messageextractor.test.TranslatableAnnotation:value
 #. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a method or a constructor
-#: de/cubeisland/messageextractor/test/AnnotationTest.java:44
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:49
 msgid "extracted from an annotation with a method target"
 msgstr ""
 
@@ -424,7 +424,7 @@ msgstr ""
 #. 1. Annotation
 #. 	Name: de.cubeisland.messageextractor.test.TranslatableAnnotation:value
 #. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a parameter
-#: de/cubeisland/messageextractor/test/AnnotationTest.java:54
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:59
 msgid "extracted from an annotation with a parameter target"
 msgstr ""
 
@@ -432,7 +432,7 @@ msgstr ""
 #. 1. Annotation
 #. 	Name: de.cubeisland.messageextractor.test.TranslatableArrayAnnotation:value
 #. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.TranslatableArrayAnnotation annotation
-#: de/cubeisland/messageextractor/test/AnnotationTest.java:37
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:38
 msgid "extracted from an annotation with an array field"
 msgstr ""
 
@@ -440,7 +440,7 @@ msgstr ""
 #. 1. Annotation
 #. 	Name: de.cubeisland.messageextractor.test.command.Command:desc,usage
 #. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.command.Command annotation
-#: de/cubeisland/messageextractor/test/AnnotationTest.java:45
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:50
 msgid "extracted from the desc field of the command annotation"
 msgstr ""
 
@@ -448,7 +448,7 @@ msgstr ""
 #. 1. Annotation
 #. 	Name: de.cubeisland.messageextractor.test.command.Command:desc,usage
 #. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.command.Command annotation
-#: de/cubeisland/messageextractor/test/AnnotationTest.java:45
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:50
 msgid "extracted from the usage field of the command annotation"
 msgstr ""
 
@@ -496,6 +496,14 @@ msgstr ""
 msgid ""
 "extracted with an enum constant: TranslatableEnum{text='This is the 1st enum "
 "instance.'}"
+msgstr ""
+
+#. Extracted by:
+#. 1. Annotation
+#. 	Name: de.cubeisland.messageextractor.test.TranslatableAnnotation:value
+#. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from an annotation type
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:37
+msgid "message from second inner annotation"
 msgstr ""
 
 #. Extracted by:

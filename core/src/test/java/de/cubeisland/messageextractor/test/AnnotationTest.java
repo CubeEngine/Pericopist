@@ -34,6 +34,7 @@ public class AnnotationTest
     @TranslatableAnnotation("extracted from an annotation with a field target")
     private String value;
 
+    @OuterAnnotation(@AnnotationWithInnerAnnotation(@TranslatableAnnotation("message from second inner annotation")))
     @TranslatableArrayAnnotation({"extracted from an annotation with an array field", "extracted from an annotation with an array field"})
     @TranslatableAnnotation("extracted from an annotation with a constructor target")
     public AnnotationTest()
@@ -41,6 +42,10 @@ public class AnnotationTest
 
     }
 
+    @OuterAnnotation({ // TODO fix it; this messages won't be extracted atm
+            @AnnotationWithInnerAnnotation(@TranslatableAnnotation("message from second inner annotation")),
+            @AnnotationWithInnerAnnotation(@TranslatableAnnotation("this time is the first annotation defined as an array"))
+    })
     @TranslatableAnnotation("extracted from an annotation with a method target")
     @Command(desc = "extracted from the desc field of the command annotation", usage = "extracted from the usage field of the command annotation")
     @CommandParameter("This message won't be extracted!")
