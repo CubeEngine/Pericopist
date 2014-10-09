@@ -25,6 +25,7 @@ package de.cubeisland.messageextractor.format.gettext;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import de.cubeisland.messageextractor.message.SourceReference;
 import de.cubeisland.messageextractor.message.TranslatableExpression;
@@ -33,12 +34,16 @@ import de.cubeisland.messageextractor.message.TranslatableMessage;
 public final class GettextUtils
 {
     private GettextUtils()
-    { }
+    {
+    }
 
     /**
      * This method creates a List storing the extracted comments from the TranslatableMessage.
      * This is created with the help of the SourceReference instances which are stored by the
      * TranslatableMessage.
+     * <p/>
+     * Equal entries will be combined into one single entry containing the number of every entry
+     * which is described by the entry.
      *
      * @param message TranslatableMessage
      *
@@ -46,7 +51,9 @@ public final class GettextUtils
      */
     public static List<String> createExtractedComments(TranslatableMessage message)
     {
-        if (message.getSourceReferences().isEmpty())
+        List<SourceReferenceHolder> holders = combineSourceReferences(message.getSourceReferences());
+
+        if (holders == null)
         {
             return Collections.emptyList();
         }
@@ -54,14 +61,17 @@ public final class GettextUtils
         List<String> extractedComments = new ArrayList<>();
         extractedComments.add("Extracted by:");
 
-        int sourceReferenceCount = 0;
-        for (SourceReference reference : message.getSourceReferences())
+        for (SourceReferenceHolder holder : holders)
         {
             StringBuilder builder = new StringBuilder();
-            builder.append(++sourceReferenceCount).append(". ");
-            if (reference.getExpression() != null)
+            for (int i = 0; i < holder.numbers.size() - 1; i++)
             {
-                TranslatableExpression expression = reference.getExpression();
+                builder.append(holder.numbers.get(i)).append(", ");
+            }
+            builder.append(holder.numbers.get(holder.numbers.size() - 1)).append(". ");
+            if (holder.sourceReference.getExpression() != null)
+            {
+                TranslatableExpression expression = holder.sourceReference.getExpression();
 
                 builder.append(expression.getClass().getSimpleName());
                 builder.append("\n\tName: ").append(expression.getFQN());
@@ -71,10 +81,10 @@ public final class GettextUtils
                 }
             }
 
-            if (!reference.getExtractedComments().isEmpty())
+            if (!holder.sourceReference.getExtractedComments().isEmpty())
             {
                 builder.append("\n\tComments: ");
-                for (String extractedComment : reference.getExtractedComments())
+                for (String extractedComment : holder.sourceReference.getExtractedComments())
                 {
                     builder.append("\n\t- ").append(extractedComment);
                 }
@@ -87,5 +97,99 @@ public final class GettextUtils
         }
 
         return extractedComments;
+    }
+
+    /**
+     * This method combines similar source reference entries to one single entry. It uses a helper class
+     * which contains the source reference and and a list containing every number describing the entry.
+     *
+     * @param sourceReferences list of source references
+     *
+     * @return list of the helper class {@link SourceReferenceHolder}
+     */
+    private static List<SourceReferenceHolder> combineSourceReferences(Set<SourceReference> sourceReferences)
+    {
+        if (sourceReferences == null || sourceReferences.isEmpty())
+        {
+            return null;
+        }
+
+        List<SourceReferenceHolder> holders = new ArrayList<>(sourceReferences.size());
+
+        int number = 0;
+        for (SourceReference reference : sourceReferences)
+        {
+            number++;
+            int index = getSourceReferenceHolderIndex(holders, reference);
+
+            if (index < 0)
+            {
+                SourceReferenceHolder holder = new SourceReferenceHolder();
+                holder.sourceReference = reference;
+                holder.numbers.add(number);
+                holders.add(holder);
+            }
+            else
+            {
+                holders.get(index).numbers.add(number);
+            }
+        }
+
+        return holders;
+    }
+
+    /**
+     * A help message which is used in the {@link #combineSourceReferences(java.util.Set)} method. It loads the index of
+     * the entry in the specified list which has the same source reference as described also.
+     *
+     * @param holders   list of the helper class {@link SourceReferenceHolder}
+     * @param reference reference
+     *
+     * @return index of the specified reference in the list
+     */
+    private static int getSourceReferenceHolderIndex(List<SourceReferenceHolder> holders, SourceReference reference)
+    {
+        for (int i = 0; i < holders.size(); i++)
+        {
+            SourceReference sourceReference = holders.get(i).sourceReference;
+
+            if (!sourceReference.getClass().equals(reference.getClass()))
+            {
+                continue;
+            }
+
+            if (sourceReference.getExpression() != null && !sourceReference.getExpression().equals(reference.getExpression()))
+            {
+                continue;
+            }
+            else if (sourceReference.getExpression() == null && reference.getExpression() != null)
+            {
+                continue;
+            }
+
+            if (!sourceReference.getExtractedComments().equals(reference.getExtractedComments()))
+            {
+                continue;
+            }
+
+            return i;
+        }
+
+        return -1;
+    }
+
+    /**
+     * helper class which is used internal to store a source reference and a list of numbers which the
+     * single entries have within the original source reference list
+     */
+    private static class SourceReferenceHolder
+    {
+        private SourceReference sourceReference;
+        private List<Integer> numbers;
+
+        private SourceReferenceHolder()
+        {
+            this.numbers = new ArrayList<>(1);
+        }
     }
 }

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-10-05 23:05:57+0200\n"
+"POT-Creation-Date: 2014-10-09 10:56:26+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #. Extracted by:
@@ -174,10 +174,7 @@ msgstr ""
 #. 2. Annotation
 #. 	Name: de.cubeisland.messageextractor.test.TranslatableAnnotation:value
 #. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a field or a local variable
-#. 3. Method
-#. 	Name: de.cubeisland.messageextractor.test.command.User#sendTranslated(java.lang.String, java.lang.Object[])
-#. 	Description: this message was extracted with the de.cubeisland.messageextractor.test.command.User#sendTranslated method
-#. 4. Method
+#. 3, 4. Method
 #. 	Name: de.cubeisland.messageextractor.test.command.User#sendTranslated(java.lang.String, java.lang.Object[])
 #. 	Description: this message was extracted with the de.cubeisland.messageextractor.test.command.User#sendTranslated method
 #. 5. Method
@@ -496,10 +493,7 @@ msgid "method invocation with array test length: 1"
 msgstr ""
 
 #. Extracted by:
-#. 1. Method
-#. 	Name: de.cubeisland.messageextractor.test.i18n.I18n#translate(java.lang.String, java.lang.Object[])
-#. 	Description: this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#. 2. Method
+#. 1, 2. Method
 #. 	Name: de.cubeisland.messageextractor.test.i18n.I18n#translate(java.lang.String, java.lang.Object[])
 #. 	Description: this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:61
@@ -516,10 +510,7 @@ msgid "method invocation with more arguments than parameter: it's a test"
 msgstr ""
 
 #. Extracted by:
-#. 1. Method
-#. 	Name: de.cubeisland.messageextractor.test.i18n.I18n#translate(java.lang.String, java.lang.Object[])
-#. 	Description: this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
-#. 2. Method
+#. 1, 2. Method
 #. 	Name: de.cubeisland.messageextractor.test.i18n.I18n#translate(java.lang.String, java.lang.Object[])
 #. 	Description: this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #: de/cubeisland/messageextractor/test/StringTest.java:58
