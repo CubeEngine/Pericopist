@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-10-09 10:56:26+0200\n"
+"POT-Creation-Date: 2014-10-09 14:49:00+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #. Extracted by:
@@ -22,6 +22,16 @@ msgstr ""
 #. 1. Method
 #. 	Name: de.cubeisland.messageextractor.test.i18n.I18n#translate(java.lang.String, java.lang.Object[])
 #. 	Description: this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#: de/cubeisland/messageextractor/test/ExtractCommentsTest.java:53
+msgid ""
+"A message with an extracted comment above which is in a line with preceding "
+"java code."
+msgstr ""
+
+#. Extracted by:
+#. 1. Method
+#. 	Name: de.cubeisland.messageextractor.test.i18n.I18n#translate(java.lang.String, java.lang.Object[])
+#. 	Description: this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
 #. 	Comments: 
 #. 	- multi line
 #. 	- comment that
@@ -29,6 +39,18 @@ msgstr ""
 #. 	- extracted
 #: de/cubeisland/messageextractor/test/ExtractCommentsTest.java:44
 msgid "A message with an extracted comment above."
+msgstr ""
+
+#. Extracted by:
+#. 1. Method
+#. 	Name: de.cubeisland.messageextractor.test.i18n.I18n#translate(java.lang.String, java.lang.Object[])
+#. 	Description: this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method
+#. 	Comments: 
+#. 	- extract me for the message at the left, but not for the message beneath.
+#: de/cubeisland/messageextractor/test/ExtractCommentsTest.java:52
+msgid ""
+"A message with an extracted comment at the right and another translatable "
+"message beneath."
 msgstr ""
 
 #. Extracted by:

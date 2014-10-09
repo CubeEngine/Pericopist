@@ -48,5 +48,8 @@ public class ExtractCommentsTest
         /// I won't be extracted
         /// because the other comment has a higher priority
         i18n.translate("A message with an extracted comment above and at the right"); /// I'll be extracted
+
+        i18n.translate("A message with an extracted comment at the right and another translatable message beneath."); /// extract me for the message at the left, but not for the message beneath.
+        i18n.translate("A message with an extracted comment above which is in a line with preceding java code.");
     }
 }

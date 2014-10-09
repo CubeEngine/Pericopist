@@ -211,7 +211,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         String sourceCode = compilationUnit.getOriginalSourceCode();
 
         // load comment after element
-        String comment = this.getExtractedComment(sourceCode.substring(position.getSourceEnd(), compilationUnit.nextLineIndex(position.getSourceEnd())));
+        String comment = this.getExtractedComment(sourceCode.substring(position.getSourceEnd(), compilationUnit.nextLineIndex(position.getSourceEnd())), true);
         if (comment != null)
         {
             return new String[] {comment};
@@ -228,7 +228,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
             currentLineIndex = lastLineIndex;
             lastLineIndex = compilationUnit.beginOfLineIndex(currentLineIndex - 2);
 
-            comment = this.getExtractedComment(sourceCode.substring(lastLineIndex, currentLineIndex));
+            comment = this.getExtractedComment(sourceCode.substring(lastLineIndex, currentLineIndex), false);
 
             if (comment != null)
             {
@@ -247,12 +247,12 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
      *
      * @return the extracted comment or null
      */
-    private String getExtractedComment(String line)
+    private String getExtractedComment(String line, boolean isBehindExpression)
     {
         line = line.trim();
 
         int index = line.indexOf("/// ");
-        if (index < 0)
+        if (index < 0 || index != 0 && !isBehindExpression)
         {
             return null;
         }
