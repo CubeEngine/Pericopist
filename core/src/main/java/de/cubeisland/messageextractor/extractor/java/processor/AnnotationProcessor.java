@@ -33,6 +33,9 @@ import de.cubeisland.messageextractor.message.MessageStore;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.declaration.CtAnnotation;
 
+/**
+ * This class processes {@link CtAnnotation} instances.
+ */
 public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
 {
     public AnnotationProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore, ConverterManager converterManager, Logger logger)

@@ -22,6 +22,11 @@
  */
 package de.cubeisland.messageextractor.exception;
 
+/**
+ * This exception is a global exception of this tool. Every exception (with the exception of the runtime exception
+ * {@link IllegalTranslatableMessageException}) extends this exception. It is directly thrown by the
+ * {@link de.cubeisland.messageextractor.MessageCatalog} class.
+ */
 public class MessageCatalogException extends Exception
 {
     public MessageCatalogException(String msg)

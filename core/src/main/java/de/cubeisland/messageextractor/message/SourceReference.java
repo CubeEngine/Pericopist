@@ -46,7 +46,7 @@ public class SourceReference implements Comparable<SourceReference>
      *
      * @param file       the file where the message was extracted.
      * @param line       the line of the file
-     * @param expression the {@link de.cubeisland.messageextractor.message.TranslatableExpression} instance which extracted the message
+     * @param expression the {@link TranslatableExpression} instance which extracted the message
      */
     public SourceReference(File file, int line, TranslatableExpression expression)
     {
@@ -88,10 +88,10 @@ public class SourceReference implements Comparable<SourceReference>
     }
 
     /**
-     * This method returns the {@link de.cubeisland.messageextractor.message.TranslatableExpression} which was
+     * This method returns the {@link TranslatableExpression} which was
      * used to extract the message.
      *
-     * @return {@link de.cubeisland.messageextractor.message.TranslatableExpression} which was used to extract the message
+     * @return {@link TranslatableExpression} which was used to extract the message
      */
     public TranslatableExpression getExpression()
     {
@@ -137,6 +137,14 @@ public class SourceReference implements Comparable<SourceReference>
         return cmp;
     }
 
+    /**
+     * This method is related to the {@link #compareTo(SourceReference)} method and is called from that method.
+     * It compares the {@link TranslatableExpression}
+     *
+     * @param o {@link TranslatableExpression}
+     *
+     * @return and integer representing the result of the comparison
+     */
     private int compareExpressions(TranslatableExpression o)
     {
         TranslatableExpression t = this.getExpression();

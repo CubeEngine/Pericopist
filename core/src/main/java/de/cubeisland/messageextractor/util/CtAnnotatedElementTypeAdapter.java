@@ -28,6 +28,10 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import spoon.reflect.declaration.CtAnnotatedElementType;
 
+/**
+ * This class is a converter for the JAXB-XmlSerializer. It converts
+ * a XML string to a CtAnnotatedElementType and vice versa
+ */
 public class CtAnnotatedElementTypeAdapter extends XmlAdapter<String, CtAnnotatedElementType>
 {
     @Override

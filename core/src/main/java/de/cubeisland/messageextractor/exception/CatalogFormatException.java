@@ -22,6 +22,9 @@
  */
 package de.cubeisland.messageextractor.exception;
 
+/**
+ * This exception is thrown if an error occurred within the {@link de.cubeisland.messageextractor.format.CatalogFormat} class.
+ */
 public class CatalogFormatException extends MessageCatalogException
 {
     public CatalogFormatException(String msg, Throwable t)

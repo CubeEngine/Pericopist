@@ -22,6 +22,11 @@
  */
 package de.cubeisland.messageextractor.exception;
 
+/**
+ * This exception is thrown if an extracted translatable message has wrong conditions.
+ * The cases are that a plural message has more than one singular message or that a message
+ * has more than one plural messages.
+ */
 public class IllegalTranslatableMessageException extends RuntimeException
 {
     public IllegalTranslatableMessageException(String msg)

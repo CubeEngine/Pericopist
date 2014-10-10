@@ -26,11 +26,25 @@ import org.fedorahosted.tennera.jgettext.Message;
 
 import de.cubeisland.messageextractor.message.TranslatableMessage;
 
+/**
+ * An instance of this class represents an {@link TranslatableMessage} extracted from an
+ * existing gettext catalog. It stores every additional information which was stored within
+ * the existing catalog. The extra information will be added to the new catalog also.
+ */
 abstract class GettextMessage extends TranslatableMessage
 {
     private final int position;
 
-    public GettextMessage(String context, String singular, String plural, int position)
+    /**
+     * The constructor creates a new instance of this class.
+     *
+     * @param context  message context
+     * @param singular message singular
+     * @param plural   message plural or null of it doesn#t exist
+     * @param position position within the catalog. helps to sort the catalog entries
+     *                 old entries are at the top of the catalog and new at the bottom.
+     */
+    protected GettextMessage(String context, String singular, String plural, int position)
     {
         super(context, singular, plural);
 
@@ -53,5 +67,11 @@ abstract class GettextMessage extends TranslatableMessage
         return -1;
     }
 
+    /**
+     * This method converts this gettext message into a {@link Message} object which is
+     * used within the jgettext dependency.
+     *
+     * @return {@link Message}
+     */
     public abstract Message toMessage();
 }

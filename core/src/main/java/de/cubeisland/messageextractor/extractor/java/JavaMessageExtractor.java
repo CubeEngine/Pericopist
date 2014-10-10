@@ -52,6 +52,9 @@ import spoon.processing.ProcessingManager;
 import spoon.reflect.factory.Factory;
 import spoon.support.QueueProcessingManager;
 
+/**
+ * This {@link MessageExtractor} implementation is used for extracting the programming language java.
+ */
 public class JavaMessageExtractor implements MessageExtractor
 {
     private Logger logger;
@@ -111,7 +114,7 @@ public class JavaMessageExtractor implements MessageExtractor
         }
         catch (Exception e)
         {
-            throw new MessageExtractionException(e);
+            throw new MessageExtractionException("An error occurred while extracting the messages", e);
         }
 
         this.logger.info("The " + this.getClass().getSimpleName() + " extracted " + (messageStore.size() - messageAmount) + " new messages from the source code.");

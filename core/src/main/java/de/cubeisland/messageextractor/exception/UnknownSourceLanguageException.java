@@ -22,6 +22,9 @@
  */
 package de.cubeisland.messageextractor.exception;
 
+/**
+ * This exception is thrown if the source language which was defined in the xml configuration is unknown.
+ */
 public class UnknownSourceLanguageException extends ConfigurationException
 {
     public UnknownSourceLanguageException(String message)

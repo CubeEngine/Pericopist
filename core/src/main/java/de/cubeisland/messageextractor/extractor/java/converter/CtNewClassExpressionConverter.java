@@ -29,6 +29,10 @@ import de.cubeisland.messageextractor.extractor.java.converter.exception.Convers
 import spoon.reflect.code.CtNewClass;
 import spoon.reflect.reference.CtExecutableReference;
 
+/**
+ * This converter is responsible for constructor calls
+ * like <code>translate(new Classname())</code>
+ */
 public class CtNewClassExpressionConverter extends CtAbstractInvocationExpressionConverter<CtNewClass<?>>
 {
     @Override

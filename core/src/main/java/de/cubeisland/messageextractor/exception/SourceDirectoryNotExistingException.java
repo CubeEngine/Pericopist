@@ -22,6 +22,9 @@
  */
 package de.cubeisland.messageextractor.exception;
 
+/**
+ * This exception is thrown if the source directory does not exist.
+ */
 public class SourceDirectoryNotExistingException extends MessageExtractionException
 {
     public SourceDirectoryNotExistingException()

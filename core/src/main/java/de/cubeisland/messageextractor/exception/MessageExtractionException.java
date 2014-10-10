@@ -22,6 +22,9 @@
  */
 package de.cubeisland.messageextractor.exception;
 
+/**
+ * This exception is thrown if an error occurred within the {@link de.cubeisland.messageextractor.extractor.MessageExtractor} class.
+ */
 public class MessageExtractionException extends MessageCatalogException
 {
     public MessageExtractionException(String msg)
@@ -32,10 +35,5 @@ public class MessageExtractionException extends MessageCatalogException
     public MessageExtractionException(String msg, Throwable t)
     {
         super(msg, t);
-    }
-
-    public MessageExtractionException(Throwable t)
-    {
-        super(t);
     }
 }

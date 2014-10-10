@@ -22,6 +22,9 @@
  */
 package de.cubeisland.messageextractor.exception;
 
+/**
+ * This exception is thrown if the configuration couldn't be found
+ */
 public class ConfigurationNotFoundException extends ConfigurationException
 {
     public ConfigurationNotFoundException(String msg)

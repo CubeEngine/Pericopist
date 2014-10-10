@@ -32,6 +32,9 @@ import de.cubeisland.messageextractor.message.MessageStore;
 import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtExpression;
 
+/**
+ * This class processes {@link CtAbstractInvocation} instances.
+ */
 public class CallableExpressionProcessor extends MessageProcessor<CtAbstractInvocation<?>>
 {
     public CallableExpressionProcessor(JavaExtractorConfiguration configuration, MessageStore messageStore, ConverterManager converterManager, Logger logger)

@@ -26,6 +26,10 @@ import de.cubeisland.messageextractor.extractor.java.converter.exception.Convers
 import spoon.reflect.code.CtUnaryOperator;
 import spoon.reflect.code.UnaryOperatorKind;
 
+/**
+ * This converter is responsible for unary conditions like
+ * <code>translate(-i)</code>
+ */
 public class CtUnaryOperatorExpressionConverter implements Converter<CtUnaryOperator<?>>
 {
     @Override

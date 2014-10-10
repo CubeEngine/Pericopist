@@ -34,6 +34,10 @@ import de.cubeisland.messageextractor.exception.CatalogFormatException;
 import de.cubeisland.messageextractor.format.HeaderConfiguration;
 import de.cubeisland.messageextractor.format.HeaderConfiguration.MetadataEntry;
 
+/**
+ * This gettext message describes a gettext header.
+ * It stores the extracted header entries and the comments.
+ */
 class GettextHeader extends GettextMessage
 {
     private final static String HEADER_ID = "HEADER_MESSAGE";
@@ -41,6 +45,13 @@ class GettextHeader extends GettextMessage
     private final List<MetadataEntry> entries;
     private final Collection<String> comments;
 
+    /**
+     * This method creates a header message instance from an old gettext catalog.
+     *
+     * @param header jgettext {@link Message} instance which was parsed from the catalog
+     *
+     * @throws CatalogFormatException is thrown if a header entry has a wrong formatting and couldn't be read.
+     */
     public GettextHeader(Message header) throws CatalogFormatException
     {
         super(null, HEADER_ID, null, 0);
@@ -58,10 +69,16 @@ class GettextHeader extends GettextMessage
                 throw new CatalogFormatException("The formatting of the header entry '" + entry + "' is wrong. It has to be 'key: value'.");
             }
 
+            // every metadata entry isn't variable!!!
             this.entries.add(this.createMetadataEntry(parts[0].trim(), parts[1].trim(), false));
         }
     }
 
+    /**
+     * This method creates a header message instance from the current configuration.
+     *
+     * @param configuration gettext configuration
+     */
     public GettextHeader(GettextCatalogConfiguration configuration)
     {
         super(null, HEADER_ID, null, 0);
@@ -79,16 +96,33 @@ class GettextHeader extends GettextMessage
         Collections.addAll(this.entries, headerConfiguration.getMetadata());
     }
 
+    /**
+     * This method returns the comments from the header
+     *
+     * @return comments
+     */
     public Collection<String> getComments()
     {
         return this.comments;
     }
 
+    /**
+     * This method returns the {@link MetadataEntry} instance which has the specified index.
+     *
+     * @param index index of the entry
+     *
+     * @return {@link MetadataEntry} instance
+     */
     public MetadataEntry getEntry(int index)
     {
         return this.entries.get(index);
     }
 
+    /**
+     * This method returns the quantity of header entries
+     *
+     * @return quantity of header entries
+     */
     public int getEntrySize()
     {
         return this.entries.size();
@@ -112,6 +146,15 @@ class GettextHeader extends GettextMessage
         return headerMessage;
     }
 
+    /**
+     * helper method which creates a {@link MetadataEntry}
+     *
+     * @param key      key of the entry
+     * @param value    value of the entry
+     * @param variable is this entry variable or static
+     *
+     * @return the new {@link MetadataEntry}
+     */
     private MetadataEntry createMetadataEntry(String key, String value, boolean variable)
     {
         MetadataEntry metadataEntry = new MetadataEntry();

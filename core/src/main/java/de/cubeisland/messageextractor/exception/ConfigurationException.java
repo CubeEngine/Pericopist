@@ -22,16 +22,17 @@
  */
 package de.cubeisland.messageextractor.exception;
 
+/**
+ * This exception is thrown if the configuration file defined by invoking
+ * {@link de.cubeisland.messageextractor.MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)}
+ * couldn't be read or the validation of the {@link de.cubeisland.messageextractor.extractor.MessageExtractor} or
+ * the {@link de.cubeisland.messageextractor.format.CatalogFormat} failed.
+ */
 public class ConfigurationException extends MessageCatalogException
 {
     public ConfigurationException(String msg)
     {
         super(msg);
-    }
-
-    public ConfigurationException(Throwable t)
-    {
-        super(t);
     }
 
     public ConfigurationException(String msg, Throwable t)

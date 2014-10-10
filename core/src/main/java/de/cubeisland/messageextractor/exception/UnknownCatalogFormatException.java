@@ -22,6 +22,9 @@
  */
 package de.cubeisland.messageextractor.exception;
 
+/**
+ * This exception is thrown if the catalog format which was defined in the xml configuration is unknown.
+ */
 public class UnknownCatalogFormatException extends ConfigurationException
 {
     public UnknownCatalogFormatException(String message)

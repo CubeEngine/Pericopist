@@ -28,7 +28,8 @@ import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.reference.CtTypeReference;
 
 /**
- * This converter is responsible for the concatenation of strings like
+ * This converter is responsible for binary expressions.
+ * for example the concatenation of strings like
  * <code>translate("I'm concat" + "enated")</code>
  */
 public class CtBinaryOperatorExpressionConverter implements Converter<CtBinaryOperator<?>>
