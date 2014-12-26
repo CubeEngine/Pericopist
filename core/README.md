@@ -12,8 +12,7 @@ Every other module uses the core and adds new functionality.
 
 ## Usage
 
-You can find the information how to use the library in the [usage file](doc/usage.md)
-of the documentation.
+You can find the information how to use the library in the [usage file](https://github.com/CubeEngine/messageextractor/blob/master/core/doc/usage.md) of the documentation.
 
 ## Dependencies
 
