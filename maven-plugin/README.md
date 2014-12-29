@@ -1,5 +1,7 @@
 messageextractor-maven-plugin
-===========================
+=============================
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.cubeisland.maven.plugins/messageextractor-maven-plugin/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/de.cubeisland.maven.plugins/messageextractor-maven-plugin)
 
 # Description
 
