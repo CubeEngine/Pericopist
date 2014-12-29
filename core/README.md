@@ -1,6 +1,8 @@
 messageextractor-core
 =====================
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.cubeisland/messageextractor-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/de.cubeisland/messageextractor-core)
+
 # Description
 
 The core module of the message extractor provides the main functionality. It contains the code which 
