@@ -39,7 +39,7 @@ public abstract class CtAbstractInvocationExpressionConverter<T extends CtExpres
         CtAbstractInvocation<?> abstractInvocation = (CtAbstractInvocation<?>) expression;
         List<CtTypeReference<?>> parameterTypes = abstractInvocation.getExecutable().getParameterTypes();
 
-        if(parameterTypes.size() == 0)
+        if(parameterTypes.isEmpty())
         {
             return new Object[0];
         }

@@ -369,7 +369,7 @@ public class MessageCatalogFactory
             jaxbClasses.add(catalogConfigurationClass);
         }
 
-        if (jaxbClasses.size() == 0)
+        if (jaxbClasses.isEmpty())
         {
             return parent;
         }
@@ -389,7 +389,7 @@ public class MessageCatalogFactory
                     this.mergeObjects(extractorConfiguration, parent.extractorConfiguration);
                 }
 
-                if (extractorConfiguration.getCharset() == null)
+                if (extractorConfiguration != null && extractorConfiguration.getCharset() == null)
                 {
                     extractorConfiguration.setCharset(defaultCharset);
                 }
@@ -409,7 +409,7 @@ public class MessageCatalogFactory
                     this.mergeObjects(catalogConfiguration, parent.catalogConfiguration);
                 }
 
-                if (catalogConfiguration.getCharset() == null)
+                if (catalogConfiguration != null && catalogConfiguration.getCharset() == null)
                 {
                     catalogConfiguration.setCharset(defaultCharset);
                 }
@@ -547,26 +547,30 @@ public class MessageCatalogFactory
                     Object childFieldObject = field.get(child);
                     Object parentFieldObject = field.get(parent);
 
-                    if (parentFieldObject == null) // parent value does not exist, skip
+                    if (parentFieldObject == null)
                     {
+                        // parent value does not exist, skip
                         continue;
                     }
 
-                    if (childFieldObject == null) // child value does not exist, take parent
+                    if (childFieldObject == null)
                     {
+                        // child value does not exist, take parent
                         field.set(child, parentFieldObject);
                         continue;
                     }
 
                     // parent and child value exists
-                    if (field.getType().isArray()) // field is array
+                    if (field.getType().isArray())
                     {
+                        // field is array
                         this.mergeArray(field, child, childFieldObject, parentFieldObject);
                     }
                     else
                     {
-                        if (this.isMergeable(field)) // field is a mergeable field
+                        if (this.isMergeable(field))
                         {
+                            // field is a mergeable field
                             this.mergeObjects(childFieldObject, parentFieldObject);
                         }
                     }
@@ -619,8 +623,9 @@ public class MessageCatalogFactory
     private void mergeArray(Field field, Object instance, Object child, Object parent) throws IllegalAccessException
     {
         MergeableArray mergeableArray = field.getAnnotation(MergeableArray.class);
-        if (mergeableArray == null) // don't merge the array
+        if (mergeableArray == null)
         {
+            // don't merge the array
             return;
         }
 
@@ -629,7 +634,8 @@ public class MessageCatalogFactory
 
         List<Object> list = new ArrayList<>(childLength + parentLength);
 
-        switch (mergeableArray.value()) // switch merge mode
+        // switch merge mode
+        switch (mergeableArray.value())
         {
             case APPEND_BEHIND:
                 for (int i = 0; i < parentLength; i++)
@@ -673,12 +679,16 @@ public class MessageCatalogFactory
                     list.add(Array.get(parent, i));
                 }
                 break;
+
+            default:
+                throw new IllegalStateException("unknown mergeable array mode " + mergeableArray.value());
         }
 
         Class<?> componentType = field.getType().getComponentType();
         Object array = list.toArray((Object[]) Array.newInstance(Misc.getRelatedClass(componentType), list.size()));
 
-        if (componentType.isPrimitive()) // convert object array to primitive array
+        // convert object array to primitive array
+        if (componentType.isPrimitive())
         {
             Object primitiveArray = Array.newInstance(componentType, Array.getLength(array));
 
@@ -696,7 +706,7 @@ public class MessageCatalogFactory
     /**
      * This is a helper class which stores the extractor configuration and catalog configuration
      */
-    private class MessageExtractorConfiguration
+    private static class MessageExtractorConfiguration
     {
         public final ExtractorConfiguration extractorConfiguration;
         public final CatalogConfiguration catalogConfiguration;

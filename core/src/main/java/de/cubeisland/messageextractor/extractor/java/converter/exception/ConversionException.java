@@ -31,8 +31,8 @@ import spoon.reflect.code.CtExpression;
  */
 public class ConversionException extends MessageExtractionException
 {
-    private Converter<?> converter;
-    private CtExpression<?> expression;
+    private final Converter<?> converter;
+    private final CtExpression<?> expression;
 
     public ConversionException(Converter<?> converter, CtExpression<?> expression, String msg)
     {
@@ -67,7 +67,7 @@ public class ConversionException extends MessageExtractionException
         {
             msg += "\nConverter: " + converter.getClass().getName();
         }
-        msg += "\nConverting: " + String.valueOf(expression);
+        msg += "\nConverting: " + expression;
         if(expression != null)
         {
             msg += "\nConverting class: " + expression.getClass().getName();

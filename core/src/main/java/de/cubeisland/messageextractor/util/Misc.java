@@ -236,7 +236,7 @@ public class Misc
      *
      * @return related object class
      */
-    public static Class<?> getRelatedClass(Class<?> clazz)
+    public static Class getRelatedClass(Class clazz)
     {
         if (!clazz.isPrimitive())
         {

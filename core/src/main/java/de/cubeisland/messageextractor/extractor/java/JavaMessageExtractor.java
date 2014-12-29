@@ -27,6 +27,7 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -35,7 +36,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import de.cubeisland.messageextractor.exception.MessageExtractionException;
 import de.cubeisland.messageextractor.exception.SourceDirectoryNotExistingException;
 import de.cubeisland.messageextractor.extractor.ExtractorConfiguration;
@@ -77,7 +77,7 @@ public class JavaMessageExtractor implements MessageExtractor
     @Override
     public MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractionException
     {
-        JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration) config;
+        JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration)config;
 
         if (!extractorConfig.getDirectory().exists())
         {
@@ -100,8 +100,8 @@ public class JavaMessageExtractor implements MessageExtractor
 
             Factory spoonFactory = compiler.getFactory();
             ProcessingManager processManager = new QueueProcessingManager(spoonFactory);
-            processManager.addProcessor(new CallableExpressionProcessor((JavaExtractorConfiguration) config, messageStore, this.converterManager, this.logger));
-            processManager.addProcessor(new AnnotationProcessor((JavaExtractorConfiguration) config, messageStore, this.converterManager, this.logger));
+            processManager.addProcessor(new CallableExpressionProcessor((JavaExtractorConfiguration)config, messageStore, this.converterManager, this.logger));
+            processManager.addProcessor(new AnnotationProcessor((JavaExtractorConfiguration)config, messageStore, this.converterManager, this.logger));
 
             spoonFactory.getEnvironment().setManager(processManager);
             compiler.build();
@@ -162,7 +162,8 @@ public class JavaMessageExtractor implements MessageExtractor
                     continue;
                 }
 
-                if (fileList.size() > 0)
+                // TODO remove with next spoon release; don't remove classpath entry containing java files
+                if (!fileList.isEmpty())
                 {
                     this.logger.warning("The classpath entry '" + entry + "' was removed. The directory contains java files.");
                     continue;
@@ -172,7 +173,7 @@ public class JavaMessageExtractor implements MessageExtractor
             classpath.add(entry);
         }
 
-        if (classpath.size() == 0)
+        if (classpath.isEmpty())
         {
             this.logger.warning("The classpath is empty.");
         }
@@ -185,8 +186,6 @@ public class JavaMessageExtractor implements MessageExtractor
      * contains the specified classpath and the current one.
      *
      * @param classpath the new classpath entries
-     *
-     * @throws MalformedURLException
      */
     private void loadClassLoader(String[] classpath) throws MalformedURLException
     {
@@ -195,13 +194,20 @@ public class JavaMessageExtractor implements MessageExtractor
             return;
         }
 
-        Set<URL> urls = new HashSet<>();
+        Set<URI> uris = new HashSet<>();
         for (String element : classpath)
         {
-            urls.add(new File(element).toURI().toURL());
+            uris.add(new File(element).toURI());
         }
 
-        ClassLoader contextClassLoader = URLClassLoader.newInstance(urls.toArray(new URL[urls.size()]), Thread.currentThread().getContextClassLoader());
+        URL[] urls = new URL[uris.size()];
+        int i = 0;
+        for (URI uri : uris)
+        {
+            urls[i++] = uri.toURL();
+        }
+
+        ClassLoader contextClassLoader = URLClassLoader.newInstance(urls, Thread.currentThread().getContextClassLoader());
         Thread.currentThread().setContextClassLoader(contextClassLoader);
     }
 }

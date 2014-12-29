@@ -141,7 +141,7 @@ public class ConverterManager
 
         if (objects == null)
         {
-            return null;
+            return new String[0];
         }
 
         String[] strings = new String[objects.length];
@@ -256,9 +256,9 @@ public class ConverterManager
      *
      * @return the component type of the array
      */
-    private Class<?> toComponentType(Class<?> clazz, int dimension)
+    private Class toComponentType(Class clazz, int dimension)
     {
-        Class<?> objectClass = Misc.getRelatedClass(clazz);
+        Class objectClass = Misc.getRelatedClass(clazz);
         for (int i = 1; i < dimension; i++)
         {
             Object array = Array.newInstance(objectClass, 0);
@@ -274,9 +274,9 @@ public class ConverterManager
      *
      * @return last component type
      */
-    private Class<?> getLastComponentType(Object array)
+    private Class getLastComponentType(Object array)
     {
-        Class<?> clazz = array.getClass();
+        Class clazz = array.getClass();
         while (clazz.isArray())
         {
             clazz = clazz.getComponentType();

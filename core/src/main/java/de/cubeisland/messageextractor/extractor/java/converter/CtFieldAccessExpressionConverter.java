@@ -24,7 +24,6 @@ package de.cubeisland.messageextractor.extractor.java.converter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
-
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import spoon.reflect.code.CtFieldAccess;
 import spoon.reflect.reference.CtFieldReference;
@@ -38,20 +37,7 @@ public class CtFieldAccessExpressionConverter implements Converter<CtFieldAccess
     @Override
     public Object convert(CtFieldAccess<?> expression, ConverterManager manager) throws ConversionException
     {
-        CtFieldReference<?> fieldReference = expression.getVariable();
-        if (!fieldReference.isStatic())
-        {
-            throw new ConversionException(this, expression, "'" + expression.getClass().getName() + "' expressions which aren't static aren't supported.");
-        }
-
-        Member member = fieldReference.getActualField();
-        if (member == null || !(member instanceof Field))
-        {
-            throw new ConversionException(this, expression, "The member isn't a field value");
-        }
-
-        Field field = (Field) member;
-
+        Field field = this.getField(expression);
         try
         {
             if (!field.isAccessible())
@@ -69,5 +55,29 @@ public class CtFieldAccessExpressionConverter implements Converter<CtFieldAccess
         {
             throw new ConversionException(this, expression, "The expression '" + expression.getClass().getName() + "' couldn't be parsed. The field '" + field.getName() + "' of the class '" + field.getDeclaringClass().getName() + "' couldn't be accessed.", e);
         }
+    }
+
+    /**
+     * Returns the java field of the specified expression
+     *
+     * @param expression field access expression
+     *
+     * @return field
+     */
+    private Field getField(CtFieldAccess<?> expression) throws ConversionException
+    {
+        CtFieldReference<?> fieldReference = expression.getVariable();
+        if (!fieldReference.isStatic())
+        {
+            throw new ConversionException(this, expression, "'" + expression.getClass().getName() + "' expressions which aren't static aren't supported.");
+        }
+
+        Member member = fieldReference.getActualField();
+        if (member == null || !(member instanceof Field))
+        {
+            throw new ConversionException(this, expression, "The member isn't a field value");
+        }
+
+        return (Field)member;
     }
 }
