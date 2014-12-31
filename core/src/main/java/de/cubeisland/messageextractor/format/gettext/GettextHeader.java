@@ -40,7 +40,7 @@ import de.cubeisland.messageextractor.format.HeaderConfiguration.MetadataEntry;
  */
 class GettextHeader extends GettextMessage
 {
-    private final static String HEADER_ID = "HEADER_MESSAGE";
+    private static final String HEADER_ID = "HEADER_MESSAGE";
 
     private final List<MetadataEntry> entries;
     private final Collection<String> comments;
@@ -58,13 +58,14 @@ class GettextHeader extends GettextMessage
 
         this.comments = header.getComments();
 
-        String[] entries = header.getMsgstr().split("\n");
+        String[] headerEntries = header.getMsgstr().split("\n");
 
-        this.entries = new ArrayList<>(entries.length);
-        for (String entry : entries)
+        this.entries = new ArrayList<>(headerEntries.length);
+        for (String entry : headerEntries)
         {
-            String[] parts = entry.split(":", 2);
-            if (parts.length != 2)
+            final int partSize = 2;
+            String[] parts = entry.split(":", partSize);
+            if (parts.length != partSize)
             {
                 throw new CatalogFormatException("The formatting of the header entry '" + entry + "' is wrong. It has to be 'key: value'.");
             }
@@ -84,7 +85,7 @@ class GettextHeader extends GettextMessage
         super(null, HEADER_ID, null, 0);
 
         this.comments = new ArrayList<>();
-        this.entries = new ArrayList<>(6);
+        this.entries = new ArrayList<>();
 
         HeaderConfiguration headerConfiguration = configuration.getHeaderConfiguration();
         if (headerConfiguration == null)
@@ -164,5 +165,44 @@ class GettextHeader extends GettextMessage
         metadataEntry.setVariable(variable);
 
         return metadataEntry;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        if (!super.equals(o))
+        {
+            return false;
+        }
+
+        final GettextHeader that = (GettextHeader)o;
+
+        if (!comments.equals(that.comments))
+        {
+            return false;
+        }
+        if (!entries.equals(that.entries))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = 31 * result + entries.hashCode();
+        result = 31 * result + comments.hashCode();
+        return result;
     }
 }

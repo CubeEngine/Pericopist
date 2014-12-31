@@ -38,6 +38,8 @@ import java.util.List;
 
 public class Misc
 {
+    public static final String JAVA_CLASS_PATH = "java.class.path";
+    
     /**
      * It's a FileFilter object which accepts every file
      */

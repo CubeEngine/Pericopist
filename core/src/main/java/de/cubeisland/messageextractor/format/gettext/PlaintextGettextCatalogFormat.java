@@ -128,14 +128,16 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             }
 
             Message availableMessage = catalog.locateMessage(message.getMsgctxt(), message.getMsgid());
-            if (availableMessage == null) // it's a completely new entry
+            if (availableMessage == null)
             {
+                // it's a completely new entry
                 catalog.addMessage(message);
                 continue;
             }
 
-            if (availableMessage.getSourceReferences().isEmpty()) // the old entry isn't used anymore
+            if (availableMessage.getSourceReferences().isEmpty())
             {
+                // the old entry isn't used anymore
                 catalog.addMessage(message);
                 continue;
             }
@@ -219,7 +221,8 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             {
                 if (!(oldMessage instanceof TranslatableGettextMessage))
                 {
-                    continue; // delete every message which wasn't in the old catalog
+                    // delete every message which wasn't in the old catalog
+                    continue;
                 }
 
                 TranslatableGettextMessage translatableGettextMessage = (TranslatableGettextMessage) oldMessage;
@@ -280,7 +283,8 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
             }
             else
             {
-                message.setPrevMsgidPlural(""); // the old message wasn't a plural message
+                // the old message wasn't a plural message
+                message.setPrevMsgidPlural("");
             }
         }
         else

@@ -16,6 +16,7 @@
  */
 package de.cubeisland.maven.plugins.messageextractor.mojo;
 
+import de.cubeisland.messageextractor.util.Misc;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -63,7 +64,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
      */
     private String charsetName = null;
 
-    private String classpath = System.getProperty("java.class.path");
+    private String classpath = System.getProperty(Misc.JAVA_CLASS_PATH);
 
     /**
      * {@inheritDoc}
@@ -109,7 +110,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
         }
 
         // revert the classpath
-        System.setProperty("java.class.path", this.classpath);
+        System.setProperty(Misc.JAVA_CLASS_PATH, this.classpath);
     }
 
     /**
@@ -212,7 +213,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
                 classpath.append(element.toString());
             }
 
-            System.setProperty("java.class.path", classpath.toString());
+            System.setProperty(Misc.JAVA_CLASS_PATH, classpath.toString());
         }
         catch (DependencyResolutionRequiredException e)
         {

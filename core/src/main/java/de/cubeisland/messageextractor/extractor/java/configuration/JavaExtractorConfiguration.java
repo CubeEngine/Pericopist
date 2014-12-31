@@ -35,6 +35,7 @@ import de.cubeisland.messageextractor.exception.ConfigurationException;
 import de.cubeisland.messageextractor.extractor.AbstractExtractorConfiguration;
 import de.cubeisland.messageextractor.extractor.MessageExtractor;
 import de.cubeisland.messageextractor.extractor.java.JavaMessageExtractor;
+import de.cubeisland.messageextractor.util.Misc;
 import spoon.reflect.declaration.CtElement;
 
 /**
@@ -118,7 +119,8 @@ public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
     {
         if (this.classpathEntries == null)
         {
-            return System.getProperty("java.class.path").split(File.pathSeparator); // default value
+            // default value
+            return System.getProperty(Misc.JAVA_CLASS_PATH).split(File.pathSeparator);
         }
         return this.classpathEntries;
     }

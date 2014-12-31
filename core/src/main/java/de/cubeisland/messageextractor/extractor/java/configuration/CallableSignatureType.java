@@ -88,7 +88,7 @@ public class CallableSignatureType
      */
     @XmlRootElement(name = "use-as")
     @XmlEnum
-    public enum CallableSignatureTypeUsage
+    public static enum CallableSignatureTypeUsage
     {
         /**
          * This is the default value. It means that the type doesn't have a special role
@@ -116,7 +116,7 @@ public class CallableSignatureType
          * This value means that the messageextractor tries to extract the context
          * from that signature type
          */
-        @XmlEnumValue("context") // implement context
+        @XmlEnumValue("context")
         CONTEXT
     }
 }

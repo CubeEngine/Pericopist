@@ -60,7 +60,8 @@ public abstract class AbstractExtractorConfiguration implements ExtractorConfigu
     {
         if (this.directory == null)
         {
-            return new File("./src/main/java"); // default value
+            // default value
+            return new File("./src/main/java");
         }
         return this.directory;
     }

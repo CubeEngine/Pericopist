@@ -84,7 +84,7 @@ public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
             if (fieldEntry.getValue() instanceof CtExpression<?>)
             {
                 String[] messages = this.getMessages((CtExpression<?>) fieldEntry.getValue(), annotation);
-                if (messages == null || messages.length == 0)
+                if (messages.length == 0)
                 {
                     continue;
                 }

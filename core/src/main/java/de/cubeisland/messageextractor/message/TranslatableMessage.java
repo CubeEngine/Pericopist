@@ -149,7 +149,7 @@ public class TranslatableMessage implements Comparable<TranslatableMessage>
     {
         if (o.overridesCompareToMethod())
         {
-            return -o.compareTo(this);
+            return -1 * o.compareTo(this);
         }
 
         // compare context

@@ -53,7 +53,7 @@ public final class GettextUtils
     {
         List<SourceReferenceHolder> holders = combineSourceReferences(message.getSourceReferences());
 
-        if (holders == null)
+        if (holders.isEmpty())
         {
             return Collections.emptyList();
         }
@@ -111,7 +111,7 @@ public final class GettextUtils
     {
         if (sourceReferences == null || sourceReferences.isEmpty())
         {
-            return null;
+            return Collections.emptyList();
         }
 
         List<SourceReferenceHolder> holders = new ArrayList<>(sourceReferences.size());

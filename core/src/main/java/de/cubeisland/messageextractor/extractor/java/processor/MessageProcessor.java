@@ -120,7 +120,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
 
             this.getLogger().log(Level.WARNING, builder.toString(), e.getCause());
         }
-        return null;
+        return new String[0];
     }
 
     /**

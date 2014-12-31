@@ -294,4 +294,19 @@ class TranslatableGettextMessage extends GettextMessage
 
         return !extractedCommentsGettext.toString().equals(extractedCommentsSource.toString());
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        // just use the super method; because the additional fields of this class are just for
+        // catalog creation purposes. The messages from the source code shall be added to this instances either
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        // just use the super method!
+        return super.hashCode();
+    }
 }

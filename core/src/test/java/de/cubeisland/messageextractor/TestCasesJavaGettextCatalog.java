@@ -22,6 +22,7 @@
  */
 package de.cubeisland.messageextractor;
 
+import de.cubeisland.messageextractor.util.Misc;
 import org.apache.velocity.tools.ToolContext;
 import org.apache.velocity.tools.ToolManager;
 import org.junit.Before;
@@ -100,7 +101,7 @@ public class TestCasesJavaGettextCatalog
         assertNotNull("The configuration isn't a JavaExtractorConfiguration instance.", config);
 
         assertEquals("UTF-8", config.getCharset().displayName());
-        assertArrayEquals(System.getProperty("java.class.path").split(File.pathSeparator), config.getClasspathEntries());
+        assertArrayEquals(System.getProperty(Misc.JAVA_CLASS_PATH).split(File.pathSeparator), config.getClasspathEntries());
         assertEquals(new File("./src/test/java").getAbsolutePath(), config.getDirectory().getAbsolutePath());
         assertEquals("de.cubeisland.messageextractor.test.command.User#sendTranslated", config.getJavaExpressions()[0].getName());
         assertEquals("de.cubeisland.messageextractor.test.command.User#sendTranslatedN", config.getJavaExpressions()[1].getName());
