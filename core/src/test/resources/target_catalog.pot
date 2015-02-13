@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-10-09 15:26:28+0200\n"
+"POT-Creation-Date: 2015-02-13 16:46:08+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 
 #. Extracted by:
@@ -499,10 +499,11 @@ msgid ""
 msgstr ""
 
 #. Extracted by:
-#. 1. Annotation
+#. 1, 2. Annotation
 #. 	Name: de.cubeisland.messageextractor.test.TranslatableAnnotation:value
 #. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from an annotation type
 #: de/cubeisland/messageextractor/test/AnnotationTest.java:37
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:46
 msgid "message from second inner annotation"
 msgstr ""
 
@@ -646,6 +647,14 @@ msgstr ""
 #. 	Description: this message was extracted with a de.cubeisland.messageextractor.test.exception.WrongUsageException constructor
 #: de/cubeisland/messageextractor/test/ConstructorTest.java:36
 msgid "this message was extracted from the WrongUsageException constructor."
+msgstr ""
+
+#. Extracted by:
+#. 1. Annotation
+#. 	Name: de.cubeisland.messageextractor.test.TranslatableAnnotation:value
+#. 	Description: This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from an annotation type
+#: de/cubeisland/messageextractor/test/AnnotationTest.java:47
+msgid "this time is the first annotation defined as an array"
 msgstr ""
 
 #. Extracted by:

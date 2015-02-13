@@ -37,9 +37,9 @@ public abstract class CtAbstractInvocationExpressionConverter<T extends CtExpres
     protected Object[] loadArguments(T expression, ConverterManager manager) throws ConversionException
     {
         CtAbstractInvocation<?> abstractInvocation = (CtAbstractInvocation<?>) expression;
-        List<CtTypeReference<?>> parameterTypes = abstractInvocation.getExecutable().getParameterTypes();
+        List<CtTypeReference<?>> parameters = abstractInvocation.getExecutable().getParameters();
 
-        if(parameterTypes.isEmpty())
+        if(parameters.isEmpty())
         {
             return new Object[0];
         }
@@ -50,31 +50,31 @@ public abstract class CtAbstractInvocationExpressionConverter<T extends CtExpres
             arguments[i] =  manager.convert(abstractInvocation.getArguments().get(i));
         }
 
-        if(matchesParameter(abstractInvocation.getArguments(), parameterTypes))
+        if(matchesParameter(abstractInvocation.getArguments(), parameters))
         {
             return arguments;
         }
 
-        Object[] parameterValues = new Object[parameterTypes.size()];
+        Object[] parameterValues = new Object[parameters.size()];
         System.arraycopy(arguments, 0, parameterValues, 0, parameterValues.length - 1);
 
         // contains every entry from the arguments which has the index index param.length - 1
-        Object[] lastValues = new Object[arguments.length - parameterTypes.size() + 1];
-        System.arraycopy(arguments, parameterTypes.size() - 1, lastValues, 0, lastValues.length);
+        Object[] lastValues = new Object[arguments.length - parameters.size() + 1];
+        System.arraycopy(arguments, parameters.size() - 1, lastValues, 0, lastValues.length);
 
-        parameterValues[parameterValues.length - 1] = this.createArray(((CtArrayTypeReference) parameterTypes.get(parameterTypes.size() - 1)).getComponentType().getActualClass(), lastValues);
+        parameterValues[parameterValues.length - 1] = this.createArray(((CtArrayTypeReference) parameters.get(parameters.size() - 1)).getComponentType().getActualClass(), lastValues);
 
         return parameterValues;
     }
 
-    private boolean matchesParameter(List<CtExpression<?>> arguments, List<CtTypeReference<?>> parameterTypes)
+    private boolean matchesParameter(List<CtExpression<?>> arguments, List<CtTypeReference<?>> parameters)
     {
-        if(arguments.size() != parameterTypes.size())
+        if(arguments.size() != parameters.size())
         {
             return false;
         }
 
-        CtTypeReference<?> lastParameterType = parameterTypes.get(parameterTypes.size() - 1);
+        CtTypeReference<?> lastParameterType = parameters.get(parameters.size() - 1);
         CtTypeReference<?> lastArgumentType = arguments.get(arguments.size() - 1).getType();
         do
         {

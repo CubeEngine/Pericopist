@@ -166,7 +166,7 @@ public abstract class CallableExpression extends JavaExpression
      */
     protected boolean matchesSignature(CtExecutableReference<?> executable)
     {
-        List<CtTypeReference<?>> parameters = executable.getParameterTypes();
+        List<CtTypeReference<?>> parameters = executable.getParameters();
 
         if (parameters.size() != this.getSignature().length)
         {

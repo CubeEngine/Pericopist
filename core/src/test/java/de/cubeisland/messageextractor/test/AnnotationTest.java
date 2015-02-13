@@ -42,7 +42,7 @@ public class AnnotationTest
 
     }
 
-    @OuterAnnotation({ // TODO fix it; this messages won't be extracted atm
+    @OuterAnnotation({
             @AnnotationWithInnerAnnotation(@TranslatableAnnotation("message from second inner annotation")),
             @AnnotationWithInnerAnnotation(@TranslatableAnnotation("this time is the first annotation defined as an array"))
     })
