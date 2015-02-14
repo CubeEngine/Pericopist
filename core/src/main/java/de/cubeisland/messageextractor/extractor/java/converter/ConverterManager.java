@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import de.cubeisland.messageextractor.extractor.java.converter.binary.CtBinaryOperatorExpressionConverter;
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConverterNotFoundException;
 import de.cubeisland.messageextractor.util.Misc;
