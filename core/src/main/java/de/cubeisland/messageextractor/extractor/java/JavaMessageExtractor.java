@@ -108,10 +108,6 @@ public class JavaMessageExtractor implements MessageExtractor
 
             processManager.process();
         }
-        catch (FileNotFoundException e)
-        {
-            throw new MessageExtractionException("A file was not found.", e);
-        }
         catch (Exception e)
         {
             throw new MessageExtractionException("An error occurred while extracting the messages", e);

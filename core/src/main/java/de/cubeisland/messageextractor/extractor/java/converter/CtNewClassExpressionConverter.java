@@ -26,6 +26,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
+import spoon.reflect.code.CtConstructorCall;
 import spoon.reflect.code.CtNewClass;
 import spoon.reflect.reference.CtExecutableReference;
 
@@ -33,10 +34,10 @@ import spoon.reflect.reference.CtExecutableReference;
  * This converter is responsible for constructor calls
  * like <code>translate(new Classname())</code>
  */
-public class CtNewClassExpressionConverter extends CtAbstractInvocationExpressionConverter<CtNewClass<?>>
+public class CtNewClassExpressionConverter extends CtAbstractInvocationExpressionConverter<CtConstructorCall<?>>
 {
     @Override
-    public Object convert(CtNewClass<?> expression, ConverterManager manager) throws ConversionException
+    public Object convert(CtConstructorCall<?> expression, ConverterManager manager) throws ConversionException
     {
         CtExecutableReference<?> executable = expression.getExecutable();
 

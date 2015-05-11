@@ -26,19 +26,18 @@ import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import de.cubeisland.messageextractor.extractor.java.converter.binary.CtBinaryOperatorExpressionConverter;
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConversionException;
 import de.cubeisland.messageextractor.extractor.java.converter.exception.ConverterNotFoundException;
 import de.cubeisland.messageextractor.util.Misc;
 import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtConditional;
+import spoon.reflect.code.CtConstructorCall;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtFieldAccess;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtNewArray;
-import spoon.reflect.code.CtNewClass;
 import spoon.reflect.code.CtUnaryOperator;
 
 /**
@@ -209,7 +208,7 @@ public class ConverterManager
         this.registerConverter(CtInvocation.class, new CtInvocationExpressionConverter());
         this.registerConverter(CtLiteral.class, new CtLiteralExpressionConverter());
         this.registerConverter(CtNewArray.class, new CtNewArrayExpressionConverter());
-        this.registerConverter(CtNewClass.class, new CtNewClassExpressionConverter());
+        this.registerConverter(CtConstructorCall.class, new CtNewClassExpressionConverter());
         this.registerConverter(CtUnaryOperator.class, new CtUnaryOperatorExpressionConverter());
     }
 
