@@ -9,13 +9,13 @@
         <relativePath/>
     </parent>
 
-    <groupId>de.cubeisland</groupId>
-    <artifactId>messageextractor</artifactId>
+    <groupId>org.cubeengine</groupId>
+    <artifactId>pericopist</artifactId>
     <version>2.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Message Extractor</name>
-    <description>This is the parent for all message extractor projects.</description>
+    <name>Pericopist</name>
+    <description>This is the parent for all pericopist projects.</description>
     <url>https://engine.cubeisland.de</url>
     <inceptionYear>2013</inceptionYear>
 

@@ -1,6 +1,6 @@
 # Gettext
 
-Configuration class: ```de.cubeisland.messageextractor.format.gettext.GettextCatalogConfiguration```
+Configuration class: ```org.cubeengine.pericopist.format.gettext.GettextCatalogConfiguration```
 
 ## Settings:
 

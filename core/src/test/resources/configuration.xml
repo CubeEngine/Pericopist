@@ -5,37 +5,37 @@
         <translatables>
 
             <method>
-                <name>de.cubeisland.messageextractor.test.command.User#sendTranslated</name>
+                <name>org.cubeengine.pericopist.test.command.User#sendTranslated</name>
                 <signature>
                     <type use-as="singular">java.lang.String</type>
                     <type>java.lang.Object[]</type>
                 </signature>
-                <description>this message was extracted with the de.cubeisland.messageextractor.test.command.User#sendTranslated method</description>
+                <description>this message was extracted with the org.cubeengine.pericopist.test.command.User#sendTranslated method</description>
             </method>
 
             <method>
-                <name>de.cubeisland.messageextractor.test.command.User#sendTranslatedN</name>
+                <name>org.cubeengine.pericopist.test.command.User#sendTranslatedN</name>
                 <signature>
                     <type>int</type>
                     <type use-as="singular">java.lang.String</type>
                     <type use-as="plural">java.lang.String</type>
                     <type>java.lang.Object[]</type>
                 </signature>
-                <description>this message was extracted with the de.cubeisland.messageextractor.test.command.User#sendTranslatedN method</description>
+                <description>this message was extracted with the org.cubeengine.pericopist.test.command.User#sendTranslatedN method</description>
             </method>
 
             <annotation>
-                <name>de.cubeisland.messageextractor.test.command.Command</name>
+                <name>org.cubeengine.pericopist.test.command.Command</name>
                 <fields>
                     <field>desc</field>
                     <field>usage</field>
                 </fields>
-                <description>This message was extracted with the de.cubeisland.messageextractor.test.command.Command annotation</description>
+                <description>This message was extracted with the org.cubeengine.pericopist.test.command.Command annotation</description>
             </annotation>
 
             <annotation>
-                <name>de.cubeisland.messageextractor.test.TranslatableAnnotation</name>
-                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a type or a package</description>
+                <name>org.cubeengine.pericopist.test.TranslatableAnnotation</name>
+                <description>This message was extracted with the org.cubeengine.pericopist.test.TranslatableAnnotation annotation from a type or a package</description>
                 <targets>
                     <target>package</target>
                     <target>type</target>
@@ -43,8 +43,8 @@
             </annotation>
 
             <annotation>
-                <name>de.cubeisland.messageextractor.test.TranslatableAnnotation</name>
-                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a field or a local variable</description>
+                <name>org.cubeengine.pericopist.test.TranslatableAnnotation</name>
+                <description>This message was extracted with the org.cubeengine.pericopist.test.TranslatableAnnotation annotation from a field or a local variable</description>
                 <targets>
                     <target>field</target>
                     <target>local_variable</target>
@@ -52,24 +52,24 @@
             </annotation>
 
             <annotation>
-                <name>de.cubeisland.messageextractor.test.TranslatableAnnotation</name>
-                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a parameter</description>
+                <name>org.cubeengine.pericopist.test.TranslatableAnnotation</name>
+                <description>This message was extracted with the org.cubeengine.pericopist.test.TranslatableAnnotation annotation from a parameter</description>
                 <targets>
                     <target>parameter</target>
                 </targets>
             </annotation>
 
             <annotation>
-                <name>de.cubeisland.messageextractor.test.TranslatableAnnotation</name>
-                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from an annotation type</description>
+                <name>org.cubeengine.pericopist.test.TranslatableAnnotation</name>
+                <description>This message was extracted with the org.cubeengine.pericopist.test.TranslatableAnnotation annotation from an annotation type</description>
                 <targets>
                     <target>annotation_type</target>
                 </targets>
             </annotation>
 
             <annotation>
-                <name>de.cubeisland.messageextractor.test.TranslatableAnnotation</name>
-                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableAnnotation annotation from a method or a constructor</description>
+                <name>org.cubeengine.pericopist.test.TranslatableAnnotation</name>
+                <description>This message was extracted with the org.cubeengine.pericopist.test.TranslatableAnnotation annotation from a method or a constructor</description>
                 <targets>
                     <target>method</target>
                     <target>constructor</target>
@@ -77,24 +77,24 @@
             </annotation>
 
             <annotation>
-                <name>de.cubeisland.messageextractor.test.TranslatableArrayAnnotation</name>
-                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableArrayAnnotation annotation</description>
+                <name>org.cubeengine.pericopist.test.TranslatableArrayAnnotation</name>
+                <description>This message was extracted with the org.cubeengine.pericopist.test.TranslatableArrayAnnotation annotation</description>
             </annotation>
 
             <constructor>
-                <name>de.cubeisland.messageextractor.test.MessageExtractorTest</name>
+                <name>org.cubeengine.pericopist.test.MessageExtractorTest</name>
                 <signature>
                     <type use-as="singular">java.lang.String</type>
                 </signature>
-                <description>this message was extracted with a de.cubeisland.messageextractor.test.MessageExtractorTest constructor</description>
+                <description>this message was extracted with a org.cubeengine.pericopist.test.MessageExtractorTest constructor</description>
             </constructor>
 
             <constructor>
-                <name>de.cubeisland.messageextractor.test.exception.WrongUsageException</name>
+                <name>org.cubeengine.pericopist.test.exception.WrongUsageException</name>
                 <signature>
                     <type use-as="singular">java.lang.String</type>
                 </signature>
-                <description>this message was extracted with a de.cubeisland.messageextractor.test.exception.WrongUsageException constructor</description>
+                <description>this message was extracted with a org.cubeengine.pericopist.test.exception.WrongUsageException constructor</description>
             </constructor>
         </translatables>
     </source>

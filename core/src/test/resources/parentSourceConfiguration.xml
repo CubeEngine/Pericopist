@@ -6,39 +6,39 @@
 
         <translatables>
             <method>
-                <name>de.cubeisland.messageextractor.test.i18n.I18n#translate</name>
+                <name>org.cubeengine.pericopist.test.i18n.I18n#translate</name>
                 <signature>
                     <type use-as="singular">java.lang.String</type>
                     <type>java.lang.Object[]</type>
                 </signature>
-                <description>this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translate method</description>
+                <description>this message was extracted with the org.cubeengine.pericopist.test.i18n.I18n#translate method</description>
             </method>
 
             <method>
-                <name>de.cubeisland.messageextractor.test.i18n.I18n#translateC</name>
+                <name>org.cubeengine.pericopist.test.i18n.I18n#translateC</name>
                 <signature>
                     <type use-as="context">java.lang.String</type>
                     <type use-as="singular">java.lang.String</type>
                     <type>java.lang.Object[]</type>
                 </signature>
                 <context>This is a default context</context>
-                <description>this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translateC method</description>
+                <description>this message was extracted with the org.cubeengine.pericopist.test.i18n.I18n#translateC method</description>
             </method>
 
             <method>
-                <name>de.cubeisland.messageextractor.test.i18n.I18n#translateN</name>
+                <name>org.cubeengine.pericopist.test.i18n.I18n#translateN</name>
                 <signature>
                     <type>int</type>
                     <type use-as="singular">java.lang.String</type>
                     <type use-as="plural">java.lang.String</type>
                     <type>java.lang.Object[]</type>
                 </signature>
-                <description>this message was extracted with the de.cubeisland.messageextractor.test.i18n.I18n#translateN method</description>
+                <description>this message was extracted with the org.cubeengine.pericopist.test.i18n.I18n#translateN method</description>
             </method>
 
             <annotation>
-                <name>de.cubeisland.messageextractor.test.TranslatableContextAnnotation</name>
-                <description>This message was extracted with the de.cubeisland.messageextractor.test.TranslatableContextAnnotation annotation</description>
+                <name>org.cubeengine.pericopist.test.TranslatableContextAnnotation</name>
+                <description>This message was extracted with the org.cubeengine.pericopist.test.TranslatableContextAnnotation annotation</description>
                 <context>This is a default context</context>
                 <contextField>context</contextField>
             </annotation>

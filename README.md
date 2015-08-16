@@ -6,7 +6,7 @@ Maven plugin: [![Maven Central](https://maven-badges.herokuapp.com/maven-central
 
 # Description
 
-The messageextractor project consists of different modules. The main task of the project is to generate a
+The pericopist project consists of different modules. The main task of the project is to generate a
 message catalog containing all the string literals of a project by parsing its source tree.
 
 # Modules

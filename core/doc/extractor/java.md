@@ -1,6 +1,6 @@
 # Java
 
-Configuration class: ```de.cubeisland.messageextractor.extractor.java.configuration.JavaExtractorConfiguration```
+Configuration class: ```org.cubeengine.pericopist.extractor.java.configuration.JavaExtractorConfiguration```
 
 ## Settings:
 
@@ -28,7 +28,7 @@ for example:
 
 ### Constructor
 
-Use the class ```de.cubeisland.messageextractor.extractor.java.configuration.Constructor``` to set up the extraction from a constructor invocation.
+Use the class ```org.cubeengine.pericopist.extractor.java.configuration.Constructor``` to set up the extraction from a constructor invocation.
 
 - **name:** fully qualified name
 - **signature:** specifies the arguments of the constructor (arguments must be specified in the correct order!)
@@ -43,14 +43,14 @@ Use the class ```de.cubeisland.messageextractor.extractor.java.configuration.Con
 
 ### Method
 
-Use the class ```de.cubeisland.messageextractor.extractor.java.configuration.Method``` to set up the extraction of a message from a method invocation.
+Use the class ```org.cubeengine.pericopist.extractor.java.configuration.Method``` to set up the extraction of a message from a method invocation.
 
 - **static:** static or non static method
 - all of the settings from a constructor
 
 ### Annotation
 
-Use the class ```de.cubeisland.messageextractor.extractor.java.configuration.Annotation``` to set up the extraction of annotation fields.
+Use the class ```org.cubeengine.pericopist.extractor.java.configuration.Annotation``` to set up the extraction of annotation fields.
 
 - **name:** fully qualified name of the annotation
 - **fields:** names of the fields containing singular messages
