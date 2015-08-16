@@ -35,7 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.cubeengine.pericopist.exception.CatalogFormatException;
-import org.cubeengine.pericopist.exception.MessageCatalogException;
+import org.cubeengine.pericopist.exception.PericopistException;
 import org.cubeengine.pericopist.exception.MessageExtractionException;
 import org.cubeengine.pericopist.extractor.ExtractorConfiguration;
 import org.cubeengine.pericopist.extractor.MessageExtractor;
@@ -46,7 +46,7 @@ import org.cubeengine.pericopist.message.MessageStore;
 /**
  * This class is the main class of the project. It shall be used to generate or update message catalog
  */
-public class MessageCatalog
+public class Pericopist
 {
     private final Logger logger;
 
@@ -57,30 +57,30 @@ public class MessageCatalog
     private final CatalogFormat catalogFormat;
 
     /**
-     * The constructor creates a new MessageCatalog instance
+     * The constructor creates a new pericopist instance
      *
      * @param extractorConfiguration configuration of the extractor
      * @param catalogConfiguration   configuration of the catalog
      *
-     * @throws MessageCatalogException if the {@link org.cubeengine.pericopist.extractor.MessageExtractor} or the {@link org.cubeengine.pericopist.format.CatalogFormat} couldn't be created.
+     * @throws PericopistException if the {@link org.cubeengine.pericopist.extractor.MessageExtractor} or the {@link org.cubeengine.pericopist.format.CatalogFormat} couldn't be created.
      */
-    public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration) throws MessageCatalogException
+    public Pericopist(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration) throws PericopistException
     {
         this(extractorConfiguration, catalogConfiguration, null);
     }
 
     /**
-     * The constructor creates a new MessageCatalog instance
+     * The constructor creates a new pericopist instance
      *
      * @param extractorConfiguration configuration of the extractor
      * @param catalogConfiguration   configuration of the catalog
      * @param logger                 logger which shall be used
      *
-     * @throws MessageCatalogException if the {@link org.cubeengine.pericopist.extractor.MessageExtractor} or the {@link org.cubeengine.pericopist.format.CatalogFormat} couldn't be created.
+     * @throws PericopistException if the {@link org.cubeengine.pericopist.extractor.MessageExtractor} or the {@link org.cubeengine.pericopist.format.CatalogFormat} couldn't be created.
      */
-    public MessageCatalog(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration, Logger logger) throws MessageCatalogException
+    public Pericopist(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration, Logger logger) throws PericopistException
     {
-        this.logger = logger == null ? Logger.getLogger("messageextractor") : logger;
+        this.logger = logger == null ? Logger.getLogger("pericopist") : logger;
 
         this.extractorConfiguration = extractorConfiguration;
         this.catalogConfiguration = catalogConfiguration;
@@ -95,7 +95,7 @@ public class MessageCatalog
         }
         catch (Exception e)
         {
-            throw new MessageCatalogException("Could not create a MessageExtractor instance of '" + extractorConfiguration.getExtractorClass().getName() + "'.", e);
+            throw new PericopistException("Could not create a MessageExtractor instance of '" + extractorConfiguration.getExtractorClass().getName() + "'.", e);
         }
 
         try
@@ -105,7 +105,7 @@ public class MessageCatalog
         }
         catch (Exception e)
         {
-            throw new MessageCatalogException("Could not create a CatalogFormat instance of '" + catalogConfiguration.getCatalogFormatClass().getName() + "'.", e);
+            throw new PericopistException("Could not create a CatalogFormat instance of '" + catalogConfiguration.getCatalogFormatClass().getName() + "'.", e);
         }
     }
 
@@ -152,9 +152,9 @@ public class MessageCatalog
     /**
      * This method generates a completely new message catalog. It overrides the existing file without to read it.
      *
-     * @throws MessageCatalogException
+     * @throws PericopistException
      */
-    public void generateCatalog() throws MessageCatalogException
+    public void generateCatalog() throws PericopistException
     {
         this.generateCatalog(new MessageStore());
     }
@@ -164,9 +164,9 @@ public class MessageCatalog
      *
      * @param messageStore message store which shall store the messages
      *
-     * @throws MessageCatalogException if the extraction of the message or the creation of the new message catalog fails
+     * @throws PericopistException if the extraction of the message or the creation of the new message catalog fails
      */
-    private void generateCatalog(final MessageStore messageStore) throws MessageCatalogException
+    private void generateCatalog(final MessageStore messageStore) throws PericopistException
     {
         this.createCatalog(this.parseSourceCode(messageStore));
     }
@@ -175,9 +175,9 @@ public class MessageCatalog
      * This method updates a message catalog. It reads the existing file if it exists and extracts the new messages from the project
      * with a {@link org.cubeengine.pericopist.message.MessageStore} containing the messages from the old catalog.
      *
-     * @throws MessageCatalogException
+     * @throws PericopistException
      */
-    public void updateCatalog() throws MessageCatalogException
+    public void updateCatalog() throws PericopistException
     {
         MessageStore messageStore = null;
         if (this.catalogConfiguration.getTemplateFile().exists())
@@ -212,9 +212,9 @@ public class MessageCatalog
      *
      * @return a message store containing the messages which were read from the message catalog
      *
-     * @throws MessageCatalogException if the reading fails
+     * @throws PericopistException if the reading fails
      */
-    private MessageStore readCatalog() throws MessageCatalogException
+    private MessageStore readCatalog() throws PericopistException
     {
         MessageStore messageStore;
         try
@@ -234,7 +234,7 @@ public class MessageCatalog
         }
         catch (IOException e)
         {
-            throw new MessageCatalogException("Couldn't read the catalog.", e);
+            throw new PericopistException("Couldn't read the catalog.", e);
         }
 
         return messageStore;
@@ -248,9 +248,9 @@ public class MessageCatalog
      *
      * @param messageStore message store containing all the messages which shall be included in the catalog
      *
-     * @throws MessageCatalogException if the creating fails.
+     * @throws PericopistException if the creating fails.
      */
-    private void createCatalog(MessageStore messageStore) throws MessageCatalogException
+    private void createCatalog(MessageStore messageStore) throws PericopistException
     {
         Path tempPath;
 
@@ -261,7 +261,7 @@ public class MessageCatalog
         }
         catch (IOException e)
         {
-            throw new MessageCatalogException("The temporary file couldn't be created.", e);
+            throw new PericopistException("The temporary file couldn't be created.", e);
         }
 
         boolean wroteFile = false;
@@ -306,7 +306,7 @@ public class MessageCatalog
         }
         catch (IOException e)
         {
-            throw new MessageCatalogException("The temp file couldn't be moved to the specified place.", e);
+            throw new PericopistException("The temp file couldn't be moved to the specified place.", e);
         }
     }
 }

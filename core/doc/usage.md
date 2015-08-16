@@ -2,9 +2,9 @@
 
 ## Manual Usage
 
-The class ```org.cubeengine.pericopist.MessageCatalog``` is the main part of the library. This class has methods to generate a completely new message catalog or update the existing one. Also the updating process will generate a completely new message catalog if currently no catalog exists. To generate a new catalog use the ```generateCatalog()``` method and for updating the existing catalog the ```updateCatalog()``` method.
+The class ```org.cubeengine.pericopist.Pericopist``` is the main part of the library. This class has methods to generate a completely new message catalog or update the existing one. Also the updating process will generate a completely new message catalog if currently no catalog exists. To generate a new catalog use the ```generateCatalog()``` method and for updating the existing catalog the ```updateCatalog()``` method.
 
-To create a new ```org.cubeengine.pericopist.MessageCatalog``` class, the constructor needs a ```org.cubeengine.pericopist.extractor.ExtractorConfiguration``` and a ```org.cubeengine.pericopist.format.CatalogConfiguration```instance. Optionally a ```java.util.logging.Logger``` can be specified. Furthermore configurations have to be set up correctly, elsewise the validation of the configuration will fail, throwing an exception in ```org.cubeengine.pericopist.MessageCatalog```. 
+To create a new ```org.cubeengine.pericopist.Pericopist``` class, the constructor needs a ```org.cubeengine.pericopist.extractor.ExtractorConfiguration``` and a ```org.cubeengine.pericopist.format.CatalogConfiguration```instance. Optionally a ```java.util.logging.Logger``` can be specified. Furthermore configurations have to be set up correctly, elsewise the validation of the configuration will fail, throwing an exception in ```org.cubeengine.pericopist.Pericopist```. 
 
 The ```org.cubeengine.pericopist.extractor.ExtractorConfiguration``` needs to be configured accordingly to the projects programming language from which the translatable messages have to be extracted. Have a look at the [extractor directoy](extractor) of the documentation to see a list of all supported languages and to get a more detailed description. 
 
@@ -12,7 +12,7 @@ The ```org.cubeengine.pericopist.extractor.ExtractorConfiguration``` needs to be
 
 # Configuration
 
-With the help of the ```org.cubeengine.pericopist.MessageCatalogFactory``` class is it possible to set the configurations with a single xml file. That is a much easier way to get a ```org.cubeengine.pericopist.MessageCatalog``` class. Simple call one of the ```getMessageCatalog(...)``` methods. At least a String to the xml resource and a ```java.nio.charset.Charset``` must be specified. A ```java.util.logging.Logger``` and a ```org.apache.velocity.context.Context``` instance are optional. The latter specifies a velocity context which is used to evaluate the configuration and to replace the [Velocity language](http://velocity.apache.org/engine/devel/user-guide.html) 
+With the help of the ```org.cubeengine.pericopist.PericopistFactory``` class is it possible to set the configurations with a single xml file. That is a much easier way to get a ```org.cubeengine.pericopist.Pericopist``` class. Simple call one of the ```getPericopist(...)``` methods. At least a String to the xml resource and a ```java.nio.charset.Charset``` must be specified. A ```java.util.logging.Logger``` and a ```org.apache.velocity.context.Context``` instance are optional. The latter specifies a velocity context which is used to evaluate the configuration and to replace the [Velocity language](http://velocity.apache.org/engine/devel/user-guide.html) 
 
 ## Configuration example:
 

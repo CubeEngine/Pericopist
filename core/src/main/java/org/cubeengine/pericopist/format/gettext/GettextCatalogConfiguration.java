@@ -25,7 +25,7 @@ package org.cubeengine.pericopist.format.gettext;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.cubeengine.pericopist.MessageCatalogFactory;
+import org.cubeengine.pericopist.PericopistFactory;
 import org.cubeengine.pericopist.exception.ConfigurationException;
 import org.cubeengine.pericopist.format.AbstractCatalogConfiguration;
 import org.cubeengine.pericopist.format.CatalogFormat;
@@ -61,7 +61,7 @@ import org.cubeengine.pericopist.format.HeaderConfiguration;
  * }
  * </pre>
  *
- * @see MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+ * @see PericopistFactory#getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
  * @see org.cubeengine.pericopist.format.gettext.PlaintextGettextCatalogFormat
  */
 @XmlRootElement(name = "catalog")

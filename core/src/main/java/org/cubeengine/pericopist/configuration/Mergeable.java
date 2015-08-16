@@ -26,11 +26,11 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.cubeengine.pericopist.MessageCatalogFactory;
+import org.cubeengine.pericopist.PericopistFactory;
 
 /**
  * This annotation is for fields within a {@link org.cubeengine.pericopist.configuration.Configuration}.
- * It is needed during the {@link MessageCatalogFactory#mergeObjects(Object, Object)} method to merge two configurations.
+ * It is needed during the {@link PericopistFactory#mergeObjects(Object, Object)} method to merge two configurations.
  * This annotation specifies whether a field of a configuration can be merged. This annotation can have a field or a type as the annotated element type. A field has a higher priority.
  */
 @Retention(RetentionPolicy.RUNTIME)

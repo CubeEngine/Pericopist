@@ -58,7 +58,7 @@ public interface CatalogFormat
      * @param config      config which shall be used to read the catalog
      * @param inputStream the input stream which shall be used to read the catalog
      *
-     * @return a MessageCatalog instance holding all messages
+     * @return a {@link MessageStore} instance holding all messages
      *
      * @throws CatalogFormatException
      */

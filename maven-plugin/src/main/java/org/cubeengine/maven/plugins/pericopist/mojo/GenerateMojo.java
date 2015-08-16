@@ -32,25 +32,25 @@
  */
 package org.cubeengine.maven.plugins.pericopist.mojo;
 
-import org.cubeengine.pericopist.MessageCatalog;
-import org.cubeengine.pericopist.exception.MessageCatalogException;
+import org.cubeengine.pericopist.Pericopist;
+import org.cubeengine.pericopist.exception.PericopistException;
 
 /**
  * This Mojo implements the goal generate. This goal creates a message catalog
  *
  * @goal generate
  */
-public class GenerateMojo extends AbstractMessageExtractorMojo
+public class GenerateMojo extends AbstractPericopistMojo
 {
     /**
      * This method generates the message catalog
      *
-     * @param catalog the MessageCatalog instance
+     * @param catalog the {@link Pericopist} instance
      *
-     * @throws MessageCatalogException
+     * @throws PericopistException
      */
     @Override
-    public void doExecute(MessageCatalog catalog) throws MessageCatalogException
+    public void doExecute(Pericopist catalog) throws PericopistException
     {
         catalog.generateCatalog();
     }

@@ -35,7 +35,7 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
-import org.cubeengine.pericopist.exception.MessageCatalogException;
+import org.cubeengine.pericopist.exception.PericopistException;
 import org.cubeengine.pericopist.extractor.java.configuration.JavaExtractorConfiguration;
 import org.cubeengine.pericopist.format.CatalogConfiguration;
 import org.cubeengine.pericopist.format.CatalogFormat;
@@ -57,16 +57,16 @@ public class TestCasesJavaGettextCatalog
 {
     private File targetCatalogFile;
     private File catalogFile;
-    private MessageCatalog messageCatalog;
+    private Pericopist pericopist;
 
     @Before
-    public void setUp() throws MessageCatalogException
+    public void setUp() throws PericopistException
     {
         ToolContext toolContext = new ToolManager(true).createContext();
         toolContext.put("resource", new ResourceLoader());
 
-        MessageCatalogFactory factory = new MessageCatalogFactory();
-        this.messageCatalog = factory.getMessageCatalog("./src/test/resources/configuration.xml", Charset.forName("UTF-8"), toolContext);
+        PericopistFactory factory = new PericopistFactory();
+        this.pericopist = factory.getPericopist("./src/test/resources/configuration.xml", Charset.forName("UTF-8"), toolContext);
 
         this.targetCatalogFile = new File("./src/test/resources/target_catalog.pot");
         this.catalogFile = new File("./src/test/resources/messages.pot");
@@ -75,7 +75,7 @@ public class TestCasesJavaGettextCatalog
     @Test
     public void testCompareGettextConfiguration() throws Exception
     {
-        GettextCatalogConfiguration config = (GettextCatalogConfiguration) this.messageCatalog.getCatalogConfiguration();
+        GettextCatalogConfiguration config = (GettextCatalogConfiguration) this.pericopist.getCatalogConfiguration();
         assertNotNull("The configuration isn't a GettextCatalogConfiguration instance.", config);
 
         assertEquals(2, config.getPluralAmount());
@@ -97,7 +97,7 @@ public class TestCasesJavaGettextCatalog
     @Test
     public void testCompareJavaConfiguration() throws Exception
     {
-        JavaExtractorConfiguration config = (JavaExtractorConfiguration) this.messageCatalog.getExtractorConfiguration();
+        JavaExtractorConfiguration config = (JavaExtractorConfiguration) this.pericopist.getExtractorConfiguration();
         assertNotNull("The configuration isn't a JavaExtractorConfiguration instance.", config);
 
         assertEquals("UTF-8", config.getCharset().displayName());
@@ -124,31 +124,31 @@ public class TestCasesJavaGettextCatalog
     public void testGenerateCatalog() throws Exception
     {
         // 1. generate new catalog
-        this.messageCatalog.generateCatalog();
+        this.pericopist.generateCatalog();
 
         // 2. compare new catalog with target one
-        CatalogFormat catalogFormat = this.messageCatalog.getCatalogFormat();
+        CatalogFormat catalogFormat = this.pericopist.getCatalogFormat();
         assertNotNull(catalogFormat);
         assertEquals(PlaintextGettextCatalogFormat.class, catalogFormat.getClass());
 
-        CatalogConfiguration configuration = this.messageCatalog.getCatalogConfiguration();
+        CatalogConfiguration configuration = this.pericopist.getCatalogConfiguration();
         assertNotNull(configuration);
         assertEquals(GettextCatalogConfiguration.class, configuration.getClass());
 
         GettextCatalogConfiguration config = (GettextCatalogConfiguration) configuration;
 
         // 2.1. load MessageStore instances from both catalogs
-        Method readMethod = this.messageCatalog.getClass().getDeclaredMethod("readCatalog");
+        Method readMethod = this.pericopist.getClass().getDeclaredMethod("readCatalog");
         readMethod.setAccessible(true);
 
-        Object object = readMethod.invoke(this.messageCatalog);
+        Object object = readMethod.invoke(this.pericopist);
         assertNotNull(object);
         assertEquals(MessageStore.class, object.getClass());
 
         MessageStore currentMessageStore = (MessageStore) object;
 
         config.setTemplateFile(this.targetCatalogFile);
-        object = readMethod.invoke(this.messageCatalog);
+        object = readMethod.invoke(this.pericopist);
         assertNotNull(object);
         assertEquals(MessageStore.class, object.getClass());
 
@@ -172,27 +172,27 @@ public class TestCasesJavaGettextCatalog
     @Test
     public void testUpdateCatalog() throws Exception
     {
-        CatalogConfiguration configuration = this.messageCatalog.getCatalogConfiguration();
+        CatalogConfiguration configuration = this.pericopist.getCatalogConfiguration();
         assertNotNull(configuration);
         assertEquals(GettextCatalogConfiguration.class, configuration.getClass());
 
         GettextCatalogConfiguration config = (GettextCatalogConfiguration) configuration;
         config.setTemplateFile(this.targetCatalogFile);
 
-        Method readMethod = this.messageCatalog.getClass().getDeclaredMethod("readCatalog");
+        Method readMethod = this.pericopist.getClass().getDeclaredMethod("readCatalog");
         readMethod.setAccessible(true);
 
-        Object o = readMethod.invoke(this.messageCatalog);
+        Object o = readMethod.invoke(this.pericopist);
         assertNotNull(o);
         assertEquals(MessageStore.class, o.getClass());
 
         MessageStore messageStore = (MessageStore) o;
         int length = messageStore.size();
 
-        Method parseSourceCode = this.messageCatalog.getClass().getDeclaredMethod("parseSourceCode", MessageStore.class);
+        Method parseSourceCode = this.pericopist.getClass().getDeclaredMethod("parseSourceCode", MessageStore.class);
         parseSourceCode.setAccessible(true);
 
-        o = parseSourceCode.invoke(this.messageCatalog, messageStore);
+        o = parseSourceCode.invoke(this.pericopist, messageStore);
         assertNotNull(o);
         assertEquals(MessageStore.class, o.getClass());
         messageStore = (MessageStore) o;

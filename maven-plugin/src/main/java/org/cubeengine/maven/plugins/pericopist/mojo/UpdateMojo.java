@@ -32,18 +32,18 @@
  */
 package org.cubeengine.maven.plugins.pericopist.mojo;
 
-import org.cubeengine.pericopist.MessageCatalog;
-import org.cubeengine.pericopist.exception.MessageCatalogException;
+import org.cubeengine.pericopist.Pericopist;
+import org.cubeengine.pericopist.exception.PericopistException;
 
 /**
  * This Mojo implements the goal update. This goal updates a message catalog
  *
  * @goal update
  */
-public class UpdateMojo extends AbstractMessageExtractorMojo
+public class UpdateMojo extends AbstractPericopistMojo
 {
     @Override
-    protected void doExecute(MessageCatalog catalog) throws MessageCatalogException
+    protected void doExecute(Pericopist catalog) throws PericopistException
     {
         catalog.updateCatalog();
     }

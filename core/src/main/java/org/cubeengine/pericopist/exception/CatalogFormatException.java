@@ -25,7 +25,7 @@ package org.cubeengine.pericopist.exception;
 /**
  * This exception is thrown if an error occurred within the {@link org.cubeengine.pericopist.format.CatalogFormat} class.
  */
-public class CatalogFormatException extends MessageCatalogException
+public class CatalogFormatException extends PericopistException
 {
     public CatalogFormatException(String msg, Throwable t)
     {

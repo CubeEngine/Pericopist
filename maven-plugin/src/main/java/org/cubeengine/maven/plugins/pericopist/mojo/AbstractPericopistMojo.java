@@ -48,11 +48,11 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
-import org.cubeengine.pericopist.MessageCatalog;
-import org.cubeengine.pericopist.MessageCatalogFactory;
+import org.cubeengine.pericopist.Pericopist;
+import org.cubeengine.pericopist.PericopistFactory;
 import org.cubeengine.pericopist.exception.ConfigurationException;
 import org.cubeengine.pericopist.exception.ConfigurationNotFoundException;
-import org.cubeengine.pericopist.exception.MessageCatalogException;
+import org.cubeengine.pericopist.exception.PericopistException;
 import org.cubeengine.pericopist.exception.SourceDirectoryNotExistingException;
 import org.cubeengine.pericopist.util.ResourceLoader;
 
@@ -60,7 +60,7 @@ import org.cubeengine.pericopist.util.ResourceLoader;
  * @requiresDependencyResolution test
  * @threadSafe true
  */
-public abstract class AbstractMessageExtractorMojo extends AbstractMojo
+public abstract class AbstractPericopistMojo extends AbstractMojo
 {
     /**
      * @parameter default-value="${project}"
@@ -105,7 +105,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
         // load the classpath of the maven project
         this.loadClasspath();
 
-        MessageCatalog catalog = this.getMessageCatalog(new MessageCatalogFactory());
+        Pericopist catalog = this.getPericopist(new PericopistFactory());
         if (catalog == null)
         {
             throw new MojoFailureException("The template could not be created. Did not find any of the specified configurations.");
@@ -120,7 +120,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
             this.getLog().info(e.getMessage());
             this.getLog().info("Skipped the project '" + this.project.getName() + "'' ...", e);
         }
-        catch (MessageCatalogException e)
+        catch (PericopistException e)
         {
             throw new MojoFailureException(e.getMessage(), e);
         }
@@ -170,15 +170,15 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
     }
 
     /**
-     * This method creates and prepares the MessageCatalog instance which shall be used to create the catalog
+     * This method creates and prepares the {@link Pericopist} instance which shall be used to create the catalog
      *
-     * @param factory the MessageCatalogFactory which shall be taken to create the MessageCatalog instance
+     * @param factory the {@link PericopistFactory} which shall be taken to create the {@link Pericopist} instance
      *
-     * @return the MessageCatalog instance
+     * @return the {@link Pericopist} instance
      *
      * @throws MojoFailureException
      */
-    private MessageCatalog getMessageCatalog(MessageCatalogFactory factory) throws MojoFailureException, MojoExecutionException
+    private Pericopist getPericopist(PericopistFactory factory) throws MojoFailureException, MojoExecutionException
     {
         Context velocityContext = this.getVelocityContext();
         Charset charset = this.getCharset();
@@ -189,7 +189,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
 
             try
             {
-                return factory.getMessageCatalog(configuration, charset, velocityContext);
+                return factory.getPericopist(configuration, charset, velocityContext);
             }
             catch (ConfigurationNotFoundException e)
             {
@@ -199,7 +199,7 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
             {
                 throw new MojoFailureException("Failed to read the configuration '" + configuration + "'!", e);
             }
-            catch (MessageCatalogException e)
+            catch (PericopistException e)
             {
                 throw new MojoExecutionException(e.getMessage(), e);
             }
@@ -238,11 +238,11 @@ public abstract class AbstractMessageExtractorMojo extends AbstractMojo
     }
 
     /**
-     * This method is called after a MessageCatalog instance was loaded successfully by the execute method.
+     * This method is called after a Pericopist instance was loaded successfully by the execute method.
      *
-     * @param catalog the MessageCatalog instance
+     * @param catalog the {@link Pericopist} instance
      *
-     * @throws MessageCatalogException an exception thrown by the MessageCatalog instance
+     * @throws PericopistException an exception thrown by the {@link Pericopist} instance
      */
-    protected abstract void doExecute(MessageCatalog catalog) throws MessageCatalogException;
+    protected abstract void doExecute(Pericopist catalog) throws PericopistException;
 }

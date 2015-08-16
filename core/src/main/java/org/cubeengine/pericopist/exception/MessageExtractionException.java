@@ -25,7 +25,7 @@ package org.cubeengine.pericopist.exception;
 /**
  * This exception is thrown if an error occurred within the {@link org.cubeengine.pericopist.extractor.MessageExtractor} class.
  */
-public class MessageExtractionException extends MessageCatalogException
+public class MessageExtractionException extends PericopistException
 {
     public MessageExtractionException(String msg)
     {

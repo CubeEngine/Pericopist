@@ -57,7 +57,7 @@ import org.cubeengine.pericopist.configuration.Mergeable;
 import org.cubeengine.pericopist.configuration.MergeableArray;
 import org.cubeengine.pericopist.exception.ConfigurationException;
 import org.cubeengine.pericopist.exception.ConfigurationNotFoundException;
-import org.cubeengine.pericopist.exception.MessageCatalogException;
+import org.cubeengine.pericopist.exception.PericopistException;
 import org.cubeengine.pericopist.exception.UnknownCatalogFormatException;
 import org.cubeengine.pericopist.exception.UnknownSourceLanguageException;
 import org.cubeengine.pericopist.extractor.ExtractorConfiguration;
@@ -70,11 +70,13 @@ import org.cubeengine.pericopist.util.Misc;
  * This class is a little helper. It helps to create a MessageCatalog instance which is needed to
  * create the catalog. With this class one can set the configuration up with an xml file.
  *
- * @see de.cubeisland.messageextractor.MessageCatalog
- * @see #getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+ * @see Pericopist
+ * @see #getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
  */
-public class MessageCatalogFactory
+public class PericopistFactory
 {
+    private static final String CONFIGURATION_ROOT_TAG = "pericopist";
+
     private Map<String, Class<? extends ExtractorConfiguration>> extractorConfigurationMap;
     private Map<String, Class<? extends CatalogConfiguration>> catalogConfigurationMap;
 
@@ -83,7 +85,7 @@ public class MessageCatalogFactory
     /**
      * creates a new instance of this class.
      */
-    public MessageCatalogFactory()
+    public PericopistFactory()
     {
         this.extractorConfigurationMap = new HashMap<>();
         this.catalogConfigurationMap = new HashMap<>();
@@ -144,57 +146,57 @@ public class MessageCatalogFactory
     }
 
     /**
-     * This method creates a MessageCatalog instance.
+     * This method creates a {@link Pericopist} instance.
      *
      * @param resource the xml configuration resource
      * @param charset  the default charset
      *
-     * @return MessageCatalog instance
+     * @return {@link Pericopist} instance
      *
-     * @throws MessageCatalogException if an error occurs
-     * @see #getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+     * @throws PericopistException if an error occurs
+     * @see #getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
      */
-    public MessageCatalog getMessageCatalog(String resource, Charset charset) throws MessageCatalogException
+    public Pericopist getPericopist(String resource, Charset charset) throws PericopistException
     {
-        return this.getMessageCatalog(resource, charset, (Context) null);
+        return this.getPericopist(resource, charset, (Context)null);
     }
 
     /**
-     * This method creates a MessageCatalog instance.
+     * This method creates a {@link Pericopist} instance.
      *
      * @param resource the xml configuration resource
      * @param charset  the default charset
      * @param logger   a logger
      *
-     * @return MessageCatalog instance
+     * @return {@link Pericopist} instance
      *
-     * @throws MessageCatalogException if an error occurs
-     * @see #getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+     * @throws PericopistException if an error occurs
+     * @see #getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
      */
-    public MessageCatalog getMessageCatalog(String resource, Charset charset, Logger logger) throws MessageCatalogException
+    public Pericopist getPericopist(String resource, Charset charset, Logger logger) throws PericopistException
     {
-        return this.getMessageCatalog(resource, charset, null, logger);
+        return this.getPericopist(resource, charset, null, logger);
     }
 
     /**
-     * This method creates a MessageCatalog instance.
+     * This method creates a {@link Pericopist} instance.
      *
      * @param resource        the xml configuration resource
      * @param charset         the default charset
      * @param velocityContext a velocity context which is used to evaluate the configuration
      *
-     * @return MessageCatalog instance
+     * @return {@link Pericopist} instance
      *
-     * @throws MessageCatalogException if an error occurs
-     * @see #getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+     * @throws PericopistException if an error occurs
+     * @see #getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
      */
-    public MessageCatalog getMessageCatalog(String resource, Charset charset, Context velocityContext) throws MessageCatalogException
+    public Pericopist getPericopist(String resource, Charset charset, Context velocityContext) throws PericopistException
     {
-        return this.getMessageCatalog(resource, charset, velocityContext, null);
+        return this.getPericopist(resource, charset, velocityContext, null);
     }
 
     /**
-     * This method creates a MessageCatalog instance. The configurations is specified with the help of an
+     * This method creates a {@link Pericopist} instance. The configurations is specified with the help of an
      * xml file.
      * <p/>
      * Example:
@@ -202,14 +204,14 @@ public class MessageCatalogFactory
      * <pre>
      * {@code
      * <?xml version="1.0" encoding="UTF-8"?>
-     * <extractor charset="utf-8" parent="path">
+     * <pericopist charset="utf-8" parent="path">
      *     <source language="LANGUAGE">
      *         ...
      *     </source>
      *     <catalog format="FORMAT">
      *          ...
      *     </catalog>
-     * </extractor>
+     * </pericopist>
      * }
      * </pre>
      * <p/>
@@ -230,11 +232,11 @@ public class MessageCatalogFactory
      * @param velocityContext a velocity context which is used to evaluate the configuration
      * @param logger          a logger
      *
-     * @return MessageCatalog instance
+     * @return {@link Pericopist} instance
      *
-     * @throws MessageCatalogException if an error occurs
+     * @throws PericopistException if an error occurs
      */
-    public MessageCatalog getMessageCatalog(String resource, Charset charset, Context velocityContext, Logger logger) throws MessageCatalogException
+    public Pericopist getPericopist(String resource, Charset charset, Context velocityContext, Logger logger) throws PericopistException
     {
         if (velocityContext == null)
         {
@@ -248,7 +250,7 @@ public class MessageCatalogFactory
         velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_SYSTEM_ERR_LEVEL_KEY, "warn");
         velocityEngine.init();
 
-        MessageExtractorConfiguration extractorConfiguration = this.loadMessageExtractorConfiguration(resource, charset, velocityEngine, velocityContext);
+        PericopistConfiguration extractorConfiguration = this.loadPericopistConfiguration(resource, charset, velocityEngine, velocityContext);
 
         if (extractorConfiguration == null)
         {
@@ -263,7 +265,7 @@ public class MessageCatalogFactory
             throw new ConfigurationException("The configuration does not have a catalog tag.");
         }
 
-        return new MessageCatalog(extractorConfiguration.extractorConfiguration, extractorConfiguration.catalogConfiguration, logger);
+        return new Pericopist(extractorConfiguration.extractorConfiguration, extractorConfiguration.catalogConfiguration, logger);
     }
 
     /**
@@ -278,7 +280,7 @@ public class MessageCatalogFactory
      *
      * @throws ConfigurationException
      */
-    private MessageExtractorConfiguration loadMessageExtractorConfiguration(String resource, Charset charset, VelocityEngine velocityEngine, Context velocityContext) throws ConfigurationException
+    private PericopistConfiguration loadPericopistConfiguration(String resource, Charset charset, VelocityEngine velocityEngine, Context velocityContext) throws ConfigurationException
     {
         URL configurationUrl = Misc.getResource(resource);
         if (configurationUrl == null)
@@ -286,7 +288,7 @@ public class MessageCatalogFactory
             throw new ConfigurationNotFoundException("The configuration resource '" + resource + "' was not found in file system or as URL.");
         }
 
-        MessageExtractorConfiguration parent = null;
+        PericopistConfiguration parent = null;
         Charset defaultCharset = charset;
         Node sourceNode = null;
         Node catalogNode = null;
@@ -316,7 +318,7 @@ public class MessageCatalogFactory
             {
             }
 
-            parent = this.loadMessageExtractorConfiguration(parentResource, charset, velocityEngine, velocityContext);
+            parent = this.loadPericopistConfiguration(parentResource, charset, velocityEngine, velocityContext);
         }
 
         NodeList list = rootNode.getChildNodes();
@@ -419,7 +421,7 @@ public class MessageCatalogFactory
                 catalogConfiguration = parent.catalogConfiguration;
             }
 
-            return new MessageExtractorConfiguration(extractorConfiguration, catalogConfiguration);
+            return new PericopistConfiguration(extractorConfiguration, catalogConfiguration);
         }
         catch (JAXBException e)
         {
@@ -495,14 +497,14 @@ public class MessageCatalogFactory
             throw new ConfigurationException("Could not read the configuration file", e);
         }
 
-        NodeList list = document.getElementsByTagName("extractor");
+        NodeList list = document.getElementsByTagName(CONFIGURATION_ROOT_TAG);
         if (list.getLength() == 0)
         {
-            throw new ConfigurationException("The configuration file doesn't have a <extractor> node");
+            throw new ConfigurationException("The configuration file doesn't have a <" + CONFIGURATION_ROOT_TAG + "> node");
         }
         else if (list.getLength() > 1)
         {
-            throw new ConfigurationException("The configuration file has more than 1 <extractor> node");
+            throw new ConfigurationException("The configuration file has more than 1 <" + CONFIGURATION_ROOT_TAG + "> node");
         }
         return list.item(0);
     }
@@ -704,14 +706,14 @@ public class MessageCatalogFactory
     }
 
     /**
-     * This is a helper class which stores the extractor configuration and catalog configuration
+     * This is a helper class which stores the pericopist configuration and catalog configuration
      */
-    private static class MessageExtractorConfiguration
+    private static class PericopistConfiguration
     {
         public final ExtractorConfiguration extractorConfiguration;
         public final CatalogConfiguration catalogConfiguration;
 
-        public MessageExtractorConfiguration(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration)
+        public PericopistConfiguration(ExtractorConfiguration extractorConfiguration, CatalogConfiguration catalogConfiguration)
         {
             this.extractorConfiguration = extractorConfiguration;
             this.catalogConfiguration = catalogConfiguration;

@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.cubeengine.pericopist.MessageCatalogFactory;
+import org.cubeengine.pericopist.PericopistFactory;
 import org.cubeengine.pericopist.configuration.MergeableArray;
 import org.cubeengine.pericopist.configuration.MergeableArrayMode;
 import org.cubeengine.pericopist.exception.ConfigurationException;
@@ -72,7 +72,7 @@ import spoon.reflect.declaration.CtElement;
  * The translatables tag has to be filled with information about the
  * {@link JavaExpression} subclasses.
  *
- * @see MessageCatalogFactory#getMessageCatalog(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+ * @see PericopistFactory#getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
  * @see org.cubeengine.pericopist.extractor.java.JavaMessageExtractor
  */
 @XmlRootElement(name = "source")
