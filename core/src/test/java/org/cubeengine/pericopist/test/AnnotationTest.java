@@ -22,11 +22,12 @@
  */
 package org.cubeengine.pericopist.test;
 
+import java.util.ArrayList;
 import org.cubeengine.pericopist.test.command.Command;
 import org.cubeengine.pericopist.test.command.CommandParameter;
 
 @TranslatableAnnotation("extracted from an annotation with a class target")
-public class AnnotationTest
+public class AnnotationTest extends @TypeAnnotation("I was extracted. wuhu") ArrayList<@TypeAnnotation("I was extracted too") String>
 {
     @TranslatableAnnotation("extracted from an annotation with a constant field target")
     private static final String TEST_CONST = "this is a private test constant.";

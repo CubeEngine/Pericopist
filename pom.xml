@@ -53,6 +53,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdkVersion>1.7</jdkVersion>
+        <testJdkVersion>1.8</testJdkVersion>
     </properties>
 
     <distributionManagement>
@@ -106,6 +107,8 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <source>${jdkVersion}</source>
                     <target>${jdkVersion}</target>
+                    <testTarget>${testJdkVersion}</testTarget>
+                    <testSource>${testJdkVersion}</testSource>
                     <optimize>true</optimize>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
