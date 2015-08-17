@@ -1,8 +1,8 @@
-messageextractor
+Pericopist
 ================
 
-Core: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.cubeisland/messageextractor-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/de.cubeisland/messageextractor-core)
-Maven plugin: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.cubeisland.maven.plugins/messageextractor-maven-plugin/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/de.cubeisland.maven.plugins/messageextractor-maven-plugin)
+Core: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.cubeengine/pericopist-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.cubeengine/pericopist-core)
+Maven plugin: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.cubeengine.maven.plugins/pericopist-maven-plugin/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.cubeengine.maven.plugins/pericopist-maven-plugin)
 
 # Description
 
@@ -11,5 +11,5 @@ message catalog containing all the string literals of a project by parsing its s
 
 # Modules
 
-* [core](https://github.com/CubeEngine/messageextractor/blob/master/core/README.md)
-* [maven-plugin](https://github.com/CubeEngine/messageextractor/blob/master/maven-plugin/README.md)
+* [core](https://github.com/CubeEngine/Pericopist/blob/master/core/README.md)
+* [maven-plugin](https://github.com/CubeEngine/Pericopist/blob/master/maven-plugin/README.md)

@@ -25,7 +25,7 @@ Configuration class: ```org.cubeengine.pericopist.format.gettext.GettextCatalogC
   <header>
     <comments>
       header comments of the template file.
-      use ${resource.load("path")} to load an external file as comments
+      use ${resource.load("path")} to load an external file storing comments
     </comments>
     <metadata>
       <entry key="Project-Id-Version">PACKAGE VERSION</entry>

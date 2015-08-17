@@ -1,11 +1,12 @@
-messageextractor-core
+pericopist-core
 =====================
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.cubeisland/messageextractor-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/de.cubeisland/messageextractor-core)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.cubeengine/pericopist-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.cubeengine/pericopist-core)
+(replace ${pericopistVersion} with this version)
 
 # Description
 
-The core module of the message extractor provides the main functionality. It contains the code which 
+The core module of the pericopist provides the main functionality. It contains the code which
 extracts the messages from the source code and generates a message catalog with that information.
 
 Every other module uses the core and adds new functionality.
@@ -14,7 +15,7 @@ Every other module uses the core and adds new functionality.
 
 ## Usage
 
-You can find the information how to use the library in the [usage file](https://github.com/CubeEngine/messageextractor/blob/master/core/doc/usage.md) of the documentation.
+You can find the information how to use the library in the [usage file](https://github.com/CubeEngine/Pericopist/blob/master/core/doc/usage.md) of the documentation.
 
 ## Dependencies
 
@@ -23,9 +24,9 @@ You can find the information how to use the library in the [usage file](https://
 To add the dependency using Maven just add the following section to your dependencies:
 ```xml
 <dependency>
-    <groupId>de.cubeisland</groupId>
-    <artifactId>messageextractor-core</artifactId>
-    <version>2.1.0</version>
+    <groupId>org.cubeengine</groupId>
+    <artifactId>pericopist-core</artifactId>
+    <version>${pericopistVersion}</version>
 </dependency>
 ```
 
@@ -33,5 +34,5 @@ To add the dependency using Maven just add the following section to your depende
 
 To add the dependency using Gradle just add the following line to your dependencies:
 ```groovy
-compile 'de.cubeisland:messageextractor-core:2.1.0'
+compile 'org.cubeengine.pericopist-core:${pericopistVersion}'
 ```
