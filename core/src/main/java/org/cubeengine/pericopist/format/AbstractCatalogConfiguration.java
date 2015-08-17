@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.cubeengine.pericopist.util.XmlCharsetAdapter;
 
 /**
- * This is an abstract CatalogConfiguration class which stores information which is needed by every configuration.
+ * This is an abstract {@link CatalogConfiguration} class which stores information which is needed by every configuration.
  */
 public abstract class AbstractCatalogConfiguration implements CatalogConfiguration
 {

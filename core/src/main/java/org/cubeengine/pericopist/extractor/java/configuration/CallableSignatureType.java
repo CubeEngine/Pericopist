@@ -88,7 +88,7 @@ public class CallableSignatureType
      */
     @XmlRootElement(name = "use-as")
     @XmlEnum
-    public static enum CallableSignatureTypeUsage
+    public enum CallableSignatureTypeUsage
     {
         /**
          * This is the default value. It means that the type doesn't have a special role

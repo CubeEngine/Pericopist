@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.cubeengine.pericopist.util.XmlCharsetAdapter;
 
 /**
- * This is an abstract ExtractorConfiguration class which stores information which is needed by every configuration.
+ * This is an abstract {@link ExtractorConfiguration} class which stores information which is needed by every configuration.
  */
 public abstract class AbstractExtractorConfiguration implements ExtractorConfiguration
 {

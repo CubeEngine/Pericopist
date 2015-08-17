@@ -36,7 +36,7 @@ import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Misc
+public final class Misc
 {
     public static final String JAVA_CLASS_PATH = "java.class.path";
     

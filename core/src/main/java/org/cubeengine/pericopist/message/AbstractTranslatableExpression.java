@@ -25,8 +25,8 @@ package org.cubeengine.pericopist.message;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * This class is an abstract implementation of {@link org.cubeengine.pericopist.message.TranslatableExpression}.
- * It implements basic methods which should be used by every {@link org.cubeengine.pericopist.message.TranslatableExpression} implementation
+ * This class is an abstract implementation of {@link TranslatableExpression}.
+ * It implements basic methods which should be used by every {@link TranslatableExpression} implementation
  */
 public abstract class AbstractTranslatableExpression implements TranslatableExpression
 {
@@ -34,7 +34,7 @@ public abstract class AbstractTranslatableExpression implements TranslatableExpr
     private String description;
 
     /**
-     * This method returns the name of the translatable expression
+     * This method returns the name of the {@link TranslatableExpression}
      *
      * @return name
      */
@@ -50,7 +50,7 @@ public abstract class AbstractTranslatableExpression implements TranslatableExpr
     }
 
     /**
-     * This method sets the name of the translatable expression
+     * This method sets the name of the {@link TranslatableExpression}
      *
      * @param name name
      */
@@ -61,7 +61,7 @@ public abstract class AbstractTranslatableExpression implements TranslatableExpr
     }
 
     /**
-     * This method sets a description of the translatable expression.
+     * This method sets a description of the {@link TranslatableExpression}
      *
      * @param description a description
      */

@@ -48,7 +48,7 @@ public interface MessageExtractor
     MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractionException;
 
     /**
-     * This method sets the logger which is used by the MessageExtractor
+     * This method sets the logger which can be used by the MessageExtractor
      *
      * @param logger the logger
      */

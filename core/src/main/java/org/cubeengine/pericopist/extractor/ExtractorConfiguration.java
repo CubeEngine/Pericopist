@@ -25,17 +25,17 @@ package org.cubeengine.pericopist.extractor;
 import org.cubeengine.pericopist.configuration.Configuration;
 
 /**
- * An ExtractorConfiguration is used to set a MessageExtractor instance up.
- * One ExtractorConfiguration class relates to one MessageExtractor class.
+ * An ExtractorConfiguration is used to set a {@link MessageExtractor} instance up.
+ * One ExtractorConfiguration class relates to one {@link MessageExtractor} class.
  *
  * @see org.cubeengine.pericopist.extractor.MessageExtractor
  */
 public interface ExtractorConfiguration extends Configuration
 {
     /**
-     * This method returns the related MessageExtractor class.
+     * This method returns the related {@link MessageExtractor} class.
      *
-     * @return related MessageExtractor instance
+     * @return related {@link MessageExtractor} instance
      */
     Class<? extends MessageExtractor> getExtractorClass();
 }

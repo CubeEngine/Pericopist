@@ -44,7 +44,7 @@ import org.cubeengine.pericopist.format.CatalogFormat;
 import org.cubeengine.pericopist.message.MessageStore;
 
 /**
- * This class is the main class of the project. It shall be used to generate or update message catalog
+ * This class is the main class of the project. It shall be used to generate or update a message catalog
  */
 public class Pericopist
 {

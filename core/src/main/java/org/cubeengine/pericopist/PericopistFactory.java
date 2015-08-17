@@ -67,7 +67,7 @@ import org.cubeengine.pericopist.format.gettext.GettextCatalogConfiguration;
 import org.cubeengine.pericopist.util.Misc;
 
 /**
- * This class is a little helper. It helps to create a MessageCatalog instance which is needed to
+ * This class is a little helper. It helps to create a {@link Pericopist} instance which is needed to
  * create the catalog. With this class one can set the configuration up with an xml file.
  *
  * @see Pericopist
@@ -217,14 +217,12 @@ public class PericopistFactory
      * <p/>
      * The inner source tags are related to the language name. The language name is the name
      * specified with the method {@link #addExtractorConfiguration(String, Class)}.
-     * A default language name is 'java' which links to the
-     * {@link org.cubeengine.pericopist.extractor.java.configuration.JavaExtractorConfiguration}.
+     * A default language name is 'java' which links to the {@link JavaExtractorConfiguration}.
      * Have a look at this class to get a deeper knowledge about the xml file.
      * <p/>
      * the inner catalog tags are related to the format name. The format name is the name
      * specified with the method {@link #addCatalogConfiguration(String, Class)}.
-     * A default format name is 'gettext' which links to the
-     * {@link org.cubeengine.pericopist.format.gettext.GettextCatalogConfiguration}.
+     * A default format name is 'gettext' which links to the {@link GettextCatalogConfiguration}.
      * Have a look at this class to get a deeper knowledge about the xml file.
      *
      * @param resource        the xml configuration resource
@@ -269,14 +267,14 @@ public class PericopistFactory
     }
 
     /**
-     * This method loads the specified extractor configuration resource
+     * This method loads the specified {@link Pericopist} configuration resources
      *
      * @param resource        the xml configuration resource
      * @param charset         the charset of the configuration
      * @param velocityEngine  used velocity engine
      * @param velocityContext a velocity context which is used to evaluate the configuration
      *
-     * @return MessageExtractorConfiguration which stores the parsed configurations
+     * @return {@link PericopistConfiguration} which stores the parsed configurations
      *
      * @throws ConfigurationException
      */
