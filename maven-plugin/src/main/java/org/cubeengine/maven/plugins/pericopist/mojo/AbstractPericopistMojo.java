@@ -44,6 +44,7 @@ import org.cubeengine.pericopist.util.ResourceLoader;
  * @requiresDependencyResolution test
  * @threadSafe true
  */
+@SuppressWarnings("JavaDoc")
 public abstract class AbstractPericopistMojo extends AbstractMojo
 {
     /**

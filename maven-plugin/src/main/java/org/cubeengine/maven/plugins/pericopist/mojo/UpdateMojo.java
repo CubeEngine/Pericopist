@@ -24,6 +24,7 @@ import org.cubeengine.pericopist.exception.PericopistException;
  *
  * @goal update
  */
+@SuppressWarnings("JavaDoc")
 public class UpdateMojo extends AbstractPericopistMojo
 {
     @Override

@@ -24,6 +24,7 @@ import org.cubeengine.pericopist.exception.PericopistException;
  *
  * @goal generate
  */
+@SuppressWarnings("JavaDoc")
 public class GenerateMojo extends AbstractPericopistMojo
 {
     /**
