@@ -36,6 +36,7 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
+import javafx.util.Pair;
 
 public final class Misc
 {
@@ -205,30 +206,34 @@ public final class Misc
     }
 
     /**
-     * This method reads an url and returns the content as a String object.
+     * This method reads an url and returns the content. It returns a pair containing the url which was used finally and a String object.
      * Up to 25 redirects in a row are supported.
      *
      * @param url     the url
      * @param charset the charset of the url content
      *
-     * @return the content of the url
+     * @return {@link Pair} containing the used url and the content of the url
      *
      * @throws IOException
      */
-    public static String getContent(URL url, Charset charset) throws IOException
+    public static Pair<URL, String> getContent(URL url, Charset charset) throws IOException
     {
-        return getContent(url, charset, 0, 25);
+        return getContent(url, charset, 0, 25, null);
     }
 
-    private static String getContent(URL url, Charset charset, int redirectCount, int maxRedirectCount) throws IOException
+    private static Pair<URL, String> getContent(URL url, Charset charset, int redirectCount, int maxRedirectCount, String cookie) throws IOException
     {
-        if (redirectCount >= maxRedirectCount)
+        if (redirectCount > maxRedirectCount)
         {
-            throw new IOException("Couldn't load the content of the url. Following " + maxRedirectCount + " redirects is more than enough.");
+            throw new IOException("Couldn't load the content of the url. Following " + (redirectCount - 1) + " redirects is more than enough.");
         }
 
         URLConnection connection = url.openConnection();
         connection.setReadTimeout(5000);
+        if (cookie != null)
+        {
+            connection.setRequestProperty("Cookie", cookie);
+        }
 
         if (connection instanceof HttpURLConnection)
         {
@@ -242,7 +247,7 @@ public final class Misc
                 case HttpURLConnection.HTTP_MOVED_TEMP:
                 case HttpURLConnection.HTTP_SEE_OTHER:
                     URL redirectUrl = new URL(connection.getHeaderField("Location"));
-                    return getContent(redirectUrl, charset, redirectCount + 1, maxRedirectCount);
+                    return getContent(redirectUrl, charset, redirectCount + 1, maxRedirectCount, connection.getHeaderField("Set-Cookie"));
 
                 default:
                     throw new IOException("Couldn't read the url. Received http response code " + httpURLConnection.getResponseCode());
@@ -261,7 +266,7 @@ public final class Misc
         }
 
         reader.close();
-        return content.toString();
+        return new Pair<>(url, content.toString());
     }
 
     /**
