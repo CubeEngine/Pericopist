@@ -59,15 +59,6 @@ public class JavaMessageExtractor implements MessageExtractor
     private Logger logger;
     private ConverterManager converterManager;
 
-    private FileFilter javaFileFilter = new FileFilter()
-    {
-        @Override
-        public boolean accept(File pathname)
-        {
-            return pathname.getName().endsWith(".java");
-        }
-    };
-
     public JavaMessageExtractor()
     {
         this.converterManager = new ConverterManager(true);
@@ -142,27 +133,6 @@ public class JavaMessageExtractor implements MessageExtractor
             {
                 this.logger.warning("The classpath entry '" + entry + "' was removed. It doesn't exist.");
                 continue;
-            }
-
-            if (file.isDirectory())
-            {
-                List<File> fileList;
-                try
-                {
-                    fileList = Misc.scanFilesRecursive(file, this.javaFileFilter);
-                }
-                catch (IOException e)
-                {
-                    this.logger.log(Level.SEVERE, "The classpath entry '" + entry + "' couldn't be scanned for java files. It was removed from the classpath.", e);
-                    continue;
-                }
-
-                // TODO remove with next spoon release; don't remove classpath entry containing java files
-                if (!fileList.isEmpty())
-                {
-                    this.logger.warning("The classpath entry '" + entry + "' was removed. The directory contains java files.");
-                    continue;
-                }
             }
 
             classpath.add(entry);
