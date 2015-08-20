@@ -31,7 +31,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
@@ -224,5 +227,20 @@ public class TestCasesJavaGettextCatalog
         }
 
         assertEquals(1, notTranslatableGettextMessageCount);
+    }
+
+    @Test
+    public void generatePericopistWithOnlineConfigAndRedirect() throws PericopistException
+    {
+        final String configUrl = "http://raw.githubusercontent.com/CubeEngine/Pericopist/master/core/src/test/resources/configuration.xml";
+
+        PericopistFactory factory = new PericopistFactory();
+        Pericopist pericopist = factory.getPericopist(configUrl, Charset.forName("UTF-8"));
+
+        JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration) pericopist.getExtractorConfiguration();
+        assertNotNull("The configuration isn't a JavaExtractorConfiguration instance.", extractorConfig);
+
+        GettextCatalogConfiguration gettextConfig = (GettextCatalogConfiguration) pericopist.getCatalogConfiguration();
+        assertNotNull("The configuration isn't a GettextCatalogConfiguration instance.", gettextConfig);
     }
 }
