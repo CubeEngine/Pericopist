@@ -27,6 +27,7 @@ import org.apache.velocity.context.Context;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.log.SystemLogChute;
 import org.apache.velocity.tools.ToolManager;
+import org.cubeengine.pericopist.util.ResourceLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -76,6 +77,7 @@ import org.cubeengine.pericopist.util.Misc;
 public class PericopistFactory
 {
     private static final String CONFIGURATION_ROOT_TAG = "pericopist";
+    private static final String RESOURCE_LOADER_CONTEXT_KEY = "resource";
 
     private Map<String, Class<? extends ExtractorConfiguration>> extractorConfigurationMap;
     private Map<String, Class<? extends CatalogConfiguration>> catalogConfigurationMap;
@@ -239,6 +241,10 @@ public class PericopistFactory
         if (velocityContext == null)
         {
             velocityContext = new ToolManager(false).createContext();
+        }
+        if (!velocityContext.containsKey(RESOURCE_LOADER_CONTEXT_KEY))
+        {
+            velocityContext.put(RESOURCE_LOADER_CONTEXT_KEY, new ResourceLoader());
         }
 
         // creates velocity engine with log properties and initialises it

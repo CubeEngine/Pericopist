@@ -44,7 +44,6 @@ import org.cubeengine.pericopist.format.gettext.GettextCatalogConfiguration;
 import org.cubeengine.pericopist.format.gettext.PlaintextGettextCatalogFormat;
 import org.cubeengine.pericopist.message.MessageStore;
 import org.cubeengine.pericopist.message.TranslatableMessage;
-import org.cubeengine.pericopist.util.ResourceLoader;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -63,7 +62,6 @@ public class TestCasesJavaGettextCatalog
     public void setUp() throws PericopistException
     {
         ToolContext toolContext = new ToolManager(true).createContext();
-        toolContext.put("resource", new ResourceLoader());
 
         PericopistFactory factory = new PericopistFactory();
         this.pericopist = factory.getPericopist("./src/test/resources/configuration.xml", Charset.forName("UTF-8"), toolContext);
