@@ -29,6 +29,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -204,7 +205,8 @@ public final class Misc
     }
 
     /**
-     * This method reads an url and returns the content as a String object
+     * This method reads an url and returns the content as a String object.
+     * Up to 25 redirects in a row are supported.
      *
      * @param url     the url
      * @param charset the charset of the url content
@@ -215,7 +217,38 @@ public final class Misc
      */
     public static String getContent(URL url, Charset charset) throws IOException
     {
+        return getContent(url, charset, 0, 25);
+    }
+
+    private static String getContent(URL url, Charset charset, int redirectCount, int maxRedirectCount) throws IOException
+    {
+        if (redirectCount >= maxRedirectCount)
+        {
+            throw new IOException("Couldn't load the content of the url. Following " + maxRedirectCount + " redirects is more than enough.");
+        }
+
         URLConnection connection = url.openConnection();
+        connection.setReadTimeout(5000);
+
+        if (connection instanceof HttpURLConnection)
+        {
+            HttpURLConnection httpURLConnection = (HttpURLConnection)connection;
+            switch (httpURLConnection.getResponseCode())
+            {
+                case HttpURLConnection.HTTP_OK:
+                    break;
+
+                case HttpURLConnection.HTTP_MOVED_PERM:
+                case HttpURLConnection.HTTP_MOVED_TEMP:
+                case HttpURLConnection.HTTP_SEE_OTHER:
+                    URL redirectUrl = new URL(connection.getHeaderField("Location"));
+                    return getContent(redirectUrl, charset, redirectCount + 1, maxRedirectCount);
+
+                default:
+                    throw new IOException("Couldn't read the url. Received http response code " + httpURLConnection.getResponseCode());
+            }
+        }
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), charset));
 
         StringBuilder content = new StringBuilder();
