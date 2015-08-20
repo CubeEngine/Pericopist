@@ -33,7 +33,7 @@ import spoon.reflect.reference.CtExecutableReference;
  * This converter is responsible for constructor calls
  * like <code>translate(new Classname())</code>
  */
-public class CtNewClassExpressionConverter extends CtAbstractInvocationExpressionConverter<CtConstructorCall<?>>
+class CtNewClassExpressionConverter extends CtAbstractInvocationExpressionConverter<CtConstructorCall<?>>
 {
     @Override
     public Object convert(CtConstructorCall<?> expression, ConverterManager manager) throws ConversionException

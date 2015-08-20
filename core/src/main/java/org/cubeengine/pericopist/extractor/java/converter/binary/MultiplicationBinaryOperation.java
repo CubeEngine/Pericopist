@@ -27,7 +27,7 @@ import spoon.reflect.code.BinaryOperatorKind;
 
 class MultiplicationBinaryOperation extends BinaryOperation
 {
-    protected MultiplicationBinaryOperation(Converter<?> binaryConverter)
+    MultiplicationBinaryOperation(Converter<?> binaryConverter)
     {
         super(binaryConverter, BinaryOperatorKind.MUL);
     }

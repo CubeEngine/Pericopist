@@ -27,7 +27,7 @@ import spoon.reflect.code.BinaryOperatorKind;
 
 class EqualsBinaryOperation extends BinaryOperation
 {
-    protected EqualsBinaryOperation(Converter<?> binaryConverter)
+    EqualsBinaryOperation(Converter<?> binaryConverter)
     {
         super(binaryConverter, BinaryOperatorKind.EQ);
     }

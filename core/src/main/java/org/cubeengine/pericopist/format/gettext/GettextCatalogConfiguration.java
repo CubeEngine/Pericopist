@@ -64,6 +64,7 @@ import org.cubeengine.pericopist.format.HeaderConfiguration;
  * @see PericopistFactory#getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
  * @see org.cubeengine.pericopist.format.gettext.PlaintextGettextCatalogFormat
  */
+@SuppressWarnings("unused")
 @XmlRootElement(name = "catalog")
 public class GettextCatalogConfiguration extends AbstractCatalogConfiguration
 {

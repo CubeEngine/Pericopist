@@ -46,6 +46,7 @@ import org.cubeengine.pericopist.message.MessageStore;
 /**
  * This class is the main class of the project. It shall be used to generate or update a message catalog
  */
+@SuppressWarnings("unused")
 public class Pericopist
 {
     private final Logger logger;

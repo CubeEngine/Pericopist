@@ -27,7 +27,7 @@ import spoon.reflect.code.BinaryOperatorKind;
 
 class BitwiseXorBinaryOperation extends BinaryOperation
 {
-    protected BitwiseXorBinaryOperation(Converter<?> binaryConverter)
+    BitwiseXorBinaryOperation(Converter<?> binaryConverter)
     {
         super(binaryConverter, BinaryOperatorKind.BITXOR);
     }

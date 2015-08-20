@@ -49,6 +49,7 @@ import spoon.reflect.reference.CtExecutableReference;
  *
  * @see org.cubeengine.pericopist.extractor.java.configuration.JavaExtractorConfiguration
  */
+@SuppressWarnings("unused")
 @XmlRootElement(name = "constructor")
 public class Constructor extends CallableExpression
 {

@@ -46,7 +46,7 @@ import spoon.reflect.code.CtUnaryOperator;
  */
 public class ConverterManager
 {
-    private Map<Class<? extends CtExpression>, Converter> converters;
+    private final Map<Class<? extends CtExpression>, Converter> converters;
 
     public ConverterManager(boolean registerDefaultConverter)
     {

@@ -32,7 +32,7 @@ abstract class BinaryOperation
     private final Converter<?> binaryConverter;
     private final BinaryOperatorKind operator;
 
-    protected BinaryOperation(Converter<?> binaryConverter, BinaryOperatorKind operator)
+    BinaryOperation(Converter<?> binaryConverter, BinaryOperatorKind operator)
     {
         this.binaryConverter = binaryConverter;
         this.operator = operator;
@@ -62,5 +62,5 @@ abstract class BinaryOperation
                                                                                       leftHandOperand.getClass().getName(), rightHandOperand.getClass().getName()));
     }
 
-    public abstract Object operate(Object leftHandOperand, Object rightHandOperand);
+    protected abstract Object operate(Object leftHandOperand, Object rightHandOperand);
 }

@@ -33,7 +33,7 @@ import spoon.reflect.code.CtConditional;
  * This converter is responsible for conditions like
  * <code>translate(really? "yes" : "no")</code>
  */
-public class CtConditionalExpressionConverter implements Converter<CtConditional<?>>
+class CtConditionalExpressionConverter implements Converter<CtConditional<?>>
 {
     @Override
     public Object convert(CtConditional<?> expression, ConverterManager manager) throws ConversionException

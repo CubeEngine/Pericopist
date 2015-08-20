@@ -28,7 +28,7 @@ import spoon.reflect.reference.CtTypeReference;
 
 class InstanceOfBinaryOperation extends BinaryOperation
 {
-    protected InstanceOfBinaryOperation(Converter<?> binaryConverter)
+    InstanceOfBinaryOperation(Converter<?> binaryConverter)
     {
         super(binaryConverter, BinaryOperatorKind.INSTANCEOF);
     }

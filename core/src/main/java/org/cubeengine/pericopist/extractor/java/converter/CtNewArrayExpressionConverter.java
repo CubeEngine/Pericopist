@@ -35,7 +35,7 @@ import spoon.reflect.reference.CtTypeReference;
  * This converter is responsible for new array expressions like
  * <code>@Annotation({"first", "second", "third"})</code>
  */
-public class CtNewArrayExpressionConverter implements Converter<CtNewArray<?>>
+class CtNewArrayExpressionConverter implements Converter<CtNewArray<?>>
 {
     @Override
     public Object convert(CtNewArray<?> expression, ConverterManager manager) throws ConversionException

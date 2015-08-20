@@ -185,7 +185,7 @@ public final class GettextUtils
     private static class SourceReferenceHolder
     {
         private SourceReference sourceReference;
-        private List<Integer> numbers;
+        private final List<Integer> numbers;
 
         private SourceReferenceHolder()
         {

@@ -27,7 +27,7 @@ import spoon.reflect.code.BinaryOperatorKind;
 
 class UnsignedShiftRightBinaryOperation extends BinaryOperation
 {
-    protected UnsignedShiftRightBinaryOperation(Converter<?> binaryConverter)
+    UnsignedShiftRightBinaryOperation(Converter<?> binaryConverter)
     {
         super(binaryConverter, BinaryOperatorKind.USR);
     }

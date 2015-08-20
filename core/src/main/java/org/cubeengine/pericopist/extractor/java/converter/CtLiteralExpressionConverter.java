@@ -29,7 +29,7 @@ import spoon.reflect.code.CtLiteral;
  * This converter is responsible for simple literal strings like
  * <code>translate("I'm a translatable string")</code>
  */
-public class CtLiteralExpressionConverter implements Converter<CtLiteral<?>>
+class CtLiteralExpressionConverter implements Converter<CtLiteral<?>>
 {
     @Override
     public Object convert(CtLiteral<?> expression, ConverterManager manager) throws ConversionException

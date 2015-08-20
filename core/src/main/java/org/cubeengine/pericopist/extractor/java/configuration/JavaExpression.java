@@ -31,6 +31,7 @@ import spoon.reflect.declaration.CtElement;
 /**
  * The TranslatableExpression classes describe where the messages shall be extracted.
  */
+@SuppressWarnings("unused")
 public abstract class JavaExpression extends AbstractTranslatableExpression
 {
     private String defaultContext;

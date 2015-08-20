@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlValue;
  *
  * @see org.cubeengine.pericopist.extractor.java.configuration.CallableExpression
  */
+@SuppressWarnings("unused")
 @XmlRootElement(name = "type")
 public class CallableSignatureType
 {

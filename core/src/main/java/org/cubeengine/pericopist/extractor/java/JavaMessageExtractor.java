@@ -23,8 +23,6 @@
 package org.cubeengine.pericopist.extractor.java;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -33,7 +31,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.cubeengine.pericopist.exception.MessageExtractionException;
 import org.cubeengine.pericopist.exception.SourceDirectoryNotExistingException;
@@ -44,7 +41,6 @@ import org.cubeengine.pericopist.extractor.java.converter.ConverterManager;
 import org.cubeengine.pericopist.extractor.java.processor.AnnotationProcessor;
 import org.cubeengine.pericopist.extractor.java.processor.CallableExpressionProcessor;
 import org.cubeengine.pericopist.message.MessageStore;
-import org.cubeengine.pericopist.util.Misc;
 import spoon.Launcher;
 import spoon.compiler.SpoonCompiler;
 import spoon.processing.ProcessingManager;
@@ -57,7 +53,7 @@ import spoon.support.QueueProcessingManager;
 public class JavaMessageExtractor implements MessageExtractor
 {
     private Logger logger;
-    private ConverterManager converterManager;
+    private final ConverterManager converterManager;
 
     public JavaMessageExtractor()
     {

@@ -75,6 +75,7 @@ import spoon.reflect.declaration.CtElement;
  * @see PericopistFactory#getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
  * @see org.cubeengine.pericopist.extractor.java.JavaMessageExtractor
  */
+@SuppressWarnings("unused")
 @XmlRootElement(name = "source")
 public class JavaExtractorConfiguration extends AbstractExtractorConfiguration
 {

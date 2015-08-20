@@ -33,7 +33,7 @@ import spoon.reflect.reference.CtExecutableReference;
  * This converter is responsible for method invocations like
  * <code>translate("string".toUpperCase(Locale.ENGLISH)</code>
  */
-public class CtInvocationExpressionConverter extends CtAbstractInvocationExpressionConverter<CtInvocation>
+class CtInvocationExpressionConverter extends CtAbstractInvocationExpressionConverter<CtInvocation>
 {
     @Override
     public Object convert(CtInvocation expression, ConverterManager manager) throws ConversionException
