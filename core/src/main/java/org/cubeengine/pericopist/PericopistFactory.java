@@ -41,6 +41,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javafx.util.Pair;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.runtime.RuntimeConstants;
@@ -296,7 +297,9 @@ public class PericopistFactory
         Node sourceNode = null;
         Node catalogNode = null;
 
-        Node rootNode = this.getRootNode(this.loadConfiguration(configurationUrl, velocityEngine, velocityContext, charset));
+        Pair<URL, String> urlConfigPair = this.loadConfiguration(configurationUrl, velocityEngine, velocityContext, charset);
+        configurationUrl = urlConfigPair.getKey();
+        Node rootNode = this.getRootNode(urlConfigPair.getValue());
         Node charsetNode = rootNode.getAttributes().getNamedItem("charset");
         if (charsetNode != null)
         {
@@ -447,17 +450,19 @@ public class PericopistFactory
      * @param context        the velocity context
      * @param charset        the charset of the configuration
      *
-     * @return the configuration
+     * @return pair storing the final url (after redirects) from the configuration and the configuration
      *
      * @throws ConfigurationException if the resource couldn't be read
      */
-    private String loadConfiguration(URL resource, VelocityEngine velocityEngine, Context context, Charset charset) throws ConfigurationException
+    private Pair<URL, String> loadConfiguration(URL resource, VelocityEngine velocityEngine, Context context, Charset charset) throws ConfigurationException
     {
         // reads the configuration file
         String configuration;
         try
         {
-            configuration = Misc.getContent(resource, charset);
+            Pair<URL, String> urlConfigPair = Misc.getContent(resource, charset);
+            resource = urlConfigPair.getKey();
+            configuration = urlConfigPair.getValue();
         }
         catch (IOException e)
         {
@@ -479,7 +484,7 @@ public class PericopistFactory
         }
         while (!oldConfiguration.equals(configuration) && success);
 
-        return configuration;
+        return new Pair<>(resource, configuration);
     }
 
     /**
