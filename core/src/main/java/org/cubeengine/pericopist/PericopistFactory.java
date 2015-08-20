@@ -22,24 +22,13 @@
  */
 package org.cubeengine.pericopist;
 
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.context.Context;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.log.SystemLogChute;
-import org.apache.velocity.tools.ToolManager;
-import org.cubeengine.pericopist.util.ResourceLoader;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -47,13 +36,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.context.Context;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.log.SystemLogChute;
+import org.apache.velocity.tools.ToolManager;
 import org.cubeengine.pericopist.configuration.Mergeable;
 import org.cubeengine.pericopist.configuration.MergeableArray;
 import org.cubeengine.pericopist.exception.ConfigurationException;
@@ -66,6 +58,12 @@ import org.cubeengine.pericopist.extractor.java.configuration.JavaExtractorConfi
 import org.cubeengine.pericopist.format.CatalogConfiguration;
 import org.cubeengine.pericopist.format.gettext.GettextCatalogConfiguration;
 import org.cubeengine.pericopist.util.Misc;
+import org.cubeengine.pericopist.util.ResourceLoader;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * This class is a little helper. It helps to create a {@link Pericopist} instance which is needed to
@@ -311,16 +309,23 @@ public class PericopistFactory
             String parentResource = parentNode.getTextContent();
 
             // relative parent resource from current resource
-            try
+            if (!new File(parentResource).isAbsolute())
             {
-                if (!new File(parentResource).isAbsolute())
+                try
                 {
                     File resourceFile = new File(resource).getCanonicalFile();
                     parentResource = new File(resourceFile.getParent(), parentResource).getCanonicalPath();
                 }
-            }
-            catch (IOException ignored)
-            {
+                catch (IOException e)
+                {
+                    try
+                    {
+                        String configurationUrlString = configurationUrl.toExternalForm();
+                        parentResource = new URL(configurationUrlString.substring(0, configurationUrlString.lastIndexOf('/') + 1) + parentResource).toExternalForm();
+                    }
+                    catch (MalformedURLException ignored)
+                    {}
+                }
             }
 
             parent = this.loadPericopistConfiguration(parentResource, charset, velocityEngine, velocityContext);
