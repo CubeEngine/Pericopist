@@ -32,7 +32,7 @@ import spoon.reflect.reference.CtFieldReference;
  * This converter is responsible for constant expressions like
  * <code>translate(CLASS.CONSTANT)</code>
  */
-public class CtFieldAccessExpressionConverter implements Converter<CtFieldAccess<?>>
+class CtFieldAccessExpressionConverter implements Converter<CtFieldAccess<?>>
 {
     @Override
     public Object convert(CtFieldAccess<?> expression, ConverterManager manager) throws ConversionException

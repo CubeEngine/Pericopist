@@ -57,6 +57,7 @@ import spoon.reflect.reference.CtTypeReference;
  *
  * @see org.cubeengine.pericopist.extractor.java.configuration.JavaExtractorConfiguration
  */
+@SuppressWarnings("unused")
 @XmlRootElement(name = "method")
 public class Method extends CallableExpression
 {
@@ -151,7 +152,7 @@ public class Method extends CallableExpression
     {
         String className = this.getClassName();
 
-        Queue<CtTypeReference<?>> queue = new ArrayDeque<CtTypeReference<?>>();
+        Queue<CtTypeReference<?>> queue = new ArrayDeque<>();
         queue.offer(executable.getDeclaringType());
 
         while (!queue.isEmpty())

@@ -32,7 +32,7 @@ import spoon.reflect.code.CtExpression;
 import spoon.reflect.reference.CtArrayTypeReference;
 import spoon.reflect.reference.CtTypeReference;
 
-public abstract class CtAbstractInvocationExpressionConverter<T extends CtExpression> implements Converter<T>
+abstract class CtAbstractInvocationExpressionConverter<T extends CtExpression> implements Converter<T>
 {
     protected Object[] loadArguments(T expression, ConverterManager manager) throws ConversionException
     {

@@ -37,7 +37,7 @@ import java.util.TreeSet;
  */
 public class MessageStore implements Iterable<TranslatableMessage>
 {
-    private Set<TranslatableMessage> messages;
+    private final Set<TranslatableMessage> messages;
 
     /**
      * The constructor creates a new message store

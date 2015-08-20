@@ -27,7 +27,7 @@ import spoon.reflect.code.BinaryOperatorKind;
 
 class AndBinaryOperation extends BinaryOperation
 {
-    protected AndBinaryOperation(Converter<?> binaryConverter)
+    AndBinaryOperation(Converter<?> binaryConverter)
     {
         super(binaryConverter, BinaryOperatorKind.AND);
     }

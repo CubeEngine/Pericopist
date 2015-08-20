@@ -37,7 +37,7 @@ import spoon.reflect.code.CtBinaryOperator;
  */
 public class CtBinaryOperatorExpressionConverter implements Converter<CtBinaryOperator<?>>
 {
-    private Map<BinaryOperatorKind, BinaryOperation> binaryOperationMap;
+    private final Map<BinaryOperatorKind, BinaryOperation> binaryOperationMap;
 
     public CtBinaryOperatorExpressionConverter()
     {

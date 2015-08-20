@@ -97,7 +97,7 @@ public final class Misc
             throw new IllegalArgumentException("The base directory must actually be a directory...");
         }
 
-        List<File> files = new LinkedList<File>();
+        List<File> files = new LinkedList<>();
         scanFilesRecursive0(baseDir, files, filter);
 
         return files;
@@ -139,7 +139,7 @@ public final class Misc
         StringBuilder sb = new StringBuilder();
         byte[] buffer = new byte[4096];
 
-        int bytesRead = 0;
+        int bytesRead;
         while ((bytesRead = stream.read(buffer)) > -1)
         {
             if (bytesRead > 0)

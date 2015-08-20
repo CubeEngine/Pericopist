@@ -27,7 +27,7 @@ import spoon.reflect.code.BinaryOperatorKind;
 
 class SubtractionBinaryOperation extends BinaryOperation
 {
-    protected SubtractionBinaryOperation(Converter<?> binaryConverter)
+    SubtractionBinaryOperation(Converter<?> binaryConverter)
     {
         super(binaryConverter, BinaryOperatorKind.MINUS);
     }

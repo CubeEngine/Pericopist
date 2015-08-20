@@ -69,6 +69,7 @@ import spoon.reflect.declaration.CtElement;
  * <li>type_use (not supported by spoon yet)</li>
  * </ul>
  */
+@SuppressWarnings("unused")
 @XmlRootElement(name = "annotation")
 public class Annotation extends JavaExpression
 {

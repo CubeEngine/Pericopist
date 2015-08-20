@@ -27,7 +27,7 @@ import spoon.reflect.code.BinaryOperatorKind;
 
 class OrBinaryOperation extends BinaryOperation
 {
-    protected OrBinaryOperation(Converter<?> binaryConverter)
+    OrBinaryOperation(Converter<?> binaryConverter)
     {
         super(binaryConverter, BinaryOperatorKind.OR);
     }

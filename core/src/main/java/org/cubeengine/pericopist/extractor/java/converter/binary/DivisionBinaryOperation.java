@@ -27,7 +27,7 @@ import spoon.reflect.code.BinaryOperatorKind;
 
 class DivisionBinaryOperation extends BinaryOperation
 {
-    protected DivisionBinaryOperation(Converter<?> binaryConverter)
+    DivisionBinaryOperation(Converter<?> binaryConverter)
     {
         super(binaryConverter, BinaryOperatorKind.DIV);
     }

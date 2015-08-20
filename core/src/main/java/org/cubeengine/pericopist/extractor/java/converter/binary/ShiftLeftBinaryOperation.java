@@ -27,7 +27,7 @@ import spoon.reflect.code.BinaryOperatorKind;
 
 class ShiftLeftBinaryOperation extends BinaryOperation
 {
-    protected ShiftLeftBinaryOperation(Converter<?> binaryConverter)
+    ShiftLeftBinaryOperation(Converter<?> binaryConverter)
     {
         super(binaryConverter, BinaryOperatorKind.SL);
     }

@@ -74,13 +74,14 @@ import org.cubeengine.pericopist.util.Misc;
  * @see Pericopist
  * @see #getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
  */
+@SuppressWarnings("unused")
 public class PericopistFactory
 {
     private static final String CONFIGURATION_ROOT_TAG = "pericopist";
     private static final String RESOURCE_LOADER_CONTEXT_KEY = "resource";
 
-    private Map<String, Class<? extends ExtractorConfiguration>> extractorConfigurationMap;
-    private Map<String, Class<? extends CatalogConfiguration>> catalogConfigurationMap;
+    private final Map<String, Class<? extends ExtractorConfiguration>> extractorConfigurationMap;
+    private final Map<String, Class<? extends CatalogConfiguration>> catalogConfigurationMap;
 
     private final DocumentBuilderFactory documentBuilderFactory;
 

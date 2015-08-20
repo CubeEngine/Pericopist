@@ -30,7 +30,7 @@ import spoon.reflect.code.UnaryOperatorKind;
  * This converter is responsible for unary conditions like
  * <code>translate(-i)</code>
  */
-public class CtUnaryOperatorExpressionConverter implements Converter<CtUnaryOperator<?>>
+class CtUnaryOperatorExpressionConverter implements Converter<CtUnaryOperator<?>>
 {
     @Override
     public Object convert(CtUnaryOperator<?> expression, ConverterManager manager) throws ConversionException

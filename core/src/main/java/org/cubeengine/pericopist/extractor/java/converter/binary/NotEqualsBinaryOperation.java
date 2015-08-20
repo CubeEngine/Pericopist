@@ -27,7 +27,7 @@ import spoon.reflect.code.BinaryOperatorKind;
 
 class NotEqualsBinaryOperation extends BinaryOperation
 {
-    protected NotEqualsBinaryOperation(Converter<?> binaryConverter)
+    NotEqualsBinaryOperation(Converter<?> binaryConverter)
     {
         super(binaryConverter, BinaryOperatorKind.NE);
     }
