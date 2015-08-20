@@ -30,6 +30,7 @@ import java.nio.charset.Charset;
 /**
  * The resource loader which helps to load resources within a velocity template.
  */
+@SuppressWarnings("unused")
 public class ResourceLoader
 {
     /**

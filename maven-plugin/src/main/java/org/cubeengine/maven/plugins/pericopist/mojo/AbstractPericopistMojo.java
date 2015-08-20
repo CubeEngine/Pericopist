@@ -38,7 +38,6 @@ import org.cubeengine.pericopist.exception.ConfigurationException;
 import org.cubeengine.pericopist.exception.ConfigurationNotFoundException;
 import org.cubeengine.pericopist.exception.PericopistException;
 import org.cubeengine.pericopist.exception.SourceDirectoryNotExistingException;
-import org.cubeengine.pericopist.util.ResourceLoader;
 
 /**
  * @requiresDependencyResolution test
@@ -130,7 +129,6 @@ public abstract class AbstractPericopistMojo extends AbstractMojo
         velocityContext.put("version", this.project.getVersion());
         velocityContext.put("basedir", this.project.getBasedir());
         velocityContext.put("sourceEncoding", this.charsetName);
-        velocityContext.put("resource", new ResourceLoader());
         Properties properties = this.project.getProperties();
         for (Entry entry : properties.entrySet())
         {
