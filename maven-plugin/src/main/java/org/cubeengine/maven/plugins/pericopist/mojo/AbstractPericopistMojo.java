@@ -205,7 +205,7 @@ public abstract class AbstractPericopistMojo extends AbstractMojo
     {
         try
         {
-            Set<Object> elements = new HashSet<Object>();
+            Set<Object> elements = new HashSet<>();
             elements.addAll(this.project.getCompileClasspathElements());
             elements.addAll(this.project.getRuntimeClasspathElements());
             elements.addAll(this.project.getSystemClasspathElements());

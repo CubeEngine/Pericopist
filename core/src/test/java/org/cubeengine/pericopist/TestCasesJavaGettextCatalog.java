@@ -22,22 +22,12 @@
  */
 package org.cubeengine.pericopist;
 
-import org.cubeengine.pericopist.util.Misc;
-import org.apache.velocity.tools.ToolContext;
-import org.apache.velocity.tools.ToolManager;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Iterator;
-
+import org.apache.velocity.tools.ToolContext;
+import org.apache.velocity.tools.ToolManager;
 import org.cubeengine.pericopist.exception.PericopistException;
 import org.cubeengine.pericopist.extractor.java.configuration.JavaExtractorConfiguration;
 import org.cubeengine.pericopist.format.CatalogConfiguration;
@@ -47,12 +37,13 @@ import org.cubeengine.pericopist.format.gettext.GettextCatalogConfiguration;
 import org.cubeengine.pericopist.format.gettext.PlaintextGettextCatalogFormat;
 import org.cubeengine.pericopist.message.MessageStore;
 import org.cubeengine.pericopist.message.TranslatableMessage;
+import org.cubeengine.pericopist.util.Misc;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
 public class TestCasesJavaGettextCatalog
