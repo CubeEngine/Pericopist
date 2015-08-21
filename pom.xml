@@ -25,9 +25,9 @@
     </modules>
 
     <scm>
-        <url>scm:git:https://github.com/CubeEngine/messageextractor</url>
-        <connection>scm:git:https://github.com/CubeEngine/messageextractor</connection>
-        <developerConnection>scm:git:https://github.com/CubeEngine/messageextractor</developerConnection>
+        <url>scm:git:https://github.com/CubeEngine/Pericopist</url>
+        <connection>scm:git:https://github.com/CubeEngine/Pericopist</connection>
+        <developerConnection>scm:git:https://github.com/CubeEngine/Pericopist</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
