@@ -22,13 +22,11 @@
  */
 package org.cubeengine.pericopist;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -292,28 +290,7 @@ public class PericopistFactory
         Node parentNode = rootNode.getAttributes().getNamedItem("parent");
         if (parentNode != null)
         {
-            String parentResource = parentNode.getTextContent();
-
-            // relative parent resource from current resource
-            if (!new File(parentResource).isAbsolute())
-            {
-                try
-                {
-                    File resourceFile = new File(resource).getCanonicalFile();
-                    parentResource = new File(resourceFile.getParent(), parentResource).getCanonicalPath();
-                }
-                catch (IOException e)
-                {
-                    try
-                    {
-                        String configurationUrlString = configurationUrl.toExternalForm();
-                        parentResource = new URL(configurationUrlString.substring(0, configurationUrlString.lastIndexOf('/') + 1) + parentResource).toExternalForm();
-                    }
-                    catch (MalformedURLException ignored)
-                    {}
-                }
-            }
-
+            String parentResource = Misc.resolvePath(configurationUrl.toExternalForm(), parentNode.getTextContent());
             parent = this.loadPericopistConfiguration(parentResource, charset, readTimeout, velocityEngine, velocityContext);
         }
 
