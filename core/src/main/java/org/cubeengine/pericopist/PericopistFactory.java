@@ -39,7 +39,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javafx.util.Pair;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.runtime.RuntimeConstants;
@@ -57,6 +56,7 @@ import org.cubeengine.pericopist.extractor.java.configuration.JavaExtractorConfi
 import org.cubeengine.pericopist.format.CatalogConfiguration;
 import org.cubeengine.pericopist.format.gettext.GettextCatalogConfiguration;
 import org.cubeengine.pericopist.util.Misc;
+import org.cubeengine.pericopist.util.Pair;
 import org.cubeengine.pericopist.util.ResourceLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

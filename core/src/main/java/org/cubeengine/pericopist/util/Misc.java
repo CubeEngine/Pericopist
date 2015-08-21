@@ -32,7 +32,6 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
-import javafx.util.Pair;
 
 public final class Misc
 {
