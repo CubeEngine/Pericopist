@@ -67,7 +67,7 @@ public class TestCasesJavaGettextCatalog
         ToolContext toolContext = new ToolManager(true).createContext();
 
         PericopistFactory factory = new PericopistFactory();
-        this.pericopist = factory.getPericopist("./src/test/resources/configuration.xml", Charset.forName("UTF-8"), toolContext);
+        this.pericopist = factory.getPericopist("./src/test/resources/configuration.xml", Charset.forName("UTF-8"), 5000, toolContext, null);
 
         this.targetCatalogFile = new File("./src/test/resources/target_catalog.pot");
         this.catalogFile = new File("./src/test/resources/messages.pot");
@@ -235,7 +235,7 @@ public class TestCasesJavaGettextCatalog
         final String configUrl = "http://raw.githubusercontent.com/CubeEngine/Pericopist/master/core/src/test/resources/configuration.xml";
 
         PericopistFactory factory = new PericopistFactory();
-        Pericopist pericopist = factory.getPericopist(configUrl, Charset.forName("UTF-8"));
+        Pericopist pericopist = factory.getPericopist(configUrl);
 
         JavaExtractorConfiguration extractorConfig = (JavaExtractorConfiguration) pericopist.getExtractorConfiguration();
         assertNotNull("The configuration isn't a JavaExtractorConfiguration instance.", extractorConfig);

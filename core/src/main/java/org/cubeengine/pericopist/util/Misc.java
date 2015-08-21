@@ -211,17 +211,18 @@ public final class Misc
      *
      * @param url     the url
      * @param charset the charset of the url content
+     * @param readTimeout read timeout in milliseconds
      *
      * @return {@link Pair} containing the used url and the content of the url
      *
      * @throws IOException
      */
-    public static Pair<URL, String> getContent(URL url, Charset charset) throws IOException
+    public static Pair<URL, String> getContent(URL url, Charset charset, int readTimeout) throws IOException
     {
-        return getContent(url, charset, 0, 25, null);
+        return getContent(url, charset, readTimeout, 0, 25, null);
     }
 
-    private static Pair<URL, String> getContent(URL url, Charset charset, int redirectCount, int maxRedirectCount, String cookie) throws IOException
+    private static Pair<URL, String> getContent(URL url, Charset charset, int readTimeout, int redirectCount, int maxRedirectCount, String cookie) throws IOException
     {
         if (redirectCount > maxRedirectCount)
         {
@@ -229,7 +230,7 @@ public final class Misc
         }
 
         URLConnection connection = url.openConnection();
-        connection.setReadTimeout(5000);
+        connection.setReadTimeout(readTimeout);
         if (cookie != null)
         {
             connection.setRequestProperty("Cookie", cookie);
@@ -247,7 +248,7 @@ public final class Misc
                 case HttpURLConnection.HTTP_MOVED_TEMP:
                 case HttpURLConnection.HTTP_SEE_OTHER:
                     URL redirectUrl = new URL(connection.getHeaderField("Location"));
-                    return getContent(redirectUrl, charset, redirectCount + 1, maxRedirectCount, connection.getHeaderField("Set-Cookie"));
+                    return getContent(redirectUrl, charset, readTimeout, redirectCount + 1, maxRedirectCount, connection.getHeaderField("Set-Cookie"));
 
                 default:
                     throw new IOException("Couldn't read the url. Received http response code " + httpURLConnection.getResponseCode());
