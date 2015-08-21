@@ -59,12 +59,43 @@ public class ResourceLoader
      */
     public static String load(String path, String charsetName) throws IOException
     {
+        return load(path, charsetName, 5000);
+    }
+
+    /**
+     * This method loads a resource
+     *
+     * @param path        the path of the resource
+     * @param readTimeout read timeout of the configuration read operation in milliseconds
+     *
+     * @return the content of the resource
+     *
+     * @throws IOException if the resource couldn't be loaded
+     */
+    public static String load(String path, int readTimeout) throws IOException
+    {
+        return load(path, "UTF-8", readTimeout);
+    }
+
+    /**
+     * This method loads a resource
+     *
+     * @param path        the path of the resource
+     * @param charsetName the charset of the resource
+     * @param readTimeout read timeout of the configuration read operation in milliseconds
+     *
+     * @return the content of the resource
+     *
+     * @throws IOException if the resource couldn't be loaded
+     */
+    public static String load(String path, String charsetName, int readTimeout) throws IOException
+    {
         URL url = Misc.getResource(path);
         if (url == null)
         {
             throw new FileNotFoundException("The resource '" + path + "' was not found in file system or as URL.");
         }
 
-        return Misc.getContent(url, Charset.forName(charsetName)).getValue();
+        return Misc.getContent(url, Charset.forName(charsetName), 5000).getValue();
     }
 }

@@ -71,7 +71,7 @@ import org.xml.sax.SAXException;
  * create the catalog. With this class one can set the configuration up with an xml file.
  *
  * @see Pericopist
- * @see #getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+ * @see #getPericopist(String, java.nio.charset.Charset, int, org.apache.velocity.context.Context, java.util.logging.Logger)
  */
 @SuppressWarnings("unused")
 public class PericopistFactory
@@ -151,58 +151,41 @@ public class PericopistFactory
      * This method creates a {@link Pericopist} instance.
      *
      * @param resource the xml configuration resource
-     * @param charset  the default charset
      *
      * @return {@link Pericopist} instance
      *
      * @throws PericopistException if an error occurs
-     * @see #getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+     * @see #getPericopist(String, java.nio.charset.Charset, int, org.apache.velocity.context.Context, java.util.logging.Logger)
      */
-    public Pericopist getPericopist(String resource, Charset charset) throws PericopistException
+    public Pericopist getPericopist(String resource) throws PericopistException
     {
-        return this.getPericopist(resource, charset, (Context)null);
-    }
-
-    /**
-     * This method creates a {@link Pericopist} instance.
-     *
-     * @param resource the xml configuration resource
-     * @param charset  the default charset
-     * @param logger   a logger
-     *
-     * @return {@link Pericopist} instance
-     *
-     * @throws PericopistException if an error occurs
-     * @see #getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
-     */
-    public Pericopist getPericopist(String resource, Charset charset, Logger logger) throws PericopistException
-    {
-        return this.getPericopist(resource, charset, null, logger);
+        return this.getPericopist(resource, 5000, null, null);
     }
 
     /**
      * This method creates a {@link Pericopist} instance.
      *
      * @param resource        the xml configuration resource
-     * @param charset         the default charset
+     * @param readTimeout     read timeout of the configuration read operation in milliseconds
      * @param velocityContext a velocity context which is used to evaluate the configuration
+     * @param logger          a logger
      *
      * @return {@link Pericopist} instance
      *
      * @throws PericopistException if an error occurs
-     * @see #getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+     * @see #getPericopist(String, java.nio.charset.Charset, int, org.apache.velocity.context.Context, java.util.logging.Logger)
      */
-    public Pericopist getPericopist(String resource, Charset charset, Context velocityContext) throws PericopistException
+    public Pericopist getPericopist(String resource, int readTimeout, Context velocityContext, Logger logger) throws PericopistException
     {
-        return this.getPericopist(resource, charset, velocityContext, null);
+        return this.getPericopist(resource, Charset.forName("UTF-8"), readTimeout, null, logger);
     }
 
     /**
      * This method creates a {@link Pericopist} instance. The configurations is specified with the help of an
      * xml file.
-     * <p/>
+     * <p>
      * Example:
-     * <p/>
+     * <p>
      * <pre>
      * {@code
      * <?xml version="1.0" encoding="UTF-8"?>
@@ -216,12 +199,12 @@ public class PericopistFactory
      * </pericopist>
      * }
      * </pre>
-     * <p/>
+     * <p>
      * The inner source tags are related to the language name. The language name is the name
      * specified with the method {@link #addExtractorConfiguration(String, Class)}.
      * A default language name is 'java' which links to the {@link JavaExtractorConfiguration}.
      * Have a look at this class to get a deeper knowledge about the xml file.
-     * <p/>
+     * <p>
      * the inner catalog tags are related to the format name. The format name is the name
      * specified with the method {@link #addCatalogConfiguration(String, Class)}.
      * A default format name is 'gettext' which links to the {@link GettextCatalogConfiguration}.
@@ -229,6 +212,7 @@ public class PericopistFactory
      *
      * @param resource        the xml configuration resource
      * @param charset         the default charset
+     * @param readTimeout     read timeout of the configuration read operation in milliseconds
      * @param velocityContext a velocity context which is used to evaluate the configuration
      * @param logger          a logger
      *
@@ -236,7 +220,7 @@ public class PericopistFactory
      *
      * @throws PericopistException if an error occurs
      */
-    public Pericopist getPericopist(String resource, Charset charset, Context velocityContext, Logger logger) throws PericopistException
+    public Pericopist getPericopist(String resource, Charset charset, int readTimeout, Context velocityContext, Logger logger) throws PericopistException
     {
         if (velocityContext == null)
         {
@@ -254,7 +238,7 @@ public class PericopistFactory
         velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_SYSTEM_ERR_LEVEL_KEY, "warn");
         velocityEngine.init();
 
-        PericopistConfiguration extractorConfiguration = this.loadPericopistConfiguration(resource, charset, velocityEngine, velocityContext);
+        PericopistConfiguration extractorConfiguration = this.loadPericopistConfiguration(resource, charset, readTimeout, velocityEngine, velocityContext);
 
         if (extractorConfiguration == null)
         {
@@ -277,14 +261,13 @@ public class PericopistFactory
      *
      * @param resource        the xml configuration resource
      * @param charset         the charset of the configuration
+     * @param readTimeout     read timeout of the configuration read operation in milliseconds
      * @param velocityEngine  used velocity engine
      * @param velocityContext a velocity context which is used to evaluate the configuration
      *
      * @return {@link PericopistConfiguration} which stores the parsed configurations
-     *
-     * @throws ConfigurationException
      */
-    private PericopistConfiguration loadPericopistConfiguration(String resource, Charset charset, VelocityEngine velocityEngine, Context velocityContext) throws ConfigurationException
+    private PericopistConfiguration loadPericopistConfiguration(String resource, Charset charset, int readTimeout, VelocityEngine velocityEngine, Context velocityContext) throws ConfigurationException
     {
         URL configurationUrl = Misc.getResource(resource);
         if (configurationUrl == null)
@@ -297,7 +280,7 @@ public class PericopistFactory
         Node sourceNode = null;
         Node catalogNode = null;
 
-        Pair<URL, String> urlConfigPair = this.loadConfiguration(configurationUrl, velocityEngine, velocityContext, charset);
+        Pair<URL, String> urlConfigPair = this.loadConfiguration(configurationUrl, charset, readTimeout, velocityEngine, velocityContext);
         configurationUrl = urlConfigPair.getKey();
         Node rootNode = this.getRootNode(urlConfigPair.getValue());
         Node charsetNode = rootNode.getAttributes().getNamedItem("charset");
@@ -331,7 +314,7 @@ public class PericopistFactory
                 }
             }
 
-            parent = this.loadPericopistConfiguration(parentResource, charset, velocityEngine, velocityContext);
+            parent = this.loadPericopistConfiguration(parentResource, charset, readTimeout, velocityEngine, velocityContext);
         }
 
         NodeList list = rootNode.getChildNodes();
@@ -446,21 +429,22 @@ public class PericopistFactory
      * This method loads the configuration and evaluates it with the specified context
      *
      * @param resource       the resource of the configuration
+     * @param charset        the charset of the configuration
+     * @param readTimeout    read timeout of the configuration read operation in milliseconds
      * @param velocityEngine used velocity engine
      * @param context        the velocity context
-     * @param charset        the charset of the configuration
      *
      * @return pair storing the final url (after redirects) from the configuration and the configuration
      *
      * @throws ConfigurationException if the resource couldn't be read
      */
-    private Pair<URL, String> loadConfiguration(URL resource, VelocityEngine velocityEngine, Context context, Charset charset) throws ConfigurationException
+    private Pair<URL, String> loadConfiguration(URL resource, Charset charset, int readTimeout, VelocityEngine velocityEngine, Context context) throws ConfigurationException
     {
         // reads the configuration file
         String configuration;
         try
         {
-            Pair<URL, String> urlConfigPair = Misc.getContent(resource, charset);
+            Pair<URL, String> urlConfigPair = Misc.getContent(resource, charset, readTimeout);
             resource = urlConfigPair.getKey();
             configuration = urlConfigPair.getValue();
         }
@@ -634,8 +618,6 @@ public class PericopistFactory
      * @param instance instance which contains the child array
      * @param child    child array
      * @param parent   parent array
-     *
-     * @throws IllegalAccessException
      */
     private void mergeArray(Field field, Object instance, Object child, Object parent) throws IllegalAccessException
     {
@@ -702,7 +684,7 @@ public class PericopistFactory
         }
 
         Class<?> componentType = field.getType().getComponentType();
-        Object array = list.toArray((Object[]) Array.newInstance(Misc.getRelatedClass(componentType), list.size()));
+        Object array = list.toArray((Object[])Array.newInstance(Misc.getRelatedClass(componentType), list.size()));
 
         // convert object array to primitive array
         if (componentType.isPrimitive())

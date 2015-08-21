@@ -28,6 +28,7 @@ To use the plugin add it to the maven configuration of your project.
             <configuration>${basedir}/extractor.xml</configuration>
             <configuration>${basedir}/../extractor.xml</configuration>
         </configurations>
+        <readTimeout>10000</readTimeout> <!-- optional; adds a read timeout of 10 seconds; this is used for reading the config file -->
     </configuration>
 </plugin>
 ```

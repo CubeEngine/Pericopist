@@ -59,6 +59,12 @@ public abstract class AbstractPericopistMojo extends AbstractMojo
     private String[] configurations = null;
 
     /**
+     * @parameter
+     */
+    @SuppressWarnings("FieldCanBeLocal")
+    private int readTimeout = 5000;
+
+    /**
      * @parameter default-value="${project.build.sourceEncoding}"
      * @readonly
      */
@@ -172,7 +178,7 @@ public abstract class AbstractPericopistMojo extends AbstractMojo
 
             try
             {
-                return factory.getPericopist(configuration, charset, velocityContext);
+                return factory.getPericopist(configuration, charset, this.readTimeout, velocityContext, null);
             }
             catch (ConfigurationNotFoundException e)
             {
