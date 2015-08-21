@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -56,9 +57,23 @@ public final class Misc
     }
 
     /**
+     * Resolves a relative path against an absolute one
+     *
+     * @param base absolute path (the base)
+     * @param path relative path
+     *
+     * @return the generated absolute path
+     */
+    public static String resolvePath(String base, String path)
+    {
+        return URI.create(base).resolve(path).toString();
+    }
+
+    /**
      * This method looks for the specified resource and returns it as an url object.
      * Therefore it looks at first whether it's a file path. As a second step it tries
      * to read it as an url.
+     * NOTE: this message just returns existing resources
      *
      * @param resource the resource url string
      *

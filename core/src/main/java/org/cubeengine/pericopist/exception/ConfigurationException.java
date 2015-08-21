@@ -26,7 +26,7 @@ import org.cubeengine.pericopist.PericopistFactory;
 
 /**
  * This exception is thrown if the configuration file defined by invoking
- * {@link PericopistFactory#getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)}
+ * {@link PericopistFactory#getPericopist(String, java.nio.charset.Charset, int, org.apache.velocity.context.Context, java.util.logging.Logger)}
  * couldn't be read or the validation of the {@link org.cubeengine.pericopist.extractor.MessageExtractor} or
  * the {@link org.cubeengine.pericopist.format.CatalogFormat} failed.
  */

@@ -47,6 +47,23 @@ public class MiscTest
     }
 
     @Test
+    public void resolveUrlTest()
+    {
+        assertEquals("http://www.google.de/test/parent.xml", Misc.resolvePath("http://www.google.de/test/config.xml", "parent.xml"));
+        assertEquals("http://www.google.de/test/parent.xml", Misc.resolvePath("http://www.google.de/test/config.xml", "./parent.xml"));
+        assertEquals("http://www.google.de/test/blub/parent.xml", Misc.resolvePath("http://www.google.de/test/config.xml", "blub/parent.xml"));
+        assertEquals("http://www.google.de/test/parent.xml", Misc.resolvePath("http://www.google.de/test/blub/config.xml", "../parent.xml"));
+        assertEquals("http://www.google.de/parent.xml", Misc.resolvePath("http://www.google.de/test/blub/config.xml", "../../parent.xml"));
+        assertEquals("http://www.google.de/blub/parent.xml", Misc.resolvePath("http://www.google.de/test/what/do/I/know/config.xml", "/blub/parent.xml"));
+        assertEquals("http://www.cubyte.org/test/parent.xml", Misc.resolvePath("http://www.google.de/test/blub/config.xml", "http://www.cubyte.org/test/parent.xml"));
+        assertEquals("http://www.cubyte.org/test/parent.xml", Misc.resolvePath("file://D:/files/config.xml", "http://www.cubyte.org/test/parent.xml"));
+        assertEquals("http://www.cubyte.org/test/parent.xml", Misc.resolvePath("D:/files/config.xml", "http://www.cubyte.org/test/parent.xml"));
+        assertEquals("D:/files/blub/parent.xml", Misc.resolvePath("D:/files/config.xml", "blub/parent.xml"));
+        assertEquals("D:/files/parent.xml", Misc.resolvePath("D:/files/config.xml", "parent.xml"));
+        assertEquals("D:/parent.xml", Misc.resolvePath("D:/files/config.xml", "../parent.xml"));
+    }
+
+    @Test
     public void getResourceTest() throws IOException
     {
         String path = "src/main";
