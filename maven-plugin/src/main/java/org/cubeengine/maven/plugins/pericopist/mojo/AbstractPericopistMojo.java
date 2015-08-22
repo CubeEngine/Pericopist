@@ -89,7 +89,7 @@ public abstract class AbstractPericopistMojo extends AbstractMojo
         }
         if (this.configurations == null || this.configurations.length == 0)
         {
-            throw new MojoFailureException("An extractor configuration is not specified.");
+            throw new MojoFailureException("A pericopist configuration is not specified.");
         }
 
         // load the classpath of the maven project
@@ -174,7 +174,7 @@ public abstract class AbstractPericopistMojo extends AbstractMojo
 
         for (String configuration : this.configurations)
         {
-            this.getLog().info("uses extractor configuration '" + configuration + "'.");
+            this.getLog().info("uses pericopist configuration '" + configuration + "'.");
 
             try
             {
