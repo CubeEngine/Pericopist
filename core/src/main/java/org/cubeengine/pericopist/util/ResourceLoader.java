@@ -96,6 +96,6 @@ public class ResourceLoader
             throw new FileNotFoundException("The resource '" + path + "' was not found in file system or as URL.");
         }
 
-        return Misc.getContent(url, Charset.forName(charsetName), 5000).getValue();
+        return Misc.getContent(url, Charset.forName(charsetName), readTimeout).getValue();
     }
 }
