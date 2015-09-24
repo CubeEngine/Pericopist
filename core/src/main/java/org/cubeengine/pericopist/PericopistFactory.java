@@ -175,7 +175,7 @@ public class PericopistFactory
      */
     public Pericopist getPericopist(String resource, int readTimeout, Context velocityContext, Logger logger) throws PericopistException
     {
-        return this.getPericopist(resource, Charset.forName("UTF-8"), readTimeout, null, logger);
+        return this.getPericopist(resource, Charset.forName("UTF-8"), readTimeout, velocityContext, logger);
     }
 
     /**
