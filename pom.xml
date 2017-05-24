@@ -125,6 +125,7 @@
                     </includes>
                     <properties>
                         <owner>Cube Island</owner>
+                        <email>development@cubeisland.de</email>
                     </properties>
                     <mapping>
                         <java>SLASHSTAR_STYLE</java>
