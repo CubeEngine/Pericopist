@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2013 Cube Island
+ * Copyright © 2013 Cube Island
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,15 @@
 package org.cubeengine.pericopist.extractor.java.configuration;
 
 import java.io.File;
+import java.nio.charset.Charset;
+import java.util.logging.Logger;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.velocity.context.Context;
 import org.cubeengine.pericopist.PericopistFactory;
 import org.cubeengine.pericopist.configuration.MergeableArray;
 import org.cubeengine.pericopist.configuration.MergeableArrayMode;
@@ -72,7 +75,7 @@ import spoon.reflect.declaration.CtElement;
  * The translatables tag has to be filled with information about the
  * {@link JavaExpression} subclasses.
  *
- * @see PericopistFactory#getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+ * @see PericopistFactory#getPericopist(String, Charset, int, Context, Logger)
  * @see org.cubeengine.pericopist.extractor.java.JavaMessageExtractor
  */
 @SuppressWarnings("unused")

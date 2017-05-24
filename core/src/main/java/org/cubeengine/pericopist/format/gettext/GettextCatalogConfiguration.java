@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2013 Cube Island
+ * Copyright © 2013 Cube Island
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,12 @@
  */
 package org.cubeengine.pericopist.format.gettext;
 
+import java.nio.charset.Charset;
+import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.velocity.context.Context;
 import org.cubeengine.pericopist.PericopistFactory;
 import org.cubeengine.pericopist.exception.ConfigurationException;
 import org.cubeengine.pericopist.format.AbstractCatalogConfiguration;
@@ -61,7 +64,7 @@ import org.cubeengine.pericopist.format.HeaderConfiguration;
  * }
  * </pre>
  *
- * @see PericopistFactory#getPericopist(String, java.nio.charset.Charset, org.apache.velocity.context.Context, java.util.logging.Logger)
+ * @see PericopistFactory#getPericopist(String, Charset, int, Context, Logger)
  * @see org.cubeengine.pericopist.format.gettext.PlaintextGettextCatalogFormat
  */
 @SuppressWarnings("unused")

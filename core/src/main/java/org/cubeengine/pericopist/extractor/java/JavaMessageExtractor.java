@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2013 Cube Island
+ * Copyright © 2013 Cube Island
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,8 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,10 +44,9 @@ import org.cubeengine.pericopist.extractor.java.processor.AnnotationProcessor;
 import org.cubeengine.pericopist.extractor.java.processor.CallableExpressionProcessor;
 import org.cubeengine.pericopist.message.MessageStore;
 import spoon.Launcher;
-import spoon.compiler.SpoonCompiler;
-import spoon.processing.ProcessingManager;
-import spoon.reflect.factory.Factory;
-import spoon.support.QueueProcessingManager;
+import spoon.SpoonModelBuilder;
+import spoon.processing.Processor;
+import spoon.reflect.declaration.CtElement;
 
 /**
  * This {@link MessageExtractor} implementation is used for extracting the programming language java.
@@ -75,7 +76,7 @@ public class JavaMessageExtractor implements MessageExtractor
         try
         {
             Launcher launcher = new Launcher();
-            SpoonCompiler compiler = launcher.createCompiler();
+            SpoonModelBuilder compiler = launcher.createCompiler();
             compiler.addInputSource(extractorConfig.getDirectory());
 
             String[] classpath = this.loadClasspath(extractorConfig.getClasspathEntries());
@@ -83,16 +84,14 @@ public class JavaMessageExtractor implements MessageExtractor
             this.loadClassLoader(classpath);
 
             compiler.setEncoding(config.getCharset().name());
-
-            Factory spoonFactory = compiler.getFactory();
-            ProcessingManager processManager = new QueueProcessingManager(spoonFactory);
-            processManager.addProcessor(new CallableExpressionProcessor((JavaExtractorConfiguration)config, messageStore, this.converterManager, this.logger));
-            processManager.addProcessor(new AnnotationProcessor((JavaExtractorConfiguration)config, messageStore, this.converterManager, this.logger));
-
-            spoonFactory.getEnvironment().setManager(processManager);
             compiler.build();
 
-            processManager.process();
+            Collection<Processor<? extends CtElement>> processors = Arrays.<Processor<? extends CtElement>>asList(
+                new CallableExpressionProcessor((JavaExtractorConfiguration) config, messageStore, this.converterManager, this.logger),
+                new AnnotationProcessor((JavaExtractorConfiguration) config, messageStore, this.converterManager, this.logger)
+            );
+
+            compiler.process(processors);
         }
         catch (Exception e)
         {
