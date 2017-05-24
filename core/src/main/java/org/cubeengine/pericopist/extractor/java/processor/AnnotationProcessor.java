@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2013 Cube Island
+ * Copyright © 2013 Cube Island
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -55,7 +55,7 @@ public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
         String context = null;
         if (annotation.getContextField() != null)
         {
-            Object contextValue = element.getElementValue(annotation.getContextField());
+            Object contextValue = element.getValue(annotation.getContextField());
             if (contextValue != null)
             {
                 if (contextValue.getClass().isArray() && !contextValue.getClass().getComponentType().isPrimitive())
@@ -74,23 +74,20 @@ public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
             }
         }
 
-        for (Entry<String, Object> fieldEntry : element.getElementValues().entrySet())
+        for (Entry<String, CtExpression> fieldEntry : element.getValues().entrySet())
         {
             if (!annotation.hasField(fieldEntry.getKey()))
             {
                 continue;
             }
 
-            if (fieldEntry.getValue() instanceof CtExpression<?>)
+            String[] messages = this.getMessages((CtExpression<?>) fieldEntry.getValue(), annotation);
+            if (messages.length == 0)
             {
-                String[] messages = this.getMessages((CtExpression<?>) fieldEntry.getValue(), annotation);
-                if (messages.length == 0)
-                {
-                    continue;
-                }
-
-                this.addMessage(annotation, element, context, messages, null);
+                continue;
             }
+
+            this.addMessage(annotation, element, context, messages, null);
         }
     }
 }

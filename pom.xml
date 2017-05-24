@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <version>9</version>
         <relativePath />
     </parent>
 
@@ -27,7 +27,7 @@
     <scm>
         <url>scm:git:https://github.com/CubeEngine/Pericopist</url>
         <connection>scm:git:https://github.com/CubeEngine/Pericopist</connection>
-        <developerConnection>scm:git:https://github.com/CubeEngine/Pericopist</developerConnection>
+        <developerConnection>scm:git:git@github.com:CubeEngine/Pericopist</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
@@ -53,6 +53,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdkVersion>1.7</jdkVersion>
+        <releaseProfile>release</releaseProfile>
     </properties>
 
     <distributionManagement>
@@ -85,12 +86,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>2.5.3</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <useReleaseProfile>false</useReleaseProfile>
-                    <releaseProfiles>release</releaseProfiles>
+                    <releaseProfiles>${releaseProfile}</releaseProfiles>
                     <goals>deploy</goals>
+                    <arguments>-P${releaseProfile}</arguments>
                 </configuration>
             </plugin>
             <plugin>
@@ -101,7 +103,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
+                <version>3.6.1</version>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <source>${jdkVersion}</source>
@@ -114,17 +116,19 @@
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>2.7</version>
+                <version>3.0</version>
                 <configuration>
                     <strictCheck>true</strictCheck>
                     <header>com/mycila/maven/plugin/license/templates/MIT.txt</header>
-                    <strictCheck>true</strictCheck>
                     <includes>
                         <include>**/*.java</include>
                     </includes>
                     <properties>
                         <owner>Cube Island</owner>
                     </properties>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                    </mapping>
                 </configuration>
                 <executions>
                     <execution>
@@ -146,7 +150,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.5</version>
+                        <version>1.6.8</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
@@ -157,7 +161,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>2.4</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -170,7 +174,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.1</version>
+                        <version>2.10.4</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -183,7 +187,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>1.6</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
