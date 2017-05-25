@@ -17,14 +17,19 @@
  */
 package org.cubeengine.maven.plugins.pericopist.mojo;
 
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.cubeengine.pericopist.Pericopist;
 import org.cubeengine.pericopist.exception.PericopistException;
 
 /**
  * This Mojo implements the goal update. This goal updates a message catalog
- *
- * @goal update
  */
+@Mojo(
+    name = "update",
+    threadSafe = true,
+    requiresDependencyResolution = ResolutionScope.TEST
+)
 @SuppressWarnings("JavaDoc")
 public class UpdateMojo extends AbstractPericopistMojo
 {

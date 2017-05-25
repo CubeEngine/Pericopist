@@ -17,14 +17,19 @@
  */
 package org.cubeengine.maven.plugins.pericopist.mojo;
 
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.cubeengine.pericopist.Pericopist;
 import org.cubeengine.pericopist.exception.PericopistException;
 
 /**
  * This Mojo implements the goal generate. This goal creates a message catalog
- *
- * @goal generate
  */
+@Mojo(
+    name = "generate",
+    threadSafe = true,
+    requiresDependencyResolution = ResolutionScope.TEST
+)
 @SuppressWarnings("JavaDoc")
 public class GenerateMojo extends AbstractPericopistMojo
 {

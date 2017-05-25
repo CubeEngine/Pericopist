@@ -17,8 +17,9 @@
  */
 package org.cubeengine.maven.plugins.pericopist.mojo;
 
-import org.cubeengine.pericopist.util.Misc;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.cubeengine.pericopist.util.Misc;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -40,35 +41,20 @@ import org.cubeengine.pericopist.exception.ConfigurationNotFoundException;
 import org.cubeengine.pericopist.exception.PericopistException;
 import org.cubeengine.pericopist.exception.SourceDirectoryNotExistingException;
 
-/**
- * @requiresDependencyResolution test
- * @threadSafe true
- */
 @SuppressWarnings("JavaDoc")
 public abstract class AbstractPericopistMojo extends AbstractMojo
 {
-    /**
-     * @parameter default-value="${project}"
-     * @required
-     * @readonly
-     */
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject project = null;
 
-    /**
-     * @parameter
-     */
+     @Parameter
     private String[] configurations = null;
 
-    /**
-     * @parameter
-     */
+    @Parameter
     @SuppressWarnings("FieldCanBeLocal")
     private int readTimeout = 5000;
 
-    /**
-     * @parameter default-value="${project.build.sourceEncoding}"
-     * @readonly
-     */
+    @Parameter(defaultValue = "${project.build.sourceEncoding}", readonly = true)
     private String charsetName = null;
 
     private String classpath = System.getProperty(Misc.JAVA_CLASS_PATH);
