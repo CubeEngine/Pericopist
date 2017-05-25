@@ -35,11 +35,13 @@ import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtTypeReference;
 
 /**
+ * <p>
  * The Method class describes a method invocation.
  * It can be specified with the xml used for the JavaExtractorConfiguration.
- * <p/>
+ * </p>
+ *
  * Example:
- * <p/>
+ *
  * <pre>
  * {@code
  * <method static="false"> <!-- default static: false -->

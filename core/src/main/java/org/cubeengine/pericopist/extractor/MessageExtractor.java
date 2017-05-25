@@ -43,7 +43,7 @@ public interface MessageExtractor
      *
      * @return a message store containing all the messages
      *
-     * @throws MessageExtractionException
+     * @throws MessageExtractionException if the extraction process fails
      */
     MessageStore extract(ExtractorConfiguration config, MessageStore messageStore) throws MessageExtractionException;
 

@@ -23,9 +23,13 @@
 package org.cubeengine.pericopist.message;
 
 /**
+ * <p>
  * The TranslatableExpression class describes how messages were extracted from the source code.
- * <p/>
+ * </p>
+ *
+ * <p>
  * It can be used within the {@link org.cubeengine.pericopist.format.CatalogFormat} as a default context.
+ * </p>
  */
 public interface TranslatableExpression
 {

@@ -38,12 +38,16 @@ public final class GettextUtils
     }
 
     /**
+     * <p>
      * This method creates a List storing the extracted comments from the {@link TranslatableMessage}.
      * This is created with the help of the {@link SourceReference} instances which are stored by the
      * {@link TranslatableMessage}.
-     * <p/>
+     * </p>
+     *
+     * <p>
      * Equal entries will be combined into one single entry containing the number of every entry
      * which is described by the entry.
+     * </p>
      *
      * @param message {@link TranslatableMessage}
      *

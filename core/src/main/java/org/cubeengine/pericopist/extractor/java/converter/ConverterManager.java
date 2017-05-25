@@ -111,6 +111,9 @@ public class ConverterManager
      * This method matches a registered converter
      *
      * @param expression the expression to match for
+     * @param <T> the type of expression to convert from
+     *
+     * @throws ConverterNotFoundException if no applicable converter was found
      *
      * @return a matching converter
      */
@@ -133,6 +136,9 @@ public class ConverterManager
      * This method converts an expression into a string array
      *
      * @param expression the expression
+     * @param <T> the type of expression to convert from
+     *
+     * @throws ConversionException if the conversion process fails
      *
      * @return the string array
      */
@@ -164,6 +170,9 @@ public class ConverterManager
      * This method converts an expression into a object
      *
      * @param expression the expression
+     * @param <T> the type of expression to convert from
+     *
+     * @throws ConversionException if the conversion process fails
      *
      * @return the object
      */
@@ -180,6 +189,9 @@ public class ConverterManager
      * This method converts an expression into an Object array
      *
      * @param expression the expression
+     * @param <T> the type of expression to convert from
+     *
+     * @throws ConversionException if the conversion process fails
      *
      * @return the Object array
      */

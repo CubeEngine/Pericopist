@@ -153,7 +153,7 @@ public class Pericopist
     /**
      * This method generates a completely new message catalog. It overrides the existing file without to read it.
      *
-     * @throws PericopistException
+     * @throws PericopistException if the extraction of the message or the creation of the new message catalog fails
      */
     public void generateCatalog() throws PericopistException
     {
@@ -176,7 +176,7 @@ public class Pericopist
      * This method updates a message catalog. It reads the existing file if it exists and extracts the new messages from the project
      * with a {@link org.cubeengine.pericopist.message.MessageStore} containing the messages from the old catalog.
      *
-     * @throws PericopistException
+     * @throws PericopistException if the extraction of the message or the creation of the new message catalog fails
      */
     public void updateCatalog() throws PericopistException
     {

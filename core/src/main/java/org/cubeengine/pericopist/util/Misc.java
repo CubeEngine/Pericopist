@@ -117,7 +117,7 @@ public final class Misc
      *
      * @return {@link Pair} containing the used url and the content of the url
      *
-     * @throws IOException
+     * @throws IOException in case the content can not be received
      */
     public static Pair<URL, String> getContent(URL url, Charset charset, int readTimeout) throws IOException
     {

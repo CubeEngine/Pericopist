@@ -33,11 +33,13 @@ import spoon.reflect.declaration.CtAnnotation;
 import spoon.reflect.declaration.CtElement;
 
 /**
+ * <p>
  * The annotation describes an annotation.
  * It can be specified with the xml used for the JavaExtractorConfiguration.
- * <p/>
+ * </p>
+ *
  * Example:
- * <p/>
+ *
  * <pre>
  * {@code
  * <annotation>
@@ -54,19 +56,19 @@ import spoon.reflect.declaration.CtElement;
  * </annotation>
  * }
  * </pre>
- * <p/>
+ *
  * target element types:
  * <ul>
- * <li>type</li>
- * <li>field</li>
- * <li>method</li>
- * <li>parameter</li>
- * <li>constructor</li>
- * <li>local_variable</li>
- * <li>annotation_type</li>
- * <li>package</li>
- * <li>type_parameter (not supported by spoon yet)</li>
- * <li>type_use (not supported by spoon yet)</li>
+ *     <li>type</li>
+ *     <li>field</li>
+ *     <li>method</li>
+ *     <li>parameter</li>
+ *     <li>constructor</li>
+ *     <li>local_variable</li>
+ *     <li>annotation_type</li>
+ *     <li>package</li>
+ *     <li>type_parameter (not supported by spoon yet)</li>
+ *     <li>type_use (not supported by spoon yet)</li>
  * </ul>
  */
 @SuppressWarnings("unused")

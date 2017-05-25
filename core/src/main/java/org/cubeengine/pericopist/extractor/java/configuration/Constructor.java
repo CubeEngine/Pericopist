@@ -29,11 +29,13 @@ import spoon.reflect.declaration.CtElement;
 import spoon.reflect.reference.CtExecutableReference;
 
 /**
+ * <p>
  * The constructor describes a new object generation.
  * It can be specified with the xml used for the JavaExtractorConfiguration.
- * <p/>
+ * </p>
+ *
  * Example:
- * <p/>
+ *
  * <pre>
  * {@code
  * <constructor>

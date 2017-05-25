@@ -35,12 +35,16 @@ import org.cubeengine.pericopist.format.CatalogFormat;
 import org.cubeengine.pericopist.format.HeaderConfiguration;
 
 /**
+ * <p>
  * This configuration is used for creating a gettext catalog which stores translatable messages.
- * <p/>
+ * </p>
+ *
+ * <p>
  * The configuration can be set up with an xml file.
- * <p/>
+ * </p>
+ *
  * Example:
- * <p/>
+ *
  * <pre>
  * {@code
  * <catalog format="gettext" charset="utf-8"> <!-- default charset: charset set as extractor tag attribute -->

@@ -179,11 +179,13 @@ public class PericopistFactory
     }
 
     /**
+     * <p>
      * This method creates a {@link Pericopist} instance. The configurations is specified with the help of an
      * xml file.
-     * <p>
+     * </p>
+     *
      * Example:
-     * <p>
+     *
      * <pre>
      * {@code
      * <?xml version="1.0" encoding="UTF-8"?>
@@ -197,16 +199,20 @@ public class PericopistFactory
      * </pericopist>
      * }
      * </pre>
+     *
      * <p>
      * The inner source tags are related to the language name. The language name is the name
      * specified with the method {@link #addExtractorConfiguration(String, Class)}.
      * A default language name is 'java' which links to the {@link JavaExtractorConfiguration}.
      * Have a look at this class to get a deeper knowledge about the xml file.
+     * </p>
+     *
      * <p>
      * the inner catalog tags are related to the format name. The format name is the name
      * specified with the method {@link #addCatalogConfiguration(String, Class)}.
      * A default format name is 'gettext' which links to the {@link GettextCatalogConfiguration}.
      * Have a look at this class to get a deeper knowledge about the xml file.
+     * </p>
      *
      * @param resource        the xml configuration resource
      * @param charset         the default charset

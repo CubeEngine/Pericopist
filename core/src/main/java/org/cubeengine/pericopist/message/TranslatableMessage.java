@@ -26,12 +26,16 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
+ * <p>
  * The TranslatableMessage class represents a translatable message.
  * They're stored within a {@link org.cubeengine.pericopist.message.MessageStore} instance.
- * <p/>
+ * </p>
+ *
+ * <p>
  * The TranslatableMessage-instances will be created withing
  * {@link org.cubeengine.pericopist.format.CatalogFormat#read(org.cubeengine.pericopist.format.CatalogConfiguration, java.io.InputStream)}
  * and {@link org.cubeengine.pericopist.extractor.MessageExtractor#extract(org.cubeengine.pericopist.extractor.ExtractorConfiguration, MessageStore)}
+ * </p>
  *
  * @see org.cubeengine.pericopist.message.MessageStore
  */

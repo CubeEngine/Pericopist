@@ -47,7 +47,7 @@ public interface CatalogFormat
      *
      * @return true if the catalog file was written
      *
-     * @throws CatalogFormatException
+     * @throws CatalogFormatException if an error occurs while writing the message catalog
      */
     boolean write(CatalogConfiguration config, OutputStream outputStream, MessageStore messageStore) throws CatalogFormatException;
 
@@ -60,7 +60,7 @@ public interface CatalogFormat
      *
      * @return a {@link MessageStore} instance holding all messages
      *
-     * @throws CatalogFormatException
+     * @throws CatalogFormatException if an error occurs while reading the message catalog
      */
     MessageStore read(CatalogConfiguration config, InputStream inputStream) throws CatalogFormatException;
 

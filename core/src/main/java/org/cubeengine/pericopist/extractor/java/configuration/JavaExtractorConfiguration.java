@@ -43,12 +43,16 @@ import org.cubeengine.pericopist.util.Misc;
 import spoon.reflect.declaration.CtElement;
 
 /**
+ * <p>
  * This configuration is used for parsing the source tree of java projects and extracting its translatable messages.
- * <p/>
+ * </p>
+ *
+ * <p>
  * The configuration can be set up with an xml file.
- * <p/>
+ * </p>
+ *
  * Example:
- * <p/>
+ *
  * <pre>
  * {@code
  * <source language="java" charset="utf-8"> <!-- default charset: charset set as extractor tag attribute -->

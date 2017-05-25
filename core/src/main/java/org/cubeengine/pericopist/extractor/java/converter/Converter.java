@@ -27,6 +27,8 @@ import spoon.reflect.code.CtExpression;
 
 /**
  * Provides a method to convert a <code>T</code> into an <code>Object</code>
+ *
+ * @param <T> The type of expression to convert from
  */
 public interface Converter<T extends CtExpression>
 {
@@ -38,7 +40,7 @@ public interface Converter<T extends CtExpression>
      *
      * @return the converted Object
      *
-     * @throws ConversionException
+     * @throws ConversionException if the conversion fails
      */
     Object convert(T expression, ConverterManager manager) throws ConversionException;
 }
