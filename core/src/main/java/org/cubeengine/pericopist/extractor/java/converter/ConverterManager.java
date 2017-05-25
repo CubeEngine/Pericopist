@@ -38,6 +38,7 @@ import spoon.reflect.code.CtFieldAccess;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtNewArray;
+import spoon.reflect.code.CtTypeAccess;
 import spoon.reflect.code.CtUnaryOperator;
 
 /**
@@ -210,6 +211,7 @@ public class ConverterManager
         this.registerConverter(CtNewArray.class, new CtNewArrayExpressionConverter());
         this.registerConverter(CtConstructorCall.class, new CtNewClassExpressionConverter());
         this.registerConverter(CtUnaryOperator.class, new CtUnaryOperatorExpressionConverter());
+        this.registerConverter(CtTypeAccess.class, new CtTypeAccessExpressionConverter());
     }
 
     /**

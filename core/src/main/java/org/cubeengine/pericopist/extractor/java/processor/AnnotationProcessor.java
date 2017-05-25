@@ -55,21 +55,17 @@ public class AnnotationProcessor extends MessageProcessor<CtAnnotation<?>>
         String context = null;
         if (annotation.getContextField() != null)
         {
-            Object contextValue = element.getValue(annotation.getContextField());
+            CtExpression contextValue = element.getValue(annotation.getContextField());
             if (contextValue != null)
             {
-                if (contextValue.getClass().isArray() && !contextValue.getClass().getComponentType().isPrimitive())
+                String[] contexts = this.getMessages(contextValue, annotation);
+                if (contexts.length > 1)
                 {
-                    context = Arrays.toString((Object[]) contextValue);
+                    context = Arrays.toString(contexts);
                 }
-                else
+                else if (contexts.length == 1 && !contexts[0].isEmpty())
                 {
-                    context = contextValue.toString();
-                }
-
-                if (context.isEmpty())
-                {
-                    context = null;
+                    context = contexts[0];
                 }
             }
         }
