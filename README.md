@@ -1,4 +1,4 @@
-Pericopist
+![Pericopist](https://github.com/CubeEngine/Pericopist/blob/master/Pericopist.png?raw=true)
 ================
 
 Core: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.cubeengine/pericopist-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.cubeengine/pericopist-core)
