@@ -76,14 +76,14 @@ public class JavaMessageExtractor implements MessageExtractor
         try
         {
             Launcher launcher = new Launcher();
+            launcher.getEnvironment().setEncoding(config.getCharset());
+
             SpoonModelBuilder compiler = launcher.createCompiler();
             compiler.addInputSource(extractorConfig.getDirectory());
-
             String[] classpath = this.loadClasspath(extractorConfig.getClasspathEntries());
             compiler.setSourceClasspath(classpath);
             this.loadClassLoader(classpath);
 
-            compiler.setEncoding(config.getCharset().name());
             compiler.build();
 
             Collection<Processor<? extends CtElement>> processors = Arrays.<Processor<? extends CtElement>>asList(
