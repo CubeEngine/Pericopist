@@ -47,7 +47,7 @@ public abstract class AbstractPericopistMojo extends AbstractMojo
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject project = null;
 
-     @Parameter
+    @Parameter
     private String[] configurations = null;
 
     @Parameter
