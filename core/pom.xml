@@ -25,14 +25,14 @@
         <dependency>
             <groupId>fr.inria.gforge.spoon</groupId>
             <artifactId>spoon-core</artifactId>
-            <version>6.1.0</version>
+            <version>6.2.0</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.fedorahosted.tennera</groupId>
             <artifactId>jgettext</artifactId>
-            <version>0.15</version>
+            <version>0.15.1</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
