@@ -41,8 +41,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.log.SystemLogChute;
 import org.apache.velocity.tools.ToolManager;
 import org.cubeengine.pericopist.configuration.Mergeable;
 import org.cubeengine.pericopist.configuration.MergeableArray;
@@ -237,9 +235,6 @@ public class PericopistFactory
 
         // creates velocity engine with log properties and initialises it
         VelocityEngine velocityEngine = new VelocityEngine();
-        velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, SystemLogChute.class.getName());
-        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_LEVEL_KEY, "info");
-        velocityEngine.setProperty(SystemLogChute.RUNTIME_LOG_SYSTEM_ERR_LEVEL_KEY, "warn");
         velocityEngine.init();
 
         PericopistConfiguration extractorConfiguration = this.loadPericopistConfiguration(resource, charset, readTimeout, velocityEngine, velocityContext);
