@@ -37,11 +37,7 @@ class BitwiseXorBinaryOperation extends BinaryOperation
     {
         if (leftHandOperand instanceof Number && rightHandOperand instanceof Number)
         {
-            Number number = this.bitwiseXor(leftHandOperand, rightHandOperand);
-            if (number != null)
-            {
-                return number;
-            }
+            return bitwiseXor(leftHandOperand, rightHandOperand);
         }
         return null;
     }

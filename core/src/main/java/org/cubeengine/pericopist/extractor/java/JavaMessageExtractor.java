@@ -138,7 +138,7 @@ public class JavaMessageExtractor implements MessageExtractor
             this.logger.warning("The classpath is empty.");
         }
 
-        return classpath.toArray(new String[classpath.size()]);
+        return classpath.toArray(new String[0]);
     }
 
     /**

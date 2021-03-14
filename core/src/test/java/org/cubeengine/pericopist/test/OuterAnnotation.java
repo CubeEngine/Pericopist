@@ -24,5 +24,5 @@ package org.cubeengine.pericopist.test;
 
 public @interface OuterAnnotation
 {
-    public AnnotationWithInnerAnnotation[] value();
+    AnnotationWithInnerAnnotation[] value();
 }

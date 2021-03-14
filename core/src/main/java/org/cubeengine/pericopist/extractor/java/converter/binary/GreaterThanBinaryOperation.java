@@ -37,11 +37,7 @@ class GreaterThanBinaryOperation extends BinaryOperation
     {
         if (leftHandOperand instanceof Number && rightHandOperand instanceof Number)
         {
-            Boolean bool = this.greaterThan(leftHandOperand, rightHandOperand);
-            if (bool != null)
-            {
-                return bool;
-            }
+            return greaterThan(leftHandOperand, rightHandOperand);
         }
         return null;
     }

@@ -37,11 +37,7 @@ class ModuleBinaryOperation extends BinaryOperation
     {
         if (leftHandOperand instanceof Number && rightHandOperand instanceof Number)
         {
-            Number number = this.modulo(leftHandOperand, rightHandOperand);
-            if (number != null)
-            {
-                return number;
-            }
+            return modulo(leftHandOperand, rightHandOperand);
         }
         return null;
     }

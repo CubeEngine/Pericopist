@@ -37,11 +37,7 @@ class ShiftLeftBinaryOperation extends BinaryOperation
     {
         if (leftHandOperand instanceof Number && rightHandOperand instanceof Number)
         {
-            Number number = this.shiftLeft(leftHandOperand, rightHandOperand);
-            if (number != null)
-            {
-                return number;
-            }
+            return shiftLeft(leftHandOperand, rightHandOperand);
         }
         return null;
     }

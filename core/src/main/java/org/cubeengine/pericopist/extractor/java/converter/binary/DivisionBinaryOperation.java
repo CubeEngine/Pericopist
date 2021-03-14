@@ -37,11 +37,7 @@ class DivisionBinaryOperation extends BinaryOperation
     {
         if (leftHandOperand instanceof Number && rightHandOperand instanceof Number)
         {
-            Number number = this.division(leftHandOperand, rightHandOperand);
-            if (number != null)
-            {
-                return number;
-            }
+            return division(leftHandOperand, rightHandOperand);
         }
         return null;
     }

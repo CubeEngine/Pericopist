@@ -353,7 +353,7 @@ public class PericopistFactory
 
         try
         {
-            JAXBContext jaxbContext = JAXBContext.newInstance(jaxbClasses.toArray(new Class[jaxbClasses.size()]));
+            JAXBContext jaxbContext = JAXBContext.newInstance(jaxbClasses.toArray(new Class[0]));
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
             ExtractorConfiguration extractorConfiguration = null;

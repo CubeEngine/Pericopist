@@ -441,7 +441,7 @@ public class PlaintextGettextCatalogFormat implements CatalogFormat
 
         // compare header comments
         String[] newComments = newHeader.getComments().toArray(new String[oldHeader.getComments().size()]);
-        String[] oldComments = oldHeader.getComments().toArray(new String[oldHeader.getComments().size()]);
+        String[] oldComments = oldHeader.getComments().toArray(new String[0]);
         if (oldComments.length != newComments.length)
         {
             return true;

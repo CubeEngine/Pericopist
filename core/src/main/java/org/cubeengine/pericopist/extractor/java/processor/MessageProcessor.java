@@ -107,18 +107,14 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         }
         catch (ConversionException e)
         {
-            StringBuilder builder = new StringBuilder("A conversion exception occurred.\n");
-            builder.append(e.getClass().getName());
-            builder.append('\n');
-            builder.append(e.getMessage());
-            builder.append("\nExpression: ");
-            builder.append(expression.getParent().toString());
-            builder.append("\nTranslatable-Expression-Type: ");
-            builder.append(javaExpression.getClass().getSimpleName());
-            builder.append("\nTranslatable-Expression-Name: ");
-            builder.append(javaExpression.getFQN());
 
-            this.getLogger().log(Level.WARNING, builder.toString(), e.getCause());
+            final String builder = "A conversion exception occurred." + '\n'
+                + e.getClass().getName() + '\n'
+                + e.getMessage() + '\n'
+                + "Expression: " + expression.getParent().toString() + "\n"
+                + "Translatable-Expression-Type: " + javaExpression.getClass().getSimpleName() + '\n'
+                + "Translatable-Expression-Name: " + javaExpression.getFQN();
+            this.getLogger().log(Level.WARNING, builder, e.getCause());
         }
         return new String[0];
     }
@@ -237,7 +233,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         }
         while (comment != null);
 
-        return extractedComments.toArray(new String[extractedComments.size()]);
+        return extractedComments.toArray(new String[0]);
     }
 
     /**

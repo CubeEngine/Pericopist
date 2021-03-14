@@ -29,7 +29,7 @@ public class MessageExtractorTest
 {
     public static final String TEST_CONST = "I'm a test const for another test class.";
 
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         new MessageExtractorTest("This is the start of the messageextractor test");
     }

@@ -37,11 +37,7 @@ class LowerThanBinaryOperation extends BinaryOperation
     {
         if (leftHandOperand instanceof Number && rightHandOperand instanceof Number)
         {
-            Boolean bool = this.lowerThan(leftHandOperand, rightHandOperand);
-            if (bool != null)
-            {
-                return bool;
-            }
+            return lowerThan(leftHandOperand, rightHandOperand);
         }
         return null;
     }

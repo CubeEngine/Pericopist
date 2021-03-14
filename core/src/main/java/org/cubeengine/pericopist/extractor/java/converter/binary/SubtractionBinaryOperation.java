@@ -37,11 +37,7 @@ class SubtractionBinaryOperation extends BinaryOperation
     {
         if (leftHandOperand instanceof Number && rightHandOperand instanceof Number)
         {
-            Number number = this.subtraction(leftHandOperand, rightHandOperand);
-            if (number != null)
-            {
-                return number;
-            }
+            return subtraction(leftHandOperand, rightHandOperand);
         }
         return null;
     }

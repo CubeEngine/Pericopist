@@ -29,6 +29,7 @@ import org.apache.velocity.tools.ToolManager;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -142,7 +143,7 @@ public abstract class AbstractPericopistMojo extends AbstractMojo
         {
             return Charset.forName(this.charsetName);
         }
-        return Charset.forName("UTF-8");
+        return StandardCharsets.UTF_8;
     }
 
     /**

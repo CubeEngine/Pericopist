@@ -29,7 +29,7 @@ public enum TranslatableEnum
     THIRD("This is the 3rd enum instance.")
     ;
 
-    private String text;
+    private final String text;
 
     TranslatableEnum(String text)
     {

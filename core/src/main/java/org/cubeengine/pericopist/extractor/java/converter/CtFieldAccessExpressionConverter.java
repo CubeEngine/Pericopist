@@ -73,7 +73,7 @@ class CtFieldAccessExpressionConverter implements Converter<CtFieldAccess<?>>
         }
 
         Member member = fieldReference.getActualField();
-        if (member == null || !(member instanceof Field))
+        if (!(member instanceof Field))
         {
             throw new ConversionException(this, expression, "The member isn't a field value");
         }

@@ -37,11 +37,7 @@ class UnsignedShiftRightBinaryOperation extends BinaryOperation
     {
         if (leftHandOperand instanceof Number && rightHandOperand instanceof Number)
         {
-            Number number = this.unsignedShiftRight(leftHandOperand, rightHandOperand);
-            if (number != null)
-            {
-                return number;
-            }
+            return unsignedShiftRight(leftHandOperand, rightHandOperand);
         }
         return null;
     }

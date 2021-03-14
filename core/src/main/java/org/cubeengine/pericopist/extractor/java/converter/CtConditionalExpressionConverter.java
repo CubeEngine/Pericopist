@@ -52,6 +52,6 @@ class CtConditionalExpressionConverter implements Converter<CtConditional<?>>
             Collections.addAll(objects, conditionObjects);
         }
 
-        return objects.toArray(new Object[objects.size()]);
+        return objects.toArray(new Object[0]);
     }
 }

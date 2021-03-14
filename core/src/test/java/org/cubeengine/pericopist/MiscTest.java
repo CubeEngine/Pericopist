@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import org.cubeengine.pericopist.util.Misc;
 import org.cubeengine.pericopist.util.Pair;
 import org.junit.Test;
@@ -93,11 +94,11 @@ public class MiscTest
     public void getContentWithRedirectionTest() throws IOException
     {
         final URL startUrl = new URL("http://raw.githubusercontent.com/CubeEngine/Pericopist/master/core/src/test/resources/configuration.xml");
-        final Charset charset = Charset.forName("UTF-8");
+        final Charset charset = StandardCharsets.UTF_8;
         final int readTimeout = 5000;
 
         Pair<URL, String> content = Misc.getContent(startUrl, charset, readTimeout);
-        assertNotEquals(startUrl.toExternalForm(), content.getKey());
+        assertNotEquals(startUrl, content.getKey());
 
         Pair<URL, String> secondContent = Misc.getContent(content.getKey(), charset, readTimeout);
         assertEquals(content.getKey(), secondContent.getKey());

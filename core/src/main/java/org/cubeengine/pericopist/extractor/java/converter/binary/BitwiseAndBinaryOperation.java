@@ -37,11 +37,7 @@ class BitwiseAndBinaryOperation extends BinaryOperation
     {
         if (leftHandOperand instanceof Number && rightHandOperand instanceof Number)
         {
-            Number number = this.bitwiseAnd(leftHandOperand, rightHandOperand);
-            if (number != null)
-            {
-                return number;
-            }
+            return bitwiseAnd(leftHandOperand, rightHandOperand);
         }
         return null;
     }

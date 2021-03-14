@@ -30,7 +30,6 @@ import org.cubeengine.pericopist.exception.PericopistException;
     threadSafe = true,
     requiresDependencyResolution = ResolutionScope.TEST
 )
-@SuppressWarnings("JavaDoc")
 public class UpdateMojo extends AbstractPericopistMojo
 {
     @Override

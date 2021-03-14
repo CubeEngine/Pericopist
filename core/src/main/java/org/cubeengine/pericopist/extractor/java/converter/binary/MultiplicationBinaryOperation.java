@@ -37,11 +37,7 @@ class MultiplicationBinaryOperation extends BinaryOperation
     {
         if (leftHandOperand instanceof Number && rightHandOperand instanceof Number)
         {
-            Number number = this.multiplication(leftHandOperand, rightHandOperand);
-            if (number != null)
-            {
-                return number;
-            }
+            return multiplication(leftHandOperand, rightHandOperand);
         }
         return null;
     }

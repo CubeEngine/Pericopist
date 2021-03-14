@@ -24,5 +24,5 @@ package org.cubeengine.pericopist.test;
 
 public @interface AnnotationWithInnerAnnotation
 {
-    public TranslatableAnnotation value();
+    TranslatableAnnotation value();
 }

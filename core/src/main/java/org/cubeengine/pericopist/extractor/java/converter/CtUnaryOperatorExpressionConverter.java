@@ -45,6 +45,8 @@ class CtUnaryOperatorExpressionConverter implements Converter<CtUnaryOperator<?>
         switch (kind)
         {
             case POS:
+            case POSTINC:
+            case POSTDEC:
                 if (object instanceof Number)
                 {
                     // this unary operator kind doesn't change the object
@@ -156,22 +158,6 @@ class CtUnaryOperatorExpressionConverter implements Converter<CtUnaryOperator<?>
                 if (object instanceof Long)
                 {
                     return (Long) object - 1;
-                }
-                break;
-
-            case POSTINC:
-                if (object instanceof Number)
-                {
-                    // this unary operator kind doesn't change the object at this point
-                    return object;
-                }
-                break;
-
-            case POSTDEC:
-                if (object instanceof Number)
-                {
-                    // this unary operator kind doesn't change the object at this point
-                    return object;
                 }
                 break;
 

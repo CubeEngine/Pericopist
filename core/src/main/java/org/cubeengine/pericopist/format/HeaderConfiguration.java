@@ -22,6 +22,7 @@
  */
 package org.cubeengine.pericopist.format;
 
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -177,12 +178,7 @@ public class HeaderConfiguration
 
             MetadataEntry that = (MetadataEntry) o;
 
-            if (key != null ? !key.equals(that.key) : that.key != null)
-            {
-                return false;
-            }
-
-            return true;
+            return Objects.equals(key, that.key);
         }
 
         @Override

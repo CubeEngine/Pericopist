@@ -41,11 +41,7 @@ class PlusBinaryOperation extends BinaryOperation
         }
         if (leftHandOperand instanceof Number && rightHandOperand instanceof Number)
         {
-            Number number = this.addition(leftHandOperand, rightHandOperand);
-            if (number != null)
-            {
-                return number;
-            }
+            return addition(leftHandOperand, rightHandOperand);
         }
         return null;
     }

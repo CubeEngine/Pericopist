@@ -57,7 +57,7 @@ class CtInvocationExpressionConverter extends CtAbstractInvocationExpressionConv
 
         // 3. load method and check whether it has a return type
         Method method = executable.getActualMethod();
-        if(method.getReturnType() == null)
+        if(method.getReturnType() == void.class)
         {
             throw new ConversionException(this, expression, "The method doesn't have a return type");
         }
