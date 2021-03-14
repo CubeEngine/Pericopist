@@ -24,7 +24,7 @@ package org.cubeengine.pericopist;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import org.apache.velocity.tools.ToolContext;
 import org.apache.velocity.tools.ToolManager;
@@ -58,7 +58,7 @@ public class TestCasesJavaGettextCatalog
         ToolContext toolContext = new ToolManager(true).createContext();
 
         PericopistFactory factory = new PericopistFactory();
-        this.pericopist = factory.getPericopist("./src/test/resources/configuration.xml", Charset.forName("UTF-8"), 5000, toolContext, null);
+        this.pericopist = factory.getPericopist("./src/test/resources/configuration.xml", StandardCharsets.UTF_8, 5000, toolContext, null);
 
         this.targetCatalogFile = new File("./src/test/resources/target_catalog.pot");
         this.catalogFile = new File("./src/test/resources/messages.pot");
@@ -72,8 +72,8 @@ public class TestCasesJavaGettextCatalog
 
         assertEquals(2, config.getPluralAmount());
         assertEquals("UTF-8", config.getCharset().displayName());
-        assertEquals(false, config.getCreateEmptyTemplate());
-        assertEquals(true, config.getRemoveUnusedMessages());
+        assertFalse(config.getCreateEmptyTemplate());
+        assertTrue(config.getRemoveUnusedMessages());
         assertEquals(this.catalogFile.getAbsolutePath(), config.getTemplateFile().getAbsolutePath());
         assertEquals("Hey this are test header comments.\nyou can use the velocity context in your comments.\nfor example: 8\n", config.getHeaderConfiguration().getComments());
 

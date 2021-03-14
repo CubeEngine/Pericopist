@@ -1,3 +1,4 @@
 Hey this are test header comments.
 you can use the velocity context in your comments.
-for example: ${math.add(5, 3)}
+#set( $foo = 5 + 3 )
+for example: ${foo}

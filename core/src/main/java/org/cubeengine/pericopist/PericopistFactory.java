@@ -29,6 +29,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -173,7 +174,7 @@ public class PericopistFactory
      */
     public Pericopist getPericopist(String resource, int readTimeout, Context velocityContext, Logger logger) throws PericopistException
     {
-        return this.getPericopist(resource, Charset.forName("UTF-8"), readTimeout, velocityContext, logger);
+        return this.getPericopist(resource, StandardCharsets.UTF_8, readTimeout, velocityContext, logger);
     }
 
     /**
