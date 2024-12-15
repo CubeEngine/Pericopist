@@ -41,6 +41,7 @@ import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.cu.CompilationUnit;
 import spoon.reflect.cu.SourcePosition;
+import spoon.reflect.declaration.CtCompilationUnit;
 import spoon.reflect.declaration.CtElement;
 
 /**
@@ -192,6 +193,29 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         }
     }
 
+
+    private static int beginOfLineIndex(CtCompilationUnit cu, int index) {
+        final String code = cu.getOriginalSourceCode();
+        int cur = index;
+        while (cur >= 0) {
+            if (code.charAt(cur) == '\n') {
+                break;
+            }
+            cur--;
+        }
+        return cur + 1;
+    }
+
+    private static int nextLineIndex(CtCompilationUnit cu, int index) {
+        final String code = cu.getOriginalSourceCode();
+        int cur = index;
+        while (cur < code.length() && code.charAt(cur) != '\n')
+        {
+            cur++;
+        }
+        return cur + 1;
+    }
+
     /**
      * This method extracts comments from the element, which start with '/// '.
      * A comment can be behind or above the element. The comment behind has a higher priority.
@@ -207,7 +231,7 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         String sourceCode = compilationUnit.getOriginalSourceCode();
 
         // load comment after element
-        String comment = this.getExtractedComment(sourceCode.substring(position.getSourceEnd(), compilationUnit.nextLineIndex(position.getSourceEnd())), true);
+        String comment = this.getExtractedComment(sourceCode.substring(position.getSourceEnd(), nextLineIndex(compilationUnit, position.getSourceEnd())), true);
         if (comment != null)
         {
             return new String[] {comment};
@@ -217,12 +241,12 @@ public abstract class MessageProcessor<E extends CtElement> extends AbstractProc
         List<String> extractedComments = new ArrayList<>(1);
 
         int currentLineIndex;
-        int lastLineIndex = compilationUnit.beginOfLineIndex(position.getSourceStart());
+        int lastLineIndex = beginOfLineIndex(compilationUnit, position.getSourceStart());
 
         do
         {
             currentLineIndex = lastLineIndex;
-            lastLineIndex = compilationUnit.beginOfLineIndex(currentLineIndex - 2);
+            lastLineIndex = beginOfLineIndex(compilationUnit, currentLineIndex - 2);
 
             comment = this.getExtractedComment(sourceCode.substring(lastLineIndex, currentLineIndex), false);
 

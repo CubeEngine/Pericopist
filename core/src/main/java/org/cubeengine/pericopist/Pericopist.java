@@ -91,7 +91,7 @@ public class Pericopist
 
         try
         {
-            this.messageExtractor = extractorConfiguration.getExtractorClass().newInstance();
+            this.messageExtractor = extractorConfiguration.getExtractorClass().getConstructor().newInstance();
             this.messageExtractor.setLogger(this.logger);
         }
         catch (Exception e)
@@ -101,7 +101,7 @@ public class Pericopist
 
         try
         {
-            this.catalogFormat = catalogConfiguration.getCatalogFormatClass().newInstance();
+            this.catalogFormat = catalogConfiguration.getCatalogFormatClass().getConstructor().newInstance();
             this.catalogFormat.setLogger(this.logger);
         }
         catch (Exception e)
